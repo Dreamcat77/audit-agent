@@ -1,4 +1,6 @@
-import {useEffect,useMemo,useRef,useState} from "react";
+import {useCallback,useEffect,useMemo,useRef,useState} from "react";
+import {AnalysisEvidenceDialog} from "./AnalysisEvidenceDialog";
+import {uniqueSourceEvidence,type SourceEvidence,type SourceText} from "../contractAnalysisEvidenceView";
 import {ResultProjectHeader,ResultSection,ResultItem,ResultEmpty} from "../../../components/results/ResultLayout";
 import {ArrowLeft,Check,Copy,Edit3,History,Loader2,UploadCloud,X} from "lucide-react";
 import {ApiError,request} from "../../../api/client";
@@ -37,9 +39,8 @@ function ContractAnalysisSession({actorId}:{actorId?:string}){
   const [selected,setSelected]=useState<string|null>(null);const [report,setReport]=useState<Report|null>(null);
   const [selectedProjectId,setSelectedProjectId]=useState<string|null>(null);
   const [busy,setBusy]=useState(false);const [notice,setNotice]=useState<string|null>(null);const [error,setError]=useState<string|null>(null);
-  const [copied,setCopied]=useState<string|null>(null);const [source,setSource]=useState<{name:string;text:string}|null>(null);
+  const [copied,setCopied]=useState<string|null>(null);const [source,setSource]=useState<{id:number;caseId:string;items:SourceEvidence[]}|null>(null);
   const [pendingFiles,setPendingFiles]=useState(false);const alive=useRef(true);const copySequence=useRef(0);const sourceSequence=useRef(0);
-  const selection=useRef(selected);selection.current=selected;
   const projectNameOperationKey=(projectId:string)=>`audit-agent:contract-analysis:project-name:${actorId??"anonymous"}:${projectId}`;
   const readProjectNameOperation=(projectId:string):PendingProjectNameUpdate|null=>{
     try{const raw=window.sessionStorage.getItem(projectNameOperationKey(projectId));if(!raw)return null;const value=JSON.parse(raw) as PendingProjectNameUpdate;
@@ -99,15 +100,18 @@ function ContractAnalysisSession({actorId}:{actorId?:string}){
     }catch(cause){if(cause instanceof ApiError&&cause.status>=400&&cause.status<500)try{window.sessionStorage.removeItem(projectNameOperationKey(row.projectId));}catch{}if(alive.current)setError(userFacingError(cause,"项目名称未保存，请刷新后重试。"));}
     finally{if(alive.current)setSavingProject(false);}
   }
-  async function showSource(e:Evidence){if(!selected||!report)return;const caseId=selected,sequence=++sourceSequence.current;try{
-    const value=await request<{text:string}>(`${base}/${selected}/sources/${e.fileId}/text`,{params:{start:String(Math.max(0,e.start-150)),size:String(Math.min(20000,e.end-e.start+500))}});
-    if(alive.current&&selection.current===caseId&&sequence===sourceSequence.current)setSource({name:report.documents.find(d=>d.fileId===e.fileId)?.name??"来源材料",text:value.text});
-  }catch(cause){if(alive.current&&selection.current===caseId&&sequence===sourceSequence.current)setError(userFacingError(cause,"此段原文暂时无法查看，请稍后重试。"));}}
+  const loadSourceText=useCallback((fileId:string,start:number,size:number)=>request<SourceText>(`${base}/${selected}/sources/${encodeURIComponent(fileId)}/text`,{params:{start:String(start),size:String(size)}}),[selected]);
+  async function showSource(e:SourceEvidence|readonly SourceEvidence[]){
+    if(!selected||!report)return;
+    const items=uniqueSourceEvidence(Array.isArray(e)?e:[e as SourceEvidence]);
+    if(items.length)setSource({id:++sourceSequence.current,caseId:selected,items});
+  }
   async function showFormalSource(e:import("../eightCategoryReviewProjection").ContractReviewCategoryEvidenceView){
     const document=report?.documents.find(item=>item.fileId===e.fileId);if(!selected||!document)return;
-    await showSource({fileId:e.fileId,start:e.startOffset??0,end:e.endOffset??Math.min(1200,document.sourceChars),excerpt:e.excerpt});
+    await showSource({fileId:e.fileId,start:e.locatorAvailable?e.startOffset:null,end:e.locatorAvailable?e.endOffset:null,excerpt:e.excerpt,
+      pageNumber:e.pageNumber,paragraphIndex:e.paragraphIndex,segmentIndex:e.segmentIndex});
   }
-  const evidenceButtons=(items:Evidence[])=>items.map((e,i)=><button type="button" key={`${e.fileId}:${e.start}:${i}`} className="text-sm text-blue-700 hover:underline" onClick={()=>void showSource(e)}>查看原文{i>0?` ${i+1}`:""}</button>);
+  const evidenceButtons=(items:Evidence[])=>uniqueSourceEvidence(items).length>0?<button type="button" className="text-sm text-blue-700 hover:underline" onClick={()=>void showSource(items)}>查看原文</button>:null;
   const {risks,followUps}=partitionAnalysisFindings(report?.findings??[]);
   const materialHighlights=aggregateMaterialHighlights(report?.documents??[]);
   return <section className="delivery-page result-workspace space-y-5">
@@ -133,6 +137,6 @@ function ContractAnalysisSession({actorId}:{actorId?:string}){
       {report.checks.length>0&&<details className="rounded-lg border border-slate-200"><summary className="p-4 cursor-pointer font-medium">金额及关联材料核对</summary><div className="px-4 pb-4 space-y-3">{report.checks.map((check,i)=><div key={`${check.code}:${i}`} className={`text-sm leading-6 ${check.status==="FAIL"?"text-red-700":"text-slate-600"}`}><strong>{contractCheckLabel(check.status)}：</strong>{check.explanation}<div className="flex gap-3">{evidenceButtons(check.evidence)}</div></div>)}</div></details>}
       </div></div>
     </div>}
-    {source&&<div role="dialog" aria-modal="true" aria-label="来源原文" className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-5"><section className="max-w-3xl w-full max-h-[80vh] overflow-auto rounded-xl bg-white p-6 shadow-xl"><header className="flex justify-between gap-4 mb-4"><h2 className="font-semibold break-all">{source.name}</h2><button type="button" className="delivery-secondary-action shrink-0" onClick={()=>setSource(null)}>关闭</button></header><pre className="whitespace-pre-wrap break-words text-sm leading-7 font-sans">{source.text}</pre></section></div>}
+    {source&&source.caseId===selected&&report&&<AnalysisEvidenceDialog key={source.id} evidence={source.items} documents={report.documents} loadText={loadSourceText} onClose={()=>setSource(null)}/>}
   </section>;
 }
