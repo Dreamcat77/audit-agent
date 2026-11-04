@@ -17,6 +17,10 @@ const runtime=Buffer.from(readFileSync(new URL('./browser/chrome109-currentcolor
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex').slice(0,20);
 const cssName=`chrome109-colors-${hash(css)}.css`,jsName=`chrome109-currentcolor-${hash(runtime)}.js`;
 mkdirSync(output,{recursive:true});cpSync(path.join(input,'assets'),path.join(output,'assets'),{recursive:true});
+for (const name of ['browser-support.js','browser-check.html']) {
+  if (existsSync(path.join(input,name))) cpSync(path.join(input,name),path.join(output,name));
+  else if (html.includes('/browser-support.js')) throw new Error('Missing browser support resource: '+name);
+}
 writeFileSync(path.join(output,'assets',cssName),css);writeFileSync(path.join(output,'assets',jsName),runtime);
 writeFileSync(path.join(output,'index.html'),html.replace(ref,`/assets/${cssName}`).replace('</head>',`<script defer src="/assets/${jsName}"></script>\n</head>`));
 console.log(`CHROME109_LAYOUT_AND_ORIGINAL_CSS_PREFIX_PRESERVED_COLOR_FALLBACKS=${changed}; OUTPUT=${output}`);

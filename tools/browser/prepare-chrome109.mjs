@@ -22,7 +22,7 @@ for(const match of [...index.matchAll(/href="(\/[^"?]+\.css)"/g)]) {
 if(!index.includes('chrome109-currentcolor-')) {
   const script=await fs.readFile(new URL('./chrome109-currentcolor.js',import.meta.url));
   const name='chrome109-currentcolor-'+createHash('sha256').update(script).digest('hex').slice(0,20)+'.js';
-  const assetDir=path.dirname((index.match(/src="(\/[^"?]+\.js)"/)||[])[1]||'/assets/index.js');
+  const assetDir=path.dirname((index.match(/<script\b[^>]*type="module"[^>]*src="(\/[^"?]+\.js)"/)||[])[1]||'/assets/index.js');
   const relative=path.posix.join(assetDir,name);
   await fs.writeFile(path.join(root,'.'+relative),script);
   index=index.replace('</head>',`<script defer src="${relative}"></script>\n</head>`);

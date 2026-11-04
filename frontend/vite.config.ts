@@ -3,6 +3,7 @@ import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { resolveApiProxyTarget } from './viteProxyTarget.ts'
+import { browserCompatibilityBuild } from './browserCompatibilityBuild.ts'
 
 
 function figmaAssetResolver() {
@@ -30,6 +31,7 @@ export default defineConfig(({ mode }) => {
     // Tailwind is not being actively used – do not remove them
     react(),
     tailwindcss(),
+    browserCompatibilityBuild(),
   ],
   resolve: {
     alias: {
@@ -50,6 +52,8 @@ export default defineConfig(({ mode }) => {
 
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
-  ...(assetsDir ? { build: { assetsDir } } : {}),
+  // Keep app CSS in the HTML so the independent bootstrap and the existing
+  // Chrome 109 postprocessor also cover styles from dynamically loaded code.
+  build: { target: 'chrome109', cssTarget: 'chrome109', cssCodeSplit: false, ...(assetsDir ? { assetsDir } : {}) },
   }
 })

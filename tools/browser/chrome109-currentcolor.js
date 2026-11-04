@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+  if (!window.CSS || typeof CSS.supports !== 'function' || !window.MutationObserver || !window.requestAnimationFrame) return;
   if (CSS.supports('color', 'color-mix(in oklab,red,transparent)')) return;
   // Only these original rules mix currentColor with transparency. Compute its
   // channels locally; never replace fonts, layouts, literal colors or content.
