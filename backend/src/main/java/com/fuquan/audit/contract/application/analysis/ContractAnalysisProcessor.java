@@ -14,6 +14,13 @@ public class ContractAnalysisProcessor {
     private final ContractAnalysisRules rules;private final ContractAnalysisAiPort ai;
     private final ContractAnalysisEvidence evidence;private final ContractAnalysisRelations relations;private final Clock clock;
     private ContractAnalysisFormalBridge formalBridge;
+    private com.fuquan.audit.common.privacy.ClientReviewIdentity clientIdentity;
+    @org.springframework.beans.factory.annotation.Autowired
+    public void setClientIdentity(com.fuquan.audit.common.privacy.ClientReviewIdentity value){this.clientIdentity=value;}
+    private Map<UUID,String> reviewParties(Map<UUID,String> texts,List<UUID> ids){
+        // Local fake-model mode has no configured names and never sends material externally.
+        return clientIdentity==null?Map.of():clientIdentity.parties(texts,ids);
+    }
     @org.springframework.beans.factory.annotation.Autowired
     public void setFormalBridge(ContractAnalysisFormalBridge value){this.formalBridge=value;}
     public ContractAnalysisProcessor(ContractAnalysisRepository repository,ContractAnalysisTransactions tx,ContractAnalysisSources sources,
@@ -120,14 +127,16 @@ public class ContractAnalysisProcessor {
                         String supplied=scopes.stream().filter(s->s.source().fileId().equals(selected.fileId())).map(ContractAnalysisEvidence.Scope::supplied).collect(java.util.stream.Collectors.joining("\n\n"));
                         documents.add(new ContractAnalysisAiPort.Document(selected.fileId(),supplied));
                     }
-                    output=evidence.validate(ai.analyze(new ContractAnalysisAiPort.Request(c.id(),step.inputDigest(),"CROSS_FILE",documents)),scopes,"CROSS_FILE");
+                    output=evidence.validate(ai.analyze(new ContractAnalysisAiPort.Request(c.id(),step.inputDigest(),"CROSS_FILE",documents,
+                        reviewParties(texts,documents.stream().map(ContractAnalysisAiPort.Document::id).toList()))),scopes,"CROSS_FILE");
                 }
                 sources.load(c.projectId(),pair.support());
             }else {
                 // Keep enough time for the configured single provider timeout and result transaction.
                 if(clock.instant().plusSeconds(175).isAfter(c.deadline()))throw new CaseDeadline();
                 var scope=new ContractAnalysisEvidence.Scope(source,text,step.start(),step.end());
-                var request=new ContractAnalysisAiPort.Request(c.id(),step.inputDigest(),step.kind(),List.of(new ContractAnalysisAiPort.Document(source.fileId(),scope.supplied())));
+                var request=new ContractAnalysisAiPort.Request(c.id(),step.inputDigest(),step.kind(),List.of(new ContractAnalysisAiPort.Document(source.fileId(),scope.supplied())),
+                    reviewParties(texts,List.of(source.fileId())));
                 output=evidence.validate(ai.analyze(request),List.of(scope),step.kind());
             }
             // Verify the exact parse tuple still exists immediately before publication.

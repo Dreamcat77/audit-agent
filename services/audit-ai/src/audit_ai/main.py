@@ -13,6 +13,7 @@ from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 
 from audit_ai.config import Settings
+from audit_ai.client_privacy import CURRENT, HEADER, ClientIdentity
 from audit_ai.errors import install_error_handlers
 from audit_ai.logging import configure_runtime_logging, diagnostic_context, log_event
 from audit_ai.model.gateway import ModelGatewayPort, OpenAiCompatibleModelGateway
@@ -61,6 +62,23 @@ def create_app(
     app = FastAPI(title="audit-ai", version="0.1.0", lifespan=lifespan)
     app.state.settings = effective_settings
     app.state.ocr_port = effective_ocr
+
+    @app.middleware("http")
+    async def client_identity_middleware(request: Request, call_next):
+        token = CURRENT.set(None)
+        try:
+            header = request.headers.get(HEADER)
+            if (header is None and effective_settings.client_identity_required
+                    and request.url.path.startswith('/ai/v1/') and not request.url.path.startswith('/ai/v1/ocr/')):
+                return JSONResponse(status_code=503, content={"code": "CLIENT_IDENTITY_REQUIRED"})
+            if header is not None:
+                try:
+                    CURRENT.set(ClientIdentity.from_header(header, await request.json()))
+                except (ValueError, TypeError, UnicodeError):
+                    return JSONResponse(status_code=422, content={"code": "CLIENT_IDENTITY_INVALID"})
+            return await call_next(request)
+        finally:
+            CURRENT.reset(token)
 
     @app.middleware("http")
     async def request_id_middleware(request: Request, call_next):

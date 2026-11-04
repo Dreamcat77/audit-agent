@@ -68,9 +68,14 @@ class AnalysisRequest(Strict):
     input_digest: str = Field(alias="inputDigest", pattern=r"^[a-f0-9]{64}$")
     scope: Literal["FILE", "FRAGMENT", "FOCUSED", "CROSS_FILE"]
     documents: list[Document] = Field(min_length=1, max_length=8)
+    review_parties: dict[UUID, Literal["PARTY_A", "PARTY_B", "AMBIGUOUS", "UNMATCHED"]] = Field(
+        default_factory=dict, alias="reviewParties", max_length=8
+    )
 
     @model_validator(mode="after")
     def bounded(self):
+        if not set(self.review_parties).issubset({d.id for d in self.documents}):
+            raise ValueError("review perspective outside supplied documents")
         if sum(len(d.text) for d in self.documents) > 12000:
             raise ValueError("contract context exceeds bounded scope")
         if len({d.id for d in self.documents}) != len(self.documents):

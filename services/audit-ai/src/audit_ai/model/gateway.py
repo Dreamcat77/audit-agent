@@ -19,6 +19,7 @@ from typing import Any, Protocol, get_args
 import httpx
 
 from audit_ai.config import Settings
+from audit_ai.client_privacy import CURRENT
 from audit_ai.logging import log_event
 from audit_ai.model.contract_correction import contract_correction_json_schema
 from audit_ai.model.contract_draft import (
@@ -1440,6 +1441,8 @@ class OpenAiCompatibleModelGateway(ModelGatewayPort):
     ) -> ModelCompletion:
         started = time.perf_counter_ns()
         try:
+            if self._settings.client_identity_required and CURRENT.get() is None:
+                raise ModelNotConfigured("client identity context required")
             base_url, api_key, model_name = self._required_configuration()
         except ModelNotConfigured:
             log_event(
@@ -1537,6 +1540,10 @@ class OpenAiCompatibleModelGateway(ModelGatewayPort):
                     if disable_thinking:
                         request_body["reasoning_effort"] = "none"
                     endpoint = f"{base_url.rstrip('/')}/chat/completions"
+                identity = CURRENT.get()
+                privacy_boundary = identity.boundary(request_body) if identity is not None else None
+                if privacy_boundary is not None:
+                    request_body = privacy_boundary.body
                 log_event(LOGGER, "PROVIDER_HTTP_SEND", stage="MODEL_HTTP", request_id=request_id,
                           operation=operation, connect_timeout_ms=int(connect_timeout_seconds*1000),
                           read_timeout_ms=int(read_timeout_seconds*1000),
@@ -1717,7 +1724,7 @@ class OpenAiCompatibleModelGateway(ModelGatewayPort):
         finish_reason = self._safe_finish_reason(body)
         prompt_tokens, completion_tokens, total_tokens = self._safe_usage(body)
         result = ModelCompletion(
-            payload=completion[0], model=completion[1], duration_ms=duration_ms,
+            payload=(privacy_boundary.restore(completion[0]) if privacy_boundary is not None else completion[0]), model=completion[1], duration_ms=duration_ms,
             provider=("OLLAMA_NATIVE" if native_structured else "OPENAI_COMPATIBLE"),
             finish_reason=finish_reason, prompt_tokens=prompt_tokens,
             completion_tokens=completion_tokens, total_tokens=total_tokens,

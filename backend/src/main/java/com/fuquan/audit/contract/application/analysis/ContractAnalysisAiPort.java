@@ -5,7 +5,11 @@ import java.util.*;
 /** Independent contract protocol. Java retains evidence authority and exact money arithmetic. */
 public interface ContractAnalysisAiPort {
     record Document(UUID id,String text) {}
-    record Request(UUID caseId,String inputDigest,String scope,List<Document> documents) {}
+    record Request(UUID caseId,String inputDigest,String scope,List<Document> documents,Map<UUID,String> reviewParties) {
+        public Request(UUID caseId,String inputDigest,String scope,List<Document> documents){
+            this(caseId,inputDigest,scope,documents,Map.of());
+        }
+    }
     record Citation(UUID document,String text) {}
     record Fact(String type,String value,List<Citation> citations) {}
     record Clause(String topic,String summary,List<Citation> citations) {}

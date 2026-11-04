@@ -1,5 +1,13 @@
 # DM8 baseline SQL
 
+V058 (`V058__client_review_identity.sql`) adds the single-client formal-name/alias
+registry for deterministic review perspective and outbound model name protection.
+No customer identity is seeded. Apply through the controlled DM8 migration process,
+then provision approved names inside the deployment. See
+`docs/runbook/client-review-identity.md` for worker draining, restart, Python header
+enforcement and the required pre-production checks. This migration was not applied
+to a real DM8 instance during local development.
+
 V057 (`V057__material_extraction_deadline.sql`) adds nullable `DEADLINE_AT` to the
 shared material ledger. Apply with `MaterialDeadlineMigration apply` only after the
 existing V055 schema passes its guard, and before starting the timeout-enabled

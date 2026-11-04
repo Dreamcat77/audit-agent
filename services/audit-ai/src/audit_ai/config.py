@@ -65,6 +65,7 @@ class Settings:
     model_base_url: str | None = None
     model_api_key: str | None = field(default=None, repr=False)
     model_name: str | None = None
+    client_identity_required: bool = False
     model_connect_timeout_seconds: float = 5.0
     model_read_timeout_seconds: float = 60.0
     contract_model_read_timeout_seconds: float = 600.0
@@ -176,6 +177,7 @@ class Settings:
             model_base_url=os.getenv("AUDIT_MODEL_BASE_URL") or None,
             model_api_key=os.getenv("AUDIT_MODEL_API_KEY") or None,
             model_name=os.getenv("AUDIT_MODEL_NAME") or None,
+            client_identity_required=_environment_bool("AUDIT_CLIENT_IDENTITY_REQUIRED", False),
             model_connect_timeout_seconds=_environment_float(
                 "AUDIT_MODEL_CONNECT_TIMEOUT_SECONDS", 5.0
             ),
