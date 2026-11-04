@@ -9,13 +9,16 @@ import org.apache.ibatis.annotations.*;
 public interface ContractAnalysisMapper {
     record Row(String id,String projectId,String owner,String digest,String status,long version,String token,
             LocalDateTime until,LocalDateTime created,LocalDateTime deadline,String payload) {}
+    record HistoryRow(String payload,String projectName) {}
     @Select("SELECT SNAPSHOT_JSON FROM CONTRACT_ANALYSIS_CASE WHERE ID=#{id}")
     @ResultType(String.class)
     String find(String id);
     @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY CREATED_AT DESC,ID) RN FROM CONTRACT_ANALYSIS_CASE WHERE OWNER_ID=#{owner}) WHERE RN>#{offset} AND RN<=#{end}")
     List<String> recent(@Param("owner") String owner,@Param("offset") int offset,@Param("end") int end);
-    @Select("<script>SELECT ID FROM (SELECT C.ID,ROW_NUMBER() OVER(ORDER BY C.CREATED_AT DESC,C.ID) RN FROM CONTRACT_ANALYSIS_CASE C JOIN PROJECT P ON P.ID=C.PROJECT_ID WHERE C.OWNER_ID=#{owner} <if test='projectName != null and projectName != \"\"'>AND INSTR(UPPER(COALESCE(P.NAME,'')),UPPER(#{projectName})) &gt; 0</if> <if test='from != null'>AND C.CREATED_AT &gt;= #{from}</if> <if test='to != null'>AND C.CREATED_AT &lt; #{to}</if>) WHERE RN&gt;#{offset} AND RN&lt;=#{end}</script>")
-    List<String> recentFiltered(@Param("owner") String owner,@Param("projectName") String projectName,
+    @Select("<script>SELECT PAYLOAD,PROJECT_NAME FROM (SELECT C.SNAPSHOT_JSON PAYLOAD,P.NAME PROJECT_NAME,ROW_NUMBER() OVER(ORDER BY C.CREATED_AT DESC,C.ID) RN FROM CONTRACT_ANALYSIS_CASE C JOIN PROJECT P ON P.ID=C.PROJECT_ID WHERE C.OWNER_ID=#{owner} <if test='from != null'>AND C.CREATED_AT &gt;= #{from}</if> <if test='to != null'>AND C.CREATED_AT &lt; #{to}</if>) WHERE RN&gt;#{offset} AND RN&lt;=#{end}</script>")
+    @ConstructorArgs({@Arg(column="PAYLOAD",javaType=String.class,typeHandler=org.apache.ibatis.type.ClobTypeHandler.class),
+            @Arg(column="PROJECT_NAME",javaType=String.class)})
+    List<HistoryRow> recentFiltered(@Param("owner") String owner,
             @Param("from") LocalDateTime from,@Param("to") LocalDateTime to,
             @Param("offset") int offset,@Param("end") int end);
     @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY ROW_VERSION,CREATED_AT,ID) RN FROM CONTRACT_ANALYSIS_CASE WHERE STATUS='QUEUED' OR (STATUS='RUNNING' AND LEASE_UNTIL<=#{now})) WHERE RN<=#{limit}")

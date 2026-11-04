@@ -16,8 +16,26 @@ public class Dm8ContractAnalysisRepository implements ContractAnalysisRepository
     public Optional<ContractAnalysisCase> find(UUID id){return Optional.ofNullable(mapper.find(id.toString())).map(this::decode);}
     public List<ContractAnalysisCase> recent(String owner,int offset,int limit){return mapper.recent(owner,offset,Math.addExact(offset,limit)).stream().map(UUID::fromString).map(id->find(id).orElseThrow()).toList();}
     public List<ContractAnalysisCase> recent(String owner,int offset,int limit,String projectName,Instant from,Instant to){
-        return mapper.recentFiltered(owner,projectName,time(from),time(to),offset,Math.addExact(offset,limit)).stream()
-                .map(UUID::fromString).map(id->find(id).orElseThrow()).toList();
+        if(projectName==null||projectName.isBlank())return mapper.recentFiltered(owner,time(from),time(to),offset,Math.addExact(offset,limit))
+                .stream().map(row->decode(row.payload())).toList();
+        // Display names may come from grounded facts while PROJECT.NAME is still
+        // generated. Read bounded batches, match the shared display policy, then
+        // paginate matches. Never search arbitrary snapshot text or just one page.
+        final int batchSize=100;
+        var result=new ArrayList<ContractAnalysisCase>();
+        int cursor=0,matched=0;
+        while(true){
+            var batch=mapper.recentFiltered(owner,time(from),time(to),cursor,Math.addExact(cursor,batchSize));
+            for(var row:batch){
+                var value=decode(row.payload());
+                if(ContractAnalysisProjectNames.matches(value,row.projectName(),projectName)&&matched++>=offset){
+                    result.add(value);
+                    if(result.size()==limit)return List.copyOf(result);
+                }
+            }
+            if(batch.size()<batchSize)return List.copyOf(result);
+            cursor=Math.addExact(cursor,batch.size());
+        }
     }
     public List<UUID> pending(Instant now,int limit){return mapper.pending(time(now),limit).stream().map(UUID::fromString).toList();}
     @Transactional(propagation=Propagation.MANDATORY)

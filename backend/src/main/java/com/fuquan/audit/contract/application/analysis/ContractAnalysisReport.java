@@ -100,12 +100,7 @@ public class ContractAnalysisReport {
     private static <T> List<T> deduplicate(List<T> values,java.util.function.Function<T,String> key){var map=new LinkedHashMap<String,T>();for(var v:values)map.putIfAbsent(key.apply(v),v);return List.copyOf(map.values());}
     static String label(State s){return switch(s){case QUEUED->"等待处理";case RUNNING->"正在分析";case COMPLETED->"分析完成";case PARTIAL->"已生成结果";case DATA_INSUFFICIENT->"材料不足以支持分析";case FAILED->"未能完成处理";case UNKNOWN->"处理已停止，结果待核查";};}
     static String projectName(ContractAnalysisCase c,String established,List<String> texts){
-        var names=new ArrayList<String>();
-        if(established!=null&&!com.fuquan.audit.contract.application.project.AutomaticProjectMetadataService.isGeneratedName(established))names.add(established);
-        c.steps().stream().map(Step::output).filter(Objects::nonNull).flatMap(o->o.facts().stream())
-                .filter(f->f.type().equals("PROJECT_NAME")).map(Fact::value).forEach(names::add);
-        return com.fuquan.audit.common.material.ProjectNameResolver.resolve(names,texts,
-                "自动整理项目-"+c.projectId().toString().substring(0,8));
+        return ContractAnalysisProjectNames.resolve(c,established,texts);
     }
     private static String sourceReason(Source s){return switch(s.status()){case WAITING->"正在等待文件解析";case FAILED->"文件未取得可读内容，其他材料仍独立分析";case UNKNOWN->"文件处理结果无法确认，未使用无法核对的内容";default->"已取得可读内容";};}
 }

@@ -22,12 +22,11 @@ public class InMemoryContractAnalysisRepository implements ContractAnalysisRepos
             .sorted(Comparator.comparing(ContractAnalysisCase::createdAt).reversed().thenComparing(ContractAnalysisCase::id)).skip(offset).limit(limit).toList();}
     @Override public synchronized List<ContractAnalysisCase> recent(String owner,int offset,int limit,String projectName,Instant from,Instant to){
         return values.values().stream().filter(c->c.owner().equals(owner))
-                .filter(c->projectName==null||projectName.isBlank()||contains(projectNames.apply(c.projectId()),projectName))
+                .filter(c->projectName==null||projectName.isBlank()||ContractAnalysisProjectNames.matches(c,projectNames.apply(c.projectId()),projectName))
                 .filter(c->from==null||!c.createdAt().isBefore(from)).filter(c->to==null||c.createdAt().isBefore(to))
                 .sorted(Comparator.comparing(ContractAnalysisCase::createdAt).reversed().thenComparing(ContractAnalysisCase::id))
                 .skip(offset).limit(limit).toList();
     }
-    private static boolean contains(String value,String term){return value!=null&&value.toLowerCase(Locale.ROOT).contains(term.trim().toLowerCase(Locale.ROOT));}
     public synchronized List<UUID> pending(Instant now,int limit){return values.values().stream().filter(c->c.claimable(now))
             .sorted(Comparator.comparingLong(ContractAnalysisCase::version).thenComparing(ContractAnalysisCase::createdAt).thenComparing(ContractAnalysisCase::id)).limit(limit).map(ContractAnalysisCase::id).toList();}
     public synchronized boolean replace(ContractAnalysisCase previous,ContractAnalysisCase next,Instant now){
