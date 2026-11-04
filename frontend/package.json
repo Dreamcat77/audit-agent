@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "build:customer": "npm run build",
+    "build:customer": "vite build && node ../tools/browser/prepare-chrome109.mjs dist",
     "dev": "vite"
   },
   "dependencies": {
