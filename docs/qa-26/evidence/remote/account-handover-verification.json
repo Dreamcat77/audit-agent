@@ -1,0 +1,10 @@
+{
+  "isolatedSchema": "QA26_FULL2",
+  "ownerIdPreserved": true,
+  "rolesUnchanged": true,
+  "durableAudit": true,
+  "credentialsExported": false,
+  "originalDatabaseDdlOrDml": false,
+  "negativeGuards": 4,
+  "failures": []
+}

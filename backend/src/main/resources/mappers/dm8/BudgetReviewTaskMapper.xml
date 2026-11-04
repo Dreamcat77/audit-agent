@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BudgetReviewTaskMapper">
+    <resultMap id="taskRow" type="com.fuquan.audit.integration.dm8.BudgetReviewTaskPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="fileName" column="FILE_NAME"/>
+        <result property="contentType" column="CONTENT_TYPE"/>
+        <result property="fileSize" column="FILE_SIZE"/>
+        <result property="tempFilePath" column="TEMP_FILE_PATH"/>
+        <result property="status" column="STATUS"/>
+        <result property="parsedLineCount" column="PARSED_LINE_COUNT"/>
+        <result property="errorDetail" column="ERROR_DETAIL"/>
+        <result property="budgetYear" column="BUDGET_YEAR"/>
+        <result property="departmentCode" column="DEPARTMENT_CODE"/>
+        <result property="reviewCursor" column="REVIEW_CURSOR"/>
+        <result property="pendingRowNumber" column="PENDING_ROW_NUMBER"/>
+        <result property="pendingStep" column="PENDING_STEP"/>
+        <result property="pendingReason" column="PENDING_REASON"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO BUDGET_REVIEW_TASK (
+            ID, FILE_NAME, CONTENT_TYPE, FILE_SIZE, TEMP_FILE_PATH, STATUS,
+            PARSED_LINE_COUNT, ERROR_DETAIL, BUDGET_YEAR, DEPARTMENT_CODE,
+            REVIEW_CURSOR, PENDING_ROW_NUMBER, PENDING_STEP, PENDING_REASON, CREATED_TIME, UPDATED_TIME
+        ) VALUES (
+            #{row.id}, #{row.fileName}, #{row.contentType}, #{row.fileSize}, #{row.tempFilePath}, #{row.status},
+            #{row.parsedLineCount}, #{row.errorDetail}, #{row.budgetYear}, #{row.departmentCode},
+            #{row.reviewCursor}, #{row.pendingRowNumber}, #{row.pendingStep}, #{row.pendingReason},
+            #{row.createdTime}, #{row.updatedTime}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE BUDGET_REVIEW_TASK
+        SET STATUS = #{row.status},
+            TEMP_FILE_PATH = #{row.tempFilePath},
+            PARSED_LINE_COUNT = #{row.parsedLineCount},
+            ERROR_DETAIL = #{row.errorDetail},
+            BUDGET_YEAR = #{row.budgetYear},
+            DEPARTMENT_CODE = #{row.departmentCode},
+            REVIEW_CURSOR = #{row.reviewCursor},
+            PENDING_ROW_NUMBER = #{row.pendingRowNumber},
+            PENDING_STEP = #{row.pendingStep},
+            PENDING_REASON = #{row.pendingReason},
+            UPDATED_TIME = #{row.updatedTime}
+        WHERE ID = #{row.id}
+    </update>
+
+    <select id="findById" resultMap="taskRow">
+        SELECT ID, FILE_NAME, CONTENT_TYPE, FILE_SIZE, TEMP_FILE_PATH, STATUS,
+               PARSED_LINE_COUNT, ERROR_DETAIL, BUDGET_YEAR, DEPARTMENT_CODE,
+               REVIEW_CURSOR, PENDING_ROW_NUMBER, PENDING_STEP, PENDING_REASON, CREATED_TIME, UPDATED_TIME
+        FROM BUDGET_REVIEW_TASK
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findByIdForUpdate" resultMap="taskRow">
+        SELECT ID, FILE_NAME, CONTENT_TYPE, FILE_SIZE, TEMP_FILE_PATH, STATUS,
+               PARSED_LINE_COUNT, ERROR_DETAIL, BUDGET_YEAR, DEPARTMENT_CODE,
+               REVIEW_CURSOR, PENDING_ROW_NUMBER, PENDING_STEP, PENDING_REASON, CREATED_TIME, UPDATED_TIME
+        FROM BUDGET_REVIEW_TASK
+        WHERE ID = #{id}
+        FOR UPDATE
+    </select>
+
+    <select id="timedOutForCleanup" resultMap="taskRow">
+        SELECT * FROM (SELECT T.*,ROW_NUMBER() OVER (ORDER BY UPDATED_TIME,ID) RN FROM BUDGET_REVIEW_TASK T
+        WHERE STATUS='FAILED' AND PARSED_LINE_COUNT=0 AND TEMP_FILE_PATH IS NOT NULL
+        AND ERROR_DETAIL IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT')) WHERE RN &lt;= #{limit}
+    </select>
+    <select id="findPage" resultMap="taskRow">
+        SELECT ID, FILE_NAME, CONTENT_TYPE, FILE_SIZE, TEMP_FILE_PATH, STATUS,
+               PARSED_LINE_COUNT, ERROR_DETAIL, BUDGET_YEAR, DEPARTMENT_CODE,
+               REVIEW_CURSOR, PENDING_ROW_NUMBER, PENDING_STEP, PENDING_REASON,
+               CREATED_TIME, UPDATED_TIME
+        FROM (
+            SELECT ID, FILE_NAME, CONTENT_TYPE, FILE_SIZE, TEMP_FILE_PATH, STATUS,
+                   PARSED_LINE_COUNT, ERROR_DETAIL, BUDGET_YEAR, DEPARTMENT_CODE,
+                   REVIEW_CURSOR, PENDING_ROW_NUMBER, PENDING_STEP, PENDING_REASON,
+                   CREATED_TIME, UPDATED_TIME,
+                   ROW_NUMBER() OVER (ORDER BY CREATED_TIME DESC, ID DESC) AS RN
+            FROM BUDGET_REVIEW_TASK
+            <where>
+                AND (ERROR_DETAIL IS NULL OR ERROR_DETAIL NOT IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT'))
+                <if test="batchId != null and batchId != ''">AND ID = #{batchId}</if>
+                <if test="budgetYear != null and budgetYear != ''">AND BUDGET_YEAR = #{budgetYear}</if>
+                <if test="departmentCode != null and departmentCode != ''">AND DEPARTMENT_CODE = #{departmentCode}</if>
+                <if test="fileName != null">AND INSTR(LOWER(FILE_NAME), LOWER(#{fileName})) &gt; 0</if>
+                <if test="createdFrom != null">AND CREATED_TIME &gt;= #{createdFrom}</if>
+                <if test="createdBefore != null">AND CREATED_TIME &lt; #{createdBefore}</if>
+            </where>
+        ) PAGE_DATA
+        WHERE RN &gt; #{offset} AND RN &lt;= (#{offset} + #{limit})
+        ORDER BY RN
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(1)
+        FROM BUDGET_REVIEW_TASK
+        <where>
+            AND (ERROR_DETAIL IS NULL OR ERROR_DETAIL NOT IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT'))
+            <if test="batchId != null and batchId != ''">AND ID = #{batchId}</if>
+            <if test="budgetYear != null and budgetYear != ''">AND BUDGET_YEAR = #{budgetYear}</if>
+            <if test="departmentCode != null and departmentCode != ''">AND DEPARTMENT_CODE = #{departmentCode}</if>
+            <if test="fileName != null">AND INSTR(LOWER(FILE_NAME), LOWER(#{fileName})) &gt; 0</if>
+            <if test="createdFrom != null">AND CREATED_TIME &gt;= #{createdFrom}</if>
+            <if test="createdBefore != null">AND CREATED_TIME &lt; #{createdBefore}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,11 @@
+# Install only into a dedicated Python 3.11 application environment.
+fastapi==0.141.1
+httpx==0.28.1
+python-multipart==0.0.20
+uvicorn==0.52.1
+
+# The verified 29 OCR environment manages these native/runtime packages.
+# Do not reinstall or upgrade them as part of the application deployment:
+# paddlepaddle 3.3.1
+# paddleocr 3.7.0
+# opencv 4.10.0

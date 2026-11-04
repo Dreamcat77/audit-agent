@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementApprovalOperationMapper">
+    <resultMap id="operationRow" type="com.fuquan.audit.integration.dm8.ProcurementApprovalOperationPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="instanceId" column="INSTANCE_ID"/>
+        <result property="projectId" column="PROJECT_ID"/>
+        <result property="nodeCode" column="NODE_CODE"/>
+        <result property="operationType" column="OPERATION_TYPE"/>
+        <result property="operatorUserId" column="OPERATOR_USER_ID"/>
+        <result property="operatorName" column="OPERATOR_NAME"/>
+        <result property="opinion" column="OPINION"/>
+        <result property="fromStatus" column="FROM_STATUS"/>
+        <result property="toStatus" column="TO_STATUS"/>
+        <result property="operatedTime" column="OPERATED_TIME"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="originalAssigneeUserId" column="ORIGINAL_ASSIGNEE_USER_ID"/>
+        <result property="originalAssigneeName" column="ORIGINAL_ASSIGNEE_NAME"/>
+        <result property="newAssigneeUserId" column="NEW_ASSIGNEE_USER_ID"/>
+        <result property="newAssigneeName" column="NEW_ASSIGNEE_NAME"/>
+        <result property="adminActing" column="ADMIN_ACTING"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO PROCUREMENT_APPROVAL_OPERATION_LOG (
+            ID, INSTANCE_ID, PROJECT_ID, NODE_CODE, OPERATION_TYPE, OPERATOR_USER_ID,
+            OPERATOR_NAME, OPINION, FROM_STATUS, TO_STATUS, OPERATED_TIME, CREATED_TIME,
+            ORIGINAL_ASSIGNEE_USER_ID, ORIGINAL_ASSIGNEE_NAME, NEW_ASSIGNEE_USER_ID, NEW_ASSIGNEE_NAME, ADMIN_ACTING
+        ) VALUES (
+            #{id}, #{instanceId}, #{projectId}, #{nodeCode}, #{operationType}, #{operatorUserId},
+            #{operatorName}, #{opinion}, #{fromStatus}, #{toStatus}, #{operatedTime}, #{createdTime},
+            #{originalAssigneeUserId}, #{originalAssigneeName}, #{newAssigneeUserId}, #{newAssigneeName}, #{adminActing}
+        )
+    </insert>
+
+    <select id="findByProjectId" resultMap="operationRow">
+        SELECT ID, INSTANCE_ID, PROJECT_ID, NODE_CODE, OPERATION_TYPE, OPERATOR_USER_ID,
+               OPERATOR_NAME, OPINION, FROM_STATUS, TO_STATUS, OPERATED_TIME, CREATED_TIME,
+               ORIGINAL_ASSIGNEE_USER_ID, ORIGINAL_ASSIGNEE_NAME, NEW_ASSIGNEE_USER_ID, NEW_ASSIGNEE_NAME, ADMIN_ACTING
+        FROM PROCUREMENT_APPROVAL_OPERATION_LOG
+        WHERE PROJECT_ID = #{projectId}
+        ORDER BY OPERATED_TIME, ID
+    </select>
+</mapper>

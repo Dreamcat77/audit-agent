@@ -1,0 +1,140 @@
+[
+  {
+    "label": "budget-normal",
+    "before": "c0c030e67becd1094fc5df2f15dc6055ef38dc16760dddf86494023073d41860",
+    "after": "c0c030e67becd1094fc5df2f15dc6055ef38dc16760dddf86494023073d41860",
+    "failures": []
+  },
+  {
+    "label": "budget-over",
+    "before": "9a9005d125b9d442b72267aea7421b06e8d196344349c3cd3bed42275fd0d5bf",
+    "after": "9a9005d125b9d442b72267aea7421b06e8d196344349c3cd3bed42275fd0d5bf",
+    "failures": []
+  },
+  {
+    "label": "budget-uppercase",
+    "before": "3f81ce2713b4f3dc758ac80bce815f9e8de1542c26ace15dd6f6260ae8bc421d",
+    "after": "3f81ce2713b4f3dc758ac80bce815f9e8de1542c26ace15dd6f6260ae8bc421d",
+    "failures": []
+  },
+  {
+    "label": "budget-missing-item",
+    "before": "a36a82e037aa48ad496cf3b57bcbb446d81b696bf5ea310bb5a2d1f7a392ff3a",
+    "after": "a36a82e037aa48ad496cf3b57bcbb446d81b696bf5ea310bb5a2d1f7a392ff3a",
+    "failures": []
+  },
+  {
+    "label": "budget-excel",
+    "before": "e099d203f57a75c1cbd6f3bb29d0be495aad2b48335ae83b61de90f8ea6ef862",
+    "after": "e099d203f57a75c1cbd6f3bb29d0be495aad2b48335ae83b61de90f8ea6ef862",
+    "failures": []
+  },
+  {
+    "label": "budget-partial",
+    "before": "87246b06a3cd7cd16243d48f3e53d91cf67dde56c15ae34b634c75611686377b",
+    "after": "87246b06a3cd7cd16243d48f3e53d91cf67dde56c15ae34b634c75611686377b",
+    "failures": []
+  },
+  {
+    "label": "procurement-normal",
+    "before": "2c1df939e1bb98640f64b8fbea5fee78378a922dc7cb3bd93d4f7daf5d10932f",
+    "after": "2c1df939e1bb98640f64b8fbea5fee78378a922dc7cb3bd93d4f7daf5d10932f",
+    "failures": []
+  },
+  {
+    "label": "procurement-conflict",
+    "before": "918bdb729dce8247d36a50c034eba217e67ba12dc3cde525c27dda2e5da51c61",
+    "after": "918bdb729dce8247d36a50c034eba217e67ba12dc3cde525c27dda2e5da51c61",
+    "failures": []
+  },
+  {
+    "label": "contract-normal-procurement",
+    "before": "5dd08ef76d8df6b6f0cab367a503c1033de7740597ea73772997fdb2a52e13c0",
+    "after": "5dd08ef76d8df6b6f0cab367a503c1033de7740597ea73772997fdb2a52e13c0",
+    "failures": []
+  },
+  {
+    "label": "contract-normal-service",
+    "before": "6b5d87f2dee384eb2314d6ea8dd5441f14354dd3b55feea0646aca0685a2e228",
+    "after": "6b5d87f2dee384eb2314d6ea8dd5441f14354dd3b55feea0646aca0685a2e228",
+    "failures": []
+  },
+  {
+    "label": "contract-normal-lease",
+    "before": "6f0953d56ccb7565ad2a9a9c0f8b9b919b4b87fcd2d9d7d6afd6e5374880b2f7",
+    "after": "6f0953d56ccb7565ad2a9a9c0f8b9b919b4b87fcd2d9d7d6afd6e5374880b2f7",
+    "failures": []
+  },
+  {
+    "label": "contract-missing-fields",
+    "before": "b353abf409c0f7b33218b306fefdc2c7c8a66101919fd8d99bc2defc001a1fdc",
+    "after": "b353abf409c0f7b33218b306fefdc2c7c8a66101919fd8d99bc2defc001a1fdc",
+    "failures": []
+  },
+  {
+    "label": "contract-amount-conflict",
+    "before": "c8437fb39986017982cec0ed23b6b5399f21b9c65011ebd057f2ea525e002edc",
+    "after": "c8437fb39986017982cec0ed23b6b5399f21b9c65011ebd057f2ea525e002edc",
+    "failures": []
+  },
+  {
+    "label": "contract-payment-conflict",
+    "before": "6f3f03e2ddc2752bd5a65ef96d3b2eeeaf45cd0616965614be9dc0b93a57e4ce",
+    "after": "6f3f03e2ddc2752bd5a65ef96d3b2eeeaf45cd0616965614be9dc0b93a57e4ce",
+    "failures": []
+  },
+  {
+    "label": "contract-award-conflict",
+    "before": "aa2fc2fb3788fc723ef285539808f722f17191a9e4121bdaafd831b8c420715a",
+    "after": "aa2fc2fb3788fc723ef285539808f722f17191a9e4121bdaafd831b8c420715a",
+    "failures": []
+  },
+  {
+    "label": "contract-supplement-conflict",
+    "before": "262425d8a09870465688470408ae54580cae457816d574d5854b5940bd5977db",
+    "after": "262425d8a09870465688470408ae54580cae457816d574d5854b5940bd5977db",
+    "failures": []
+  },
+  {
+    "label": "contract-valid-amendment",
+    "before": "76f418fa628db8de696acf0e1a60c118316ea59756424280bd7d5ad1188b17aa",
+    "after": "76f418fa628db8de696acf0e1a60c118316ea59756424280bd7d5ad1188b17aa",
+    "failures": []
+  },
+  {
+    "label": "contract-mixed-contracts",
+    "before": "46484e324433068c932ea6bd07507e7ae6fd61025668f46ef24ba671eafbf722",
+    "after": "46484e324433068c932ea6bd07507e7ae6fd61025668f46ef24ba671eafbf722",
+    "failures": []
+  },
+  {
+    "label": "contract-partial-file",
+    "before": "4cca472493f846239e451ea7d3e2fce5d2eb8268dc08f889c6a366ca40e895ea",
+    "after": "4cca472493f846239e451ea7d3e2fce5d2eb8268dc08f889c6a366ca40e895ea",
+    "failures": []
+  },
+  {
+    "label": "contract-prompt-injection",
+    "before": "29940aa288f29d0be447cf4a97b07a664f454d8373b9db361ebdff49ab339b8f",
+    "after": "29940aa288f29d0be447cf4a97b07a664f454d8373b9db361ebdff49ab339b8f",
+    "failures": []
+  },
+  {
+    "label": "contract-rotated-scan",
+    "before": "8c1fbafc6a95f58d31916b119db9d7b41afcabf7174fe9603dfca11be34fdbcc",
+    "after": "8c1fbafc6a95f58d31916b119db9d7b41afcabf7174fe9603dfca11be34fdbcc",
+    "failures": []
+  },
+  {
+    "label": "contract-complex-table",
+    "before": "005fdced5ba98e9984c7de27f3653b6d980ec2a5964379f78cc5385a834d3bb0",
+    "after": "005fdced5ba98e9984c7de27f3653b6d980ec2a5964379f78cc5385a834d3bb0",
+    "failures": []
+  },
+  {
+    "label": "contract-valid-amendment-clear",
+    "before": "a0a91e213ebd9defbd422798079242c534a377d406f9a768363e4e40ac4dc09b",
+    "after": "a0a91e213ebd9defbd422798079242c534a377d406f9a768363e4e40ac4dc09b",
+    "failures": []
+  }
+]

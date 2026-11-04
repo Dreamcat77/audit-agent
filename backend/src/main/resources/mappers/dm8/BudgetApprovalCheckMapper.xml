@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BudgetApprovalCheckMapper">
+    <insert id="insertBatch">
+        INSERT INTO BUDGET_APPROVAL_CHECK (
+            ID, PROCUREMENT_ID, CHECK_TYPE, SUBJECT_CODE,
+            EXPECTED_VALUE, ACTUAL_VALUE, IS_PASSED, ERROR_DETAIL, CHECK_TIME
+        ) VALUES
+        <foreach collection="list" item="row" separator=",">
+            (
+                #{row.id}, #{row.procurementId}, #{row.checkType}, #{row.subjectCode},
+                #{row.expectedValue}, #{row.actualValue}, #{row.passed}, #{row.errorDetail}, #{row.checkTime}
+            )
+        </foreach>
+    </insert>
+</mapper>

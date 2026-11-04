@@ -1,0 +1,17 @@
+{
+  "label": "budget-partial",
+  "batchId": "a9214ae1-c50f-4622-a247-f4a44fb0e798",
+  "jobs": [
+    "ce63b459-b1e4-4ff7-9e43-f0278037f19b",
+    "e8520788-70c1-4574-9067-2eebc8dee8de"
+  ],
+  "statuses": [
+    "PARSED",
+    "FAILED"
+  ],
+  "lines": 1,
+  "reportFingerprint": "87246b06a3cd7cd16243d48f3e53d91cf67dde56c15ae34b634c75611686377b",
+  "failures": [],
+  "realModel": true,
+  "synthetic": true
+}

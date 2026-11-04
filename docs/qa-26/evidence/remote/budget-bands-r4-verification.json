@@ -1,0 +1,45 @@
+{
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "scenarios": [
+    {
+      "total": "9999.99",
+      "band": "BELOW_10K",
+      "analysisId": "b8bbc23b-63e4-48b8-ba6c-f2430457da85",
+      "fingerprint": "680eb08251f9b30a32f018926f8fcbfc43f4b6bcf2d922f17afd2be948b0a5a3"
+    },
+    {
+      "total": "10000",
+      "band": "FROM_10K_TO_100K",
+      "analysisId": "2f8aa51c-517b-4ec8-b2bb-debe0f432cb1",
+      "fingerprint": "b9ec8f2bf76d058f30eab1914ca11962f820278966199ae5661108a4833bccda"
+    },
+    {
+      "total": "50000",
+      "band": "FROM_10K_TO_100K",
+      "analysisId": "a1dab17d-d9fc-4e65-be70-69879fad7a62",
+      "fingerprint": "cda4dc52b1c8e73bd3da23609d80260a9fbde0f52ec17749e17d8503e3420c0d"
+    },
+    {
+      "total": "100000",
+      "band": "FROM_10K_TO_100K",
+      "analysisId": "d7d48264-8ec9-49b9-ae8e-ae906da44285",
+      "fingerprint": "8e5036a10a5dbd36f04240a7b1e3fd9d868769e7313284056bb87534eab33ce4"
+    },
+    {
+      "total": "110000",
+      "band": "ABOVE_100K",
+      "analysisId": "78741d30-1712-40e8-b3ff-79b7ab055412",
+      "fingerprint": "2053f5d6df96081a5786e78d151829e02ded229844714ac0caddbdc2b2abcef4"
+    }
+  ],
+  "sixWayIdempotentReplay": true,
+  "changedSelectionHttp": 409,
+  "crossOwnerDenied": true,
+  "newLoginReopenUnchanged": true,
+  "historyPagesDoNotOverlap": true,
+  "historyDateFilter": true,
+  "allSelectedCandidatesDiscoverable": true,
+  "failures": []
+}

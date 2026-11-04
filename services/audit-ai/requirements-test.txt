@@ -1,0 +1,6 @@
+-r requirements-runtime.txt
+pytest==9.1.1
+pillow==12.3.0
+numpy==1.26.4
+opencv-python-headless==4.10.0.84
+pypdfium2==5.14.0

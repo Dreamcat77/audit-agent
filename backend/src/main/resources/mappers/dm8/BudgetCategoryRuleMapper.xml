@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BudgetCategoryRuleMapper">
+    <resultMap id="categoryRuleRow" type="com.fuquan.audit.integration.dm8.BudgetCategoryRulePersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="categoryName" column="CATEGORY_NAME"/>
+        <result property="allowedKeywords" column="ALLOWED_KEYWORDS"/>
+        <result property="forbiddenKeywords" column="FORBIDDEN_KEYWORDS"/>
+        <result property="suggestCategory" column="SUGGEST_CATEGORY"/>
+        <result property="status" column="STATUS"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+    </resultMap>
+
+    <select id="findByCategoryCode" resultMap="categoryRuleRow">
+        SELECT ID, CATEGORY_CODE, CATEGORY_NAME, ALLOWED_KEYWORDS, FORBIDDEN_KEYWORDS,
+               SUGGEST_CATEGORY, STATUS, CREATED_TIME, UPDATED_TIME
+        FROM BUDGET_CATEGORY_RULES
+        WHERE CATEGORY_CODE = #{categoryCode}
+          AND STATUS = 'ACTIVE'
+    </select>
+
+    <select id="findAllActive" resultMap="categoryRuleRow">
+        SELECT ID, CATEGORY_CODE, CATEGORY_NAME, ALLOWED_KEYWORDS, FORBIDDEN_KEYWORDS,
+               SUGGEST_CATEGORY, STATUS, CREATED_TIME, UPDATED_TIME
+        FROM BUDGET_CATEGORY_RULES
+        WHERE STATUS = 'ACTIVE'
+        ORDER BY CATEGORY_CODE
+    </select>
+</mapper>

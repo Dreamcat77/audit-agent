@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementApprovalNodeMapper">
+    <resultMap id="nodeRow" type="com.fuquan.audit.integration.dm8.ProcurementApprovalNodePersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="instanceId" column="INSTANCE_ID"/>
+        <result property="nodeCode" column="NODE_CODE"/>
+        <result property="nodeName" column="NODE_NAME"/>
+        <result property="nodeOrder" column="NODE_ORDER"/>
+        <result property="status" column="STATUS"/>
+        <result property="requiredRoleCode" column="REQUIRED_ROLE_CODE"/>
+        <result property="assigneeUserId" column="ASSIGNEE_USER_ID"/>
+        <result property="assigneeName" column="ASSIGNEE_NAME"/>
+        <result property="startedTime" column="STARTED_TIME"/>
+        <result property="completedTime" column="COMPLETED_TIME"/>
+    </resultMap>
+
+    <resultMap id="taskRow" type="com.fuquan.audit.integration.dm8.ProcurementApprovalTaskPersistenceRow">
+        <id property="nodeId" column="NODE_ID"/>
+        <result property="projectId" column="PROJECT_ID"/>
+        <result property="projectCode" column="PROJECT_CODE"/>
+        <result property="projectName" column="PROJECT_NAME"/>
+        <result property="budgetAmount" column="BUDGET_AMOUNT"/>
+        <result property="instanceId" column="INSTANCE_ID"/>
+        <result property="instanceStatus" column="INSTANCE_STATUS"/>
+        <result property="nodeCode" column="NODE_CODE"/>
+        <result property="nodeName" column="NODE_NAME"/>
+        <result property="requiredRoleCode" column="REQUIRED_ROLE_CODE"/>
+        <result property="assigneeUserId" column="ASSIGNEE_USER_ID"/>
+        <result property="assigneeName" column="ASSIGNEE_NAME"/>
+        <result property="startedTime" column="STARTED_TIME"/>
+    </resultMap>
+
+    <select id="findByInstanceId" resultMap="nodeRow">
+        SELECT ID, INSTANCE_ID, NODE_CODE, NODE_NAME, NODE_ORDER, STATUS, REQUIRED_ROLE_CODE,
+               ASSIGNEE_USER_ID, ASSIGNEE_NAME, STARTED_TIME, COMPLETED_TIME
+        FROM PROCUREMENT_APPROVAL_NODE
+        WHERE INSTANCE_ID = #{instanceId}
+        ORDER BY NODE_ORDER
+    </select>
+
+    <select id="findPendingTasksByAssignee" resultMap="taskRow">
+        SELECT D.ID AS PROJECT_ID, D.BUDGET_APPROVAL_ID AS PROJECT_CODE, D.PROCUREMENT_NAME AS PROJECT_NAME,
+               D.AMOUNT AS BUDGET_AMOUNT, I.ID AS INSTANCE_ID, I.STATUS AS INSTANCE_STATUS,
+               N.ID AS NODE_ID, N.NODE_CODE, N.NODE_NAME, N.REQUIRED_ROLE_CODE,
+               N.ASSIGNEE_USER_ID, N.ASSIGNEE_NAME, N.STARTED_TIME
+        FROM PROCUREMENT_APPROVAL_NODE N
+        INNER JOIN PROCUREMENT_APPROVAL_INSTANCE I ON I.ID = N.INSTANCE_ID
+        INNER JOIN PROCUREMENT_DEMAND D ON D.ID = I.PROJECT_ID
+        WHERE N.STATUS = 'IN_PROGRESS'
+          AND N.ASSIGNEE_USER_ID = #{userId}
+          AND I.STATUS = 'IN_PROGRESS'
+          AND D.DELETED = 0
+        ORDER BY N.STARTED_TIME, N.ID
+    </select>
+
+    <insert id="insertBatch">
+        INSERT INTO PROCUREMENT_APPROVAL_NODE (
+            ID, INSTANCE_ID, NODE_CODE, NODE_NAME, NODE_ORDER, STATUS,
+            REQUIRED_ROLE_CODE, ASSIGNEE_USER_ID, ASSIGNEE_NAME, STARTED_TIME, COMPLETED_TIME
+        ) VALUES
+        <foreach collection="list" item="row" separator=",">
+            (#{row.id}, #{row.instanceId}, #{row.nodeCode}, #{row.nodeName}, #{row.nodeOrder}, #{row.status},
+             #{row.requiredRoleCode}, #{row.assigneeUserId}, #{row.assigneeName}, #{row.startedTime}, #{row.completedTime})
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE PROCUREMENT_APPROVAL_NODE
+        SET STATUS = #{status}, REQUIRED_ROLE_CODE = #{requiredRoleCode}, ASSIGNEE_USER_ID = #{assigneeUserId}, ASSIGNEE_NAME = #{assigneeName},
+            STARTED_TIME = #{startedTime}, COMPLETED_TIME = #{completedTime}
+        WHERE ID = #{id}
+    </update>
+</mapper>

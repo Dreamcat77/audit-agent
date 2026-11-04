@@ -1,0 +1,17 @@
+{
+  "scenario": "partial-file",
+  "caseId": "f98ca0de-e71f-360f-bfd5-7646838723b3",
+  "status": "PARTIAL",
+  "documents": 2,
+  "facts": 10,
+  "clauses": 8,
+  "risks": 0,
+  "followUps": 0,
+  "evidenceChecks": 22,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-partial-file",
+  "reportFingerprint": "4cca472493f846239e451ea7d3e2fce5d2eb8268dc08f889c6a366ca40e895ea"
+}

@@ -1,0 +1,19 @@
+{
+  "headings": [
+    "合同审核",
+    "分析记录"
+  ],
+  "buttons": [
+    "查看原有正式审核记录",
+    "上一页",
+    "下一页"
+  ],
+  "inputs": [
+    {
+      "type": "file",
+      "placeholder": "",
+      "accept": ".zip,.pdf,.doc,.docx,.png,.jpg,.jpeg",
+      "aria": null
+    }
+  ]
+}

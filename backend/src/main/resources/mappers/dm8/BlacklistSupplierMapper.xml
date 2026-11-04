@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BlacklistSupplierMapper">
+
+    <resultMap id="supplierRow" type="com.fuquan.audit.integration.dm8.BlacklistSupplierPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="supplierName" column="SUPPLIER_NAME"/>
+        <result property="supplierCode" column="SUPPLIER_CODE"/>
+        <result property="blacklistType" column="BLACKLIST_TYPE"/>
+        <result property="reason" column="REASON"/>
+        <result property="source" column="SOURCE"/>
+        <result property="effectiveDate" column="EFFECTIVE_DATE"/>
+        <result property="expiryDate" column="EXPIRY_DATE"/>
+        <result property="active" column="IS_ACTIVE"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+    </resultMap>
+
+    <sql id="columns">
+        ID, SUPPLIER_NAME, SUPPLIER_CODE, BLACKLIST_TYPE, REASON, SOURCE,
+        EFFECTIVE_DATE, EXPIRY_DATE, IS_ACTIVE, CREATED_BY, CREATED_TIME, UPDATED_TIME
+    </sql>
+
+    <select id="findAllActive" resultMap="supplierRow">
+        SELECT <include refid="columns"/>
+        FROM BLACKLIST_SUPPLIER
+        WHERE IS_ACTIVE = TRUE
+        ORDER BY CREATED_TIME DESC
+    </select>
+
+    <select id="findPage" resultMap="supplierRow">
+        SELECT *
+        FROM (
+            SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.CREATED_TIME DESC) AS RN
+            FROM BLACKLIST_SUPPLIER t
+            <where>
+                <if test="active != null">
+                    AND t.IS_ACTIVE = #{active}
+                </if>
+                <if test="keyword != null and keyword != ''">
+                    AND (t.SUPPLIER_NAME LIKE '%' || #{keyword} || '%'
+                         OR t.SUPPLIER_CODE LIKE '%' || #{keyword} || '%')
+                </if>
+                <if test="blacklistType != null and blacklistType != ''">
+                    AND t.BLACKLIST_TYPE = #{blacklistType}
+                </if>
+            </where>
+        ) t
+        WHERE t.RN &gt; #{startRow} AND t.RN &lt;= #{endRow}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(1)
+        FROM BLACKLIST_SUPPLIER
+        <where>
+            <if test="active != null">
+                AND IS_ACTIVE = #{active}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (SUPPLIER_NAME LIKE '%' || #{keyword} || '%'
+                     OR SUPPLIER_CODE LIKE '%' || #{keyword} || '%')
+            </if>
+            <if test="blacklistType != null and blacklistType != ''">
+                AND BLACKLIST_TYPE = #{blacklistType}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById" resultMap="supplierRow">
+        SELECT <include refid="columns"/>
+        FROM BLACKLIST_SUPPLIER
+        WHERE ID = #{id}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO BLACKLIST_SUPPLIER (
+            ID, SUPPLIER_NAME, SUPPLIER_CODE, BLACKLIST_TYPE, REASON, SOURCE,
+            EFFECTIVE_DATE, EXPIRY_DATE, IS_ACTIVE, CREATED_BY, CREATED_TIME, UPDATED_TIME
+        ) VALUES (
+            #{id}, #{supplierName}, #{supplierCode}, #{blacklistType}, #{reason}, #{source},
+            #{effectiveDate}, #{expiryDate}, #{active}, #{createdBy}, #{createdTime}, #{updatedTime}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE BLACKLIST_SUPPLIER
+        SET SUPPLIER_NAME = #{supplierName},
+            SUPPLIER_CODE = #{supplierCode},
+            BLACKLIST_TYPE = #{blacklistType},
+            REASON = #{reason},
+            SOURCE = #{source},
+            EFFECTIVE_DATE = #{effectiveDate},
+            EXPIRY_DATE = #{expiryDate},
+            IS_ACTIVE = #{active},
+            CREATED_BY = #{createdBy},
+            UPDATED_TIME = #{updatedTime}
+        WHERE ID = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,13 @@
+{
+  "backup": "/home/admin/audit-agent-backups/qa26-stage2-20261027",
+  "originalRelease": "/opt/audit-agent/releases/auto-intake-20261026.qw7KXB",
+  "archive": "original-deployment.tar",
+  "archiveSha256": "f6d98267e9e6e521b55e29ba3a779833d03f90d3a191d26612f5b0f7addb67f7",
+  "files": 260,
+  "bytes": 105945242,
+  "regularFilesRestoredAndHashVerified": 260,
+  "symlinksRecorded": 0,
+  "sourceUnchangedDuringBackup": true,
+  "originalServicesStopped": false,
+  "databaseDataBackupIncluded": false
+}

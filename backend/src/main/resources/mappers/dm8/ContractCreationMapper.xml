@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ContractCreationMapper">
+    <insert id="insertContract">
+        INSERT INTO CONTRACT (ID, CONTRACT_NO, CONTRACT_NAME, CONTRACT_TYPE, PARTY_A, PARTY_B,
+            PARTY_B_CREDIT_CODE, CONTRACT_AMOUNT, AMOUNT_IN_WORDS, STATUS, VERSION_NO, CREATED_AT, UPDATED_AT)
+        VALUES (#{row.id}, #{row.contractNo}, #{row.contractName}, #{row.contractType}, #{row.partyA}, #{row.partyB},
+            #{row.partyBCreditCode}, #{row.contractAmount}, #{row.amountInWords}, #{row.status}, #{row.versionNo},
+            #{row.createdAt}, #{row.updatedAt})
+    </insert>
+    <insert id="insertLineItem">
+        INSERT INTO CONTRACT_LINE_ITEM (ID, CONTRACT_ID, ITEM_KEY, ITEM_NAME, BASIS, QUANTITY, UNIT_PRICE,
+            DECLARED_AMOUNT, SORT_NO)
+        VALUES (#{row.id}, #{row.contractId}, #{row.itemKey}, #{row.itemName}, #{row.basis}, #{row.quantity},
+            #{row.unitPrice}, #{row.declaredAmount}, #{row.sortNo})
+    </insert>
+    <insert id="insertAwardNotice">
+        INSERT INTO CONTRACT_AWARD_NOTICE (ID, CONTRACT_ID, NOTICE_NO, PROJECT_NAME, WINNING_BIDDER,
+            WINNING_BIDDER_CREDIT_CODE, WINNING_AMOUNT, WINNING_DATE, SOURCE_REF, CREATED_AT)
+        VALUES (#{row.id}, #{row.contractId}, #{row.noticeNo}, #{row.projectName}, #{row.winningBidder},
+            #{row.winningBidderCreditCode}, #{row.winningAmount}, #{row.winningDate}, #{row.sourceRef},
+            #{row.createdAt})
+    </insert>
+</mapper>

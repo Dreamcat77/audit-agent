@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProjectContractMapper">
+    <sql id="columns">PROJECT_ID, CONTRACT_ID, CANDIDATE_ID, CREATED_BY, CREATED_AT</sql>
+    <insert id="insert">
+        INSERT INTO PROJECT_CONTRACT (<include refid="columns"/>)
+        VALUES (#{row.projectId}, #{row.contractId}, #{row.candidateId}, #{row.createdBy}, #{row.createdAt})
+    </insert>
+    <select id="findByProjectId" resultType="com.fuquan.audit.integration.dm8.ProjectContractPersistenceRow">
+        SELECT <include refid="columns"/> FROM PROJECT_CONTRACT
+        WHERE PROJECT_ID = #{projectId} ORDER BY CREATED_AT, CONTRACT_ID
+    </select>
+    <select id="findByContractId" resultType="com.fuquan.audit.integration.dm8.ProjectContractPersistenceRow">
+        SELECT <include refid="columns"/> FROM PROJECT_CONTRACT WHERE CONTRACT_ID = #{contractId}
+    </select>
+    <select id="findByContractIdForUpdate" resultType="com.fuquan.audit.integration.dm8.ProjectContractPersistenceRow">
+        SELECT <include refid="columns"/> FROM PROJECT_CONTRACT WHERE CONTRACT_ID = #{contractId} FOR UPDATE
+    </select>
+    <select id="findByCandidateId" resultType="com.fuquan.audit.integration.dm8.ProjectContractPersistenceRow">
+        SELECT <include refid="columns"/> FROM PROJECT_CONTRACT WHERE CANDIDATE_ID = #{candidateId}
+    </select>
+</mapper>

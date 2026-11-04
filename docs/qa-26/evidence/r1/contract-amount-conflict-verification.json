@@ -1,0 +1,17 @@
+{
+  "scenario": "amount-conflict",
+  "caseId": "8782a704-ef63-3856-9431-d7a950c9f974",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 10,
+  "clauses": 8,
+  "risks": 2,
+  "followUps": 0,
+  "evidenceChecks": 27,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-amount-conflict",
+  "reportFingerprint": "c8437fb39986017982cec0ed23b6b5399f21b9c65011ebd057f2ea525e002edc"
+}

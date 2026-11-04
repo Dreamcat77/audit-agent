@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementAgentReviewSnapshotMapper">
+    <resultMap id="snapshotRow" type="com.fuquan.audit.integration.dm8.ProcurementAgentReviewSnapshotPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="projectId" column="PROJECT_ID"/>
+        <result property="generatedTime" column="GENERATED_TIME"/>
+        <result property="reviewJson" column="REVIEW_JSON"/>
+    </resultMap>
+
+    <update id="update">
+        UPDATE PROCUREMENT_AGENT_REVIEW_SNAPSHOT
+        SET ID = #{id}, GENERATED_TIME = #{generatedTime}, REVIEW_JSON = #{reviewJson}
+        WHERE PROJECT_ID = #{projectId}
+    </update>
+
+    <insert id="insert">
+        INSERT INTO PROCUREMENT_AGENT_REVIEW_SNAPSHOT
+            (ID, PROJECT_ID, GENERATED_TIME, REVIEW_JSON)
+        VALUES
+            (#{id}, #{projectId}, #{generatedTime}, #{reviewJson})
+    </insert>
+
+    <select id="findByProjectId" resultMap="snapshotRow">
+        SELECT ID, PROJECT_ID, GENERATED_TIME, REVIEW_JSON
+        FROM PROCUREMENT_AGENT_REVIEW_SNAPSHOT
+        WHERE PROJECT_ID = #{projectId}
+    </select>
+
+    <select id="findByProjectIds" resultMap="snapshotRow">
+        SELECT ID, PROJECT_ID, GENERATED_TIME, REVIEW_JSON
+        FROM PROCUREMENT_AGENT_REVIEW_SNAPSHOT
+        WHERE PROJECT_ID IN
+        <foreach collection="projectIds" item="projectId" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </select>
+
+    <delete id="deleteByProjectId">
+        DELETE FROM PROCUREMENT_AGENT_REVIEW_SNAPSHOT
+        WHERE PROJECT_ID = #{projectId}
+    </delete>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ContractCandidateMapper">
+    <sql id="columns">ID, PROJECT_ID, SOURCE_CONTRACT_FILE_ID, SOURCE_PARSE_RESULT_ID, SOURCE_ROLE_DECISION_ID, SOURCE_IDENTITY_DECISION_ID, SOURCE_AUTHORITY_SOURCE, SOURCE_FACT_FINGERPRINT, CONTRACT_NO, CONTRACT_NAME, CONTRACT_TYPE, PARTY_A, PARTY_B, PARTY_B_CREDIT_CODE, CONTRACT_AMOUNT, AMOUNT_IN_WORDS, AWARD_AMOUNT, AWARD_SUPPLIER, AWARD_SUPPLIER_CREDIT_CODE, PROMOTION_STATE, VERSION_NO, PROMOTED_CONTRACT_ID, PROMOTED_CONFIRMATION_ID, PROMOTED_BY, PROMOTED_AT, CREATED_AT, UPDATED_AT, SUPPORT_AUTHORITY_VERSION_NO, SUPPORT_AUTHORITY_FINGERPRINT</sql>
+    <insert id="insert">INSERT INTO CONTRACT_CANDIDATE (<include refid="columns"/>) VALUES (#{row.id},#{row.projectId},#{row.sourceContractFileId},#{row.sourceParseResultId},#{row.sourceRoleDecisionId},#{row.sourceIdentityDecisionId},#{row.sourceAuthoritySource},#{row.sourceFactFingerprint},#{row.contractNo},#{row.contractName},#{row.contractType},#{row.partyA},#{row.partyB},#{row.partyBCreditCode},#{row.contractAmount},#{row.amountInWords},#{row.awardAmount},#{row.awardSupplier},#{row.awardSupplierCreditCode},#{row.promotionState},#{row.versionNo},#{row.promotedContractId},#{row.promotedConfirmationId},#{row.promotedBy},#{row.promotedAt},#{row.createdAt},#{row.updatedAt},#{row.supportAuthorityVersionNo},#{row.supportAuthorityFingerprint})</insert>
+    <insert id="insertLine">INSERT INTO CONTRACT_CANDIDATE_LINE_ITEM (ID, PROJECT_ID, CANDIDATE_ID, ITEM_KEY, ITEM_NAME, QUANTITY, UNIT_PRICE, DECLARED_AMOUNT, SORT_NO) VALUES (#{row.id},#{row.projectId},#{row.candidateId},#{row.itemKey},#{row.itemName},#{row.quantity},#{row.unitPrice},#{row.declaredAmount},#{row.sortNo})</insert>
+    <select id="findByProjectAndId" resultType="com.fuquan.audit.integration.dm8.ContractCandidatePersistenceRow">SELECT <include refid="columns"/> FROM CONTRACT_CANDIDATE WHERE PROJECT_ID=#{projectId} AND ID=#{id}</select>
+    <select id="findByProjectAndIdForUpdate" resultType="com.fuquan.audit.integration.dm8.ContractCandidatePersistenceRow">SELECT <include refid="columns"/> FROM CONTRACT_CANDIDATE WHERE PROJECT_ID=#{projectId} AND ID=#{id} FOR UPDATE</select>
+    <select id="findBySource" resultType="com.fuquan.audit.integration.dm8.ContractCandidatePersistenceRow">SELECT <include refid="columns"/> FROM CONTRACT_CANDIDATE WHERE PROJECT_ID=#{projectId} AND SOURCE_CONTRACT_FILE_ID=#{sourceId}</select>
+    <select id="findBySourceForUpdate" resultType="com.fuquan.audit.integration.dm8.ContractCandidatePersistenceRow">SELECT <include refid="columns"/> FROM CONTRACT_CANDIDATE WHERE PROJECT_ID=#{projectId} AND SOURCE_CONTRACT_FILE_ID=#{sourceId} FOR UPDATE</select>
+    <select id="findByProject" resultType="com.fuquan.audit.integration.dm8.ContractCandidatePersistenceRow">SELECT <include refid="columns"/> FROM CONTRACT_CANDIDATE WHERE PROJECT_ID=#{projectId} ORDER BY CREATED_AT, ID</select>
+    <select id="findLinesByCandidate" resultType="com.fuquan.audit.integration.dm8.ContractCandidateLineItemPersistenceRow">SELECT ID, PROJECT_ID, CANDIDATE_ID, ITEM_KEY, ITEM_NAME, QUANTITY, UNIT_PRICE, DECLARED_AMOUNT, SORT_NO FROM CONTRACT_CANDIDATE_LINE_ITEM WHERE PROJECT_ID=#{projectId} AND CANDIDATE_ID=#{candidateId} ORDER BY SORT_NO, ID</select>
+    <delete id="deleteLinesByCandidate">DELETE FROM CONTRACT_CANDIDATE_LINE_ITEM WHERE PROJECT_ID=#{projectId} AND CANDIDATE_ID=#{candidateId}</delete>
+    <update id="replaceDraftDerivedFactsIfVersionMatches">
+        UPDATE CONTRACT_CANDIDATE
+        SET CONTRACT_NO=#{facts.contractNo}, CONTRACT_NAME=#{facts.contractName}, CONTRACT_TYPE=#{facts.contractType},
+            PARTY_A=#{facts.partyA}, PARTY_B=#{facts.partyB}, PARTY_B_CREDIT_CODE=#{facts.partyBCreditCode},
+            CONTRACT_AMOUNT=#{facts.contractAmount}, AMOUNT_IN_WORDS=#{facts.amountInWords},
+            AWARD_AMOUNT=#{facts.awardAmount}, AWARD_SUPPLIER=#{facts.awardSupplier},
+            AWARD_SUPPLIER_CREDIT_CODE=#{facts.awardSupplierCreditCode},
+            SUPPORT_AUTHORITY_VERSION_NO=#{supportAuthorityVersionNo},
+            SUPPORT_AUTHORITY_FINGERPRINT=#{supportAuthorityFingerprint}, VERSION_NO=VERSION_NO+1,
+            UPDATED_AT=#{updatedAt}
+        WHERE PROJECT_ID=#{projectId} AND ID=#{candidateId}
+          AND PROMOTION_STATE='DRAFT' AND VERSION_NO=#{expectedVersion}
+    </update>
+    <update id="promoteIfVersionMatches">
+        UPDATE CONTRACT_CANDIDATE
+        SET PROMOTION_STATE='PROMOTED', VERSION_NO=VERSION_NO+1,
+            PROMOTED_CONTRACT_ID=#{contractId}, PROMOTED_BY=#{promotedBy},
+            PROMOTED_AT=#{promotedAt}, UPDATED_AT=#{updatedAt}
+        WHERE PROJECT_ID=#{projectId} AND ID=#{candidateId}
+          AND PROMOTION_STATE='DRAFT' AND VERSION_NO=#{expectedVersion}
+    </update>
+    <update id="promoteWithConfirmationIfVersionMatches">
+        UPDATE CONTRACT_CANDIDATE
+        SET PROMOTION_STATE='PROMOTED', VERSION_NO=VERSION_NO+1,
+            PROMOTED_CONTRACT_ID=#{contractId}, PROMOTED_CONFIRMATION_ID=#{confirmationId},
+            PROMOTED_BY=#{promotedBy}, PROMOTED_AT=#{promotedAt}, UPDATED_AT=#{updatedAt}
+        WHERE PROJECT_ID=#{projectId} AND ID=#{candidateId}
+          AND PROMOTION_STATE='DRAFT' AND VERSION_NO=#{expectedVersion}
+    </update>
+    <update id="confirmDraftIfVersionMatches">
+        UPDATE CONTRACT_CANDIDATE SET VERSION_NO=VERSION_NO+1, UPDATED_AT=#{updatedAt}
+        WHERE PROJECT_ID=#{projectId} AND ID=#{candidateId}
+          AND PROMOTION_STATE='DRAFT' AND VERSION_NO=#{expectedVersion}
+    </update>
+    <update id="reauthorizeDraftIfVersionMatches">
+        UPDATE CONTRACT_CANDIDATE
+        SET SOURCE_PARSE_RESULT_ID=#{parseResultId}, SOURCE_ROLE_DECISION_ID=#{roleDecisionId},
+            SOURCE_IDENTITY_DECISION_ID=#{identityDecisionId},
+            SOURCE_AUTHORITY_SOURCE=#{authoritySource},
+            SOURCE_FACT_FINGERPRINT=#{factFingerprint}, VERSION_NO=VERSION_NO+1,
+            UPDATED_AT=#{updatedAt}
+        WHERE PROJECT_ID=#{projectId} AND ID=#{candidateId}
+          AND PROMOTION_STATE='DRAFT' AND VERSION_NO=#{expectedVersion}
+    </update>
+</mapper>

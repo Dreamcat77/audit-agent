@@ -1,0 +1,17 @@
+{
+  "scenario": "missing-fields",
+  "caseId": "d7ab5ba7-2a56-344c-a505-9fbc33d9179e",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 7,
+  "clauses": 8,
+  "risks": 0,
+  "followUps": 1,
+  "evidenceChecks": 16,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-missing-fields",
+  "reportFingerprint": "b353abf409c0f7b33218b306fefdc2c7c8a66101919fd8d99bc2defc001a1fdc"
+}

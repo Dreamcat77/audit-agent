@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.IdempotencyMapper">
+    <sql id="columns">
+        ID, SCOPE, IDEMPOTENCY_KEY, ACTOR_ID, RESOURCE_TYPE, RESOURCE_ID, REQUEST_FINGERPRINT,
+        STATUS, RESULT_RESOURCE_TYPE, RESULT_RESOURCE_ID, FIRST_REQUEST_ID, TRACE_ID,
+        CREATED_AT, COMPLETED_AT, VERSION_NO
+    </sql>
+    <insert id="insert">
+        INSERT INTO IDEMPOTENCY_RECORD (
+            ID, SCOPE, IDEMPOTENCY_KEY, ACTOR_ID, RESOURCE_TYPE, RESOURCE_ID, REQUEST_FINGERPRINT,
+            STATUS, RESULT_RESOURCE_TYPE, RESULT_RESOURCE_ID, FIRST_REQUEST_ID, TRACE_ID,
+            CREATED_AT, COMPLETED_AT, VERSION_NO
+        ) VALUES (
+            #{id}, #{scope}, #{idempotencyKey}, #{actorId}, #{resourceType}, #{resourceId},
+            #{requestFingerprint}, #{status}, #{resultResourceType}, #{resultResourceId},
+            #{firstRequestId}, #{traceId}, #{createdAt}, #{completedAt}, #{versionNo}
+        )
+    </insert>
+    <select id="findByScopeAndKey" resultType="com.fuquan.audit.integration.dm8.IdempotencyPersistenceRow">
+        SELECT <include refid="columns"/> FROM IDEMPOTENCY_RECORD
+        WHERE SCOPE = #{scope} AND IDEMPOTENCY_KEY = #{idempotencyKey}
+    </select>
+    <select id="findById" resultType="com.fuquan.audit.integration.dm8.IdempotencyPersistenceRow">
+        SELECT <include refid="columns"/> FROM IDEMPOTENCY_RECORD WHERE ID = #{id}
+    </select>
+    <select id="findByResultResource" resultType="com.fuquan.audit.integration.dm8.IdempotencyPersistenceRow">
+        SELECT <include refid="columns"/> FROM IDEMPOTENCY_RECORD
+        WHERE RESULT_RESOURCE_TYPE = #{resultResourceType} AND RESULT_RESOURCE_ID = #{resultResourceId}
+    </select>
+    <select id="findAllByResultResource" resultType="com.fuquan.audit.integration.dm8.IdempotencyPersistenceRow">
+        SELECT <include refid="columns"/> FROM IDEMPOTENCY_RECORD
+        WHERE RESULT_RESOURCE_TYPE = #{resultResourceType} AND RESULT_RESOURCE_ID = #{resultResourceId}
+    </select>
+    <update id="markSucceeded">
+        UPDATE IDEMPOTENCY_RECORD
+        SET STATUS = 'SUCCEEDED', RESULT_RESOURCE_TYPE = #{resultResourceType},
+            RESULT_RESOURCE_ID = #{resultResourceId}, COMPLETED_AT = #{completedAt},
+            VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id} AND STATUS = 'IN_PROGRESS' AND VERSION_NO = #{expectedVersion}
+    </update>
+    <update id="markFailed">
+        UPDATE IDEMPOTENCY_RECORD
+        SET STATUS = 'FAILED', COMPLETED_AT = #{completedAt}, VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id} AND STATUS = 'IN_PROGRESS' AND VERSION_NO = #{expectedVersion}
+    </update>
+</mapper>

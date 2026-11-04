@@ -1,0 +1,2 @@
+/* Keep the customer LAN build self-contained. The global theme already uses
+   the system UI and Chinese font stack, so no remote font request is needed. */

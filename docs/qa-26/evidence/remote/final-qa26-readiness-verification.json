@@ -1,0 +1,34 @@
+{
+  "release": "/opt/audit-agent/pilots/qa26-20261027-r5",
+  "version": "qa26-20261027-r5",
+  "archiveSha256": "82524f60afe245370017c14b8f4c5a6f0148f5f019fe4fd1d9694628c9dffb7a",
+  "backendSha256": "c5ebe922d4bc241e7c2505668042fe4f4ced8992a8d3d97de727032b0f1ede69",
+  "http": {
+    ":18082/api/v1/health": 200,
+    ":19153/health": 200,
+    "/api/v1/health": 200
+  },
+  "activeTaskCounts": [
+    "QA26_ACTIVE table=AUDIT_CASE count=0",
+    "QA26_ACTIVE table=CONTRACT_ANALYSIS_CASE count=0",
+    "QA26_ACTIVE table=BUDGET_MATERIAL_JOB count=0",
+    "QA26_ACTIVE table=BUSINESS_MATERIAL_INTAKE count=0",
+    "QA26_ACTIVE table=PROJECT_FILE_PROCESSING_JOB count=0",
+    "QA26_ACTIVE table=CONTRACT_REVIEW_RUN count=0",
+    "QA26_ACTIVE table=CONTRACT_REVIEW_STEP_ATTEMPT count=0",
+    "QA26_ACTIVE table=MATERIAL_EXTRACTION_LEDGER count=0"
+  ],
+  "servicesActive": [
+    "audit-backend",
+    "audit-ai",
+    "nginx",
+    "audit-qa26-ai",
+    "audit-qa26-backend",
+    "audit-qa26-web"
+  ],
+  "originalFilesAndConfigurationUnchanged": true,
+  "originalDatabaseDdlOrDml": false,
+  "realDm8": true,
+  "readOnly": true,
+  "failures": []
+}

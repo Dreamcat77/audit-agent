@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.OperationAuditMapper">
+    <resultMap id="row" type="com.fuquan.audit.integration.dm8.OperationAuditPersistenceRow">
+      <constructor>
+        <arg column="ID" javaType="java.lang.String"/><arg column="EVENT_TYPE" javaType="java.lang.String"/>
+        <arg column="MODULE" javaType="java.lang.String"/><arg column="ACTION" javaType="java.lang.String"/>
+        <arg column="USER_ID" javaType="java.lang.String"/><arg column="USERNAME" javaType="java.lang.String"/>
+        <arg column="RESOURCE_TYPE" javaType="java.lang.String"/><arg column="RESOURCE_ID" javaType="java.lang.String"/>
+        <arg column="TASK_ID" javaType="java.lang.String"/><arg column="RESULT_STATUS" javaType="java.lang.String"/>
+        <arg column="BUSINESS_RESULT" javaType="java.lang.String"/><arg column="ACTION_DESC" javaType="java.lang.String"/>
+        <arg column="DETAIL" javaType="java.lang.String"/><arg column="REQUEST_ID" javaType="java.lang.String"/>
+        <arg column="TRACE_ID" javaType="java.lang.String"/><arg column="SOURCE_IP" javaType="java.lang.String"/>
+        <arg column="OCCURRED_AT" javaType="java.time.LocalDateTime"/><arg column="CREATED_AT" javaType="java.time.LocalDateTime"/>
+        <arg column="RESOURCE_NAME" javaType="java.lang.String"/><arg column="BEFORE_DATA" javaType="java.lang.String"/>
+        <arg column="AFTER_DATA" javaType="java.lang.String"/><arg column="FAILURE_REASON" javaType="java.lang.String"/>
+        <arg column="CONFIRMATION_FIELD_CODE" javaType="java.lang.String"/><arg column="CONFIRMATION_FIELD_NAME" javaType="java.lang.String"/>
+        <arg column="CONFIRMATION_FIELD_VALUE" javaType="java.lang.String"/><arg column="CONFIRMATION_RULE_PROMPT" javaType="java.lang.String"/>
+        <arg column="CONFIRMATION_AI_PROMPT" javaType="java.lang.String"/><arg column="CONFIRMATION_NOTE" javaType="java.lang.String"/>
+      </constructor>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO AUDIT_OPERATION_LOG (
+            ID, EVENT_TYPE, MODULE, ACTION,
+            USER_ID, USERNAME, RESOURCE_TYPE, RESOURCE_ID, TASK_ID,
+            RESULT_STATUS, BUSINESS_RESULT, ACTION_DESC, DETAIL,
+            REQUEST_ID, TRACE_ID, SOURCE_IP, OCCURRED_AT, CREATED_AT,
+            RESOURCE_NAME, BEFORE_DATA, AFTER_DATA, FAILURE_REASON,
+            CONFIRMATION_FIELD_CODE, CONFIRMATION_FIELD_NAME, CONFIRMATION_FIELD_VALUE,
+            CONFIRMATION_RULE_PROMPT, CONFIRMATION_AI_PROMPT, CONFIRMATION_NOTE
+        ) VALUES (
+            #{id}, #{eventType}, #{module}, #{action},
+            #{userId}, #{username}, #{resourceType}, #{resourceId}, #{taskId},
+            #{resultStatus}, #{businessResult}, #{actionDesc}, #{detail},
+            #{requestId}, #{traceId}, #{sourceIp}, #{occurredAt}, #{createdAt},
+            #{resourceName}, #{beforeData}, #{afterData}, #{failureReason},
+            #{confirmationFieldCode}, #{confirmationFieldName}, #{confirmationFieldValue},
+            #{confirmationRulePrompt}, #{confirmationAiPrompt}, #{confirmationNote}
+        )
+    </insert>
+    <select id="find" resultMap="row">
+      SELECT ID,EVENT_TYPE,MODULE,ACTION,USER_ID,USERNAME,RESOURCE_TYPE,RESOURCE_ID,TASK_ID,RESULT_STATUS,
+             BUSINESS_RESULT,ACTION_DESC,DETAIL,REQUEST_ID,TRACE_ID,SOURCE_IP,OCCURRED_AT,CREATED_AT,
+             RESOURCE_NAME,BEFORE_DATA,AFTER_DATA,FAILURE_REASON,
+             CONFIRMATION_FIELD_CODE,CONFIRMATION_FIELD_NAME,CONFIRMATION_FIELD_VALUE,
+             CONFIRMATION_RULE_PROMPT,CONFIRMATION_AI_PROMPT,CONFIRMATION_NOTE
+      FROM AUDIT_OPERATION_LOG
+      <where>
+        <if test="userId != null and userId != ''">USER_ID=#{userId}</if>
+        <if test="action != null and action != ''">AND ACTION=#{action}</if>
+        <if test="resourceType != null and resourceType != ''">AND RESOURCE_TYPE=#{resourceType}</if>
+        <if test="from != null">AND OCCURRED_AT &gt;= #{from}</if><if test="to != null">AND OCCURRED_AT &lt;= #{to}</if>
+      </where> ORDER BY OCCURRED_AT DESC, ID DESC
+    </select>
+</mapper>

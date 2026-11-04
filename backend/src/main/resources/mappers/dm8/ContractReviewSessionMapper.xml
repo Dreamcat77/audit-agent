@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ContractReviewSessionMapper">
+    <resultMap id="sessionRow" type="com.fuquan.audit.integration.dm8.ContractReviewSessionPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="contractId" column="CONTRACT_ID"/>
+        <result property="contractVersion" column="CONTRACT_VERSION"/>
+        <result property="name" column="NAME"/>
+        <result property="reviewType" column="REVIEW_TYPE"/>
+        <result property="status" column="STATUS"/>
+        <result property="remark" column="REMARK"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <result property="updatedAt" column="UPDATED_AT"/>
+        <result property="materialsConfirmedAt" column="MATERIALS_CONFIRMED_AT"/>
+        <result property="versionNo" column="VERSION_NO"/>
+        <result property="deletedAt" column="DELETED_AT"/>
+        <result property="deletedBy" column="DELETED_BY"/>
+        <result property="sourceKind" column="SOURCE_KIND"/>
+        <result property="projectId" column="PROJECT_ID"/>
+    </resultMap>
+    <sql id="columns">
+        ID, CONTRACT_ID, CONTRACT_VERSION, NAME, REVIEW_TYPE, STATUS, REMARK,
+        CREATED_BY, CREATED_AT, UPDATED_AT, MATERIALS_CONFIRMED_AT, VERSION_NO,
+        DELETED_AT, DELETED_BY, SOURCE_KIND, PROJECT_ID
+    </sql>
+    <insert id="insert">
+        INSERT INTO CONTRACT_REVIEW_SESSION (
+            ID, CONTRACT_ID, CONTRACT_VERSION, NAME, REVIEW_TYPE, STATUS, REMARK,
+            CREATED_BY, CREATED_AT, UPDATED_AT, MATERIALS_CONFIRMED_AT, VERSION_NO,
+            DELETED_AT, DELETED_BY, SOURCE_KIND, PROJECT_ID
+        ) VALUES (
+            #{id}, #{contractId}, #{contractVersion}, #{name}, #{reviewType}, #{status}, #{remark},
+            #{createdBy}, #{createdAt}, #{updatedAt}, #{materialsConfirmedAt}, #{versionNo},
+            #{deletedAt}, #{deletedBy}, #{sourceKind}, #{projectId}
+        )
+    </insert>
+    <select id="findById" resultMap="sessionRow">
+        SELECT <include refid="columns"/> FROM CONTRACT_REVIEW_SESSION WHERE ID = #{id}
+    </select>
+    <select id="findByContractId" resultMap="sessionRow">
+        SELECT <include refid="columns"/> FROM CONTRACT_REVIEW_SESSION
+        WHERE CONTRACT_ID = #{contractId} AND DELETED_AT IS NULL
+        ORDER BY CREATED_AT DESC, ID DESC
+    </select>
+    <update id="advancePreparingVersion">
+        UPDATE CONTRACT_REVIEW_SESSION
+        SET UPDATED_AT = #{updatedAt}, VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id} AND STATUS = 'PREPARING_MATERIALS'
+          AND VERSION_NO = #{expectedVersion} AND DELETED_AT IS NULL
+    </update>
+    <update id="confirmMaterials">
+        UPDATE CONTRACT_REVIEW_SESSION
+        SET STATUS = 'READY', MATERIALS_CONFIRMED_AT = #{confirmedAt},
+            UPDATED_AT = #{confirmedAt}, VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id} AND STATUS = 'PREPARING_MATERIALS'
+          AND VERSION_NO = #{expectedVersion} AND DELETED_AT IS NULL
+    </update>
+    <update id="softDelete">
+        UPDATE CONTRACT_REVIEW_SESSION
+        SET DELETED_AT = #{deletedAt}, DELETED_BY = #{deletedBy},
+            UPDATED_AT = #{deletedAt}, VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id} AND VERSION_NO = #{expectedVersion} AND DELETED_AT IS NULL
+    </update>
+    <resultMap id="taskRow" type="com.fuquan.audit.integration.dm8.ReviewSessionTaskPersistenceRow">
+        <id property="sessionId" column="SESSION_ID"/>
+        <result property="name" column="SESSION_NAME"/>
+        <result property="reviewType" column="REVIEW_TYPE"/>
+        <result property="sessionStatus" column="SESSION_STATUS"/>
+        <result property="remark" column="REMARK"/>
+        <result property="contractVersion" column="CONTRACT_VERSION"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdByName" column="CREATED_BY_NAME"/>
+        <result property="sessionCreatedAt" column="SESSION_CREATED_AT"/>
+        <result property="sessionUpdatedAt" column="SESSION_UPDATED_AT"/>
+        <result property="materialsConfirmedAt" column="MATERIALS_CONFIRMED_AT"/>
+        <result property="sessionVersionNo" column="SESSION_VERSION_NO"/>
+        <result property="deletedAt" column="DELETED_AT"/>
+        <result property="deletedBy" column="DELETED_BY"/>
+        <result property="contractId" column="CONTRACT_ID"/>
+        <result property="contractNo" column="CONTRACT_NO"/>
+        <result property="contractName" column="CONTRACT_NAME"/>
+        <result property="contractType" column="CONTRACT_TYPE"/>
+        <result property="partyA" column="PARTY_A"/>
+        <result property="partyB" column="PARTY_B"/>
+        <result property="partyBCreditCode" column="PARTY_B_CREDIT_CODE"/>
+        <result property="contractAmount" column="CONTRACT_AMOUNT"/>
+        <result property="amountInWords" column="AMOUNT_IN_WORDS"/>
+        <result property="contractStatus" column="CONTRACT_STATUS"/>
+        <result property="contractVersionNo" column="CONTRACT_VERSION_NO"/>
+        <result property="contractCreatedAt" column="CONTRACT_CREATED_AT"/>
+        <result property="contractUpdatedAt" column="CONTRACT_UPDATED_AT"/>
+    </resultMap>
+    <sql id="taskFilter">
+        WHERE s.DELETED_AT IS NULL
+        <if test="status != null">AND s.STATUS = #{status}</if>
+        <if test="keyword != null">
+            AND (INSTR(UPPER(s.NAME), UPPER(#{keyword})) &gt; 0
+            OR INSTR(UPPER(c.CONTRACT_NO), UPPER(#{keyword})) &gt; 0
+            OR INSTR(UPPER(c.CONTRACT_NAME), UPPER(#{keyword})) &gt; 0
+            OR INSTR(UPPER(c.PARTY_B), UPPER(#{keyword})) &gt; 0)
+        </if>
+    </sql>
+    <select id="findTaskPage" resultMap="taskRow">
+        SELECT SESSION_ID, SESSION_NAME, REVIEW_TYPE, SESSION_STATUS, REMARK,
+               CONTRACT_VERSION, CREATED_BY, CREATED_BY_NAME, SESSION_CREATED_AT, SESSION_UPDATED_AT,
+               MATERIALS_CONFIRMED_AT, SESSION_VERSION_NO, DELETED_AT, DELETED_BY,
+               CONTRACT_ID, CONTRACT_NO, CONTRACT_NAME, CONTRACT_TYPE, PARTY_A, PARTY_B,
+               PARTY_B_CREDIT_CODE, CONTRACT_AMOUNT, AMOUNT_IN_WORDS, CONTRACT_STATUS, CONTRACT_VERSION_NO,
+               CONTRACT_CREATED_AT, CONTRACT_UPDATED_AT
+        FROM (
+            SELECT s.ID AS SESSION_ID, s.NAME AS SESSION_NAME, s.REVIEW_TYPE,
+                   s.STATUS AS SESSION_STATUS, s.REMARK, s.CONTRACT_VERSION, s.CREATED_BY,
+                   u.REAL_NAME AS CREATED_BY_NAME,
+                   s.CREATED_AT AS SESSION_CREATED_AT, s.UPDATED_AT AS SESSION_UPDATED_AT,
+                   s.MATERIALS_CONFIRMED_AT, s.VERSION_NO AS SESSION_VERSION_NO,
+                   s.DELETED_AT, s.DELETED_BY, c.ID AS CONTRACT_ID, c.CONTRACT_NO,
+                   c.CONTRACT_NAME, c.CONTRACT_TYPE, c.PARTY_A, c.PARTY_B,
+                   c.PARTY_B_CREDIT_CODE, c.CONTRACT_AMOUNT, c.AMOUNT_IN_WORDS,
+                   c.STATUS AS CONTRACT_STATUS,
+                   c.VERSION_NO AS CONTRACT_VERSION_NO, c.CREATED_AT AS CONTRACT_CREATED_AT,
+                   c.UPDATED_AT AS CONTRACT_UPDATED_AT,
+                   ROW_NUMBER() OVER (ORDER BY s.CREATED_AT DESC, s.ID DESC) AS ROW_NO
+            FROM CONTRACT_REVIEW_SESSION s
+            JOIN CONTRACT c ON c.ID = s.CONTRACT_ID
+            LEFT JOIN SYS_USER u ON u.ID = s.CREATED_BY
+            <include refid="taskFilter"/>
+        ) PAGE_ROWS
+        WHERE ROW_NO &gt; #{offset} AND ROW_NO &lt;= #{endRow}
+        ORDER BY ROW_NO
+    </select>
+    <select id="countTasks" resultType="long">
+        SELECT COUNT(*)
+        FROM CONTRACT_REVIEW_SESSION s
+        JOIN CONTRACT c ON c.ID = s.CONTRACT_ID
+        <include refid="taskFilter"/>
+    </select>
+    <select id="findCreatorDisplayName" resultType="string">
+        SELECT u.REAL_NAME
+        FROM CONTRACT_REVIEW_SESSION s
+        LEFT JOIN SYS_USER u ON u.ID = s.CREATED_BY
+        WHERE s.ID = #{sessionId}
+    </select>
+</mapper>

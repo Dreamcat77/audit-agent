@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "fixtureSet": "contract-core-synthetic",
+  "version": "v1",
+  "groundTruthVersion": "v1",
+  "source": "SYNTHETIC",
+  "provenance": {"reviewer": "repository-track-c-tests", "reason": "Hand-authored minimal regression examples; no customer source", "createdAt": "2026-09-16"},
+  "cases": [
+    {"id":"parse-1","capability":"PARSE","input":"Synthetic parser sentence.","inputSha256":"e24896933665cf991730966d774707a764e499164e414305cbf583d9fdd7e817","truth":{"schemaVersion":1,"text":"Synthetic parser sentence."}},
+    {"id":"ocr-1","capability":"OCR","input":"synthetic ocr","inputSha256":"82221f9e5de6730d71a9b58f99298df1f642128de826dd424787d0816cbef900","truth":{"schemaVersion":1,"text":"synthetic ocr"}},
+    {"id":"role-1","capability":"DOCUMENT_ROLE","input":"采购合同","inputSha256":"cd8b37686cc46a06f8c8b53c718afa1abbcb46a9a6a0593edc4f646c11d37ffa","truth":{"schemaVersion":1,"label":"CONTRACT_BODY"}},
+    {"id":"identity-1","capability":"PROJECT_IDENTITY","input":"SYN-001","inputSha256":"2954b23d6a02feb15c5051031152e91adaac3f91adceadf7ecb8c1e54100eeab","truth":{"schemaVersion":1,"label":"CONFLICT"}},
+    {"id":"candidate-1","capability":"CONTRACT_CANDIDATE","input":"SYN-CONTRACT","inputSha256":"3c22d45b18992bb40d1285f5f93cfde439a870a25792a952083123dc08612bf8","truth":{"schemaVersion":1,"text":"SYN-CONTRACT"}},
+    {"id":"f02-1","capability":"F02","input":"100.00","inputSha256":"d66c66a96157220af2fe47c6d564d0d2a61d9d441a2e52a92bc78b15876053c8","truth":{"schemaVersion":1,"label":"PASS","amount":"100.00"}},
+    {"id":"semantic-1","capability":"SEMANTIC","input":"Synthetic clause.","inputSha256":"e7d63fc97f92d7ce08a67bb18068e634abd80e9daaac959e04e1e4a14cd57e5d","truth":{"schemaVersion":1,"claims":["GROUNDED_SEGMENT"]}},
+    {"id":"breach-1","capability":"BREACH","input":"每延期一周，按合同金额1%支付违约金；累计违约金最高不超过合同金额20%。","inputSha256":"09e2fc9403d277834d85dc2cef14581b27de2a97a2bed8af20b3c92b85b0ff8e","truth":{"schemaVersion":1,"claims":["WEEK"],"amount":"1.00"}},
+    {"id":"term-1","capability":"TERM","input":"合同生效日期为2026年09月01日。","inputSha256":"aab9600574a0272beefd5482d30b64b1872ccd8013c8c514afa258de87476654","truth":{"schemaVersion":1,"claims":["2026-09-01"]}},
+    {"id":"evidence-1","capability":"EVIDENCE_GROUNDING","input":"😀甲乙违约条款","inputSha256":"d6a54e5442e32c6c3c6cd847f193f3c979c348025f624b3bc9b0d774a1b3fa6a","truth":{"schemaVersion":1,"label":"3:5"}}
+  ]
+}

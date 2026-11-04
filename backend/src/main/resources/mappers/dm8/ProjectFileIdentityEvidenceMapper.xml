@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProjectFileIdentityEvidenceMapper">
+    <sql id="columns">EVIDENCE_ID, ASSESSMENT_ID, PROJECT_ID, PROJECT_VERSION_NO, FILE_ID, FILE_SHA256, PARSE_RESULT_ID, PARSE_VERSION, FACT_TYPE, EXTRACTION_RESULT_ID, LEFT_SOURCE, RIGHT_SOURCE, LEFT_NORMALIZED_HASH, RIGHT_NORMALIZED_HASH, LEFT_BOUNDED_VALUE, RIGHT_BOUNDED_VALUE, COMPARISON_OUTCOME, SIGNIFICANCE_CODE, SOURCE_LOCATOR, CREATED_AT</sql>
+    <insert id="insert">INSERT INTO PROJECT_FILE_IDENTITY_EVIDENCE (<include refid="columns"/>) VALUES (#{row.evidenceId}, #{row.assessmentId}, #{row.projectId}, #{row.projectVersionNo}, #{row.fileId}, #{row.fileSha256}, #{row.parseResultId}, #{row.parseVersion}, #{row.factType}, #{row.extractionResultId}, #{row.leftSource}, #{row.rightSource}, #{row.leftNormalizedHash}, #{row.rightNormalizedHash}, #{row.leftBoundedValue}, #{row.rightBoundedValue}, #{row.comparisonOutcome}, #{row.significanceCode}, #{row.sourceLocator}, #{row.createdAt})</insert>
+    <select id="findByAssessmentId" resultType="com.fuquan.audit.integration.dm8.ProjectFileIdentityEvidencePersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_IDENTITY_EVIDENCE WHERE ASSESSMENT_ID=#{assessmentId} ORDER BY FACT_TYPE, EVIDENCE_ID</select>
+</mapper>

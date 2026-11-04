@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementTenderFindingMapper">
+    <resultMap id="findingRow" type="com.fuquan.audit.integration.dm8.ProcurementTenderFindingPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="projectId" column="PROJECT_ID"/>
+        <result property="reviewId" column="REVIEW_ID"/>
+        <result property="ruleCode" column="RULE_CODE"/>
+        <result property="ruleName" column="RULE_NAME"/>
+        <result property="riskCategory" column="RISK_CATEGORY"/>
+        <result property="riskLevel" column="RISK_LEVEL"/>
+        <result property="matchedText" column="MATCHED_TEXT"/>
+        <result property="sourceLocator" column="SOURCE_LOCATOR"/>
+        <result property="pageNumber" column="PAGE_NUMBER"/>
+        <result property="remediationSuggestion" column="REMEDIATION_SUGGESTION"/>
+        <result property="source" column="SOURCE"/>
+        <result property="riskReason" column="RISK_REASON"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+    </resultMap>
+    <delete id="deleteByReviewId">
+        DELETE FROM PROCUREMENT_TENDER_FINDING
+        WHERE PROJECT_ID=#{projectId} AND REVIEW_ID=#{reviewId}
+    </delete>
+    <insert id="insertBatch">
+        INSERT INTO PROCUREMENT_TENDER_FINDING (
+            ID, PROJECT_ID, REVIEW_ID, RULE_CODE, RULE_NAME, RISK_CATEGORY, RISK_LEVEL,
+            MATCHED_TEXT, SOURCE_LOCATOR, PAGE_NUMBER, REMEDIATION_SUGGESTION, SOURCE, RISK_REASON, CREATED_TIME
+        ) VALUES
+        <foreach collection="list" item="row" separator=",">
+            (#{row.id}, #{row.projectId}, #{row.reviewId}, #{row.ruleCode}, #{row.ruleName},
+             #{row.riskCategory}, #{row.riskLevel}, #{row.matchedText}, #{row.sourceLocator},
+             #{row.pageNumber}, #{row.remediationSuggestion}, #{row.source}, #{row.riskReason}, #{row.createdTime})
+        </foreach>
+    </insert>
+    <select id="findByReviewId" resultMap="findingRow">
+        SELECT ID, PROJECT_ID, REVIEW_ID, RULE_CODE, RULE_NAME, RISK_CATEGORY, RISK_LEVEL,
+               MATCHED_TEXT, SOURCE_LOCATOR, PAGE_NUMBER, REMEDIATION_SUGGESTION, SOURCE, RISK_REASON, CREATED_TIME
+        FROM PROCUREMENT_TENDER_FINDING
+        WHERE PROJECT_ID=#{projectId} AND REVIEW_ID=#{reviewId}
+        ORDER BY CREATED_TIME, ID
+    </select>
+</mapper>

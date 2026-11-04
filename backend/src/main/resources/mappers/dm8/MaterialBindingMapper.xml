@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.MaterialBindingMapper">
+    <resultMap id="bindingRow" type="com.fuquan.audit.integration.dm8.MaterialBindingPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="sessionId" column="SESSION_ID"/>
+        <result property="slotKey" column="SLOT_KEY"/>
+        <result property="documentKind" column="DOCUMENT_KIND"/>
+        <result property="boundDocumentId" column="BOUND_DOCUMENT_ID"/>
+        <result property="activeFlag" column="ACTIVE_FLAG"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <result property="updatedAt" column="UPDATED_AT"/>
+        <result property="versionNo" column="VERSION_NO"/>
+    </resultMap>
+    <sql id="columns">
+        ID, SESSION_ID, SLOT_KEY, DOCUMENT_KIND, BOUND_DOCUMENT_ID,
+        ACTIVE_FLAG, CREATED_AT, UPDATED_AT, VERSION_NO
+    </sql>
+    <insert id="insert">
+        INSERT INTO CONTRACT_REVIEW_MATERIAL_BINDING (
+            ID, SESSION_ID, SLOT_KEY, DOCUMENT_KIND, BOUND_DOCUMENT_ID,
+            ACTIVE_FLAG, CREATED_AT, UPDATED_AT, VERSION_NO
+        ) VALUES (
+            #{id}, #{sessionId}, #{slotKey}, #{documentKind}, #{boundDocumentId},
+            #{activeFlag}, #{createdAt}, #{updatedAt}, #{versionNo}
+        )
+    </insert>
+    <select id="findBySessionAndSlot" resultMap="bindingRow">
+        SELECT <include refid="columns"/> FROM CONTRACT_REVIEW_MATERIAL_BINDING
+        WHERE SESSION_ID = #{sessionId} AND SLOT_KEY = #{slotKey}
+    </select>
+    <select id="findById" resultMap="bindingRow">
+        SELECT <include refid="columns"/> FROM CONTRACT_REVIEW_MATERIAL_BINDING WHERE ID = #{id}
+    </select>
+    <select id="findBySessionId" resultMap="bindingRow">
+        SELECT <include refid="columns"/> FROM CONTRACT_REVIEW_MATERIAL_BINDING
+        WHERE SESSION_ID = #{sessionId} ORDER BY CREATED_AT, ID
+    </select>
+    <update id="bind">
+        UPDATE CONTRACT_REVIEW_MATERIAL_BINDING
+        SET BOUND_DOCUMENT_ID = #{newDocumentId}, ACTIVE_FLAG = 1,
+            UPDATED_AT = #{updatedAt}, VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id} AND BOUND_DOCUMENT_ID = #{expectedDocumentId}
+          AND ACTIVE_FLAG = #{expectedActiveFlag} AND VERSION_NO = #{expectedVersion}
+    </update>
+    <update id="deactivate">
+        UPDATE CONTRACT_REVIEW_MATERIAL_BINDING
+        SET ACTIVE_FLAG = 0, UPDATED_AT = #{updatedAt}, VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id} AND BOUND_DOCUMENT_ID = #{expectedDocumentId}
+          AND ACTIVE_FLAG = 1 AND VERSION_NO = #{expectedVersion}
+    </update>
+</mapper>

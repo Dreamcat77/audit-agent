@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementProjectMapper">
+    <resultMap id="projectRow" type="com.fuquan.audit.integration.dm8.ProcurementProjectPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="projectCode" column="PROJECT_CODE"/>
+        <result property="projectName" column="PROJECT_NAME"/>
+        <result property="subjectCode" column="SUBJECT_CODE"/>
+        <result property="subjectName" column="SUBJECT_NAME"/>
+        <result property="budgetAmount" column="BUDGET_AMOUNT"/>
+        <result property="supplierName" column="SUPPLIER_NAME"/>
+        <result property="status" column="STATUS"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="departmentName" column="DEPARTMENT_NAME"/>
+        <result property="procurementType" column="PROCUREMENT_TYPE"/>
+        <result property="procurementMethod" column="PROCUREMENT_METHOD"/>
+        <result property="requirementDescription" column="REQUIREMENT_DESCRIPTION"/>
+        <result property="applicantName" column="APPLICANT_NAME"/>
+        <result property="attachmentName" column="ATTACHMENT_NAME"/>
+        <result property="sourceProjectId" column="SOURCE_PROJECT_ID"/>
+        <result property="sourceMaterialIds" column="SOURCE_MATERIAL_IDS"/>
+    </resultMap>
+
+    <sql id="columns">
+        ID, BUDGET_APPROVAL_ID AS PROJECT_CODE, PROCUREMENT_NAME AS PROJECT_NAME,
+        SUBJECT_CODE, SUBJECT_NAME, AMOUNT AS BUDGET_AMOUNT, SUPPLIER_NAME,
+        STATUS, CREATED_TIME, DEPARTMENT_NAME, PROCUREMENT_TYPE, PROCUREMENT_METHOD,
+        REQUIREMENT_DESCRIPTION, APPLICANT_NAME, ATTACHMENT_NAME,
+        COALESCE((SELECT L.MATERIAL_ID FROM PROCUREMENT_DEMAND_MATERIAL L
+                  WHERE L.DEMAND_ID = PROCUREMENT_DEMAND.ID AND L.IS_PRIMARY = 1),
+                 (SELECT L.MATERIAL_ID FROM PROCUREMENT_MATERIAL_LINK L
+                  WHERE L.DEMAND_ID = PROCUREMENT_DEMAND.ID), SOURCE_PROJECT_ID) AS SOURCE_PROJECT_ID,
+        (SELECT LISTAGG(L.MATERIAL_ID, ',') WITHIN GROUP (ORDER BY L.MATERIAL_ORDER)
+         FROM PROCUREMENT_DEMAND_MATERIAL L
+         WHERE L.DEMAND_ID = PROCUREMENT_DEMAND.ID) AS SOURCE_MATERIAL_IDS
+    </sql>
+
+    <select id="findPage" resultMap="projectRow">
+        SELECT *
+        FROM (
+            SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.CREATED_TIME DESC, t.ID DESC) AS RN
+            FROM (
+                SELECT <include refid="columns"/>
+                FROM PROCUREMENT_DEMAND
+                <where>
+                    DELETED = 0
+                    <if test="status != null and status != ''">
+                        AND STATUS = #{status}
+                    </if>
+                    <if test="keyword != null and keyword != ''">
+                        AND PROCUREMENT_NAME LIKE '%' || #{keyword} || '%'
+                    </if>
+                </where>
+            ) t
+        ) page_data
+        WHERE RN &gt; #{startRow} AND RN &lt;= #{endRow}
+        ORDER BY RN
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(1)
+        FROM PROCUREMENT_DEMAND
+        <where>
+            DELETED = 0
+            <if test="status != null and status != ''">
+                AND STATUS = #{status}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND PROCUREMENT_NAME LIKE '%' || #{keyword} || '%'
+            </if>
+        </where>
+    </select>
+
+    <select id="findById" resultMap="projectRow">
+        SELECT <include refid="columns"/>
+        FROM PROCUREMENT_DEMAND
+        WHERE ID = #{id} AND DELETED = 0
+    </select>
+
+    <select id="lockParsedMaterial" resultType="string">
+        SELECT ID FROM BUSINESS_MATERIAL_INTAKE WHERE ID = #{materialId} AND STATUS = 'PARSED' FOR UPDATE
+    </select>
+    <select id="countMaterialProjects" resultType="long">
+        SELECT COUNT(1) FROM PROCUREMENT_DEMAND D WHERE D.DELETED = 0
+        AND (D.SOURCE_PROJECT_ID = #{materialId} OR EXISTS (
+            SELECT 1 FROM PROCUREMENT_MATERIAL_LINK L
+            WHERE L.DEMAND_ID = D.ID AND L.MATERIAL_ID = #{materialId}
+        ) OR EXISTS (
+            SELECT 1 FROM PROCUREMENT_DEMAND_MATERIAL L
+            WHERE L.DEMAND_ID = D.ID AND L.MATERIAL_ID = #{materialId}
+        ))
+    </select>
+    <insert id="insert">
+        INSERT INTO PROCUREMENT_DEMAND (
+            ID, BUDGET_APPROVAL_ID, PROCUREMENT_NAME, DEPARTMENT_NAME, PROCUREMENT_TYPE,
+            AMOUNT, SUBJECT_CODE, SUBJECT_NAME, PROCUREMENT_METHOD, REQUIREMENT_DESCRIPTION,
+            APPLICANT_NAME, ATTACHMENT_NAME, STATUS, SUPPLIER_NAME, DELETED, CREATED_TIME
+        ) VALUES (
+            #{id}, #{projectCode}, #{projectName}, #{departmentName}, #{procurementType},
+            #{budgetAmount}, #{subjectCode}, #{subjectName}, #{procurementMethod},
+            #{requirementDescription}, #{applicantName}, #{attachmentName}, 'DRAFT', NULL, 0,
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <insert id="insertLegacyMaterialLink">
+        INSERT INTO PROCUREMENT_MATERIAL_LINK (DEMAND_ID, MATERIAL_ID, CREATED_AT)
+        SELECT D.ID, M.ID, CURRENT_TIMESTAMP FROM PROCUREMENT_DEMAND D, BUSINESS_MATERIAL_INTAKE M
+        WHERE D.ID = #{id} AND D.DELETED = 0 AND M.ID = #{materialId} AND M.STATUS = 'PARSED'
+    </insert>
+    <insert id="insertMaterialLink">
+        INSERT INTO PROCUREMENT_DEMAND_MATERIAL
+            (DEMAND_ID, MATERIAL_ID, MATERIAL_ORDER, IS_PRIMARY, CREATED_AT)
+        SELECT D.ID, M.ID, #{materialOrder}, #{primary}, CURRENT_TIMESTAMP
+        FROM PROCUREMENT_DEMAND D, BUSINESS_MATERIAL_INTAKE M
+        WHERE D.ID = #{id} AND D.DELETED = 0 AND M.ID = #{materialId} AND M.STATUS = 'PARSED'
+    </insert>
+
+    <update id="update">
+        UPDATE PROCUREMENT_DEMAND
+        SET PROCUREMENT_NAME = #{projectName},
+            DEPARTMENT_NAME = #{departmentName},
+            PROCUREMENT_TYPE = #{procurementType},
+            AMOUNT = #{budgetAmount},
+            SUBJECT_CODE = #{subjectCode},
+            SUBJECT_NAME = #{subjectName},
+            PROCUREMENT_METHOD = #{procurementMethod},
+            REQUIREMENT_DESCRIPTION = #{requirementDescription},
+            APPLICANT_NAME = #{applicantName},
+            ATTACHMENT_NAME = COALESCE(#{attachmentName}, ATTACHMENT_NAME)
+        WHERE ID = #{id} AND DELETED = 0 AND STATUS = 'DRAFT'
+    </update>
+
+    <update id="updateStatus">
+        UPDATE PROCUREMENT_DEMAND
+        SET STATUS = #{status}
+        WHERE ID = #{id} AND DELETED = 0
+    </update>
+
+    <update id="softDelete">
+        UPDATE PROCUREMENT_DEMAND
+        SET DELETED = 1,
+            UPDATED_TIME = CURRENT_TIMESTAMP
+        WHERE ID = #{id} AND DELETED = 0
+    </update>
+</mapper>

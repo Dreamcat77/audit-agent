@@ -1,0 +1,14 @@
+{
+  "realDm8": true,
+  "independentInstance": true,
+  "originalBusinessDatabaseModified": false,
+  "failures": [],
+  "firstCreate": "RECOVERED_FROM_JOURNAL",
+  "repeatNoDdl": "PASS",
+  "ddlSurvivesCodeRollback": "PASS",
+  "realCatalogDriftNegatives": 3,
+  "partialGroupRejected": true,
+  "actualSchemaDriftNegatives": 3,
+  "existingQaFullManifestReadOnly": "PASS",
+  "schemaSha256": "00b20ef024c1b2493ea55b4513d4c55eb35de143bd66f9180d4aa3ad310ee834"
+}

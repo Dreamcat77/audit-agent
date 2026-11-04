@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.UserAccountMapper">
+
+    <resultMap id="userAccountRow" type="com.fuquan.audit.integration.dm8.UserAccountPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="username" column="USERNAME"/>
+        <result property="passwordHash" column="PASSWORD_HASH"/>
+        <result property="realName" column="REAL_NAME"/>
+        <result property="status" column="STATUS"/>
+        <result property="failedLoginCount" column="FAILED_LOGIN_COUNT"/>
+        <result property="lockedUntil" column="LOCKED_UNTIL"/>
+        <result property="lastLoginAt" column="LAST_LOGIN_AT"/>
+        <result property="passwordChangedAt" column="PASSWORD_CHANGED_AT"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <result property="updatedAt" column="UPDATED_AT"/>
+        <result property="versionNo" column="VERSION_NO"/>
+    </resultMap>
+
+    <sql id="userColumns">
+        ID, USERNAME, PASSWORD_HASH, REAL_NAME, STATUS, FAILED_LOGIN_COUNT,
+        LOCKED_UNTIL, LAST_LOGIN_AT, PASSWORD_CHANGED_AT, CREATED_AT, UPDATED_AT, VERSION_NO
+    </sql>
+
+    <select id="findByUsername" resultMap="userAccountRow">
+        SELECT <include refid="userColumns"/>
+        FROM SYS_USER
+        WHERE USERNAME = #{username}
+    </select>
+
+    <select id="findById" resultMap="userAccountRow">
+        SELECT <include refid="userColumns"/>
+        FROM SYS_USER
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findFirstActiveByRole" resultMap="userAccountRow">
+        SELECT * FROM (
+            SELECT <include refid="userColumns"/>
+            FROM SYS_USER U
+            WHERE U.STATUS = 'ACTIVE'
+              AND EXISTS (
+                  SELECT 1 FROM SYS_USER_ROLE UR
+                  INNER JOIN SYS_ROLE R ON R.ID = UR.ROLE_ID
+                  WHERE UR.USER_ID = U.ID AND R.ROLE_CODE = #{roleCode} AND R.STATUS = 'ACTIVE'
+              )
+            ORDER BY U.ID
+        ) WHERE ROWNUM = 1
+    </select>
+
+    <select id="findRoleCodesByUserId" resultType="string">
+        SELECT R.ROLE_CODE
+        FROM SYS_ROLE R
+        INNER JOIN SYS_USER_ROLE UR ON UR.ROLE_ID = R.ID
+        WHERE UR.USER_ID = #{userId}
+          AND R.STATUS = 'ACTIVE'
+        ORDER BY R.ROLE_CODE
+    </select>
+
+    <select id="existsActiveRole" resultType="boolean">
+        SELECT CASE WHEN COUNT(1) &gt; 0 THEN 1 ELSE 0 END
+        FROM SYS_ROLE
+        WHERE ROLE_CODE = #{roleCode}
+          AND STATUS = 'ACTIVE'
+    </select>
+
+    <select id="existsUserRole" resultType="boolean">
+        SELECT CASE WHEN COUNT(1) &gt; 0 THEN 1 ELSE 0 END
+        FROM SYS_USER_ROLE UR
+        INNER JOIN SYS_ROLE R ON R.ID = UR.ROLE_ID
+        WHERE UR.USER_ID = #{userId}
+          AND R.ROLE_CODE = #{roleCode}
+          AND R.STATUS = 'ACTIVE'
+    </select>
+
+    <insert id="insertUserRole">
+        INSERT INTO SYS_USER_ROLE (USER_ID, ROLE_ID)
+        SELECT #{userId}, R.ID
+        FROM SYS_ROLE R
+        WHERE R.ROLE_CODE = #{roleCode}
+          AND R.STATUS = 'ACTIVE'
+          AND NOT EXISTS (
+              SELECT 1
+              FROM SYS_USER_ROLE EXISTING
+              WHERE EXISTING.USER_ID = #{userId}
+                AND EXISTING.ROLE_ID = R.ID
+          )
+    </insert>
+    <delete id="deleteUserRole">
+      DELETE FROM SYS_USER_ROLE WHERE USER_ID=#{userId} AND ROLE_ID IN
+      (SELECT ID FROM SYS_ROLE WHERE ROLE_CODE=#{roleCode})
+    </delete>
+
+    <update id="incrementFailedLogin">
+        UPDATE SYS_USER
+        SET FAILED_LOGIN_COUNT = FAILED_LOGIN_COUNT + 1,
+            STATUS = CASE
+                WHEN FAILED_LOGIN_COUNT + 1 &gt;= #{maxFailedAttempts} THEN 'LOCKED'
+                ELSE STATUS
+            END,
+            LOCKED_UNTIL = CASE
+                WHEN FAILED_LOGIN_COUNT + 1 &gt;= #{maxFailedAttempts}
+                     AND LOCKED_UNTIL IS NULL THEN #{lockUntil}
+                ELSE LOCKED_UNTIL
+            END,
+            UPDATED_AT = #{occurredAt},
+            VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id}
+          AND STATUS IN ('ACTIVE', 'LOCKED')
+    </update>
+
+    <update id="recordSuccessfulLogin">
+        UPDATE SYS_USER
+        SET FAILED_LOGIN_COUNT = 0,
+            LOCKED_UNTIL = NULL,
+            LAST_LOGIN_AT = #{occurredAt},
+            UPDATED_AT = #{occurredAt},
+            VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id}
+          AND STATUS = 'ACTIVE'
+    </update>
+
+    <update id="unlockIfExpired">
+        UPDATE SYS_USER
+        SET STATUS = 'ACTIVE',
+            FAILED_LOGIN_COUNT = 0,
+            LOCKED_UNTIL = NULL,
+            UPDATED_AT = #{occurredAt},
+            VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id}
+          AND STATUS = 'LOCKED'
+          AND LOCKED_UNTIL IS NOT NULL
+          AND LOCKED_UNTIL &lt;= #{occurredAt}
+    </update>
+</mapper>

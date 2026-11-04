@@ -1,0 +1,17 @@
+{
+  "scenario": "supplement-conflict",
+  "caseId": "8dfab62e-84f0-3e4d-a98a-4ff0df7fdb58",
+  "status": "PARTIAL",
+  "documents": 2,
+  "facts": 14,
+  "clauses": 11,
+  "risks": 2,
+  "followUps": 1,
+  "evidenceChecks": 37,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-supplement-conflict",
+  "reportFingerprint": "262425d8a09870465688470408ae54580cae457816d574d5854b5940bd5977db"
+}

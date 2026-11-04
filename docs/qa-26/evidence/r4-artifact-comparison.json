@@ -1,0 +1,10 @@
+{
+  "frontendOnly": true,
+  "changed": [
+    "frontend/assets/index-BHL8D3aa.js",
+    "frontend/assets/index-BTflL7r6.js",
+    "frontend/index.html"
+  ],
+  "backendUnchanged": true,
+  "backendSha256": "c5ebe922d4bc241e7c2505668042fe4f4ced8992a8d3d97de727032b0f1ede69"
+}

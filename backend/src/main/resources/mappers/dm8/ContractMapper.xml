@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ContractMapper">
+    <resultMap id="contractRow" type="com.fuquan.audit.integration.dm8.ContractPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="contractNo" column="CONTRACT_NO"/>
+        <result property="contractName" column="CONTRACT_NAME"/>
+        <result property="contractType" column="CONTRACT_TYPE"/>
+        <result property="partyA" column="PARTY_A"/>
+        <result property="partyB" column="PARTY_B"/>
+        <result property="partyBCreditCode" column="PARTY_B_CREDIT_CODE"/>
+        <result property="contractAmount" column="CONTRACT_AMOUNT"/>
+        <result property="amountInWords" column="AMOUNT_IN_WORDS"/>
+        <result property="status" column="STATUS"/>
+        <result property="versionNo" column="VERSION_NO"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <result property="updatedAt" column="UPDATED_AT"/>
+    </resultMap>
+    <select id="findById" resultMap="contractRow">
+        SELECT ID, CONTRACT_NO, CONTRACT_NAME, CONTRACT_TYPE, PARTY_A, PARTY_B,
+               PARTY_B_CREDIT_CODE, CONTRACT_AMOUNT, AMOUNT_IN_WORDS, STATUS,
+               VERSION_NO, CREATED_AT, UPDATED_AT
+        FROM CONTRACT WHERE ID = #{id}
+    </select>
+    <select id="findByIdForUpdate" resultMap="contractRow">
+        SELECT ID, CONTRACT_NO, CONTRACT_NAME, CONTRACT_TYPE, PARTY_A, PARTY_B,
+               PARTY_B_CREDIT_CODE, CONTRACT_AMOUNT, AMOUNT_IN_WORDS, STATUS,
+               VERSION_NO, CREATED_AT, UPDATED_AT
+        FROM CONTRACT WHERE ID = #{id} FOR UPDATE
+    </select>
+    <select id="findLineItems" resultType="com.fuquan.audit.integration.dm8.ContractLineItemPersistenceRow">
+        SELECT ID, CONTRACT_ID, ITEM_KEY, ITEM_NAME, BASIS, QUANTITY, UNIT_PRICE, DECLARED_AMOUNT, SORT_NO
+        FROM CONTRACT_LINE_ITEM WHERE CONTRACT_ID = #{contractId} ORDER BY SORT_NO, ITEM_KEY
+    </select>
+    <select id="findAwardNotice" resultType="com.fuquan.audit.integration.dm8.ContractAwardNoticePersistenceRow">
+        SELECT ID, CONTRACT_ID, NOTICE_NO, PROJECT_NAME, WINNING_BIDDER,
+               WINNING_BIDDER_CREDIT_CODE, WINNING_AMOUNT, WINNING_DATE, SOURCE_REF, CREATED_AT
+        FROM CONTRACT_AWARD_NOTICE WHERE CONTRACT_ID = #{contractId}
+    </select>
+    <sql id="summaryFilter">
+        <where>
+            <if test="status != null">STATUS = #{status}</if>
+            <if test="keyword != null">
+                <if test="status != null">AND</if>
+                (INSTR(UPPER(CONTRACT_NO), UPPER(#{keyword})) &gt; 0
+                OR INSTR(UPPER(CONTRACT_NAME), UPPER(#{keyword})) &gt; 0
+                OR INSTR(UPPER(PARTY_A), UPPER(#{keyword})) &gt; 0
+                OR INSTR(UPPER(PARTY_B), UPPER(#{keyword})) &gt; 0)
+            </if>
+        </where>
+    </sql>
+    <select id="findSummaryPage" resultMap="contractRow">
+        SELECT ID, CONTRACT_NO, CONTRACT_NAME, CONTRACT_TYPE, PARTY_A, PARTY_B,
+               PARTY_B_CREDIT_CODE, CONTRACT_AMOUNT, AMOUNT_IN_WORDS, STATUS,
+               VERSION_NO, CREATED_AT, UPDATED_AT
+        FROM (
+            SELECT ID, CONTRACT_NO, CONTRACT_NAME, CONTRACT_TYPE, PARTY_A, PARTY_B,
+                   PARTY_B_CREDIT_CODE, CONTRACT_AMOUNT, AMOUNT_IN_WORDS, STATUS,
+                   VERSION_NO, CREATED_AT, UPDATED_AT,
+                   ROW_NUMBER() OVER (ORDER BY UPDATED_AT DESC, ID DESC) AS ROW_NO
+            FROM CONTRACT
+            <include refid="summaryFilter"/>
+        ) PAGE_ROWS
+        WHERE ROW_NO &gt; #{offset} AND ROW_NO &lt;= #{endRow}
+        ORDER BY ROW_NO
+    </select>
+    <select id="countSummaries" resultType="long">
+        SELECT COUNT(*) FROM CONTRACT
+        <include refid="summaryFilter"/>
+    </select>
+</mapper>

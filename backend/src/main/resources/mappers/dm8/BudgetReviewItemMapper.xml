@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BudgetReviewItemMapper">
+    <resultMap id="itemRow" type="com.fuquan.audit.integration.dm8.BudgetReviewItemPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="taskId" column="TASK_ID"/>
+        <result property="rowNumber" column="ROW_NUMBER"/>
+        <result property="subjectCode" column="SUBJECT_CODE"/>
+        <result property="subjectName" column="SUBJECT_NAME"/>
+        <result property="declaredAmount" column="DECLARED_AMOUNT"/>
+        <result property="supplierName" column="SUPPLIER_NAME"/>
+        <result property="projectCode" column="PROJECT_CODE"/>
+        <result property="approvalSubjectCode" column="APPROVAL_SUBJECT_CODE"/>
+        <result property="approvalSubjectName" column="APPROVAL_SUBJECT_NAME"/>
+        <result property="approvalAmount" column="APPROVAL_AMOUNT"/>
+        <result property="approvalSupplierName" column="APPROVAL_SUPPLIER_NAME"/>
+        <result property="matchStatus" column="MATCH_STATUS"/>
+        <result property="matchMethod" column="MATCH_METHOD"/>
+        <result property="matchDistance" column="MATCH_DISTANCE"/>
+        <result property="amountStatus" column="AMOUNT_STATUS"/>
+        <result property="differenceAmount" column="DIFFERENCE_AMOUNT"/>
+        <result property="exceptionType" column="EXCEPTION_TYPE"/>
+        <result property="errorDetail" column="ERROR_DETAIL"/>
+        <result property="riskLevel" column="RISK_LEVEL"/>
+        <result property="missingFields" column="MISSING_FIELDS"/>
+        <result property="amountFormatErrors" column="AMOUNT_FORMAT_ERRORS"/>
+        <result property="codeFormatError" column="CODE_FORMAT_ERROR"/>
+        <result property="requiredFieldsStatus" column="REQUIRED_FIELDS_STATUS"/>
+        <result property="amountFormatStatus" column="AMOUNT_FORMAT_STATUS"/>
+        <result property="categoryAttributionStatus" column="CATEGORY_ATTRIBUTION_STATUS"/>
+        <result property="categorySuggestion" column="CATEGORY_SUGGESTION"/>
+        <result property="projectCodeStatus" column="PROJECT_CODE_STATUS"/>
+        <result property="projectDepartmentStatus" column="PROJECT_DEPARTMENT_STATUS"/>
+        <result property="budgetYearValidityStatus" column="BUDGET_YEAR_VALIDITY_STATUS"/>
+        <result property="abnormalReasons" column="ABNORMAL_REASONS"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="aiSuggestedCategory" column="AI_SUGGESTED_CATEGORY"/>
+        <result property="aiHint" column="AI_HINT"/>
+        <result property="aiModel" column="AI_MODEL"/>
+        <result property="aiDurationMs" column="AI_DURATION_MS"/>
+        <result property="aiConfidence" column="AI_CONFIDENCE"/>
+        <result property="aiJudgment" column="AI_JUDGMENT"/>
+        <result property="aiSimilarityScore" column="AI_SIMILARITY_SCORE"/>
+        <result property="aiEnhancedDescription" column="AI_ENHANCED_DESCRIPTION"/>
+        <result property="aiSuggestion" column="AI_SUGGESTION"/>
+    </resultMap>
+
+    <insert id="insertBatch">
+        INSERT INTO BUDGET_REVIEW_ITEM (
+            ID, TASK_ID, ROW_NUMBER, SUBJECT_CODE, SUBJECT_NAME, DECLARED_AMOUNT,
+            SUPPLIER_NAME, PROJECT_CODE, APPROVAL_SUBJECT_CODE, APPROVAL_SUBJECT_NAME, APPROVAL_AMOUNT,
+            APPROVAL_SUPPLIER_NAME, MATCH_STATUS, MATCH_METHOD,
+            MATCH_DISTANCE, AMOUNT_STATUS, DIFFERENCE_AMOUNT, EXCEPTION_TYPE,
+            ERROR_DETAIL, RISK_LEVEL, MISSING_FIELDS, AMOUNT_FORMAT_ERRORS, CODE_FORMAT_ERROR,
+            REQUIRED_FIELDS_STATUS, AMOUNT_FORMAT_STATUS, CATEGORY_ATTRIBUTION_STATUS, CATEGORY_SUGGESTION,
+            PROJECT_CODE_STATUS,
+            PROJECT_DEPARTMENT_STATUS, BUDGET_YEAR_VALIDITY_STATUS, ABNORMAL_REASONS, CREATED_TIME
+            , AI_SUGGESTED_CATEGORY, AI_HINT, AI_MODEL, AI_DURATION_MS,
+            AI_CONFIDENCE, AI_JUDGMENT, AI_SIMILARITY_SCORE, AI_ENHANCED_DESCRIPTION,
+            AI_SUGGESTION
+        ) VALUES
+        <foreach collection="list" item="row" separator=",">
+            (
+                #{row.id}, #{row.taskId}, #{row.rowNumber}, #{row.subjectCode}, #{row.subjectName},
+                #{row.declaredAmount}, #{row.supplierName}, #{row.projectCode}, #{row.approvalSubjectCode},
+                #{row.approvalSubjectName}, #{row.approvalAmount}, #{row.approvalSupplierName},
+                #{row.matchStatus}, #{row.matchMethod},
+                #{row.matchDistance}, #{row.amountStatus}, #{row.differenceAmount}, #{row.exceptionType},
+                #{row.errorDetail}, #{row.riskLevel}, #{row.missingFields}, #{row.amountFormatErrors},
+                #{row.codeFormatError}, #{row.requiredFieldsStatus}, #{row.amountFormatStatus},
+                #{row.categoryAttributionStatus}, #{row.categorySuggestion},
+                #{row.projectCodeStatus}, #{row.projectDepartmentStatus}, #{row.budgetYearValidityStatus},
+                #{row.abnormalReasons}, #{row.createdTime},
+                #{row.aiSuggestedCategory}, #{row.aiHint}, #{row.aiModel}, #{row.aiDurationMs},
+                #{row.aiConfidence}, #{row.aiJudgment}, #{row.aiSimilarityScore},
+                #{row.aiEnhancedDescription}, #{row.aiSuggestion}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteByTaskAndRow">
+        DELETE FROM BUDGET_REVIEW_ITEM
+        WHERE TASK_ID = #{taskId}
+          AND ROW_NUMBER = #{rowNumber}
+    </delete>
+
+    <select id="findByTaskId" resultMap="itemRow">
+        SELECT ID, TASK_ID, ROW_NUMBER, SUBJECT_CODE, SUBJECT_NAME, DECLARED_AMOUNT,
+               SUPPLIER_NAME, PROJECT_CODE, APPROVAL_SUBJECT_CODE, APPROVAL_SUBJECT_NAME, APPROVAL_AMOUNT,
+               APPROVAL_SUPPLIER_NAME, MATCH_STATUS, MATCH_METHOD,
+               MATCH_DISTANCE, AMOUNT_STATUS, DIFFERENCE_AMOUNT, EXCEPTION_TYPE,
+               ERROR_DETAIL, RISK_LEVEL, MISSING_FIELDS, AMOUNT_FORMAT_ERRORS, CODE_FORMAT_ERROR,
+               REQUIRED_FIELDS_STATUS, AMOUNT_FORMAT_STATUS, CATEGORY_ATTRIBUTION_STATUS, CATEGORY_SUGGESTION,
+               PROJECT_CODE_STATUS,
+               PROJECT_DEPARTMENT_STATUS, BUDGET_YEAR_VALIDITY_STATUS, ABNORMAL_REASONS, CREATED_TIME,
+               AI_SUGGESTED_CATEGORY, AI_HINT, AI_MODEL, AI_DURATION_MS,
+               AI_CONFIDENCE, AI_JUDGMENT, AI_SIMILARITY_SCORE, AI_ENHANCED_DESCRIPTION,
+               AI_SUGGESTION
+        FROM BUDGET_REVIEW_ITEM
+        WHERE TASK_ID = #{taskId}
+        ORDER BY ROW_NUMBER
+    </select>
+
+    <select id="findById" resultMap="itemRow">
+        SELECT ID, TASK_ID, ROW_NUMBER, SUBJECT_CODE, SUBJECT_NAME, DECLARED_AMOUNT,
+               SUPPLIER_NAME, PROJECT_CODE, APPROVAL_SUBJECT_CODE, APPROVAL_SUBJECT_NAME, APPROVAL_AMOUNT,
+               APPROVAL_SUPPLIER_NAME, MATCH_STATUS, MATCH_METHOD,
+               MATCH_DISTANCE, AMOUNT_STATUS, DIFFERENCE_AMOUNT, EXCEPTION_TYPE,
+               ERROR_DETAIL, RISK_LEVEL, MISSING_FIELDS, AMOUNT_FORMAT_ERRORS, CODE_FORMAT_ERROR,
+               REQUIRED_FIELDS_STATUS, AMOUNT_FORMAT_STATUS, CATEGORY_ATTRIBUTION_STATUS, CATEGORY_SUGGESTION,
+               PROJECT_CODE_STATUS,
+               PROJECT_DEPARTMENT_STATUS, BUDGET_YEAR_VALIDITY_STATUS, ABNORMAL_REASONS, CREATED_TIME,
+               AI_SUGGESTED_CATEGORY, AI_HINT, AI_MODEL, AI_DURATION_MS,
+               AI_CONFIDENCE, AI_JUDGMENT, AI_SIMILARITY_SCORE, AI_ENHANCED_DESCRIPTION,
+               AI_SUGGESTION
+        FROM BUDGET_REVIEW_ITEM
+        WHERE ID = #{id}
+    </select>
+</mapper>

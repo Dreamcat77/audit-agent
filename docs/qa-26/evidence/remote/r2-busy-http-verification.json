@@ -1,0 +1,12 @@
+[
+  {
+    "path": "/api/v1/health",
+    "http": 200,
+    "durationMs": 4.0
+  },
+  {
+    "path": "/",
+    "http": 200,
+    "durationMs": 0.54
+  }
+]

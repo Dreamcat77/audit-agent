@@ -1,0 +1,17 @@
+{
+  "scenario": "normal-service",
+  "caseId": "9065b1d5-230d-359b-b495-44cb4c07f6d9",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 10,
+  "clauses": 8,
+  "risks": 0,
+  "followUps": 1,
+  "evidenceChecks": 23,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-normal-service",
+  "reportFingerprint": "6b5d87f2dee384eb2314d6ea8dd5441f14354dd3b55feea0646aca0685a2e228"
+}

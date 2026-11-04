@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProjectSessionBindingMapper">
+    <resultMap id="row" type="com.fuquan.audit.integration.dm8.ProjectSessionBindingPersistenceRow">
+        <result property="id" column="ID"/>
+        <result property="sessionId" column="SESSION_ID"/>
+        <result property="projectId" column="PROJECT_ID"/>
+        <result property="projectFileId" column="PROJECT_FILE_ID"/>
+        <result property="fileSha256" column="FILE_SHA256"/>
+        <result property="parseResultId" column="PARSE_RESULT_ID"/>
+        <result property="parseVersion" column="PARSE_VERSION"/>
+        <result property="canonicalTextSha256" column="CANONICAL_TEXT_SHA256"/>
+        <result property="effectiveRole" column="EFFECTIVE_ROLE"/>
+        <result property="roleDecisionId" column="ROLE_DECISION_ID"/>
+        <result property="identityDecisionId" column="IDENTITY_DECISION_ID"/>
+        <result property="slotKey" column="SLOT_KEY"/>
+        <result property="ordinal" column="ORDINAL_NO"/>
+        <result property="activeFlag" column="ACTIVE_FLAG"/>
+        <result property="boundBy" column="BOUND_BY"/>
+        <result property="boundAt" column="BOUND_AT"/>
+        <result property="selectionVersion" column="SELECTION_VERSION"/>
+        <result property="versionNo" column="VERSION_NO"/>
+    </resultMap>
+    <insert id="insert">
+        INSERT INTO REVIEW_SESSION_PROJECT_FILE_BINDING (
+            ID, SESSION_ID, PROJECT_ID, PROJECT_FILE_ID, FILE_SHA256, PARSE_RESULT_ID, PARSE_VERSION, CANONICAL_TEXT_SHA256, EFFECTIVE_ROLE, ROLE_DECISION_ID, IDENTITY_DECISION_ID, SLOT_KEY, ORDINAL_NO, ACTIVE_FLAG, BOUND_BY, BOUND_AT, SELECTION_VERSION, VERSION_NO
+        ) VALUES (
+            #{id}, #{sessionId}, #{projectId}, #{projectFileId}, #{fileSha256}, #{parseResultId}, #{parseVersion}, #{canonicalTextSha256}, #{effectiveRole}, #{roleDecisionId}, #{identityDecisionId}, #{slotKey}, #{ordinal}, #{activeFlag}, #{boundBy}, #{boundAt}, #{selectionVersion}, #{versionNo}
+        )
+    </insert>
+    <select id="findBySessionId" resultMap="row">
+        SELECT ID, SESSION_ID, PROJECT_ID, PROJECT_FILE_ID, FILE_SHA256, PARSE_RESULT_ID, PARSE_VERSION, CANONICAL_TEXT_SHA256, EFFECTIVE_ROLE, ROLE_DECISION_ID, IDENTITY_DECISION_ID, SLOT_KEY, ORDINAL_NO, ACTIVE_FLAG, BOUND_BY, BOUND_AT, SELECTION_VERSION, VERSION_NO
+        FROM REVIEW_SESSION_PROJECT_FILE_BINDING WHERE SESSION_ID = #{sessionId}
+        ORDER BY SELECTION_VERSION, ORDINAL_NO
+    </select>
+    <update id="deactivateBySessionId">
+        UPDATE REVIEW_SESSION_PROJECT_FILE_BINDING SET ACTIVE_FLAG = 0, VERSION_NO = VERSION_NO + 1
+        WHERE SESSION_ID = #{sessionId} AND ACTIVE_FLAG = 1
+    </update>
+</mapper>

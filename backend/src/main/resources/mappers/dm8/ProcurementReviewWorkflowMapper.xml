@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementReviewWorkflowMapper">
+    <select id="lockProject" resultType="java.lang.String">SELECT ID FROM PROCUREMENT_DEMAND WHERE ID=#{projectId} AND DELETED=0 FOR UPDATE</select>
+    <resultMap id="workflow" type="com.fuquan.audit.integration.dm8.ProcurementReviewWorkflowPersistenceRow">
+        <id property="id" column="ID"/><result property="projectId" column="PROJECT_ID"/><result property="currentStepOrder" column="CURRENT_STEP_ORDER"/><result property="status" column="STATUS"/><result property="createdTime" column="CREATED_TIME"/><result property="updatedTime" column="UPDATED_TIME"/>
+    </resultMap>
+    <resultMap id="step" type="com.fuquan.audit.integration.dm8.ProcurementReviewStepPersistenceRow">
+        <id property="stepCode" column="STEP_CODE"/><result property="workflowId" column="WORKFLOW_ID"/><result property="stepOrder" column="STEP_ORDER"/><result property="stepName" column="STEP_NAME"/><result property="status" column="STATUS"/><result property="completedTime" column="COMPLETED_TIME"/><result property="resultSummary" column="RESULT_SUMMARY"/>
+    </resultMap>
+    <insert id="insertWorkflow">INSERT INTO PROCUREMENT_REVIEW_WORKFLOW (ID, PROJECT_ID, CURRENT_STEP_ORDER, STATUS, CREATED_TIME, UPDATED_TIME) VALUES (#{id}, #{projectId}, #{currentStepOrder}, #{status}, #{createdTime}, #{updatedTime})</insert>
+    <insert id="insertSteps">INSERT INTO PROCUREMENT_REVIEW_STEP (WORKFLOW_ID, STEP_CODE, STEP_ORDER, STEP_NAME, STATUS, COMPLETED_TIME, RESULT_SUMMARY) VALUES <foreach collection="steps" item="step" separator=",">(#{step.workflowId}, #{step.stepCode}, #{step.stepOrder}, #{step.stepName}, #{step.status}, #{step.completedTime}, #{step.resultSummary})</foreach></insert>
+    <update id="updateWorkflow">UPDATE PROCUREMENT_REVIEW_WORKFLOW SET CURRENT_STEP_ORDER=#{currentStepOrder}, STATUS=#{status}, UPDATED_TIME=#{updatedTime} WHERE ID=#{id}</update>
+    <update id="updateStep">UPDATE PROCUREMENT_REVIEW_STEP SET STATUS=#{status}, COMPLETED_TIME=#{completedTime}, RESULT_SUMMARY=#{resultSummary} WHERE WORKFLOW_ID=#{workflowId} AND STEP_CODE=#{stepCode}</update>
+    <select id="findWorkflowByProjectId" resultMap="workflow">SELECT ID, PROJECT_ID, CURRENT_STEP_ORDER, STATUS, CREATED_TIME, UPDATED_TIME FROM PROCUREMENT_REVIEW_WORKFLOW WHERE PROJECT_ID=#{projectId}</select>
+    <select id="findStepsByWorkflowId" resultMap="step">SELECT WORKFLOW_ID, STEP_CODE, STEP_ORDER, STEP_NAME, STATUS, COMPLETED_TIME, RESULT_SUMMARY FROM PROCUREMENT_REVIEW_STEP WHERE WORKFLOW_ID=#{workflowId} ORDER BY STEP_ORDER</select>
+</mapper>

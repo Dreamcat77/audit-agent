@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BudgetApprovalRuleMapper">
+    <select id="findActiveByRuleSetCode"
+            resultType="com.fuquan.audit.integration.dm8.BudgetApprovalRulePersistenceRow">
+        SELECT ID, RULE_SET_CODE, RULE_GROUP_CODE, MATCH_MODE,
+               MIN_AMOUNT, MAX_AMOUNT, MIN_INCLUSIVE, MAX_INCLUSIVE,
+               STEP_CODE, STEP_NAME, STEP_ORDER, STATUS, VERSION_NO, CREATED_AT, UPDATED_AT
+        FROM BUDGET_APPROVAL_RULE_CONFIG
+        WHERE RULE_SET_CODE = #{ruleSetCode}
+          AND STATUS = 'ACTIVE'
+        ORDER BY CASE RULE_GROUP_CODE
+                     WHEN 'PROCEDURE_REQUIREMENT' THEN 1
+                     WHEN 'AUTHORITY_LEVEL' THEN 2
+                     ELSE 3
+                 END,
+                 STEP_ORDER
+    </select>
+
+    <select id="findByRuleSetCode"
+            resultType="com.fuquan.audit.integration.dm8.BudgetApprovalRulePersistenceRow">
+        SELECT ID, RULE_SET_CODE, RULE_GROUP_CODE, MATCH_MODE,
+               MIN_AMOUNT, MAX_AMOUNT, MIN_INCLUSIVE, MAX_INCLUSIVE,
+               STEP_CODE, STEP_NAME, STEP_ORDER, STATUS, VERSION_NO, CREATED_AT, UPDATED_AT
+        FROM BUDGET_APPROVAL_RULE_CONFIG
+        WHERE RULE_SET_CODE = #{ruleSetCode}
+        ORDER BY CASE RULE_GROUP_CODE
+                     WHEN 'PROCEDURE_REQUIREMENT' THEN 1
+                     WHEN 'AUTHORITY_LEVEL' THEN 2
+                     ELSE 3
+                 END,
+                 STEP_ORDER
+    </select>
+</mapper>

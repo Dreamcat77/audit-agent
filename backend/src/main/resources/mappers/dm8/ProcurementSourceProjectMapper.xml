@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementSourceProjectMapper">
+    <resultMap id="sourceProjectRow" type="com.fuquan.audit.integration.dm8.ProcurementSourceProjectPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="projectNo" column="PROJECT_NO"/>
+        <result property="category" column="CATEGORY"/>
+        <result property="updatedAt" column="UPDATED_AT"/>
+    </resultMap>
+
+    <sql id="eligible">
+        P.VERSION_NO &gt; 0
+        AND P.NAME IS NOT NULL
+        AND TRIM(P.NAME) &lt;&gt; ''
+        AND P.PROJECT_NO IS NOT NULL
+        AND TRIM(P.PROJECT_NO) &lt;&gt; ''
+        AND EXISTS (
+            SELECT 1
+            FROM PROJECT_FILE_PARSE_RESULT PR
+            WHERE PR.PROJECT_ID = P.ID AND PR.PARSE_STATUS = 'PARSED'
+        )
+    </sql>
+
+    <select id="findEligible" resultMap="sourceProjectRow">
+        SELECT ID, NAME, PROJECT_NO, CATEGORY, UPDATED_AT
+        FROM (
+            SELECT P.ID, P.NAME, P.PROJECT_NO, P.CATEGORY, P.UPDATED_AT,
+                   ROW_NUMBER() OVER (ORDER BY P.UPDATED_AT DESC, P.ID DESC) AS RN
+            FROM PROJECT P
+            WHERE <include refid="eligible"/>
+            <if test="keyword != null and keyword != ''">
+                AND (INSTR(UPPER(P.NAME), UPPER(#{keyword})) &gt; 0
+                     OR INSTR(UPPER(P.PROJECT_NO), UPPER(#{keyword})) &gt; 0)
+            </if>
+        ) ELIGIBLE_PROJECT
+        WHERE RN &lt;= #{limit}
+        ORDER BY RN
+    </select>
+
+    <select id="findEligibleById" resultMap="sourceProjectRow">
+        SELECT P.ID, P.NAME, P.PROJECT_NO, P.CATEGORY, P.UPDATED_AT
+        FROM PROJECT P
+        WHERE P.ID = #{id} AND <include refid="eligible"/>
+    </select>
+</mapper>

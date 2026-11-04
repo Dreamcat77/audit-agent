@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementQuoteCheckMapper">
+    <resultMap id="checkRow" type="com.fuquan.audit.integration.dm8.ProcurementQuoteCheckPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="batchId" column="BATCH_ID"/>
+        <result property="budgetAmount" column="BUDGET_AMOUNT"/>
+        <result property="averageQuote" column="AVERAGE_QUOTE"/>
+        <result property="standardDeviation" column="STANDARD_DEVIATION"/>
+        <result property="coefficientOfVariation" column="COEFFICIENT_OF_VARIATION"/>
+        <result property="highlyConcentrated" column="HIGHLY_CONCENTRATED"/>
+        <result property="riskLevel" column="RISK_LEVEL"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+    </resultMap>
+
+    <resultMap id="itemRow" type="com.fuquan.audit.integration.dm8.ProcurementQuoteCheckItemPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="checkId" column="CHECK_ID"/>
+        <result property="batchId" column="BATCH_ID"/>
+        <result property="rowNumber" column="ROW_NUMBER"/>
+        <result property="supplierName" column="SUPPLIER_NAME"/>
+        <result property="quoteAmount" column="QUOTE_AMOUNT"/>
+        <result property="productDescription" column="PRODUCT_DESCRIPTION"/>
+        <result property="overBudget" column="OVER_BUDGET"/>
+        <result property="overBudgetAmount" column="OVER_BUDGET_AMOUNT"/>
+        <result property="overBudgetRatio" column="OVER_BUDGET_RATIO"/>
+        <result property="deviationRatio" column="DEVIATION_RATIO"/>
+        <result property="suspicious" column="IS_SUSPICIOUS"/>
+        <result property="suspiciousReason" column="SUSPICIOUS_REASON"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+    </resultMap>
+
+    <insert id="insertCheck">
+        INSERT INTO PROCUREMENT_QUOTE_CHECK (
+            ID, BATCH_ID, BUDGET_AMOUNT, AVERAGE_QUOTE, STANDARD_DEVIATION,
+            COEFFICIENT_OF_VARIATION, HIGHLY_CONCENTRATED, RISK_LEVEL, CREATED_TIME
+        ) VALUES (
+            #{id}, #{batchId}, #{budgetAmount}, #{averageQuote}, #{standardDeviation},
+            #{coefficientOfVariation}, #{highlyConcentrated}, #{riskLevel}, #{createdTime}
+        )
+    </insert>
+
+    <insert id="insertItems">
+        INSERT INTO PROCUREMENT_QUOTE_CHECK_ITEM (
+            ID, CHECK_ID, BATCH_ID, ROW_NUMBER, SUPPLIER_NAME, QUOTE_AMOUNT,
+            PRODUCT_DESCRIPTION, OVER_BUDGET, OVER_BUDGET_AMOUNT, OVER_BUDGET_RATIO,
+            DEVIATION_RATIO, IS_SUSPICIOUS, SUSPICIOUS_REASON, CREATED_TIME
+        ) VALUES
+        <foreach collection="list" item="row" separator=",">
+            (
+                #{row.id}, #{row.checkId}, #{row.batchId}, #{row.rowNumber}, #{row.supplierName},
+                #{row.quoteAmount}, #{row.productDescription}, #{row.overBudget},
+                #{row.overBudgetAmount}, #{row.overBudgetRatio}, #{row.deviationRatio},
+                #{row.suspicious}, #{row.suspiciousReason}, #{row.createdTime}
+            )
+        </foreach>
+    </insert>
+
+    <select id="findLatestByBatchId" resultMap="checkRow">
+        SELECT ID, BATCH_ID, BUDGET_AMOUNT, AVERAGE_QUOTE, STANDARD_DEVIATION,
+               COEFFICIENT_OF_VARIATION, HIGHLY_CONCENTRATED, RISK_LEVEL, CREATED_TIME
+        FROM (
+            SELECT ID, BATCH_ID, BUDGET_AMOUNT, AVERAGE_QUOTE, STANDARD_DEVIATION,
+                   COEFFICIENT_OF_VARIATION, HIGHLY_CONCENTRATED, RISK_LEVEL, CREATED_TIME,
+                   ROW_NUMBER() OVER (ORDER BY CREATED_TIME DESC, ID DESC) AS RN
+            FROM PROCUREMENT_QUOTE_CHECK
+            WHERE BATCH_ID = #{batchId}
+        ) CHECK_DATA
+        WHERE RN = 1
+    </select>
+
+    <select id="findItemsByCheckId" resultMap="itemRow">
+        SELECT ID, CHECK_ID, BATCH_ID, ROW_NUMBER, SUPPLIER_NAME, QUOTE_AMOUNT,
+               PRODUCT_DESCRIPTION, OVER_BUDGET, OVER_BUDGET_AMOUNT, OVER_BUDGET_RATIO,
+               DEVIATION_RATIO, IS_SUSPICIOUS, SUSPICIOUS_REASON, CREATED_TIME
+        FROM PROCUREMENT_QUOTE_CHECK_ITEM
+        WHERE CHECK_ID = #{checkId}
+        ORDER BY ROW_NUMBER
+    </select>
+
+    <select id="findById" resultMap="checkRow">
+        SELECT * FROM PROCUREMENT_QUOTE_CHECK WHERE ID = #{id}
+    </select>
+    <insert id="insertComparison">
+        INSERT INTO PROCUREMENT_QUOTE_COMPARISON (CHECK_ID, REPORT_JSON)
+        VALUES (#{id}, #{json,jdbcType=CLOB})
+    </insert>
+    <select id="findComparison" resultType="java.lang.String">
+        SELECT REPORT_JSON FROM PROCUREMENT_QUOTE_COMPARISON WHERE CHECK_ID = #{id}
+    </select>
+
+    <resultMap id="timelineRow" type="com.fuquan.audit.integration.dm8.ProcurementSupplierQuoteTimelinePersistenceRow">
+        <result property="projectId" column="PROJECT_ID"/>
+        <result property="projectCode" column="PROJECT_CODE"/>
+        <result property="projectName" column="PROJECT_NAME"/>
+        <result property="supplierName" column="SUPPLIER_NAME"/>
+        <result property="quoteAmount" column="QUOTE_AMOUNT"/>
+        <result property="quoteTime" column="QUOTE_TIME"/>
+    </resultMap>
+
+    <select id="findLatestSupplierQuotesBySubject" resultMap="timelineRow">
+        SELECT L.BATCH_ID AS PROJECT_ID, D.BUDGET_APPROVAL_ID AS PROJECT_CODE,
+               D.PROCUREMENT_NAME AS PROJECT_NAME,
+               I.SUPPLIER_NAME, I.QUOTE_AMOUNT, L.CREATED_TIME AS QUOTE_TIME
+        FROM (
+            SELECT C.ID, C.BATCH_ID, C.CREATED_TIME,
+                   ROW_NUMBER() OVER (PARTITION BY C.BATCH_ID ORDER BY C.CREATED_TIME DESC, C.ID DESC) AS RN
+            FROM PROCUREMENT_QUOTE_CHECK C
+            INNER JOIN PROCUREMENT_DEMAND D ON D.ID = C.BATCH_ID
+            WHERE D.SUBJECT_CODE = #{subjectCode}
+              AND D.PROCUREMENT_METHOD IS NOT NULL
+              AND D.PROCUREMENT_METHOD &lt;&gt; '公开招标'
+              AND C.CREATED_TIME &gt;= #{fiscalYearStart}
+              AND C.CREATED_TIME &lt; #{fiscalYearEnd}
+        ) L
+        INNER JOIN PROCUREMENT_QUOTE_CHECK_ITEM I ON I.CHECK_ID = L.ID
+        INNER JOIN PROCUREMENT_DEMAND D ON D.ID = L.BATCH_ID
+        WHERE L.RN = 1
+        ORDER BY I.SUPPLIER_NAME, L.CREATED_TIME, L.BATCH_ID, I.ROW_NUMBER
+    </select>
+</mapper>

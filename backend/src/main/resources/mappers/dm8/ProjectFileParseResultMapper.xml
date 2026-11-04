@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProjectFileParseResultMapper">
+    <sql id="columns">PARSE_RESULT_ID, PROJECT_ID, FILE_ID, FILE_SHA256, PARSE_VERSION, PARSE_ORIGIN, PARSE_STATUS, PARSE_METHOD, ENGINE, ENGINE_VERSION, CANONICAL_TEXT, CANONICAL_TEXT_SHA256, PAGE_COUNT, DURATION_MS, CONFIDENCE, SUPERSEDES_PARSE_RESULT_ID, CREATED_AT, COMPLETED_AT, VERSION_NO</sql>
+    <insert id="insert">INSERT INTO PROJECT_FILE_PARSE_RESULT (<include refid="columns"/>) VALUES (#{row.parseResultId}, #{row.projectId}, #{row.fileId}, #{row.fileSha256}, #{row.parseVersion}, #{row.parseOrigin}, #{row.parseStatus}, #{row.parseMethod}, #{row.engine}, #{row.engineVersion}, #{row.canonicalText}, #{row.canonicalTextSha256}, #{row.pageCount}, #{row.durationMs}, #{row.confidence}, #{row.supersedesParseResultId}, #{row.createdAt}, #{row.completedAt}, #{row.versionNo})</insert>
+    <select id="findById" resultType="com.fuquan.audit.integration.dm8.ProjectFileParseResultPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_PARSE_RESULT WHERE PARSE_RESULT_ID=#{parseResultId}</select>
+    <select id="findByFileIdAndParseVersion" resultType="com.fuquan.audit.integration.dm8.ProjectFileParseResultPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_PARSE_RESULT WHERE FILE_ID=#{fileId} AND PARSE_VERSION=#{parseVersion}</select>
+    <select id="findLatestByFileId" resultType="com.fuquan.audit.integration.dm8.ProjectFileParseResultPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_PARSE_RESULT WHERE FILE_ID=#{fileId} ORDER BY PARSE_VERSION DESC, PARSE_RESULT_ID DESC FETCH FIRST 1 ROW ONLY</select>
+</mapper>

@@ -1,0 +1,17 @@
+{
+  "scenario": "normal-procurement",
+  "caseId": "8f18c14c-3cd0-37d3-8884-3803221686ac",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 10,
+  "clauses": 8,
+  "risks": 0,
+  "followUps": 1,
+  "evidenceChecks": 25,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-normal-procurement",
+  "reportFingerprint": "5dd08ef76d8df6b6f0cab367a503c1033de7740597ea73772997fdb2a52e13c0"
+}

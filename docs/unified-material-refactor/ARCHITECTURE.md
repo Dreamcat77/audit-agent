@@ -1,0 +1,11 @@
+# Shared parsing architecture — current implementation
+
+The primary DocumentTextPort bean is ParsedMaterialTextAdapter. It calls MaterialParsePort exactly once. OfficeMaterialParseAdapter explicitly injects the raw officeDocumentTextReader bean, preserving existing signature/container/resource protections and avoiding an adapter cycle. Existing budget and procurement consumers keep their business rules, prompts and source locators. AuditCaseService production injection explicitly consumes the versioned parser; old constructors remain for compatibility tests.
+
+DocumentTextPort.Result now carries optional immutable tables and OCR provenance with the old three-argument constructor retained. Excel structure is collected during the original POI read, not reconstructed by splitting text. Public cells preserve physical row/column, type, raw value, display value, formula, prior cached value, format and merged range. Text remains compatible with current budget amount/header/unit logic. XLSX precision refers to the exact raw value supplied by POI; binary XLS cannot recover precision absent from its original numeric representation.
+
+ContractMaterialParseAdapter converts the mature contract extraction into the common result structure without rereading files. Project Intake consumes the adapted canonical text and keeps its existing immutable parse results, OCR, table relationships, ZIP handling, authorization and recovery. Full extraction of the contract parser engine into a common provider remains a later compatibility step; no Project or Contract objects appear in the shared port.
+
+Uncertain parsing stays UNKNOWN. Unsupported formats and deterministic failures stay distinct. OTHER remains a business role. Native paragraphs and sheet rows are not labelled as physical pages. Coverage limitations are explicit; Office compatibility DOCX tables are not claimed structurally complete, and OCR model versions not exposed by the existing port are not invented.
+
+No DDL or cross-owner shared cache has been added. Original files and per-domain results remain in their existing authoritative storage/DM8 models. Cross-domain persistent parse-result deduplication is NOT IMPLEMENTED; matching files are not globally shared by hash alone. No replacement ZIP/storage subsystem exists. Formal procurement constraints and money rules are unchanged.

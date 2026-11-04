@@ -1,0 +1,17 @@
+{
+  "release": "/opt/audit-agent/pilots/qa26-20261027-r5",
+  "version": "qa26-20261027-r5",
+  "packageSha256": "82524f60afe245370017c14b8f4c5a6f0148f5f019fe4fd1d9694628c9dffb7a",
+  "schema": "QA26_FULL2",
+  "instance": "AUTOCASE2",
+  "webPort": 18082,
+  "backendPort": 19151,
+  "aiPort": 19153,
+  "originalFilesUnchanged": true,
+  "originalDatabaseDdlOrDml": false,
+  "webPublished": false,
+  "configurationUnchanged": true,
+  "ddl": false,
+  "historyDm8Probe": "PASS",
+  "quiescence": "PASS"
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BlacklistSupplierOperationLogMapper">
+
+    <resultMap id="operationLogRow" type="com.fuquan.audit.integration.dm8.BlacklistSupplierOperationLogPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="blacklistId" column="BLACKLIST_ID"/>
+        <result property="operationType" column="OPERATION_TYPE"/>
+        <result property="operatorUserId" column="OPERATOR_USER_ID"/>
+        <result property="operatorName" column="OPERATOR_NAME"/>
+        <result property="operationReason" column="OPERATION_REASON"/>
+        <result property="operatedTime" column="OPERATED_TIME"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+    </resultMap>
+
+    <sql id="columns">
+        ID, BLACKLIST_ID, OPERATION_TYPE, OPERATOR_USER_ID, OPERATOR_NAME,
+        OPERATION_REASON, OPERATED_TIME, CREATED_TIME
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO BLACKLIST_SUPPLIER_OPERATION_LOG (
+            ID, BLACKLIST_ID, OPERATION_TYPE, OPERATOR_USER_ID, OPERATOR_NAME,
+            OPERATION_REASON, OPERATED_TIME, CREATED_TIME
+        ) VALUES (
+            #{id}, #{blacklistId}, #{operationType}, #{operatorUserId}, #{operatorName},
+            #{operationReason}, #{operatedTime}, #{createdTime}
+        )
+    </insert>
+
+    <select id="findByBlacklistId" resultMap="operationLogRow">
+        SELECT <include refid="columns"/>
+        FROM BLACKLIST_SUPPLIER_OPERATION_LOG
+        WHERE BLACKLIST_ID = #{blacklistId}
+        ORDER BY OPERATED_TIME DESC
+    </select>
+
+</mapper>

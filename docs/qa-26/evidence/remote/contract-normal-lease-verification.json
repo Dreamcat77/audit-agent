@@ -1,0 +1,17 @@
+{
+  "scenario": "normal-lease",
+  "caseId": "afdb4d3c-cdda-379e-bb84-69eded08c714",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 7,
+  "clauses": 10,
+  "risks": 0,
+  "followUps": 0,
+  "evidenceChecks": 17,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-normal-lease",
+  "reportFingerprint": "6f0953d56ccb7565ad2a9a9c0f8b9b919b4b87fcd2d9d7d6afd6e5374880b2f7"
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ContractRuleConfigMapper">
+    <select id="findEnabledF02" resultType="com.fuquan.audit.integration.dm8.ContractRuleConfigPersistenceRow">
+        SELECT RULE_CODE, RULE_NAME, ENABLED, FAIL_LEVEL, BLOCK_SIGN, VERSION_NO, DESCRIPTION, UPDATED_AT
+        FROM CONTRACT_RULE_CONFIG
+        WHERE ENABLED = 1 AND SUBSTR(RULE_CODE, 1, 4) = 'F02_'
+        ORDER BY RULE_CODE
+    </select>
+</mapper>

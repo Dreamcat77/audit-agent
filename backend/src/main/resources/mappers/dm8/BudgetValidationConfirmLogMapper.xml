@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BudgetValidationConfirmLogMapper">
+    <resultMap id="confirmLogRow" type="com.fuquan.audit.integration.dm8.BudgetValidationConfirmLogPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="batchId" column="BATCH_ID"/>
+        <result property="rowNumber" column="ROW_NUMBER"/>
+        <result property="departmentCode" column="DEPARTMENT_CODE"/>
+        <result property="departmentName" column="DEPARTMENT_NAME"/>
+        <result property="confirmerUserId" column="CONFIRMER_USER_ID"/>
+        <result property="confirmerName" column="CONFIRMER_NAME"/>
+        <result property="confirmTime" column="CONFIRM_TIME"/>
+        <result property="confirmStep" column="CONFIRM_STEP"/>
+        <result property="abnormalReason" column="ABNORMAL_REASON"/>
+        <result property="remark" column="REMARK"/>
+        <result property="createdAt" column="CREATED_AT"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO BUDGET_VALIDATION_CONFIRM_LOG (
+            BATCH_ID, ROW_NUMBER, DEPARTMENT_CODE, DEPARTMENT_NAME,
+            CONFIRMER_USER_ID, CONFIRMER_NAME, CONFIRM_TIME, CONFIRM_STEP,
+            ABNORMAL_REASON, REMARK, CREATED_AT
+        ) VALUES (
+            #{row.batchId}, #{row.rowNumber}, #{row.departmentCode}, #{row.departmentName},
+            #{row.confirmerUserId}, #{row.confirmerName}, #{row.confirmTime}, #{row.confirmStep},
+            #{row.abnormalReason}, #{row.remark}, #{row.createdAt}
+        )
+    </insert>
+
+    <select id="findByBatchId" resultMap="confirmLogRow">
+        SELECT ID, BATCH_ID, ROW_NUMBER, DEPARTMENT_CODE, DEPARTMENT_NAME,
+               CONFIRMER_USER_ID, CONFIRMER_NAME, CONFIRM_TIME, CONFIRM_STEP,
+               ABNORMAL_REASON, REMARK, CREATED_AT
+        FROM BUDGET_VALIDATION_CONFIRM_LOG
+        WHERE BATCH_ID = #{batchId}
+        ORDER BY CONFIRM_TIME
+    </select>
+</mapper>

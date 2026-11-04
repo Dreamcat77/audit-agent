@@ -1,0 +1,17 @@
+{
+  "scenario": "complex-table",
+  "caseId": "1f31d23d-ed15-3027-a868-2af13fa049b6",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 10,
+  "clauses": 8,
+  "risks": 2,
+  "followUps": 0,
+  "evidenceChecks": 62,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-complex-table",
+  "reportFingerprint": "005fdced5ba98e9984c7de27f3653b6d980ec2a5964379f78cc5385a834d3bb0"
+}

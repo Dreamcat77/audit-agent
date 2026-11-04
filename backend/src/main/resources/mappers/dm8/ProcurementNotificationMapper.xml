@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementNotificationMapper">
+  <insert id="insert">INSERT INTO PROCUREMENT_NOTIFICATION
+    (ID, RECIPIENT_USER_ID, PROJECT_ID, PROJECT_NAME, TYPE, TITLE, CONTENT, OPERATOR_NAME, OPINION, READ_FLAG, CREATED_TIME, READ_TIME)
+    VALUES (#{id},#{recipientUserId},#{projectId},#{projectName},#{type},#{title},#{content},#{operatorName},#{opinion},#{readFlag},#{createdTime},#{readTime})</insert>
+  <select id="findByRecipient" resultType="com.fuquan.audit.integration.dm8.ProcurementNotificationPersistenceRow">
+    SELECT ID, RECIPIENT_USER_ID, PROJECT_ID, PROJECT_NAME, TYPE, TITLE, CONTENT, OPERATOR_NAME, OPINION,
+           READ_FLAG, CREATED_TIME, READ_TIME FROM PROCUREMENT_NOTIFICATION
+    WHERE RECIPIENT_USER_ID=#{userId}<if test="unreadOnly"> AND READ_FLAG=0</if>
+    ORDER BY CREATED_TIME DESC, ID DESC
+  </select>
+  <update id="markRead">UPDATE PROCUREMENT_NOTIFICATION SET READ_FLAG=1, READ_TIME=#{readTime}
+    WHERE ID=#{id} AND RECIPIENT_USER_ID=#{userId} AND READ_FLAG=0</update>
+</mapper>

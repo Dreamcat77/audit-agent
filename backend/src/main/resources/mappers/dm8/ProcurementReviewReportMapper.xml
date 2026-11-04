@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementReviewReportMapper">
+    <resultMap id="reportRow" type="com.fuquan.audit.integration.dm8.ProcurementReviewReportPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="projectId" column="PROJECT_ID"/>
+        <result property="reportNumber" column="REPORT_NUMBER"/>
+        <result property="riskLevel" column="RISK_LEVEL"/>
+        <result property="generatedTime" column="GENERATED_TIME"/>
+        <result property="overallConclusion" column="OVERALL_CONCLUSION"/>
+        <result property="agentReviewJson" column="AGENT_REVIEW_JSON"/>
+        <result property="reportSnapshotJson" column="REPORT_SNAPSHOT_JSON"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO PROCUREMENT_REVIEW_REPORT
+            (ID, PROJECT_ID, REPORT_NUMBER, RISK_LEVEL, GENERATED_TIME,
+             OVERALL_CONCLUSION, AGENT_REVIEW_JSON, REPORT_SNAPSHOT_JSON)
+        VALUES
+            (#{id}, #{projectId}, #{reportNumber}, #{riskLevel}, #{generatedTime},
+             #{overallConclusion}, #{agentReviewJson}, #{reportSnapshotJson,jdbcType=CLOB})
+    </insert>
+
+    <select id="findLatestByProjectId" resultMap="reportRow">
+        SELECT ID, PROJECT_ID, REPORT_NUMBER, RISK_LEVEL, GENERATED_TIME,
+               OVERALL_CONCLUSION, AGENT_REVIEW_JSON, REPORT_SNAPSHOT_JSON
+        FROM (
+        SELECT ID, PROJECT_ID, REPORT_NUMBER, RISK_LEVEL, GENERATED_TIME,
+               OVERALL_CONCLUSION, AGENT_REVIEW_JSON, REPORT_SNAPSHOT_JSON,
+               ROW_NUMBER() OVER (ORDER BY GENERATED_TIME DESC, ID DESC) AS RN
+            FROM PROCUREMENT_REVIEW_REPORT
+            WHERE PROJECT_ID = #{projectId}
+        ) REPORT_DATA
+        WHERE RN = 1
+    </select>
+</mapper>

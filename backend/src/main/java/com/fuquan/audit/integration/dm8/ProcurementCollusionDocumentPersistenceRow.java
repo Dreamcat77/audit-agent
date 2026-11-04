@@ -1,0 +1,8 @@
+package com.fuquan.audit.integration.dm8;
+
+import java.time.LocalDateTime;
+public class ProcurementCollusionDocumentPersistenceRow {
+    private String id, projectId, bidderName, ipAddress, handlerName, fileName, fileExtension, contentType, sha256, storageKey, parsedText;
+    private Long fileSize; private LocalDateTime createdTime;
+    public String getId(){return id;} public void setId(String v){id=v;} public String getProjectId(){return projectId;} public void setProjectId(String v){projectId=v;} public String getBidderName(){return bidderName;} public void setBidderName(String v){bidderName=v;} public String getIpAddress(){return ipAddress;} public void setIpAddress(String v){ipAddress=v;} public String getHandlerName(){return handlerName;} public void setHandlerName(String v){handlerName=v;} public String getFileName(){return fileName;} public void setFileName(String v){fileName=v;} public String getFileExtension(){return fileExtension;} public void setFileExtension(String v){fileExtension=v;} public String getContentType(){return contentType;} public void setContentType(String v){contentType=v;} public Long getFileSize(){return fileSize;} public void setFileSize(Long v){fileSize=v;} public String getSha256(){return sha256;} public void setSha256(String v){sha256=v;} public String getStorageKey(){return storageKey;} public void setStorageKey(String v){storageKey=v;} public String getParsedText(){return parsedText;} public void setParsedText(String v){parsedText=v;} public LocalDateTime getCreatedTime(){return createdTime;} public void setCreatedTime(LocalDateTime v){createdTime=v;}
+}

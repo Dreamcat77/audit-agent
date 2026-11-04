@@ -1,0 +1,16 @@
+---
+description: 甲方离线打包、DM8预检与部署约定
+alwaysApply: true
+---
+
+# 甲方部署约定
+
+处理打包、数据库预检、迁移或部署前，读取 `DEPLOYMENT-MEMORY.md` 和 `docs/runbook/customer-offline-deployment.md`。
+
+只阻断本次程序/迁移真正依赖的不变量。不得因冗余括号、已证实等价的 DM8 Catalog 表达、无关历史对象或缺迁移登记无理由阻断。CHECK 等价识别必须限定范围，保留列、常量、NULL 和优先级；真实漂移或未知状态仍停止。
+
+发布前必须测试真实 DM8 首次建表、重复执行、DDL 后代码回退再检查、部分迁移和 fail-closed 反例。Fake/JDBC 单测不能代替真实 DM8。重新编译 Java17 class、重建 manifest/外层 SHA，并从最终包重新解压验包。
+
+代码回退不撤销已生效 DDL；不得刷库、删表、清历史、重放已执行 SQL。保留现场 AI 地址/密钥/模型名称、Nginx、数据库/Redis 配置及业务数据。模型白名单和数据库误判分开处理；HTTP 200 不能代表模型或业务成功。
+
+每次交付记录命令、环境和结果，未验证写 `NOT VERIFIED`，不能因生成脚本或本地测试通过就宣称甲方部署成功。

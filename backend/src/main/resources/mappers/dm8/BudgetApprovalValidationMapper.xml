@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BudgetApprovalValidationMapper">
+    <sql id="columns">
+        ID, RULE_SET_CODE, SOURCE_TASK_ID, SOURCE_ITEM_ID, SOURCE_ROW_NUMBER,
+        DECLARED_AMOUNT, ACTUAL_SOURCE, REQUIRED_PROCEDURE_STEPS, REQUIRED_AUTHORITY_STEP,
+        ACTUAL_STEPS, MISSING_PROCEDURE_STEPS, PROCEDURE_ORDER_VALID,
+        AUTHORITY_MATCHED, IS_PASSED, RESULT_SUMMARY, CREATED_BY, CREATED_AT
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO BUDGET_APPROVAL_VALIDATION (
+            <include refid="columns"/>
+        ) VALUES (
+            #{row.id}, #{row.ruleSetCode}, #{row.sourceTaskId}, #{row.sourceItemId}, #{row.sourceRowNumber},
+            #{row.declaredAmount}, #{row.actualSource}, #{row.requiredProcedureSteps},
+            #{row.requiredAuthorityStep}, #{row.actualSteps}, #{row.missingProcedureSteps},
+            #{row.procedureOrderValid}, #{row.authorityMatched}, #{row.passed},
+            #{row.resultSummary}, #{row.createdBy}, #{row.createdAt}
+        )
+    </insert>
+
+    <select id="findById"
+            resultType="com.fuquan.audit.integration.dm8.BudgetApprovalValidationPersistenceRow">
+        SELECT <include refid="columns"/>
+        FROM BUDGET_APPROVAL_VALIDATION
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findPage"
+            resultType="com.fuquan.audit.integration.dm8.BudgetApprovalValidationPersistenceRow">
+        SELECT <include refid="columns"/>
+        FROM (
+            SELECT <include refid="columns"/>,
+                   ROW_NUMBER() OVER (ORDER BY CREATED_AT DESC, ID ASC) AS RN
+            FROM BUDGET_APPROVAL_VALIDATION
+            <where>
+                <if test="taskId != null and taskId != ''">AND SOURCE_TASK_ID = #{taskId}</if>
+            </where>
+        ) PAGE_DATA
+        WHERE RN &gt; #{offset} AND RN &lt;= (#{offset} + #{limit})
+        ORDER BY RN
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(1)
+        FROM BUDGET_APPROVAL_VALIDATION
+        <where>
+            <if test="taskId != null and taskId != ''">AND SOURCE_TASK_ID = #{taskId}</if>
+        </where>
+    </select>
+</mapper>

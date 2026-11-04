@@ -1,0 +1,13 @@
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import path from 'node:path';
+const root=path.resolve('.runtime/managed-review-20261020');mkdirSync(root,{recursive:true});
+const fixtures=path.resolve('.runtime/budget-extended/fixtures');
+const suite=JSON.parse(readFileSync(path.join(fixtures,'suite.json'),'utf8'));
+const selected=new Set(['财务大写含零角分','同名项目不同编号隔离','完整科目比对错支漏项','同编号不同正文名称','长材料首尾明细']);
+const cases=suite.cases.filter(c=>selected.has(c.label));
+const formats=JSON.parse(readFileSync(path.join(fixtures,'formats.json'),'utf8'));
+cases.push(...formats.cases.filter(c=>['纯扫描PDF复测','Excel工作簿复测','Word表格复测','损坏DOCX拒绝'].includes(c.label)));
+writeFileSync(path.join(root,'suite.json'),JSON.stringify({label:suite.label,cases},null,2)+'\n');
+const expectations=JSON.parse(readFileSync(path.join(fixtures,'expected.json'),'utf8')).filter(c=>selected.has(c.label));
+writeFileSync(path.join(root,'expected.json'),JSON.stringify(expectations,null,2)+'\n');
+console.log(JSON.stringify({cases:cases.length,files:cases.reduce((n,c)=>n+c.files.length,0),fixtureFiles:cases.flatMap(c=>c.files)}));

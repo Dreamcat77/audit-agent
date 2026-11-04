@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementTenderRuleMapper">
+    <resultMap id="ruleRow" type="com.fuquan.audit.integration.dm8.ProcurementTenderRulePersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="ruleCode" column="RULE_CODE"/>
+        <result property="ruleName" column="RULE_NAME"/>
+        <result property="riskCategory" column="RISK_CATEGORY"/>
+        <result property="matchType" column="MATCH_TYPE"/>
+        <result property="matchContent" column="MATCH_CONTENT"/>
+        <result property="riskLevel" column="RISK_LEVEL"/>
+        <result property="remediationSuggestion" column="REMEDIATION_SUGGESTION"/>
+        <result property="legalBasis" column="LEGAL_BASIS"/>
+        <result property="ruleExplanation" column="RULE_EXPLANATION"/>
+        <result property="source" column="SOURCE"/>
+        <result property="enabled" column="ENABLED"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+    </resultMap>
+    <sql id="columns">
+        ID, RULE_CODE, RULE_NAME, RISK_CATEGORY, MATCH_TYPE, MATCH_CONTENT,
+        RISK_LEVEL, REMEDIATION_SUGGESTION, LEGAL_BASIS, RULE_EXPLANATION,
+        SOURCE, ENABLED, CREATED_TIME, UPDATED_TIME
+    </sql>
+    <select id="findAll" resultMap="ruleRow">
+        SELECT <include refid="columns"/> FROM PROCUREMENT_TENDER_RULE ORDER BY RULE_CODE
+    </select>
+    <select id="findEnabled" resultMap="ruleRow">
+        SELECT <include refid="columns"/> FROM PROCUREMENT_TENDER_RULE
+        WHERE ENABLED = 1 ORDER BY RULE_CODE
+    </select>
+</mapper>

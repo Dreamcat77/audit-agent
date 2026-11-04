@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BudgetSplitRiskMapper">
+    <resultMap id="ruleRow" type="com.fuquan.audit.integration.dm8.BudgetSplitRiskRulePersistenceRow">
+        <id property="ruleCode" column="RULE_CODE"/>
+        <result property="ruleName" column="RULE_NAME"/>
+        <result property="windowDays" column="WINDOW_DAYS"/>
+        <result property="individualAmountLimit" column="INDIVIDUAL_AMOUNT_LIMIT"/>
+        <result property="aggregateAmountThreshold" column="AGGREGATE_AMOUNT_THRESHOLD"/>
+        <result property="minimumRecordCount" column="MINIMUM_RECORD_COUNT"/>
+        <result property="warningScore" column="WARNING_SCORE"/>
+        <result property="criticalScore" column="CRITICAL_SCORE"/>
+        <result property="versionNo" column="VERSION_NO"/>
+    </resultMap>
+    <resultMap id="assessmentRow" type="com.fuquan.audit.integration.dm8.BudgetSplitRiskAssessmentPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="procurementIdsJson" column="PROCUREMENT_IDS_JSON"/>
+        <result property="totalAmount" column="TOTAL_AMOUNT"/>
+        <result property="riskLevel" column="RISK_LEVEL"/>
+        <result property="riskScore" column="RISK_SCORE"/>
+        <result property="splitRatio" column="SPLIT_RATIO"/>
+        <result property="timeConcentration" column="TIME_CONCENTRATION"/>
+        <result property="supplierConcentration" column="SUPPLIER_CONCENTRATION"/>
+        <result property="recordsJson" column="RECORDS_JSON"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdAt" column="CREATED_AT"/>
+    </resultMap>
+    <select id="findActiveRules" resultMap="ruleRow">
+        SELECT RULE_CODE, RULE_NAME, WINDOW_DAYS, INDIVIDUAL_AMOUNT_LIMIT,
+               AGGREGATE_AMOUNT_THRESHOLD, MINIMUM_RECORD_COUNT, WARNING_SCORE,
+               CRITICAL_SCORE, VERSION_NO
+        FROM BUDGET_SPLIT_RISK_RULE
+        WHERE STATUS = 'ACTIVE'
+        ORDER BY AGGREGATE_AMOUNT_THRESHOLD
+    </select>
+    <insert id="insertAssessment">
+        INSERT INTO BUDGET_SPLIT_RISK_ASSESSMENT (
+            ID, PROCUREMENT_IDS_JSON, TOTAL_AMOUNT, RISK_LEVEL, RISK_SCORE,
+            SPLIT_RATIO, TIME_CONCENTRATION, SUPPLIER_CONCENTRATION,
+            RECORDS_JSON, CREATED_BY, CREATED_AT
+        ) VALUES (
+            #{row.id}, #{row.procurementIdsJson}, #{row.totalAmount}, #{row.riskLevel},
+            #{row.riskScore}, #{row.splitRatio}, #{row.timeConcentration},
+            #{row.supplierConcentration}, #{row.recordsJson}, #{row.createdBy}, #{row.createdAt}
+        )
+    </insert>
+    <select id="findAssessmentById" resultMap="assessmentRow">
+        SELECT ID, PROCUREMENT_IDS_JSON, TOTAL_AMOUNT, RISK_LEVEL, RISK_SCORE,
+               SPLIT_RATIO, TIME_CONCENTRATION, SUPPLIER_CONCENTRATION,
+               RECORDS_JSON, CREATED_BY, CREATED_AT
+        FROM BUDGET_SPLIT_RISK_ASSESSMENT
+        WHERE ID = #{id}
+    </select>
+</mapper>

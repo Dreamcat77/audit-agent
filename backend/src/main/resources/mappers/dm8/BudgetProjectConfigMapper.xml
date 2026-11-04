@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BudgetProjectConfigMapper">
+    <resultMap id="projectConfigRow" type="com.fuquan.audit.integration.dm8.BudgetProjectConfigPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="projectCode" column="PROJECT_CODE"/>
+        <result property="projectName" column="PROJECT_NAME"/>
+        <result property="departmentCode" column="DEPARTMENT_CODE"/>
+        <result property="departmentName" column="DEPARTMENT_NAME"/>
+        <result property="status" column="STATUS"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+    </resultMap>
+    <select id="findByProjectCode" resultMap="projectConfigRow">
+        SELECT ID, PROJECT_CODE, PROJECT_NAME, DEPARTMENT_CODE, DEPARTMENT_NAME, STATUS,
+               CREATED_TIME, UPDATED_TIME
+        FROM BUDGET_PROJECT_CONFIG
+        WHERE PROJECT_CODE = #{projectCode} AND STATUS = 'ACTIVE'
+    </select>
+    <select id="findAllActive" resultMap="projectConfigRow">
+        SELECT ID, PROJECT_CODE, PROJECT_NAME, DEPARTMENT_CODE, DEPARTMENT_NAME, STATUS,
+               CREATED_TIME, UPDATED_TIME
+        FROM BUDGET_PROJECT_CONFIG
+        WHERE STATUS = 'ACTIVE'
+    </select>
+</mapper>

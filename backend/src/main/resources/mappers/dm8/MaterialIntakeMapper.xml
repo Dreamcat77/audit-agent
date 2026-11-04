@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.MaterialIntakeMapper">
+    <resultMap id="material" type="com.fuquan.audit.integration.dm8.MaterialIntakePersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="actorId" column="ACTOR_ID"/>
+        <result property="operationKey" column="OPERATION_KEY"/>
+        <result property="fileName" column="FILE_NAME"/>
+        <result property="mediaType" column="MEDIA_TYPE"/>
+        <result property="fileSize" column="FILE_SIZE"/>
+        <result property="sha256" column="SHA256"/>
+        <result property="storageKey" column="STORAGE_KEY"/>
+        <result property="status" column="STATUS"/>
+        <result property="leaseToken" column="LEASE_TOKEN"/>
+        <result property="leaseUntil" column="LEASE_UNTIL"/>
+        <result property="fieldsJson" column="FIELDS_JSON" jdbcType="CLOB" javaType="java.lang.String"/>
+        <result property="parseMethod" column="PARSE_METHOD"/>
+        <result property="errorCode" column="ERROR_CODE"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <result property="updatedAt" column="UPDATED_AT"/>
+        <result property="projectName" column="PROJECT_NAME"/>
+        <result property="projectNo" column="PROJECT_NO"/>
+        <result property="departmentName" column="DEPARTMENT_NAME"/>
+        <result property="procurementType" column="PROCUREMENT_TYPE"/>
+        <result property="budgetAmount" column="BUDGET_AMOUNT"/>
+        <result property="subjectCode" column="SUBJECT_CODE"/>
+        <result property="subjectName" column="SUBJECT_NAME"/>
+        <result property="procurementMethod" column="PROCUREMENT_METHOD"/>
+        <result property="requirementDescription" column="REQUIREMENT_DESCRIPTION"/>
+        <result property="applicantName" column="APPLICANT_NAME"/>
+    </resultMap>
+    <select id="find" resultMap="material">
+        SELECT * FROM BUSINESS_MATERIAL_INTAKE WHERE ID = #{id}
+    </select>
+    <select id="findOperation" resultMap="material">
+        SELECT * FROM BUSINESS_MATERIAL_INTAKE WHERE ACTOR_ID = #{actorId} AND OPERATION_KEY = #{key}
+    </select>
+    <select id="eligible" resultMap="material">
+        SELECT * FROM (SELECT M.*, ROW_NUMBER() OVER (ORDER BY UPDATED_AT DESC, ID DESC) RN
+        FROM BUSINESS_MATERIAL_INTAKE M WHERE STATUS = 'PARSED'
+        <if test="keyword != null and keyword != ''">
+            AND (INSTR(PROJECT_NAME, #{keyword}) &gt; 0 OR INSTR(FILE_NAME, #{keyword}) &gt; 0)
+        </if>) WHERE RN &lt;= #{limit} ORDER BY RN
+    </select>
+    <select id="eligibleForProcurement" resultMap="material">
+        SELECT * FROM (SELECT M.*, ROW_NUMBER() OVER (ORDER BY M.UPDATED_AT DESC, M.ID DESC) RN
+        FROM BUSINESS_MATERIAL_INTAKE M WHERE M.STATUS = 'PARSED'
+        AND M.ACTOR_ID = #{actorId}
+        AND NOT EXISTS (
+            SELECT 1 FROM PROCUREMENT_DEMAND D WHERE D.DELETED = 0
+            AND (D.SOURCE_PROJECT_ID = M.ID OR EXISTS (
+                SELECT 1 FROM PROCUREMENT_MATERIAL_LINK L WHERE L.DEMAND_ID = D.ID AND L.MATERIAL_ID = M.ID
+            ) OR EXISTS (
+                SELECT 1 FROM PROCUREMENT_DEMAND_MATERIAL L WHERE L.DEMAND_ID = D.ID AND L.MATERIAL_ID = M.ID
+            ))
+        )
+        <if test="keyword != null and keyword != ''">
+            AND (INSTR(M.PROJECT_NAME, #{keyword}) &gt; 0 OR INSTR(M.FILE_NAME, #{keyword}) &gt; 0)
+        </if>) WHERE RN &lt;= #{limit} ORDER BY RN
+    </select>
+    <select id="recent" resultMap="material">
+        SELECT * FROM (SELECT M.*, ROW_NUMBER() OVER (ORDER BY CREATED_AT DESC, ID DESC) RN
+        FROM BUSINESS_MATERIAL_INTAKE M WHERE ACTOR_ID = #{actorId}
+        AND (ERROR_CODE IS NULL OR ERROR_CODE NOT IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT','MATERIAL_CALL_TIMEOUT_CLEANED','MATERIAL_TIME_LIMIT_CLEANED','MATERIAL_QUEUE_TIMEOUT_CLEANED'))) WHERE RN &lt;= #{limit} ORDER BY RN
+    </select>
+    <select id="timedOutForCleanup" resultMap="material">
+        SELECT * FROM (SELECT M.*,ROW_NUMBER() OVER (ORDER BY UPDATED_AT,ID) RN FROM BUSINESS_MATERIAL_INTAKE M
+        WHERE STATUS='FAILED' AND FIELDS_JSON IS NULL AND ERROR_CODE IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT')) WHERE RN &lt;= #{limit}
+    </select>
+    <update id="cleaned">
+        UPDATE BUSINESS_MATERIAL_INTAKE SET ERROR_CODE=ERROR_CODE || '_CLEANED' WHERE ID=#{id} AND STATUS='FAILED' AND FIELDS_JSON IS NULL AND ERROR_CODE=#{reason}
+    </update>
+    <insert id="insert">
+        INSERT INTO BUSINESS_MATERIAL_INTAKE (ID, ACTOR_ID, OPERATION_KEY, FILE_NAME, MEDIA_TYPE, FILE_SIZE, SHA256, STORAGE_KEY, STATUS, LEASE_TOKEN, LEASE_UNTIL, FIELDS_JSON, PARSE_METHOD, ERROR_CODE, CREATED_AT, UPDATED_AT, PROJECT_NAME, PROJECT_NO, DEPARTMENT_NAME, PROCUREMENT_TYPE, BUDGET_AMOUNT, SUBJECT_CODE, SUBJECT_NAME, PROCUREMENT_METHOD, REQUIREMENT_DESCRIPTION, APPLICANT_NAME)
+        VALUES (#{id}, #{actorId}, #{operationKey}, #{fileName}, #{mediaType}, #{fileSize}, #{sha256}, #{storageKey}, #{status}, #{leaseToken}, #{leaseUntil}, #{fieldsJson,jdbcType=CLOB}, #{parseMethod}, #{errorCode}, #{createdAt}, #{updatedAt}, #{projectName}, #{projectNo}, #{departmentName}, #{procurementType}, #{budgetAmount}, #{subjectCode}, #{subjectName}, #{procurementMethod}, #{requirementDescription}, #{applicantName})
+    </insert>
+    <select id="pending" resultMap="material">
+        SELECT * FROM (SELECT M.*, ROW_NUMBER() OVER (ORDER BY CREATED_AT, ID) RN
+        FROM BUSINESS_MATERIAL_INTAKE M
+        WHERE STATUS = 'QUEUED' OR (STATUS = 'PROCESSING' AND LEASE_UNTIL &lt;= #{now}))
+        WHERE RN &lt;= #{limit} ORDER BY RN
+    </select>
+    <update id="renew">
+        UPDATE BUSINESS_MATERIAL_INTAKE SET LEASE_UNTIL = #{until}
+        WHERE ID = #{id} AND STATUS = 'PROCESSING' AND LEASE_TOKEN = #{token}
+    </update>
+    <update id="claim">
+        UPDATE BUSINESS_MATERIAL_INTAKE SET STATUS = 'PROCESSING', LEASE_TOKEN = #{row.leaseToken},
+            LEASE_UNTIL = #{row.leaseUntil}, UPDATED_AT = #{row.updatedAt}, ERROR_CODE = NULL
+        WHERE ID = #{row.id} AND STATUS &lt;&gt; 'PARSED'
+          AND (ERROR_CODE IS NULL OR ERROR_CODE NOT IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT','MATERIAL_CALL_TIMEOUT_CLEANED','MATERIAL_TIME_LIMIT_CLEANED','MATERIAL_QUEUE_TIMEOUT_CLEANED'))
+          AND (STATUS &lt;&gt; 'PROCESSING' OR LEASE_UNTIL &lt;= #{now})
+    </update>
+    <update id="complete">
+        UPDATE BUSINESS_MATERIAL_INTAKE SET
+            STATUS = #{status},
+            FIELDS_JSON = #{fieldsJson,jdbcType=CLOB},
+            PARSE_METHOD = #{parseMethod},
+            ERROR_CODE = #{errorCode},
+            UPDATED_AT = #{updatedAt},
+            PROJECT_NAME = #{projectName},
+            PROJECT_NO = #{projectNo},
+            DEPARTMENT_NAME = #{departmentName},
+            PROCUREMENT_TYPE = #{procurementType},
+            BUDGET_AMOUNT = #{budgetAmount},
+            SUBJECT_CODE = #{subjectCode},
+            SUBJECT_NAME = #{subjectName},
+            PROCUREMENT_METHOD = #{procurementMethod},
+            REQUIREMENT_DESCRIPTION = #{requirementDescription},
+            APPLICANT_NAME = #{applicantName}
+        WHERE ID = #{id} AND STATUS = 'PROCESSING' AND LEASE_TOKEN = #{leaseToken}
+    </update>
+    <update id="claimPending">
+        UPDATE BUSINESS_MATERIAL_INTAKE SET STATUS = 'PROCESSING', LEASE_TOKEN = #{row.leaseToken},
+            LEASE_UNTIL = #{row.leaseUntil}, UPDATED_AT = #{row.updatedAt}, ERROR_CODE = NULL
+        WHERE ID = #{row.id}
+          AND (STATUS = 'QUEUED' OR (STATUS = 'PROCESSING' AND LEASE_UNTIL &lt;= #{now}))
+    </update>
+</mapper>

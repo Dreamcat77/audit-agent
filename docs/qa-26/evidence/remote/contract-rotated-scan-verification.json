@@ -1,0 +1,17 @@
+{
+  "scenario": "rotated-scan",
+  "caseId": "00e08cb7-ecac-38ab-835f-3e109ae25df4",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 10,
+  "clauses": 8,
+  "risks": 0,
+  "followUps": 0,
+  "evidenceChecks": 22,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-rotated-scan",
+  "reportFingerprint": "8c1fbafc6a95f58d31916b119db9d7b41afcabf7174fe9603dfca11be34fdbcc"
+}

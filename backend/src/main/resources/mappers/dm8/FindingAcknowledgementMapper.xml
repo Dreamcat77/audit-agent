@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.FindingAcknowledgementMapper">
+    <insert id="insert">
+        INSERT INTO REVIEW_FINDING_ACKNOWLEDGEMENT (
+            ID, CHECK_RESULT_ID, ACKNOWLEDGED_BY, ACKNOWLEDGED_AT,
+            REQUEST_ID, TRACE_ID, RULE_VERSION
+        ) VALUES (
+            #{id}, #{checkResultId}, #{acknowledgedBy}, #{acknowledgedAt},
+            #{requestId}, #{traceId}, #{ruleVersion}
+        )
+    </insert>
+    <select id="findByCheckResultId"
+            resultType="com.fuquan.audit.integration.dm8.FindingAcknowledgementPersistenceRow">
+        SELECT ID, CHECK_RESULT_ID, ACKNOWLEDGED_BY, ACKNOWLEDGED_AT,
+               REQUEST_ID, TRACE_ID, RULE_VERSION
+        FROM REVIEW_FINDING_ACKNOWLEDGEMENT
+        WHERE CHECK_RESULT_ID = #{checkResultId}
+    </select>
+    <select id="findByTaskId"
+            resultType="com.fuquan.audit.integration.dm8.FindingAcknowledgementPersistenceRow">
+        SELECT A.ID, A.CHECK_RESULT_ID, A.ACKNOWLEDGED_BY, A.ACKNOWLEDGED_AT,
+               A.REQUEST_ID, A.TRACE_ID, A.RULE_VERSION
+        FROM REVIEW_FINDING_ACKNOWLEDGEMENT A
+        JOIN AUDIT_CHECK_RESULT R ON R.ID = A.CHECK_RESULT_ID
+        WHERE R.TASK_ID = #{taskId}
+        ORDER BY A.ACKNOWLEDGED_AT, A.ID
+    </select>
+</mapper>

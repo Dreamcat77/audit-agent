@@ -1,0 +1,9 @@
+audit:
+  ai:
+    base-url: ${AUDIT_AI_BASE_URL}
+    connect-timeout-ms: ${AUDIT_AI_CONNECT_TIMEOUT_MS:5000}
+    read-timeout-ms: ${AUDIT_AI_READ_TIMEOUT_MS:960000}
+  ocr:
+    base-url: ${AUDIT_OCR_BASE_URL}
+    connect-timeout-ms: ${AUDIT_OCR_CONNECT_TIMEOUT_MS:5000}
+    read-timeout-ms: ${AUDIT_OCR_READ_TIMEOUT_MS:1900000}

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.AuditTaskMapper">
+    <resultMap id="auditTaskRow" type="com.fuquan.audit.integration.dm8.AuditTaskPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="sourceType" column="SOURCE_TYPE"/>
+        <result property="sourceId" column="SOURCE_ID"/>
+        <result property="sourceVersion" column="SOURCE_VERSION"/>
+        <result property="reviewType" column="REVIEW_TYPE"/>
+        <result property="status" column="STATUS"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="requestId" column="REQUEST_ID"/>
+        <result property="traceId" column="TRACE_ID"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <result property="startedAt" column="STARTED_AT"/>
+        <result property="finishedAt" column="FINISHED_AT"/>
+        <result property="versionNo" column="VERSION_NO"/>
+    </resultMap>
+    <sql id="columns">
+        ID, SOURCE_TYPE, SOURCE_ID, SOURCE_VERSION, REVIEW_TYPE, STATUS, CREATED_BY,
+        REQUEST_ID, TRACE_ID, CREATED_AT, STARTED_AT, FINISHED_AT, VERSION_NO
+    </sql>
+    <insert id="insert">
+        INSERT INTO AUDIT_TASK (
+            ID, SOURCE_TYPE, SOURCE_ID, SOURCE_VERSION, REVIEW_TYPE, STATUS, CREATED_BY,
+            REQUEST_ID, TRACE_ID, CREATED_AT, STARTED_AT, FINISHED_AT, VERSION_NO
+        ) VALUES (
+            #{id}, #{sourceType}, #{sourceId}, #{sourceVersion}, #{reviewType}, #{status}, #{createdBy},
+            #{requestId}, #{traceId}, #{createdAt}, #{startedAt}, #{finishedAt}, #{versionNo}
+        )
+    </insert>
+    <select id="findById" resultMap="auditTaskRow">
+        SELECT <include refid="columns"/> FROM AUDIT_TASK WHERE ID = #{id}
+    </select>
+    <select id="findLatest" resultMap="auditTaskRow">
+        SELECT <include refid="columns"/>
+        FROM (
+            SELECT <include refid="columns"/> FROM AUDIT_TASK
+            WHERE SOURCE_TYPE = #{sourceType} AND SOURCE_ID = #{sourceId} AND REVIEW_TYPE = #{reviewType}
+            ORDER BY CREATED_AT DESC, ID DESC
+        )
+        WHERE ROWNUM = 1
+    </select>
+    <select id="findLatestPage" resultMap="auditTaskRow">
+        SELECT <include refid="columns"/>
+        FROM (
+            SELECT <include refid="columns"/>,
+                   ROW_NUMBER() OVER (ORDER BY CREATED_AT DESC, ID DESC) AS PAGE_ROW_NO
+            FROM (
+                SELECT <include refid="columns"/>,
+                       ROW_NUMBER() OVER (
+                           PARTITION BY SOURCE_ID ORDER BY CREATED_AT DESC, ID DESC
+                       ) AS SOURCE_ROW_NO
+                FROM AUDIT_TASK
+                WHERE SOURCE_TYPE = #{sourceType} AND REVIEW_TYPE = #{reviewType}
+            ) LATEST_BY_SOURCE
+            WHERE SOURCE_ROW_NO = 1
+        ) PAGE_ROWS
+        WHERE PAGE_ROW_NO &gt; #{offset} AND PAGE_ROW_NO &lt;= #{endRow}
+        ORDER BY CREATED_AT DESC, ID DESC
+    </select>
+    <select id="countLatest" resultType="long">
+        SELECT COUNT(DISTINCT SOURCE_ID)
+        FROM AUDIT_TASK
+        WHERE SOURCE_TYPE = #{sourceType} AND REVIEW_TYPE = #{reviewType}
+    </select>
+    <select id="findAllLatest" resultMap="auditTaskRow">
+        SELECT <include refid="columns"/>
+        FROM (
+            SELECT <include refid="columns"/>,
+                   ROW_NUMBER() OVER (
+                       PARTITION BY SOURCE_ID ORDER BY CREATED_AT DESC, ID DESC
+                   ) AS SOURCE_ROW_NO
+            FROM AUDIT_TASK
+            WHERE SOURCE_TYPE = #{sourceType} AND REVIEW_TYPE = #{reviewType}
+        ) LATEST_BY_SOURCE
+        WHERE SOURCE_ROW_NO = 1
+        ORDER BY CREATED_AT DESC, ID DESC
+    </select>
+    <select id="findAllPage" resultMap="auditTaskRow">
+        SELECT <include refid="columns"/>
+        FROM (
+            SELECT <include refid="columns"/>,
+                   ROW_NUMBER() OVER (ORDER BY CREATED_AT DESC, ID DESC) AS PAGE_ROW_NO
+            FROM AUDIT_TASK
+            WHERE SOURCE_TYPE = #{sourceType} AND REVIEW_TYPE = #{reviewType}
+        ) PAGE_ROWS
+        WHERE PAGE_ROW_NO &gt; #{offset} AND PAGE_ROW_NO &lt;= #{endRow}
+        ORDER BY CREATED_AT DESC, ID DESC
+    </select>
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM AUDIT_TASK
+        WHERE SOURCE_TYPE = #{sourceType} AND REVIEW_TYPE = #{reviewType}
+    </select>
+    <select id="findAll" resultMap="auditTaskRow">
+        SELECT <include refid="columns"/> FROM AUDIT_TASK
+        WHERE SOURCE_TYPE = #{sourceType} AND REVIEW_TYPE = #{reviewType}
+        ORDER BY CREATED_AT DESC, ID DESC
+    </select>
+    <update id="transition">
+        UPDATE AUDIT_TASK
+        SET STATUS = #{targetStatus},
+            STARTED_AT = CASE WHEN #{targetStatus} = 'PROCESSING' THEN #{occurredAt} ELSE STARTED_AT END,
+            FINISHED_AT = CASE WHEN #{targetStatus} IN ('DONE', 'FAILED') THEN #{occurredAt} ELSE FINISHED_AT END,
+            VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id} AND STATUS = #{expectedStatus} AND VERSION_NO = #{expectedVersion}
+    </update>
+</mapper>

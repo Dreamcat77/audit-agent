@@ -1,0 +1,57 @@
+{
+  "headings": [
+    "预算校验",
+    "预算申报材料",
+    "预算项目风险分析",
+    "历史分析结果"
+  ],
+  "buttons": [
+    "历史结果",
+    "智能分析",
+    "开始智能解析",
+    "查询",
+    "电子0 项材料记录",
+    "工程0 项材料记录",
+    "装潢0 项材料记录",
+    "其他0 项材料记录",
+    "科目待核对0 项材料记录",
+    "上一页",
+    "下一页",
+    "执行风险分析",
+    "查询",
+    "上一页",
+    "下一页"
+  ],
+  "inputs": [
+    {
+      "type": "file",
+      "placeholder": "",
+      "accept": ".doc,.docx,.xls,.xlsx,.pdf,.ppt,.pptx,.txt,.csv,.rtf,.png,.jpg,.jpeg,.bmp,.tif,.tiff",
+      "aria": null
+    },
+    {
+      "type": "file",
+      "placeholder": "",
+      "accept": ".doc,.docx,.xls,.xlsx,.pdf,.ppt,.pptx,.txt,.csv,.rtf,.png,.jpg,.jpeg,.bmp,.tif,.tiff",
+      "aria": null
+    },
+    {
+      "type": "text",
+      "placeholder": "项目、科目或材料名称",
+      "accept": "",
+      "aria": "搜索项目或材料"
+    },
+    {
+      "type": "date",
+      "placeholder": "",
+      "accept": "",
+      "aria": "分析日期"
+    },
+    {
+      "type": "text",
+      "placeholder": "项目、科目或材料名称",
+      "accept": "",
+      "aria": "搜索历史分析"
+    }
+  ]
+}

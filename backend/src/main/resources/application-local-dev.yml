@@ -1,0 +1,45 @@
+# local-dev: 本地开发 profile，连接开发 DM8，Session 使用 Redis
+# 使用方式: 设置数据库、Redis、文件存储和其它所需环境变量后
+# java -jar ... --spring.profiles.active=local-dev
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: ${AUDIT_MULTIPART_MAX_FILE_SIZE:100MB}
+      max-request-size: ${AUDIT_MULTIPART_MAX_REQUEST_SIZE:102MB}
+  datasource:
+    url: ${AUDIT_DB_URL}
+    username: ${AUDIT_DB_USERNAME}
+    password: ${AUDIT_DB_PASSWORD}
+    driver-class-name: dm.jdbc.driver.DmDriver
+  data:
+    redis:
+      host: ${AUDIT_REDIS_HOST:127.0.0.1}
+      port: ${AUDIT_REDIS_PORT:6379}
+      password: ${AUDIT_REDIS_PASSWORD:}
+  session:
+    redis:
+      namespace: ${AUDIT_SESSION_REDIS_NAMESPACE:audit-agent:sessions}
+      repository-type: default
+
+server:
+  port: 8888
+  servlet:
+    session:
+      cookie:
+        secure: ${AUDIT_SESSION_COOKIE_SECURE:false}
+
+logging:
+  level:
+    com.fuquan.audit.common.observability.FlowDebugLogger: DEBUG
+
+audit:
+  security:
+    cors:
+      allowed-origins: ${AUDIT_CORS_ALLOWED_ORIGINS:http://localhost:5173}
+  observability:
+    flow-debug-enabled: true
+  operation-audit:
+    enabled: true
+  file-storage:
+    root: ${AUDIT_FILE_STORAGE_ROOT}

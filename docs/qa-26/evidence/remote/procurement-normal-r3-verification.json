@@ -1,0 +1,19 @@
+{
+  "label": "procurement-normal-r3",
+  "caseId": "cb80c533-7282-39f8-b165-4289ae8c2162",
+  "status": "COMPLETED",
+  "modules": {
+    "TENDER_COMPLIANCE": "COMPLETED",
+    "BLACKLIST": "NOT_EXECUTED",
+    "QUOTE": "COMPLETED",
+    "COLLUSION": "NOT_EXECUTED",
+    "SPLIT_PURCHASE": "NOT_EXECUTED",
+    "AGENT_PRECHECK": "COMPLETED"
+  },
+  "offers": 3,
+  "citations": 200,
+  "reportFingerprint": "403d9c729068c3b990441c3e315c3b72cd9229d9a2c84670f4b20d9283d47ea6",
+  "failures": [],
+  "realModel": true,
+  "synthetic": true
+}

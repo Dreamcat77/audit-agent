@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProjectFileIdentityAssessmentMapper">
+    <sql id="columns">ASSESSMENT_ID, PROJECT_ID, PROJECT_VERSION_NO, FILE_ID, FILE_SHA256, PARSE_RESULT_ID, PARSE_VERSION, ASSESSMENT_SOURCE, ASSESSMENT_VERSION, IDENTITY_POLICY_VERSION, STATUS, NORMALIZED_INPUT_FINGERPRINT, SAFE_REASON_CODE, CREATED_AT, COMPLETED_AT, VERSION_NO</sql>
+    <insert id="insert">INSERT INTO PROJECT_FILE_IDENTITY_ASSESSMENT (<include refid="columns"/>) VALUES (#{row.assessmentId}, #{row.projectId}, #{row.projectVersionNo}, #{row.fileId}, #{row.fileSha256}, #{row.parseResultId}, #{row.parseVersion}, #{row.assessmentSource}, #{row.assessmentVersion}, #{row.identityPolicyVersion}, #{row.status}, #{row.normalizedInputFingerprint}, #{row.safeReasonCode}, #{row.createdAt}, #{row.completedAt}, #{row.versionNo})</insert>
+    <select id="findById" resultType="com.fuquan.audit.integration.dm8.ProjectFileIdentityAssessmentPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_IDENTITY_ASSESSMENT WHERE ASSESSMENT_ID=#{assessmentId}</select>
+    <select id="findLatestByFileId" resultType="com.fuquan.audit.integration.dm8.ProjectFileIdentityAssessmentPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_IDENTITY_ASSESSMENT WHERE FILE_ID=#{fileId} ORDER BY CREATED_AT DESC, ASSESSMENT_ID DESC FETCH FIRST 1 ROW ONLY</select>
+</mapper>

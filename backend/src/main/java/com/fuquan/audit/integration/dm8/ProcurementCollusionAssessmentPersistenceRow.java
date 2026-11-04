@@ -1,0 +1,8 @@
+package com.fuquan.audit.integration.dm8;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+public class ProcurementCollusionAssessmentPersistenceRow {
+    private String id, projectId, riskLevel, similaritiesJson; private Integer riskScore, duplicateIpGroups, duplicateHandlerGroups; private BigDecimal quoteCoefficientOfVariation, maxDocumentSimilarity; private LocalDateTime assessedTime;
+    public String getId(){return id;} public void setId(String v){id=v;} public String getProjectId(){return projectId;} public void setProjectId(String v){projectId=v;} public Integer getRiskScore(){return riskScore;} public void setRiskScore(Integer v){riskScore=v;} public String getRiskLevel(){return riskLevel;} public void setRiskLevel(String v){riskLevel=v;} public BigDecimal getQuoteCoefficientOfVariation(){return quoteCoefficientOfVariation;} public void setQuoteCoefficientOfVariation(BigDecimal v){quoteCoefficientOfVariation=v;} public BigDecimal getMaxDocumentSimilarity(){return maxDocumentSimilarity;} public void setMaxDocumentSimilarity(BigDecimal v){maxDocumentSimilarity=v;} public Integer getDuplicateIpGroups(){return duplicateIpGroups;} public void setDuplicateIpGroups(Integer v){duplicateIpGroups=v;} public Integer getDuplicateHandlerGroups(){return duplicateHandlerGroups;} public void setDuplicateHandlerGroups(Integer v){duplicateHandlerGroups=v;} public String getSimilaritiesJson(){return similaritiesJson;} public void setSimilaritiesJson(String v){similaritiesJson=v;} public LocalDateTime getAssessedTime(){return assessedTime;} public void setAssessedTime(LocalDateTime v){assessedTime=v;}
+}

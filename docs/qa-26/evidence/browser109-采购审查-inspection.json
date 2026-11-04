@@ -1,0 +1,24 @@
+{
+  "headings": [
+    "采购需求管理",
+    "上传采购材料，自动完成预审、招标合规与询比价分析"
+  ],
+  "buttons": [
+    "导入",
+    "新建采购需求"
+  ],
+  "inputs": [
+    {
+      "type": "file",
+      "placeholder": "",
+      "accept": ".doc,.docx,.xls,.xlsx,.pdf,.ppt,.pptx,.txt,.csv,.rtf,.png,.jpg,.jpeg,.bmp,.tif,.tiff",
+      "aria": "选择采购材料并开始分析"
+    },
+    {
+      "type": "text",
+      "placeholder": "搜索项目名称…",
+      "accept": "",
+      "aria": "按项目名称搜索"
+    }
+  ]
+}

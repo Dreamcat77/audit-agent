@@ -1,0 +1,22 @@
+// Preserve Tailwind layout and add only the previously verified Chrome 109 color fallbacks.
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { addChrome109Colors } from './browser/chrome109-colors.mjs';
+const [inputArg,outputArg]=process.argv.slice(2);
+const input=path.resolve(inputArg),output=path.resolve(outputArg);
+assert.ok(!existsSync(output),'Existing output must be preserved');
+const html=readFileSync(path.join(input,'index.html'),'utf8');
+const ref=/href="(\/assets\/[^" ]+\.css)"/.exec(html)?.[1];
+assert.ok(ref);
+const original=readFileSync(path.join(input,ref.slice(1)),'utf8');
+const {css,changed}=await addChrome109Colors(original);
+assert.ok(css.startsWith(original));
+const runtime=Buffer.from(readFileSync(new URL('./browser/chrome109-currentcolor.js',import.meta.url),'utf8').replace(/\r\n/g,'\n'));
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex').slice(0,20);
+const cssName=`chrome109-colors-${hash(css)}.css`,jsName=`chrome109-currentcolor-${hash(runtime)}.js`;
+mkdirSync(output,{recursive:true});cpSync(path.join(input,'assets'),path.join(output,'assets'),{recursive:true});
+writeFileSync(path.join(output,'assets',cssName),css);writeFileSync(path.join(output,'assets',jsName),runtime);
+writeFileSync(path.join(output,'index.html'),html.replace(ref,`/assets/${cssName}`).replace('</head>',`<script defer src="/assets/${jsName}"></script>\n</head>`));
+console.log(`CHROME109_LAYOUT_AND_ORIGINAL_CSS_PREFIX_PRESERVED_COLOR_FALLBACKS=${changed}; OUTPUT=${output}`);

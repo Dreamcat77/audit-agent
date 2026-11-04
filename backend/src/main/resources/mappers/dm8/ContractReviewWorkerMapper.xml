@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ContractReviewWorkerMapper">
+    <update id="advanceRetryStep">
+        UPDATE CONTRACT_REVIEW_STEP SET STATUS = 'PENDING', CURRENT_ATTEMPT_NO = #{nextAttemptNo},
+            OUTPUT_RESOURCE_TYPE = NULL, OUTPUT_RESOURCE_ID = NULL, SAFE_REASON_CODE = NULL,
+            STARTED_AT = NULL, COMPLETED_AT = NULL, VERSION_NO = VERSION_NO + 1
+        WHERE STEP_ID = #{stepId} AND RUN_ID = #{runId} AND STATUS = 'FAILED'
+          AND VERSION_NO = #{expectedVersion} AND CURRENT_ATTEMPT_NO = #{previousAttemptNo}
+          AND EXISTS (SELECT 1 FROM CONTRACT_REVIEW_STEP_ATTEMPT a
+            WHERE a.RUN_ID = #{runId} AND a.STEP_ID = #{stepId}
+              AND a.ATTEMPT_NO = #{previousAttemptNo} AND a.STATUS = 'FAILED')
+    </update>
+    <update id="resumeRetryRun">
+        UPDATE CONTRACT_REVIEW_RUN SET STATUS = 'RUNNING', COMPLETED_AT = NULL, FAILED_AT = NULL,
+            UNKNOWN_AT = NULL, SAFE_REASON_CODE = NULL, VERSION_NO = VERSION_NO + 1
+        WHERE RUN_ID = #{runId} AND VERSION_NO = #{expectedVersion}
+          AND STATUS = #{expectedStatus} AND STATUS IN ('RUNNING', 'FAILED')
+    </update>
+    <select id="findBusinessInitiator" resultType="com.fuquan.audit.contract.application.reviewrun.port.ContractReviewWorkerRepository$BusinessInitiator">
+        SELECT ID AS USER_ID, USERNAME, REAL_NAME AS DISPLAY_NAME FROM SYS_USER WHERE ID = #{userId}
+    </select>
+    <select id="findClaimCandidates" resultType="com.fuquan.audit.integration.dm8.ContractReviewStepAttemptPersistenceRow">
+        SELECT * FROM (
+            SELECT a.* FROM CONTRACT_REVIEW_STEP_ATTEMPT a
+            JOIN CONTRACT_REVIEW_STEP s ON s.RUN_ID = a.RUN_ID AND s.STEP_ID = a.STEP_ID
+            JOIN CONTRACT_REVIEW_RUN r ON r.RUN_ID = a.RUN_ID
+            WHERE a.STATUS = 'PENDING' AND s.STATUS = 'PENDING'
+              AND s.CURRENT_ATTEMPT_NO = a.ATTEMPT_NO
+              AND r.STATUS IN ('PENDING', 'RUNNING')
+              AND a.LEASE_OWNER IS NULL AND a.LEASE_UNTIL IS NULL
+              AND a.EXTERNAL_CALL_STATE = 'NOT_STARTED'
+            ORDER BY CASE WHEN s.STEP_TYPE = 'SEMANTIC_AI' THEN 1 ELSE 0 END,
+                a.LEASE_UNTIL, a.ATTEMPT_ID
+        ) WHERE ROWNUM &lt;= #{limit}
+    </select>
+    <select id="findExpiredLeases" resultType="com.fuquan.audit.integration.dm8.ContractReviewStepAttemptPersistenceRow">
+        SELECT * FROM (
+            SELECT a.* FROM CONTRACT_REVIEW_STEP_ATTEMPT a
+            JOIN CONTRACT_REVIEW_STEP s ON s.RUN_ID = a.RUN_ID AND s.STEP_ID = a.STEP_ID
+            JOIN CONTRACT_REVIEW_RUN r ON r.RUN_ID = a.RUN_ID
+            WHERE a.STATUS = 'RUNNING' AND s.STATUS = 'RUNNING'
+              AND s.CURRENT_ATTEMPT_NO = a.ATTEMPT_NO
+              AND r.STATUS IN ('RUNNING', 'UNKNOWN')
+              AND a.LEASE_OWNER IS NOT NULL AND a.LEASE_UNTIL &lt;= #{now}
+            ORDER BY a.LEASE_UNTIL, a.ATTEMPT_ID
+        ) WHERE ROWNUM &lt;= #{limit}
+    </select>
+    <update id="compareAndSetAttempt">
+        UPDATE CONTRACT_REVIEW_STEP_ATTEMPT SET
+            STATUS = #{next.status}, LEASE_OWNER = #{next.leaseOwner}, LEASE_UNTIL = #{next.leaseUntil},
+            CLAIMED_AT = #{next.claimedAt}, EXTERNAL_CALL_STATE = #{next.externalCallState},
+            EXTERNAL_REQUEST_FINGERPRINT = #{next.externalRequestFingerprint},
+            PROVIDER_REQUEST_ID = #{next.providerRequestId}, PROVIDER = #{next.provider}, "MODEL" = #{next.model},
+            STARTED_AT = #{next.startedAt}, COMPLETED_AT = #{next.completedAt},
+            SAFE_REASON_CODE = #{next.safeReasonCode}, OUTPUT_RESOURCE_TYPE = #{next.outputResourceType},
+            OUTPUT_RESOURCE_ID = #{next.outputResourceId}, VERSION_NO = #{next.versionNo}
+        WHERE ATTEMPT_ID = #{expected.attemptId} AND RUN_ID = #{expected.runId}
+          AND STEP_ID = #{expected.stepId} AND ATTEMPT_NO = #{expected.attemptNo}
+          AND STATUS = #{expected.status} AND VERSION_NO = #{expected.versionNo}
+          AND OPERATION_IDENTITY = #{expected.operationIdentity}
+          AND EXISTS (SELECT 1 FROM CONTRACT_REVIEW_STEP s
+              WHERE s.RUN_ID = #{expected.runId} AND s.STEP_ID = #{expected.stepId}
+                AND s.CURRENT_ATTEMPT_NO = #{expected.attemptNo} AND s.STATUS = #{expected.status})
+        <choose>
+            <when test="condition == 'PENDING'">
+                AND STATUS = 'PENDING' AND LEASE_OWNER IS NULL AND LEASE_UNTIL IS NULL
+                AND EXTERNAL_CALL_STATE = 'NOT_STARTED'
+            </when>
+            <when test="condition == 'ACTIVE'">
+                AND STATUS = 'RUNNING' AND LEASE_OWNER = #{expected.leaseOwner} AND LEASE_UNTIL &gt; #{now}
+            </when>
+            <when test="condition == 'EXPIRED'">
+                AND STATUS = 'RUNNING' AND LEASE_OWNER = #{expected.leaseOwner} AND LEASE_UNTIL &lt;= #{now}
+            </when>
+            <otherwise>AND 1 = 0</otherwise>
+        </choose>
+    </update>
+</mapper>

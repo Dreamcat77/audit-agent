@@ -1,0 +1,42 @@
+/* Local, licensed, static 500-weight subset for these ten Chinese headings.
+   Customer browsers must not depend on a CDN or the installed CJK fonts. */
+@font-face {
+  font-family: "Audit Header SC";
+  src: url('../assets/fonts/audit-header-sc-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Cumulative v1 + v2 repair: retain stats, status badges, material previews
+   and procurement types on Chrome 109. Do not drop these when rebuilding.
+   changing the existing monospace sizing or spacing. ASCII characters still
+   use the original monospace stack through unicode-range. */
+@font-face {
+  font-family: "Audit UI CJK";
+  src: url('../assets/fonts/ui-cjk.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0080-10FFFF;
+}
+
+.procurement-demand-table > thead > tr > th {
+  font-family: "Audit Header SC", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans CJK SC", "Source Han Sans SC", "WenQuanYi Micro Hei",
+    "WenQuanYi Zen Hei", sans-serif;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+  font-synthesis: none;
+  letter-spacing: normal;
+}
+
+.font-mono.uppercase.tracking-wider,
+.procurement-demand-table > tbody > tr > td:nth-child(6) .font-mono,
+.procurement-demand-table > tbody > tr > td:nth-child(7) .font-mono,
+pre.whitespace-pre-wrap.select-text.text-xs,
+.procurement-demand-table > tbody > tr > td:nth-child(4) > span.font-mono {
+  font-family: "Audit UI CJK", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+}

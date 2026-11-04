@@ -1,0 +1,10 @@
+-- MIGRATION-NAMESPACE: PROCUREMENT
+-- MIGRATION-ID: f06-quote-comparison
+-- DEPENDS-ON: V023__f06_procurement_quote_alert.sql
+-- EXECUTION: CONTROLLED_MANUAL
+-- Additive snapshot table for F06. Apply only after preflight on the target DM8 schema.
+CREATE TABLE PROCUREMENT_QUOTE_COMPARISON (
+    CHECK_ID VARCHAR(36) NOT NULL,
+    REPORT_JSON CLOB NOT NULL,
+    CONSTRAINT PK_PROC_QUOTE_COMPARISON PRIMARY KEY (CHECK_ID)
+);

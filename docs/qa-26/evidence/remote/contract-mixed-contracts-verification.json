@@ -1,0 +1,17 @@
+{
+  "scenario": "mixed-contracts",
+  "caseId": "d95391ed-df67-311b-8b7a-4b229667d63f",
+  "status": "COMPLETED",
+  "documents": 2,
+  "facts": 20,
+  "clauses": 16,
+  "risks": 0,
+  "followUps": 2,
+  "evidenceChecks": 49,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-mixed-contracts",
+  "reportFingerprint": "46484e324433068c932ea6bd07507e7ae6fd61025668f46ef24ba671eafbf722"
+}

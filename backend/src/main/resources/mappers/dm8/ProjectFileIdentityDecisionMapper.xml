@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProjectFileIdentityDecisionMapper">
+    <sql id="columns">DECISION_ID, PROJECT_ID, PROJECT_VERSION_NO, FILE_ID, FILE_SHA256, PARSE_RESULT_ID, PARSE_VERSION, ASSESSMENT_ID, RESOLUTION, DECIDED_BY, DECIDED_AT, SUPERSEDES_DECISION_ID, REASON, VERSION_NO</sql>
+    <insert id="insert">INSERT INTO PROJECT_FILE_IDENTITY_DECISION (<include refid="columns"/>) VALUES (#{row.decisionId}, #{row.projectId}, #{row.projectVersionNo}, #{row.fileId}, #{row.fileSha256}, #{row.parseResultId}, #{row.parseVersion}, #{row.assessmentId}, #{row.resolution}, #{row.decidedBy}, #{row.decidedAt}, #{row.supersedesDecisionId}, #{row.reason}, #{row.versionNo})</insert>
+    <select id="findById" resultType="com.fuquan.audit.integration.dm8.ProjectFileIdentityDecisionPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_IDENTITY_DECISION WHERE DECISION_ID=#{decisionId}</select>
+    <select id="findByFileIdAndVersion" resultType="com.fuquan.audit.integration.dm8.ProjectFileIdentityDecisionPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_IDENTITY_DECISION WHERE FILE_ID=#{fileId} AND VERSION_NO=#{versionNo}</select>
+    <select id="findLatestByFileId" resultType="com.fuquan.audit.integration.dm8.ProjectFileIdentityDecisionPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_IDENTITY_DECISION WHERE FILE_ID=#{fileId} ORDER BY VERSION_NO DESC, DECISION_ID DESC FETCH FIRST 1 ROW ONLY</select>
+</mapper>

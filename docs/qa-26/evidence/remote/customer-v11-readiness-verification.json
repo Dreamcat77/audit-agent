@@ -1,0 +1,8 @@
+{
+  "realDm8": true,
+  "busyOrUnknownRejected": 7,
+  "terminalAllowed": 2,
+  "fixturesRolledBack": true,
+  "originalDatabaseModified": false,
+  "failures": []
+}

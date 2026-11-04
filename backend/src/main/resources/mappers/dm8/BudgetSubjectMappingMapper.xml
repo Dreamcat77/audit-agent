@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BudgetSubjectMappingMapper">
+    <resultMap id="budgetSubjectMappingRow" type="com.fuquan.audit.integration.dm8.BudgetSubjectMappingPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="systemSubjectCode" column="SYSTEM_SUBJECT_CODE"/>
+        <result property="systemSubjectName" column="SYSTEM_SUBJECT_NAME"/>
+        <result property="budgetSubjectCode" column="BUDGET_SUBJECT_CODE"/>
+        <result property="budgetSubjectName" column="BUDGET_SUBJECT_NAME"/>
+        <result property="budgetAmount" column="BUDGET_AMOUNT"/>
+        <result property="budgetYear" column="BUDGET_YEAR"/>
+        <result property="supplierName" column="SUPPLIER_NAME"/>
+        <result property="status" column="STATUS"/>
+        <result property="createTime" column="CREATE_TIME"/>
+    </resultMap>
+    <select id="findBySystemSubjectCode" resultMap="budgetSubjectMappingRow">
+        SELECT ID, SYSTEM_SUBJECT_CODE, SYSTEM_SUBJECT_NAME, BUDGET_SUBJECT_CODE,
+               BUDGET_SUBJECT_NAME, BUDGET_AMOUNT, BUDGET_YEAR, SUPPLIER_NAME, STATUS, CREATE_TIME
+        FROM BUDGET_SUBJECT_MAPPING
+        WHERE SYSTEM_SUBJECT_CODE = #{systemSubjectCode} AND STATUS = 'ACTIVE'
+    </select>
+    <select id="findAllActive" resultMap="budgetSubjectMappingRow">
+        SELECT ID, SYSTEM_SUBJECT_CODE, SYSTEM_SUBJECT_NAME, BUDGET_SUBJECT_CODE,
+               BUDGET_SUBJECT_NAME, BUDGET_AMOUNT, BUDGET_YEAR, SUPPLIER_NAME, STATUS, CREATE_TIME
+        FROM BUDGET_SUBJECT_MAPPING
+        WHERE STATUS = 'ACTIVE'
+    </select>
+</mapper>

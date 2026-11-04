@@ -1,0 +1,41 @@
+{
+  "caseId": "e9276b52-8cee-38ca-8d80-d830eaf62d75",
+  "status": "PARTIAL",
+  "failures": [
+    "AUTOMATIC_MODULE_NOT_COMPLETED"
+  ],
+  "budgetFromTenderOnly": true,
+  "separateApprovalFile": false,
+  "uppercaseQuote": true,
+  "overBudgetSuppliers": 1,
+  "concurrentReplays": [
+    [
+      409,
+      null
+    ],
+    [
+      200,
+      "e9276b52-8cee-38ca-8d80-d830eaf62d75"
+    ],
+    [
+      200,
+      "e9276b52-8cee-38ca-8d80-d830eaf62d75"
+    ],
+    [
+      409,
+      null
+    ],
+    [
+      409,
+      null
+    ],
+    [
+      409,
+      null
+    ]
+  ],
+  "frozenFingerprint": "21b853293525aae0a9d3d2b22bfacd78180f08f68b261e3316ab63485a20b87c",
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true
+}

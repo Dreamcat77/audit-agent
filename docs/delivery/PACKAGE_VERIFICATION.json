@@ -1,0 +1,21 @@
+{
+  "version": "v11",
+  "appCommit": "11c217d9f1fed5a30943af8913e99ea2fdf16aa8",
+  "archiveSha256": "acb6b917131e0586604f7c5b6c5d06b68a93f10b8bf32ff4d7975473d8751be8",
+  "bytes": 84372416,
+  "files": 158,
+  "manifestVerified": true,
+  "noUnregisteredFiles": true,
+  "flatRoot": true,
+  "java17Classes": 22,
+  "testedHelpersUnchanged": true,
+  "frontendMatchesChrome109VerifiedCandidate": true,
+  "backendMatchesQa26": true,
+  "noNativeWheelsOrSystemPackages": true,
+  "sourceState": "CLEAN",
+  "arm64Execution": "NOT_VERIFIED",
+  "finalPackageLinuxShellSyntaxChecks": 5,
+  "finalPackagePythonAstChecks": 62,
+  "desktopCopySha256Verified": true,
+  "failures": []
+}

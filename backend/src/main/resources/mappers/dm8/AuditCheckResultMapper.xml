@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.AuditCheckResultMapper">
+    <insert id="insert">
+        INSERT INTO AUDIT_CHECK_RESULT (
+            ID, TASK_ID, RULE_CODE, ITEM_KEY, CHECK_STATUS, RISK_LEVEL, BLOCK_SIGN,
+            ACTUAL_VALUE, EXPECTED_VALUE, DETAIL, RULE_VERSION, CREATED_AT
+        ) VALUES (
+            #{id}, #{taskId}, #{ruleCode}, #{itemKey}, #{checkStatus}, #{riskLevel}, #{blockSign},
+            #{actualValue}, #{expectedValue}, #{detail}, #{ruleVersion}, #{createdAt}
+        )
+    </insert>
+    <select id="findByTaskId" resultType="com.fuquan.audit.integration.dm8.AuditCheckResultPersistenceRow">
+        SELECT ID, TASK_ID, RULE_CODE, ITEM_KEY, CHECK_STATUS, RISK_LEVEL, BLOCK_SIGN,
+               ACTUAL_VALUE, EXPECTED_VALUE, DETAIL, RULE_VERSION, CREATED_AT
+        FROM AUDIT_CHECK_RESULT WHERE TASK_ID = #{taskId} ORDER BY RULE_CODE, ITEM_KEY, ID
+    </select>
+    <select id="findById" resultType="com.fuquan.audit.integration.dm8.AuditCheckResultPersistenceRow">
+        SELECT ID, TASK_ID, RULE_CODE, ITEM_KEY, CHECK_STATUS, RISK_LEVEL, BLOCK_SIGN,
+               ACTUAL_VALUE, EXPECTED_VALUE, DETAIL, RULE_VERSION, CREATED_AT
+        FROM AUDIT_CHECK_RESULT WHERE ID = #{id}
+    </select>
+</mapper>

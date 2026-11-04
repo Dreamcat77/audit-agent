@@ -1,0 +1,35 @@
+{
+  "stage": "accept",
+  "browser": "109.0.5412.0",
+  "production": true,
+  "realHttp": true,
+  "realModel": true,
+  "realDm8": true,
+  "pageErrors": [],
+  "results": [
+    {
+      "module": "budget",
+      "batchId": "b1f7ae28-5b49-4864-aa04-75362dce9122",
+      "automaticResultNavigation": true,
+      "historyReopen": true,
+      "differenceExport": true,
+      "mobileNoOverflow": true
+    },
+    {
+      "module": "procurement",
+      "caseId": "eecbf639-1507-304f-80f1-bbfd0328daac",
+      "threeSuppliersVisible": true,
+      "noManualBusinessGate": true,
+      "evidenceReadable": true,
+      "refreshPreserved": true
+    },
+    {
+      "module": "contract",
+      "caseId": "9065b1d5-230d-359b-b495-44cb4c07f6d9",
+      "manualBusinessInputs": 0,
+      "noManualConfirmation": true,
+      "evidenceReadable": true,
+      "refreshPreserved": true
+    }
+  ]
+}

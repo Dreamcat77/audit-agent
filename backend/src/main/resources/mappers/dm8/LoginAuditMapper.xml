@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.LoginAuditMapper">
+
+    <insert id="insert">
+        INSERT INTO AUTH_LOGIN_AUDIT (
+            ID, USER_ID, USERNAME, EVENT_TYPE, RESULT, FAIL_REASON,
+            REQUEST_ID, TRACE_ID, SOURCE_IP, OCCURRED_AT
+        ) VALUES (
+            #{id}, #{userId}, #{username}, #{eventType}, #{result}, #{failReason},
+            #{requestId}, #{traceId}, #{sourceIp}, #{occurredAt}
+        )
+    </insert>
+</mapper>

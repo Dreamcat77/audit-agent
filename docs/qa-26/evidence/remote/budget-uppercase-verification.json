@@ -1,0 +1,17 @@
+{
+  "label": "budget-uppercase",
+  "batchId": "2ef3f06f-15a0-4b97-a794-dfa4d5bb196b",
+  "jobs": [
+    "b3733413-8c06-4cec-a97b-f5bf33cd9576",
+    "72865fae-d7a8-4324-906e-6bebd9951216"
+  ],
+  "statuses": [
+    "PARSED",
+    "PARSED"
+  ],
+  "lines": 2,
+  "reportFingerprint": "3f81ce2713b4f3dc758ac80bce815f9e8de1542c26ace15dd6f6260ae8bc421d",
+  "failures": [],
+  "realModel": true,
+  "synthetic": true
+}

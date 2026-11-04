@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementApprovalInstanceMapper">
+    <resultMap id="instanceRow" type="com.fuquan.audit.integration.dm8.ProcurementApprovalInstancePersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="projectId" column="PROJECT_ID"/>
+        <result property="status" column="STATUS"/>
+        <result property="currentNodeCode" column="CURRENT_NODE_CODE"/>
+        <result property="startedByUserId" column="STARTED_BY_USER_ID"/>
+        <result property="startedByName" column="STARTED_BY_NAME"/>
+        <result property="startedTime" column="STARTED_TIME"/>
+        <result property="completedTime" column="COMPLETED_TIME"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+        <result property="returnSnapshot" column="RETURN_SNAPSHOT"/>
+    </resultMap>
+
+    <select id="findByProjectId" resultMap="instanceRow">
+        SELECT * FROM (
+            SELECT ID, PROJECT_ID, STATUS, CURRENT_NODE_CODE, STARTED_BY_USER_ID, STARTED_BY_NAME,
+                   STARTED_TIME, COMPLETED_TIME, CREATED_TIME, UPDATED_TIME, RETURN_SNAPSHOT
+            FROM PROCUREMENT_APPROVAL_INSTANCE
+            WHERE PROJECT_ID = #{projectId}
+            ORDER BY STARTED_TIME DESC, CREATED_TIME DESC, ID DESC
+        ) WHERE ROWNUM = 1
+    </select>
+
+    <insert id="insert">
+        INSERT INTO PROCUREMENT_APPROVAL_INSTANCE (
+            ID, PROJECT_ID, STATUS, CURRENT_NODE_CODE, STARTED_BY_USER_ID, STARTED_BY_NAME,
+            STARTED_TIME, COMPLETED_TIME, CREATED_TIME, UPDATED_TIME, RETURN_SNAPSHOT
+        ) VALUES (
+            #{id}, #{projectId}, #{status}, #{currentNodeCode}, #{startedByUserId}, #{startedByName},
+            #{startedTime}, #{completedTime}, #{createdTime}, #{updatedTime}, #{returnSnapshot}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE PROCUREMENT_APPROVAL_INSTANCE
+        SET STATUS = #{status}, CURRENT_NODE_CODE = #{currentNodeCode},
+            COMPLETED_TIME = #{completedTime}, UPDATED_TIME = #{updatedTime}, RETURN_SNAPSHOT = #{returnSnapshot}
+        WHERE ID = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,14 @@
+/* Chrome 109 local CJK glyphs for the procurement type badge only. */
+@font-face {
+  font-family: "Audit UI CJK";
+  src: url('ui-cjk.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0080-10FFFF;
+}
+
+.procurement-demand-table > tbody > tr > td:nth-child(4) > span.font-mono {
+  font-family: "Audit UI CJK", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+}

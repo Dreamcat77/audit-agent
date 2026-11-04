@@ -1,0 +1,15 @@
+{
+  "label": "budget-excel",
+  "batchId": "c46e716e-e9d5-48fd-b7cf-dbcba5cc3f72",
+  "jobs": [
+    "dbd9220a-e420-4879-9108-ec862ad89184"
+  ],
+  "statuses": [
+    "PARSED"
+  ],
+  "lines": 1,
+  "reportFingerprint": "e099d203f57a75c1cbd6f3bb29d0be495aad2b48335ae83b61de90f8ea6ef862",
+  "failures": [],
+  "realModel": true,
+  "synthetic": true
+}

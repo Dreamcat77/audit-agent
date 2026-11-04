@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementTenderDocumentMapper">
+    <resultMap id="tenderDocumentRow" type="com.fuquan.audit.integration.dm8.ProcurementTenderDocumentPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="projectId" column="PROJECT_ID"/>
+        <result property="fileName" column="FILE_NAME"/>
+        <result property="fileExtension" column="FILE_EXTENSION"/>
+        <result property="contentType" column="CONTENT_TYPE"/>
+        <result property="fileSize" column="FILE_SIZE"/>
+        <result property="sha256" column="SHA256"/>
+        <result property="storageKey" column="STORAGE_KEY"/>
+        <result property="status" column="STATUS"/>
+        <result property="parseMethod" column="PARSE_METHOD"/>
+        <result property="parseEngine" column="PARSE_ENGINE"/>
+        <result property="parseConfidence" column="PARSE_CONFIDENCE"/>
+        <result property="pageCount" column="PAGE_COUNT"/>
+        <result property="parsedContentJson" column="PARSED_CONTENT"/>
+        <result property="parseError" column="PARSE_ERROR"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO PROCUREMENT_TENDER_DOCUMENT
+        (ID, PROJECT_ID, FILE_NAME, FILE_EXTENSION, CONTENT_TYPE, FILE_SIZE, SHA256, STORAGE_KEY,
+         STATUS, PARSE_METHOD, PARSE_ENGINE, PARSE_CONFIDENCE, PAGE_COUNT, PARSED_CONTENT, PARSE_ERROR,
+         CREATED_BY, CREATED_TIME, UPDATED_TIME)
+        VALUES
+        (#{id}, #{projectId}, #{fileName}, #{fileExtension}, #{contentType}, #{fileSize}, #{sha256}, #{storageKey},
+         #{status}, #{parseMethod}, #{parseEngine}, #{parseConfidence}, #{pageCount}, #{parsedContentJson}, #{parseError},
+         #{createdBy}, #{createdTime}, #{updatedTime})
+    </insert>
+
+    <update id="update">
+        UPDATE PROCUREMENT_TENDER_DOCUMENT
+        SET STATUS=#{status}, PARSE_METHOD=#{parseMethod}, PARSE_ENGINE=#{parseEngine},
+            PARSE_CONFIDENCE=#{parseConfidence}, PAGE_COUNT=#{pageCount}, PARSED_CONTENT=#{parsedContentJson},
+            PARSE_ERROR=#{parseError}, UPDATED_TIME=#{updatedTime}
+        WHERE ID=#{id}
+    </update>
+
+    <select id="findLatestByProjectId" resultMap="tenderDocumentRow">
+        SELECT * FROM (
+            SELECT ID, PROJECT_ID, FILE_NAME, FILE_EXTENSION, CONTENT_TYPE, FILE_SIZE, SHA256, STORAGE_KEY,
+                   STATUS, PARSE_METHOD, PARSE_ENGINE, PARSE_CONFIDENCE, PAGE_COUNT, PARSED_CONTENT, PARSE_ERROR,
+                   CREATED_BY, CREATED_TIME, UPDATED_TIME
+            FROM PROCUREMENT_TENDER_DOCUMENT
+            WHERE PROJECT_ID=#{projectId}
+            ORDER BY CREATED_TIME DESC, ID DESC
+        ) WHERE ROWNUM = 1
+    </select>
+
+    <select id="findByProjectId" resultMap="tenderDocumentRow">
+        SELECT * FROM (SELECT * FROM PROCUREMENT_TENDER_DOCUMENT
+        WHERE PROJECT_ID=#{projectId} ORDER BY CREATED_TIME DESC, ID DESC) WHERE ROWNUM &lt;= 201
+    </select>
+
+    <select id="findById" resultMap="tenderDocumentRow">
+        SELECT ID, PROJECT_ID, FILE_NAME, FILE_EXTENSION, CONTENT_TYPE, FILE_SIZE, SHA256, STORAGE_KEY,
+               STATUS, PARSE_METHOD, PARSE_ENGINE, PARSE_CONFIDENCE, PAGE_COUNT, PARSED_CONTENT, PARSE_ERROR,
+               CREATED_BY, CREATED_TIME, UPDATED_TIME
+        FROM PROCUREMENT_TENDER_DOCUMENT
+        WHERE ID=#{id}
+    </select>
+</mapper>

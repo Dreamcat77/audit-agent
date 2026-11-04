@@ -1,0 +1,89 @@
+{
+  "system": "Linux",
+  "machine": "x86_64",
+  "release": "/opt/audit-agent/releases/auto-intake-20261026.qw7KXB",
+  "services": {
+    "audit-backend": {
+      "exit": 0,
+      "output": "MainPID=385368\nActiveState=active\nSubState=running"
+    },
+    "audit-ai": {
+      "exit": 0,
+      "output": "MainPID=384465\nActiveState=active\nSubState=running"
+    },
+    "nginx": {
+      "exit": 0,
+      "output": "MainPID=132\nActiveState=active\nSubState=running"
+    },
+    "DmServiceAUDITDB": {
+      "exit": 0,
+      "output": "MainPID=136\nActiveState=active\nSubState=running"
+    },
+    "audit-autocase-pilot-dm": {
+      "exit": 0,
+      "output": "MainPID=437128\nActiveState=active\nSubState=running"
+    },
+    "audit-autocase-pilot-backend": {
+      "exit": 0,
+      "output": "MainPID=454792\nActiveState=active\nSubState=running"
+    },
+    "audit-autocase-pilot-ai": {
+      "exit": 0,
+      "output": "MainPID=454791\nActiveState=active\nSubState=running"
+    },
+    "audit-autocase-pilot-web": {
+      "exit": 0,
+      "output": "MainPID=455180\nActiveState=active\nSubState=running"
+    }
+  },
+  "artifacts": {
+    "/opt/audit-agent/releases/auto-intake-20261026.qw7KXB/backend/audit-backend-0.1.0-SNAPSHOT.jar": {
+      "present": true,
+      "sha256": "ce76b6d0d12f0c098aa7bd9955b081abb420643049a5da4ed23d134aab720f4f"
+    },
+    "/opt/audit-agent/releases/auto-intake-20261026.qw7KXB/frontend/dist/index.html": {
+      "present": true,
+      "sha256": "08e07b799b7c62e341fb882290ba2e93afd2d7871a2ea0023b5d85a563bae644"
+    },
+    "/etc/audit-agent/backend.env": {
+      "present": true,
+      "sha256": "bbb18298e461f0aee05af374d7c188e68b17697c29d57816e40d6e7b8d449a80"
+    },
+    "/opt/audit-agent/releases/auto-intake-20261026.qw7KXB/deploy/update-v10/backend.env": {
+      "present": true,
+      "sha256": "5d57aab7b58a8d8ada702e3dd4a749936be0d284af5d8d759f43741645ee4844"
+    },
+    "/home/admin/audit_ai_runtime/audit-ai.env": {
+      "present": true,
+      "sha256": "7fa54a6aba98d6ed92a5146af1f9448be7e0ca2fdf761a887ade562418af5614"
+    },
+    "/opt/audit-agent/releases/auto-intake-20261026.qw7KXB/deploy/update-v10/ai.env": {
+      "present": true,
+      "sha256": "47fefe42f7a7574d725a54928fe8e1b3055b9cd98ea37b08206ad5311e3e90c5"
+    },
+    "/etc/nginx/nginx.conf": {
+      "present": true,
+      "sha256": "40845880a765f13363c0a1baf8008c63cbfef0460991612280cb934d6efe02fa"
+    }
+  },
+  "java": {
+    "exit": 0,
+    "output": "openjdk 17.0.19 2026-04-21\nOpenJDK Runtime Environment BiSheng (build 17.0.19+13)\nOpenJDK 64-Bit Server VM BiSheng (build 17.0.19+13, mixed mode, sharing)"
+  },
+  "python": {
+    "exit": 0,
+    "output": "Python 3.11.16"
+  },
+  "disk": {
+    "exit": 0,
+    "output": "Filesystem                        Size  Used Avail Use% Mounted on\n/dev/mapper/pve-vm--107--disk--0  196G   86G  101G  47% /\n/dev/mapper/pve-vm--107--disk--0  196G   86G  101G  47% /\n/dev/mapper/pve-vm--107--disk--0  196G   86G  101G  47% /"
+  },
+  "listening": {
+    "exit": 0,
+    "output": "LISTEN    0         2048                   127.0.0.1:8001          0.0.0.0:*    \nLISTEN    0         128                      0.0.0.0:22            0.0.0.0:*    \nLISTEN    0         511                      0.0.0.0:80            0.0.0.0:*    \nLISTEN    0         511                      0.0.0.0:443           0.0.0.0:*    \nLISTEN    0         511                      0.0.0.0:6379          0.0.0.0:*    \nLISTEN    0         2048                   127.0.0.1:19121         0.0.0.0:*    \nLISTEN    0         511                      0.0.0.0:18081         0.0.0.0:*    \nLISTEN    0         100           [::ffff:127.0.0.1]:8080                *:*    \nLISTEN    0         128                            *:15287               *:*    \nLISTEN    0         128                         [::]:22               [::]:*    \nLISTEN    0         511                         [::]:80               [::]:*    \nLISTEN    0         511                         [::]:443              [::]:*    \nLISTEN    0         128                            *:5236                *:*    \nLISTEN    0         128                            *:4236                *:*    \nLISTEN    0         100           [::ffff:127.0.0.1]:19131               *:*"
+  },
+  "nginxSyntax": 0,
+  "readOnly": true,
+  "businessDml": false,
+  "configurationValuesExported": false
+}

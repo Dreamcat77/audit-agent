@@ -1,0 +1,17 @@
+{
+  "label": "budget-missing-item-r2",
+  "batchId": "f35d8107-5568-4d2a-84cd-41d1153d5a7d",
+  "jobs": [
+    "0c21ae9a-d140-4131-ac97-0495117dcc31",
+    "dfbd125f-7a80-40ea-b2ed-98a71db4be79"
+  ],
+  "statuses": [
+    "PARSED",
+    "PARSED"
+  ],
+  "lines": 3,
+  "reportFingerprint": "62cc365428553075df5b752b1e07e64ab47d000426abde752b1b91a991c38f1f",
+  "failures": [],
+  "realModel": true,
+  "synthetic": true
+}

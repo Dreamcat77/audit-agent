@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementDemandMapper">
+    <resultMap id="procurementDemandRow" type="com.fuquan.audit.integration.dm8.ProcurementDemandPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="procurementName" column="PROCUREMENT_NAME"/>
+        <result property="budgetApprovalId" column="BUDGET_APPROVAL_ID"/>
+        <result property="subjectCode" column="SUBJECT_CODE"/>
+        <result property="subjectName" column="SUBJECT_NAME"/>
+        <result property="amount" column="AMOUNT"/>
+        <result property="supplierName" column="SUPPLIER_NAME"/>
+        <result property="status" column="STATUS"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+    </resultMap>
+    <select id="findById" resultMap="procurementDemandRow">
+        SELECT ID, PROCUREMENT_NAME, BUDGET_APPROVAL_ID, SUBJECT_CODE, SUBJECT_NAME,
+               AMOUNT, SUPPLIER_NAME, STATUS, CREATED_TIME
+        FROM PROCUREMENT_DEMAND
+        WHERE ID = #{id} AND DELETED = 0
+    </select>
+    <select id="findByIds" resultMap="procurementDemandRow">
+        SELECT ID, PROCUREMENT_NAME, BUDGET_APPROVAL_ID, SUBJECT_CODE, SUBJECT_NAME,
+               AMOUNT, SUPPLIER_NAME, STATUS, CREATED_TIME
+        FROM PROCUREMENT_DEMAND
+        WHERE DELETED = 0
+          AND ID IN
+          <foreach collection="ids" item="id" open="(" separator="," close=")">
+              #{id}
+          </foreach>
+    </select>
+</mapper>

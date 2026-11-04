@@ -1,0 +1,18 @@
+[
+  {
+    "route": "/api/v1/projects",
+    "http": 200
+  },
+  {
+    "route": "/api/v1/contracts",
+    "http": 200
+  },
+  {
+    "route": "/api/v1/contract-review-sessions",
+    "http": 200
+  },
+  {
+    "route": "/api/v1/contract-audit-tasks",
+    "http": 200
+  }
+]

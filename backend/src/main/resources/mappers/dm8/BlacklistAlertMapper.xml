@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BlacklistAlertMapper">
+
+    <resultMap id="alertRow" type="com.fuquan.audit.integration.dm8.BlacklistAlertPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="batchId" column="BATCH_ID"/>
+        <result property="rowNumber" column="ROW_NUMBER"/>
+        <result property="procurementId" column="PROCUREMENT_ID"/>
+        <result property="supplierName" column="SUPPLIER_NAME"/>
+        <result property="supplierCode" column="SUPPLIER_CODE"/>
+        <result property="blacklistId" column="BLACKLIST_ID"/>
+        <result property="matchedName" column="MATCHED_NAME"/>
+        <result property="blacklistType" column="BLACKLIST_TYPE"/>
+        <result property="blacklistReason" column="BLACKLIST_REASON"/>
+        <result property="matchType" column="MATCH_TYPE"/>
+        <result property="matchScore" column="MATCH_SCORE"/>
+        <result property="alertLevel" column="ALERT_LEVEL"/>
+        <result property="status" column="ALERT_STATUS"/>
+        <result property="handler" column="RESOLVED_BY"/>
+        <result property="handleRemark" column="REMARK"/>
+        <result property="handleTime" column="RESOLVED_TIME"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+    </resultMap>
+
+    <sql id="columns">
+        ID, BATCH_ID, ROW_NUMBER, PROCUREMENT_ID, SUPPLIER_NAME, SUPPLIER_CODE,
+        BLACKLIST_ID, MATCHED_NAME, BLACKLIST_TYPE, BLACKLIST_REASON, MATCH_TYPE,
+        MATCH_SCORE, ALERT_LEVEL, ALERT_STATUS, RESOLVED_BY, RESOLVED_TIME,
+        REMARK, CREATED_TIME
+    </sql>
+
+    <select id="findById" resultMap="alertRow">
+        SELECT <include refid="columns"/>
+        FROM BLACKLIST_ALERT
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findAll" resultMap="alertRow">
+        SELECT <include refid="columns"/>
+        FROM BLACKLIST_ALERT
+        <where>
+            <if test="status != null and status != ''">
+                AND ALERT_STATUS = #{status}
+            </if>
+        </where>
+        ORDER BY CREATED_TIME DESC
+    </select>
+
+    <select id="findPage" resultMap="alertRow">
+        SELECT *
+        FROM (
+            SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.CREATED_TIME DESC) AS RN
+            FROM BLACKLIST_ALERT t
+            <where>
+                <if test="batchId != null and batchId != ''">
+                    AND t.BATCH_ID = #{batchId}
+                </if>
+                <if test="alertLevel != null and alertLevel != ''">
+                    AND t.ALERT_LEVEL = #{alertLevel}
+                </if>
+                <if test="status != null and status != ''">
+                    AND t.ALERT_STATUS = #{status}
+                </if>
+                <if test="supplierName != null and supplierName != ''">
+                    AND t.SUPPLIER_NAME LIKE '%' || #{supplierName} || '%'
+                </if>
+            </where>
+        ) t
+        WHERE t.RN &gt; #{startRow} AND t.RN &lt;= #{endRow}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(1)
+        FROM BLACKLIST_ALERT
+        <where>
+            <if test="batchId != null and batchId != ''">
+                AND BATCH_ID = #{batchId}
+            </if>
+            <if test="alertLevel != null and alertLevel != ''">
+                AND ALERT_LEVEL = #{alertLevel}
+            </if>
+            <if test="status != null and status != ''">
+                AND ALERT_STATUS = #{status}
+            </if>
+            <if test="supplierName != null and supplierName != ''">
+                AND SUPPLIER_NAME LIKE '%' || #{supplierName} || '%'
+            </if>
+        </where>
+    </select>
+
+    <select id="countByBatchAndSupplier" resultType="int">
+        SELECT COUNT(1)
+        FROM BLACKLIST_ALERT
+        WHERE BATCH_ID = #{batchId}
+          AND SUPPLIER_NAME = #{supplierName}
+    </select>
+
+    <select id="findByBatchAndSupplier" resultMap="alertRow">
+        SELECT <include refid="columns"/>
+        FROM BLACKLIST_ALERT
+        WHERE BATCH_ID = #{batchId}
+          AND SUPPLIER_NAME = #{supplierName}
+    </select>
+
+    <update id="insertIfAbsent">
+        MERGE INTO BLACKLIST_ALERT target
+        USING (
+            SELECT #{batchId} AS BATCH_ID, #{supplierName} AS SUPPLIER_NAME
+            FROM DUAL
+        ) source
+        ON (target.BATCH_ID = source.BATCH_ID
+            AND target.SUPPLIER_NAME = source.SUPPLIER_NAME)
+        WHEN NOT MATCHED THEN
+            INSERT (
+                ID, BATCH_ID, ROW_NUMBER, PROCUREMENT_ID, SUPPLIER_NAME, SUPPLIER_CODE,
+                BLACKLIST_ID, MATCHED_NAME, BLACKLIST_TYPE, BLACKLIST_REASON, MATCH_TYPE,
+                MATCH_SCORE, ALERT_LEVEL, ALERT_STATUS, RESOLVED_BY, RESOLVED_TIME,
+                REMARK, CREATED_TIME
+            ) VALUES (
+                #{id}, #{batchId}, #{rowNumber}, #{procurementId}, #{supplierName}, #{supplierCode},
+                #{blacklistId}, #{matchedName}, #{blacklistType}, #{blacklistReason}, #{matchType},
+                #{matchScore}, #{alertLevel}, #{status}, #{handler}, #{handleTime},
+                #{handleRemark}, #{createdTime}
+            )
+    </update>
+
+    <insert id="insert">
+        INSERT INTO BLACKLIST_ALERT (
+            ID, BATCH_ID, ROW_NUMBER, PROCUREMENT_ID, SUPPLIER_NAME, SUPPLIER_CODE,
+            BLACKLIST_ID, MATCHED_NAME, BLACKLIST_TYPE, BLACKLIST_REASON, MATCH_TYPE,
+            MATCH_SCORE, ALERT_LEVEL, ALERT_STATUS, RESOLVED_BY, RESOLVED_TIME,
+            REMARK, CREATED_TIME
+        ) VALUES (
+            #{id}, #{batchId}, #{rowNumber}, #{procurementId}, #{supplierName}, #{supplierCode},
+            #{blacklistId}, #{matchedName}, #{blacklistType}, #{blacklistReason}, #{matchType},
+            #{matchScore}, #{alertLevel}, #{status}, #{handler}, #{handleTime},
+            #{handleRemark}, #{createdTime}
+        )
+    </insert>
+
+    <insert id="insertBatch">
+        INSERT INTO BLACKLIST_ALERT (
+            ID, BATCH_ID, ROW_NUMBER, PROCUREMENT_ID, SUPPLIER_NAME, SUPPLIER_CODE,
+            BLACKLIST_ID, MATCHED_NAME, BLACKLIST_TYPE, BLACKLIST_REASON, MATCH_TYPE,
+            MATCH_SCORE, ALERT_LEVEL, ALERT_STATUS, CREATED_TIME
+        ) VALUES
+        <foreach collection="list" item="row" separator=",">
+            (
+                #{row.id}, #{row.batchId}, #{row.rowNumber}, #{row.procurementId},
+                #{row.supplierName}, #{row.supplierCode}, #{row.blacklistId},
+                #{row.matchedName}, #{row.blacklistType}, #{row.blacklistReason},
+                #{row.matchType}, #{row.matchScore}, #{row.alertLevel}, #{row.status},
+                #{row.createdTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateIfStatus">
+        UPDATE BLACKLIST_ALERT
+        SET ALERT_STATUS = #{row.status},
+            RESOLVED_BY = #{row.handler},
+            REMARK = #{row.handleRemark},
+            RESOLVED_TIME = #{row.handleTime}
+        WHERE ID = #{row.id}
+          AND ALERT_STATUS = #{expectedStatus}
+    </update>
+
+</mapper>

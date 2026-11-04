@@ -1,0 +1,11 @@
+{
+  "stage": "inspect",
+  "revision": "r5",
+  "browser": "109.0.5412.0",
+  "production": true,
+  "realHttp": true,
+  "realModel": false,
+  "realDm8": true,
+  "pageErrors": [],
+  "results": []
+}

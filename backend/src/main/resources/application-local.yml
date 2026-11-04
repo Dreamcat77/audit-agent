@@ -1,0 +1,55 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
+audit:
+  observability:
+    flow-debug-enabled: ${AUDIT_OBSERVABILITY_FLOW_DEBUG_ENABLED:true}
+  operation-audit:
+    enabled: true
+  file-storage:
+    root: ${AUDIT_FILE_STORAGE_ROOT:${java.io.tmpdir}/audit-agent-storage}
+  security:
+    cors:
+      allowed-origins: ${AUDIT_CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173,http://127.0.0.1:5174}
+    local-account:
+      id: ${AUDIT_LOCAL_ACCOUNT_ID:00000000-0000-0000-0000-000000000001}
+      username: ${AUDIT_LOCAL_ACCOUNT_USERNAME:}
+      password-hash: ${AUDIT_LOCAL_ACCOUNT_PASSWORD_HASH:}
+      real-name: ${AUDIT_LOCAL_ACCOUNT_REAL_NAME:Local Administrator}
+      roles: ${AUDIT_LOCAL_ACCOUNT_ROLES:SYSTEM_ADMIN}
+      # 仅在提供对应 PASSWORD_HASH 时创建；哈希必须在仓库外用 PasswordHashTool 生成。
+      approval-users:
+        - id: ${AUDIT_LOCAL_APPROVAL_REVIEWER_ID:00000000-0000-0000-0000-000000000011}
+          username: ${AUDIT_LOCAL_APPROVAL_REVIEWER_USERNAME:procurement-reviewer}
+          password-hash: ${AUDIT_LOCAL_APPROVAL_REVIEWER_PASSWORD_HASH:}
+          real-name: ${AUDIT_LOCAL_APPROVAL_REVIEWER_REAL_NAME:采购审查员}
+          roles: PROCUREMENT_REVIEWER
+        - id: ${AUDIT_LOCAL_APPROVAL_FINANCE_ID:00000000-0000-0000-0000-000000000012}
+          username: ${AUDIT_LOCAL_APPROVAL_FINANCE_USERNAME:finance-reviewer}
+          password-hash: ${AUDIT_LOCAL_APPROVAL_FINANCE_PASSWORD_HASH:}
+          real-name: ${AUDIT_LOCAL_APPROVAL_FINANCE_REAL_NAME:财务审核员}
+          roles: FINANCE_REVIEWER
+        - id: ${AUDIT_LOCAL_APPROVAL_LEADER_ID:00000000-0000-0000-0000-000000000013}
+          username: ${AUDIT_LOCAL_APPROVAL_LEADER_USERNAME:procurement-leader}
+          password-hash: ${AUDIT_LOCAL_APPROVAL_LEADER_PASSWORD_HASH:}
+          real-name: ${AUDIT_LOCAL_APPROVAL_LEADER_REAL_NAME:采购领导}
+          roles: PROCUREMENT_LEADER
+        - id: ${AUDIT_LOCAL_APPROVAL_COMMITTEE_ID:00000000-0000-0000-0000-000000000014}
+          username: ${AUDIT_LOCAL_APPROVAL_COMMITTEE_USERNAME:procurement-committee}
+          password-hash: ${AUDIT_LOCAL_APPROVAL_COMMITTEE_PASSWORD_HASH:}
+          real-name: ${AUDIT_LOCAL_APPROVAL_COMMITTEE_REAL_NAME:采购领导小组}
+          roles: PROCUREMENT_COMMITTEE
+
+server:
+  servlet:
+    session:
+      cookie:
+        secure: false
+
+logging:
+  level:
+    com.fuquan.audit.common.observability.FlowDebugLogger: ${AUDIT_FLOW_DEBUG_LOG_LEVEL:DEBUG}

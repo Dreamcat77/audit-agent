@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.BlacklistRuleMapper">
+
+    <resultMap id="ruleRow" type="com.fuquan.audit.integration.dm8.BlacklistRulePersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="ruleName" column="RULE_NAME"/>
+        <result property="ruleType" column="RULE_TYPE"/>
+        <result property="blacklistTypes" column="BLACKLIST_TYPES"/>
+        <result property="alertLevel" column="ALERT_LEVEL"/>
+        <result property="autoResolve" column="AUTO_RESOLVE"/>
+        <result property="active" column="IS_ACTIVE"/>
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+    </resultMap>
+
+    <sql id="columns">
+        ID, RULE_NAME, RULE_TYPE, BLACKLIST_TYPES, ALERT_LEVEL,
+        AUTO_RESOLVE, IS_ACTIVE, CREATED_TIME, UPDATED_TIME
+    </sql>
+
+    <select id="findAllActive" resultMap="ruleRow">
+        SELECT <include refid="columns"/>
+        FROM BLACKLIST_RULE
+        WHERE IS_ACTIVE = TRUE
+        ORDER BY CREATED_TIME
+    </select>
+
+    <select id="findAll" resultMap="ruleRow">
+        SELECT <include refid="columns"/>
+        FROM BLACKLIST_RULE
+        ORDER BY CREATED_TIME
+    </select>
+
+    <select id="findById" resultMap="ruleRow">
+        SELECT <include refid="columns"/>
+        FROM BLACKLIST_RULE
+        WHERE ID = #{id}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO BLACKLIST_RULE (
+            ID, RULE_NAME, RULE_TYPE, BLACKLIST_TYPES, ALERT_LEVEL,
+            AUTO_RESOLVE, IS_ACTIVE, CREATED_TIME, UPDATED_TIME
+        ) VALUES (
+            #{id}, #{ruleName}, #{ruleType}, #{blacklistTypes}, #{alertLevel},
+            #{autoResolve}, #{active}, #{createdTime}, #{updatedTime}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE BLACKLIST_RULE
+        SET RULE_NAME = #{ruleName},
+            RULE_TYPE = #{ruleType},
+            BLACKLIST_TYPES = #{blacklistTypes},
+            ALERT_LEVEL = #{alertLevel},
+            AUTO_RESOLVE = #{autoResolve},
+            IS_ACTIVE = #{active},
+            UPDATED_TIME = #{updatedTime}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM BLACKLIST_RULE WHERE ID = #{id}
+    </delete>
+
+</mapper>

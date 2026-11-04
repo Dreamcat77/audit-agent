@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProjectFileRoleEvidenceMapper">
+    <sql id="columns">EVIDENCE_ID, ASSESSMENT_ID, PROJECT_ID, FILE_ID, FILE_SHA256, PARSE_RESULT_ID, PARSE_VERSION, ROLE, SIGNAL_TYPE, NORMALIZED_VALUE, RULE_CODE, WEIGHT, SOURCE_LOCATOR, CHAR_START, CHAR_END, TEXT_HASH, BOUNDED_EXCERPT, EXTRACTOR_VERSION, CREATED_AT</sql>
+    <insert id="insert">INSERT INTO PROJECT_FILE_ROLE_EVIDENCE (<include refid="columns"/>) VALUES (#{row.evidenceId}, #{row.assessmentId}, #{row.projectId}, #{row.fileId}, #{row.fileSha256}, #{row.parseResultId}, #{row.parseVersion}, #{row.role}, #{row.signalType}, #{row.normalizedValue}, #{row.ruleCode}, #{row.weight}, #{row.sourceLocator}, #{row.charStart}, #{row.charEnd}, #{row.textHash}, #{row.boundedExcerpt}, #{row.extractorVersion}, #{row.createdAt})</insert>
+    <select id="findById" resultType="com.fuquan.audit.integration.dm8.ProjectFileRoleEvidencePersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_ROLE_EVIDENCE WHERE EVIDENCE_ID=#{evidenceId}</select>
+    <select id="findBySignal" resultType="com.fuquan.audit.integration.dm8.ProjectFileRoleEvidencePersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_ROLE_EVIDENCE WHERE ASSESSMENT_ID=#{assessmentId} AND ROLE=#{role} AND RULE_CODE=#{ruleCode} AND SOURCE_LOCATOR=#{sourceLocator}</select>
+    <select id="findByAssessmentId" resultType="com.fuquan.audit.integration.dm8.ProjectFileRoleEvidencePersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_FILE_ROLE_EVIDENCE WHERE ASSESSMENT_ID=#{assessmentId} ORDER BY SOURCE_LOCATOR, EVIDENCE_ID</select>
+</mapper>

@@ -1,0 +1,115 @@
+spring:
+  application:
+    name: audit-backend
+  servlet:
+    multipart:
+      max-file-size: ${AUDIT_MULTIPART_MAX_FILE_SIZE:500MB}
+      max-request-size: ${AUDIT_MULTIPART_MAX_REQUEST_SIZE:502MB}
+
+mybatis:
+  mapper-locations: classpath*:mappers/dm8/*.xml
+
+audit:
+  observability:
+    flow-debug-enabled: ${AUDIT_OBSERVABILITY_FLOW_DEBUG_ENABLED:false}
+  operation-audit:
+    enabled: true
+  security:
+    authentication:
+      max-failed-attempts: ${AUDIT_AUTH_MAX_FAILED_ATTEMPTS:5}
+      lock-duration: ${AUDIT_AUTH_LOCK_DURATION:15m}
+    cors:
+      allowed-origins: ${AUDIT_CORS_ALLOWED_ORIGINS:}
+  cache:
+    key-prefix: ${AUDIT_CACHE_KEY_PREFIX:audit-agent:}
+  ai:
+    connect-timeout-ms: ${AUDIT_AI_CONNECT_TIMEOUT_MS:5000}
+    read-timeout-ms: ${AUDIT_AI_READ_TIMEOUT_MS:960000}
+    document-role:
+      model-name: ${AUDIT_AI_DOCUMENT_ROLE_MODEL_NAME:${AUDIT_MODEL_NAME:configured-model}}
+  procurement-agent-review:
+    ai-timeout-ms: ${AUDIT_PROCUREMENT_AGENT_REVIEW_AI_TIMEOUT_MS:60000}
+  procurement:
+    material:
+      worker-enabled: ${AUDIT_PROCUREMENT_MATERIAL_WORKER_ENABLED:false}
+      max-concurrent: ${AUDIT_PROCUREMENT_MATERIAL_MAX_CONCURRENT:2}
+      scan-delay-ms: ${AUDIT_PROCUREMENT_MATERIAL_SCAN_DELAY_MS:1500}
+    collusion:
+      max-upload-size: ${AUDIT_PROCUREMENT_COLLUSION_MAX_UPLOAD_SIZE:50MB}
+    approval:
+      request-approval-threshold: ${AUDIT_PROCUREMENT_APPROVAL_REQUEST_THRESHOLD:10000}
+      committee-threshold: ${AUDIT_PROCUREMENT_APPROVAL_COMMITTEE_THRESHOLD:50000}
+      city-leadership-threshold: ${AUDIT_PROCUREMENT_APPROVAL_CITY_LEADERSHIP_THRESHOLD:200000}
+      party-committee-threshold: ${AUDIT_PROCUREMENT_APPROVAL_PARTY_COMMITTEE_THRESHOLD:2000000}
+  budget:
+    material:
+      worker-enabled: ${AUDIT_BUDGET_MATERIAL_WORKER_ENABLED:false}
+      scan-delay-ms: ${AUDIT_BUDGET_MATERIAL_SCAN_DELAY_MS:1500}
+  ocr:
+    connect-timeout-ms: ${AUDIT_OCR_CONNECT_TIMEOUT_MS:5000}
+    read-timeout-ms: ${AUDIT_OCR_READ_TIMEOUT_MS:1900000}
+  file-storage:
+    max-file-size: ${AUDIT_UPLOAD_MAX_FILE_SIZE:50MB}
+    pending-recovery-age: ${AUDIT_UPLOAD_PENDING_RECOVERY_AGE:15m}
+    staging-retention-age: ${AUDIT_UPLOAD_STAGING_RETENTION_AGE:24h}
+  project-intake:
+    max-upload-size: ${AUDIT_PROJECT_INTAKE_MAX_UPLOAD_SIZE:100MB}
+    max-entry-size: ${AUDIT_PROJECT_INTAKE_MAX_ENTRY_SIZE:50MB}
+    max-expanded-archive-size: ${AUDIT_PROJECT_INTAKE_MAX_EXPANDED_ARCHIVE_SIZE:500MB}
+    max-entries: ${AUDIT_PROJECT_INTAKE_MAX_ENTRIES:200}
+    max-depth: ${AUDIT_PROJECT_INTAKE_MAX_DEPTH:10}
+    max-compression-ratio: ${AUDIT_PROJECT_INTAKE_MAX_COMPRESSION_RATIO:100}
+    max-relative-path-length: ${AUDIT_PROJECT_INTAKE_MAX_RELATIVE_PATH_LENGTH:1024}
+  role-assessment:
+    running-recovery-age: ${AUDIT_ROLE_ASSESSMENT_RUNNING_RECOVERY_AGE:15m}
+  contract:
+    analysis:
+      enabled: ${AUDIT_CONTRACT_ANALYSIS_ENABLED:false}
+      scan-delay-ms: ${AUDIT_CONTRACT_ANALYSIS_SCAN_DELAY_MS:2000}
+    auto-intake:
+      enabled: ${AUDIT_CONTRACT_AUTO_INTAKE_ENABLED:true}
+    semantic-checkpoints:
+      enabled: ${AUDIT_CONTRACT_SEMANTIC_CHECKPOINTS_ENABLED:false}
+    file-processing:
+      worker-enabled: ${AUDIT_CONTRACT_FILE_PROCESSING_WORKER_ENABLED:false}
+      scan-delay-ms: ${AUDIT_CONTRACT_FILE_PROCESSING_SCAN_DELAY_MS:1500}
+    review-worker:
+      timeout: ${AUDIT_CONTRACT_REVIEW_WORKER_TIMEOUT:PT20M}
+
+server:
+  shutdown: graceful
+  servlet:
+    session:
+      timeout: ${AUDIT_SESSION_TIMEOUT:30m}
+      cookie:
+        name: AUDITSESSION
+        http-only: true
+        path: /
+        same-site: lax
+
+management:
+  tracing:
+    sampling:
+      probability: ${AUDIT_TRACE_SAMPLING_PROBABILITY:1.0}
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+logging:
+  level:
+    root: ${AUDIT_TECH_LOG_LEVEL:INFO}
+    com.fuquan.audit.common.observability.FlowDebugLogger: ${AUDIT_FLOW_DEBUG_LOG_LEVEL:INFO}
+    org.springframework: INFO
+    org.springframework.http.converter: INFO
+    org.springframework.web.client: INFO
+  pattern:
+    correlation: "[traceId:%X{traceId:-} spanId:%X{spanId:-} requestId:%X{requestId:-}] "
+  structured:
+    json:
+      add:
+        service: ${spring.application.name}
+        environment: ${spring.profiles.active}

@@ -1,0 +1,19 @@
+{
+  "label": "procurement-conflict",
+  "caseId": "2f07897d-4ef3-3a9a-9a5a-b7b88a20db3c",
+  "status": "COMPLETED",
+  "modules": {
+    "TENDER_COMPLIANCE": "COMPLETED",
+    "AGENT_PRECHECK": "COMPLETED",
+    "COLLUSION": "NOT_EXECUTED",
+    "SPLIT_PURCHASE": "NOT_EXECUTED",
+    "QUOTE": "COMPLETED",
+    "BLACKLIST": "NOT_EXECUTED"
+  },
+  "offers": 3,
+  "citations": 175,
+  "reportFingerprint": "918bdb729dce8247d36a50c034eba217e67ba12dc3cde525c27dda2e5da51c61",
+  "failures": [],
+  "realModel": true,
+  "synthetic": true
+}

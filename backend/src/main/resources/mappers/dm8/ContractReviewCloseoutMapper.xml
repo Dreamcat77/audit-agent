@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ContractReviewCloseoutMapper">
+    <resultMap id="AcknowledgementMap" type="com.fuquan.audit.integration.dm8.ContractReviewCloseoutMapper$AcknowledgementRow">
+        <constructor>
+            <arg column="ACKNOWLEDGEMENT_ID" javaType="java.lang.String"/>
+            <arg column="PROJECT_ID" javaType="java.lang.String"/>
+            <arg column="CONTRACT_ID" javaType="java.lang.String"/>
+            <arg column="RUN_ID" javaType="java.lang.String"/>
+            <arg column="STEP_ID" javaType="java.lang.String"/>
+            <arg column="ATTEMPT_ID" javaType="java.lang.String"/>
+            <arg column="FINDING_ID" javaType="java.lang.String"/>
+            <arg column="FINDING_VERSION_NO" javaType="_long"/>
+            <arg column="ACKNOWLEDGED_BY" javaType="java.lang.String"/>
+            <arg column="ACKNOWLEDGED_AT" javaType="java.time.LocalDateTime"/>
+            <arg column="HANDLING_NOTE" javaType="java.lang.String" jdbcType="CLOB" typeHandler="org.apache.ibatis.type.ClobTypeHandler"/>
+            <arg column="REQUEST_ID" javaType="java.lang.String"/>
+            <arg column="TRACE_ID" javaType="java.lang.String"/>
+            <arg column="CREATED_AT" javaType="java.time.LocalDateTime"/>
+            <arg column="VERSION_NO" javaType="_long"/>
+        </constructor>
+    </resultMap>
+    <sql id="AcknowledgementColumns">ACKNOWLEDGEMENT_ID, PROJECT_ID, CONTRACT_ID, RUN_ID, STEP_ID, ATTEMPT_ID, FINDING_ID, FINDING_VERSION_NO, ACKNOWLEDGED_BY, ACKNOWLEDGED_AT, HANDLING_NOTE, REQUEST_ID, TRACE_ID, CREATED_AT, VERSION_NO</sql>
+    <insert id="insertAcknowledgement">
+        INSERT INTO CONTRACT_REVIEW_FINDING_ACKNOWLEDGEMENT (<include refid="AcknowledgementColumns"/>) VALUES
+        (#{acknowledgementId}, #{projectId}, #{contractId}, #{reviewRunId}, #{reviewStepId}, #{attemptId}, #{findingId}, #{findingVersionNo}, #{acknowledgedBy}, #{acknowledgedAt}, #{handlingNote,jdbcType=CLOB}, #{requestId}, #{traceId}, #{createdAt}, #{versionNo})
+    </insert>
+    <select id="findAcknowledgement" resultMap="AcknowledgementMap">SELECT <include refid="AcknowledgementColumns"/> FROM CONTRACT_REVIEW_FINDING_ACKNOWLEDGEMENT WHERE ACKNOWLEDGEMENT_ID = #{id}</select>
+    <select id="findAcknowledgementsByRun" resultMap="AcknowledgementMap">SELECT <include refid="AcknowledgementColumns"/> FROM CONTRACT_REVIEW_FINDING_ACKNOWLEDGEMENT WHERE RUN_ID = #{id} ORDER BY FINDING_ID</select>
+    <resultMap id="ReportMap" type="com.fuquan.audit.integration.dm8.ContractReviewCloseoutMapper$ReportRow">
+        <constructor>
+            <arg column="REPORT_ID" javaType="java.lang.String"/>
+            <arg column="RUN_ID" javaType="java.lang.String"/>
+            <arg column="REPORT_VERSION" javaType="_int"/>
+            <arg column="REPORT_SCHEMA_VERSION" javaType="_int"/>
+            <arg column="STATUS" javaType="java.lang.String"/>
+            <arg column="INPUT_SNAPSHOT_IDENTITY" javaType="java.lang.String"/>
+            <arg column="FINDING_SNAPSHOT_IDENTITY" javaType="java.lang.String"/>
+            <arg column="ACKNOWLEDGEMENT_SNAPSHOT_IDENTITY" javaType="java.lang.String"/>
+            <arg column="SNAPSHOT_JSON" javaType="java.lang.String" jdbcType="CLOB" typeHandler="org.apache.ibatis.type.ClobTypeHandler"/>
+            <arg column="ARTIFACT_STORAGE_KEY" javaType="java.lang.String"/>
+            <arg column="ARTIFACT_MEDIA_TYPE" javaType="java.lang.String"/>
+            <arg column="ARTIFACT_SIZE" javaType="java.lang.Long"/>
+            <arg column="SHA256" javaType="java.lang.String"/>
+            <arg column="GENERATED_BY" javaType="java.lang.String"/>
+            <arg column="REQUESTED_AT" javaType="java.time.LocalDateTime"/>
+            <arg column="GENERATED_AT" javaType="java.time.LocalDateTime"/>
+            <arg column="FAILED_AT" javaType="java.time.LocalDateTime"/>
+            <arg column="UNKNOWN_AT" javaType="java.time.LocalDateTime"/>
+            <arg column="SAFE_REASON_CODE" javaType="java.lang.String"/>
+            <arg column="REQUEST_ID" javaType="java.lang.String"/>
+            <arg column="TRACE_ID" javaType="java.lang.String"/>
+            <arg column="VERSION_NO" javaType="_long"/>
+        </constructor>
+    </resultMap>
+    <sql id="ReportColumns">REPORT_ID, RUN_ID, REPORT_VERSION, REPORT_SCHEMA_VERSION, STATUS, INPUT_SNAPSHOT_IDENTITY, FINDING_SNAPSHOT_IDENTITY, ACKNOWLEDGEMENT_SNAPSHOT_IDENTITY, SNAPSHOT_JSON, ARTIFACT_STORAGE_KEY, ARTIFACT_MEDIA_TYPE, ARTIFACT_SIZE, SHA256, GENERATED_BY, REQUESTED_AT, GENERATED_AT, FAILED_AT, UNKNOWN_AT, SAFE_REASON_CODE, REQUEST_ID, TRACE_ID, VERSION_NO</sql>
+    <insert id="insertReport">
+        INSERT INTO CONTRACT_REVIEW_REPORT (<include refid="ReportColumns"/>) VALUES
+        (#{reportId}, #{reviewRunId}, #{reportVersion}, #{reportSchemaVersion}, #{status}, #{inputSnapshotIdentity}, #{findingSnapshotIdentity}, #{acknowledgementSnapshotIdentity}, #{snapshotJson,jdbcType=CLOB}, #{artifactStorageKey}, #{artifactMediaType}, #{artifactSize}, #{sha256}, #{generatedBy}, #{requestedAt}, #{generatedAt}, #{failedAt}, #{unknownAt}, #{safeReasonCode}, #{requestId}, #{traceId}, #{versionNo})
+    </insert>
+    <select id="findReport" resultMap="ReportMap">SELECT <include refid="ReportColumns"/> FROM CONTRACT_REVIEW_REPORT WHERE REPORT_ID = #{id}</select>
+    <select id="findReportsByRun" resultMap="ReportMap">SELECT <include refid="ReportColumns"/> FROM CONTRACT_REVIEW_REPORT WHERE RUN_ID = #{id} ORDER BY REPORT_VERSION</select>
+    <select id="findAcknowledgementByFinding" resultMap="AcknowledgementMap">SELECT <include refid="AcknowledgementColumns"/> FROM CONTRACT_REVIEW_FINDING_ACKNOWLEDGEMENT WHERE FINDING_ID = #{id}</select>
+    <select id="maxReportVersion" resultType="java.lang.Integer">SELECT MAX(REPORT_VERSION) FROM CONTRACT_REVIEW_REPORT WHERE RUN_ID = #{id}</select>
+    <update id="updateReport">
+        UPDATE CONTRACT_REVIEW_REPORT SET STATUS = #{next.status}, ARTIFACT_STORAGE_KEY = #{next.artifactStorageKey},
+            ARTIFACT_MEDIA_TYPE = #{next.artifactMediaType}, ARTIFACT_SIZE = #{next.artifactSize}, SHA256 = #{next.sha256},
+            GENERATED_AT = #{next.generatedAt}, FAILED_AT = #{next.failedAt}, UNKNOWN_AT = #{next.unknownAt},
+            SAFE_REASON_CODE = #{next.safeReasonCode}, VERSION_NO = #{next.versionNo}
+        WHERE REPORT_ID = #{expected.reportId} AND RUN_ID = #{expected.reviewRunId}
+            AND VERSION_NO = #{expected.versionNo} AND STATUS = #{expected.status}
+            AND STATUS IN ('PENDING','GENERATING','UNKNOWN')
+    </update>
+</mapper>

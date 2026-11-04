@@ -1,0 +1,40 @@
+# Runtime customer profile. Supply deployment-specific values through environment variables only.
+spring:
+  datasource:
+    url: ${AUDIT_DB_URL}
+    username: ${AUDIT_DB_USERNAME}
+    password: ${AUDIT_DB_PASSWORD}
+    driver-class-name: dm.jdbc.driver.DmDriver
+  data:
+    redis:
+      host: ${AUDIT_REDIS_HOST}
+      port: ${AUDIT_REDIS_PORT}
+      password: ${AUDIT_REDIS_PASSWORD:}
+  session:
+    redis:
+      namespace: ${AUDIT_SESSION_REDIS_NAMESPACE:audit-agent:sessions}
+      repository-type: default
+
+server:
+  servlet:
+    session:
+      cookie:
+        secure: ${AUDIT_SESSION_COOKIE_SECURE:true}
+
+logging:
+  structured:
+    format:
+      console: logstash
+
+audit:
+  observability:
+    flow-debug-enabled: ${AUDIT_OBSERVABILITY_FLOW_DEBUG_ENABLED:false}
+  operation-audit:
+    enabled: true
+  file-storage:
+    root: ${AUDIT_FILE_STORAGE_ROOT}
+
+  ai:
+    base-url: ${AUDIT_AI_BASE_URL}
+  ocr:
+    base-url: ${AUDIT_OCR_BASE_URL}

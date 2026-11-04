@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProjectExtractionResultMapper">
+    <sql id="columns">ID, PROJECT_ID, SOURCE_FILE_ID, PARSE_RESULT_ID, CANDIDATE_ID, EXTRACTION_KEY, EXTRACTION_VERSION, FACT_TYPE, GROUP_KEY, VALUE_TEXT, NORMALIZED_VALUE, VALUE_AMOUNT, SOURCE_TEXT, PAGE_NUMBER, PARAGRAPH_INDEX, SOURCE_LOCATOR, CREATED_AT</sql>
+    <insert id="insert">INSERT INTO PROJECT_EXTRACTION_RESULT (<include refid="columns"/>) VALUES (#{row.id},#{row.projectId},#{row.sourceFileId},#{row.parseResultId},#{row.candidateId},#{row.extractionKey},#{row.extractionVersion},#{row.factType},#{row.groupKey},#{row.valueText},#{row.normalizedValue},#{row.valueAmount},#{row.sourceText},#{row.pageNumber},#{row.paragraphIndex},#{row.sourceLocator},#{row.createdAt})</insert>
+    <select id="findByExtractionKey" resultType="com.fuquan.audit.integration.dm8.ProjectExtractionPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_EXTRACTION_RESULT WHERE EXTRACTION_KEY=#{key}</select>
+    <select id="findBySource" resultType="com.fuquan.audit.integration.dm8.ProjectExtractionPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_EXTRACTION_RESULT WHERE PROJECT_ID=#{projectId} AND SOURCE_FILE_ID=#{sourceId} ORDER BY FACT_TYPE, GROUP_KEY, SOURCE_LOCATOR, ID</select>
+    <select id="findBySourceAndParse" resultType="com.fuquan.audit.integration.dm8.ProjectExtractionPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_EXTRACTION_RESULT WHERE PROJECT_ID=#{projectId} AND SOURCE_FILE_ID=#{sourceId} AND PARSE_RESULT_ID=#{parseResultId} ORDER BY FACT_TYPE, GROUP_KEY, SOURCE_LOCATOR, ID</select>
+    <update id="bindCandidateIfUnbound">
+        UPDATE PROJECT_EXTRACTION_RESULT SET CANDIDATE_ID=#{candidateId}
+        WHERE PROJECT_ID=#{projectId} AND SOURCE_FILE_ID=#{sourceId}
+          AND PARSE_RESULT_ID=#{parseResultId} AND EXTRACTION_KEY=#{key}
+          AND CANDIDATE_ID IS NULL
+    </update>
+    <select id="findByCandidate" resultType="com.fuquan.audit.integration.dm8.ProjectExtractionPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_EXTRACTION_RESULT WHERE PROJECT_ID=#{projectId} AND CANDIDATE_ID=#{candidateId} ORDER BY SOURCE_FILE_ID, FACT_TYPE, GROUP_KEY, SOURCE_LOCATOR, ID</select>
+    <select id="findByProject" resultType="com.fuquan.audit.integration.dm8.ProjectExtractionPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT_EXTRACTION_RESULT WHERE PROJECT_ID=#{projectId} ORDER BY SOURCE_FILE_ID, CANDIDATE_ID, FACT_TYPE, GROUP_KEY, SOURCE_LOCATOR, ID</select>
+</mapper>

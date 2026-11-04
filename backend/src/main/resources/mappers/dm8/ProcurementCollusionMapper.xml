@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProcurementCollusionMapper">
+  <resultMap id="document" type="com.fuquan.audit.integration.dm8.ProcurementCollusionDocumentPersistenceRow"><id property="id" column="ID"/><result property="projectId" column="PROJECT_ID"/><result property="bidderName" column="BIDDER_NAME"/><result property="ipAddress" column="IP_ADDRESS"/><result property="handlerName" column="HANDLER_NAME"/><result property="fileName" column="FILE_NAME"/><result property="fileExtension" column="FILE_EXTENSION"/><result property="contentType" column="CONTENT_TYPE"/><result property="fileSize" column="FILE_SIZE"/><result property="sha256" column="SHA256"/><result property="storageKey" column="STORAGE_KEY"/><result property="parsedText" column="PARSED_TEXT"/><result property="createdTime" column="CREATED_TIME"/></resultMap>
+  <resultMap id="assessment" type="com.fuquan.audit.integration.dm8.ProcurementCollusionAssessmentPersistenceRow"><id property="id" column="ID"/><result property="projectId" column="PROJECT_ID"/><result property="riskScore" column="RISK_SCORE"/><result property="riskLevel" column="RISK_LEVEL"/><result property="quoteCoefficientOfVariation" column="QUOTE_CV"/><result property="maxDocumentSimilarity" column="MAX_DOCUMENT_SIMILARITY"/><result property="duplicateIpGroups" column="DUPLICATE_IP_GROUPS"/><result property="duplicateHandlerGroups" column="DUPLICATE_HANDLER_GROUPS"/><result property="similaritiesJson" column="SIMILARITIES_JSON"/><result property="assessedTime" column="ASSESSED_TIME"/></resultMap>
+  <resultMap id="splitAssessment" type="com.fuquan.audit.integration.dm8.ProcurementSplitPurchaseAssessmentPersistenceRow"><id property="id" column="ID"/><result property="projectId" column="PROJECT_ID"/><result property="riskScore" column="RISK_SCORE"/><result property="riskLevel" column="RISK_LEVEL"/><result property="findingsJson" column="FINDINGS_JSON"/><result property="assessedTime" column="ASSESSED_TIME"/></resultMap>
+  <insert id="insertDocument">INSERT INTO PROCUREMENT_COLLUSION_DOCUMENT (ID,PROJECT_ID,BIDDER_NAME,IP_ADDRESS,HANDLER_NAME,FILE_NAME,FILE_EXTENSION,CONTENT_TYPE,FILE_SIZE,SHA256,STORAGE_KEY,PARSED_TEXT,CREATED_TIME) VALUES (#{id},#{projectId},#{bidderName},#{ipAddress},#{handlerName},#{fileName},#{fileExtension},#{contentType},#{fileSize},#{sha256},#{storageKey},#{parsedText},#{createdTime})</insert>
+  <select id="findDocuments" resultMap="document">SELECT ID,PROJECT_ID,BIDDER_NAME,IP_ADDRESS,HANDLER_NAME,FILE_NAME,FILE_EXTENSION,CONTENT_TYPE,FILE_SIZE,SHA256,STORAGE_KEY,PARSED_TEXT,CREATED_TIME FROM PROCUREMENT_COLLUSION_DOCUMENT WHERE PROJECT_ID=#{projectId} ORDER BY CREATED_TIME,ID</select>
+  <update id="mergeAssessment">
+    MERGE INTO PROCUREMENT_COLLUSION_ASSESSMENT target
+    USING (SELECT #{projectId,jdbcType=VARCHAR} AS PROJECT_ID FROM DUAL) source
+    ON (target.PROJECT_ID = source.PROJECT_ID)
+    WHEN MATCHED THEN UPDATE SET
+      target.ID=#{id}, target.RISK_SCORE=#{riskScore}, target.RISK_LEVEL=#{riskLevel},
+      target.QUOTE_CV=#{quoteCoefficientOfVariation,jdbcType=DECIMAL},
+      target.MAX_DOCUMENT_SIMILARITY=#{maxDocumentSimilarity},
+      target.DUPLICATE_IP_GROUPS=#{duplicateIpGroups}, target.DUPLICATE_HANDLER_GROUPS=#{duplicateHandlerGroups},
+      target.SIMILARITIES_JSON=#{similaritiesJson,jdbcType=CLOB}, target.ASSESSED_TIME=#{assessedTime}
+    WHEN NOT MATCHED THEN INSERT
+      (ID,PROJECT_ID,RISK_SCORE,RISK_LEVEL,QUOTE_CV,MAX_DOCUMENT_SIMILARITY,
+       DUPLICATE_IP_GROUPS,DUPLICATE_HANDLER_GROUPS,SIMILARITIES_JSON,ASSESSED_TIME)
+    VALUES
+      (#{id},#{projectId},#{riskScore},#{riskLevel},#{quoteCoefficientOfVariation,jdbcType=DECIMAL},
+       #{maxDocumentSimilarity},#{duplicateIpGroups},#{duplicateHandlerGroups},
+       #{similaritiesJson,jdbcType=CLOB},#{assessedTime})
+  </update>
+  <select id="findAssessment" resultMap="assessment">SELECT ID,PROJECT_ID,RISK_SCORE,RISK_LEVEL,QUOTE_CV,MAX_DOCUMENT_SIMILARITY,DUPLICATE_IP_GROUPS,DUPLICATE_HANDLER_GROUPS,SIMILARITIES_JSON,ASSESSED_TIME FROM PROCUREMENT_COLLUSION_ASSESSMENT WHERE PROJECT_ID=#{projectId}</select>
+  <update id="mergeSplitAssessment">
+    MERGE INTO PROCUREMENT_SPLIT_PURCHASE_ASSESSMENT target
+    USING (SELECT #{projectId,jdbcType=VARCHAR} AS PROJECT_ID FROM DUAL) source
+    ON (target.PROJECT_ID = source.PROJECT_ID)
+    WHEN MATCHED THEN UPDATE SET
+      target.ID=#{id}, target.RISK_SCORE=#{riskScore}, target.RISK_LEVEL=#{riskLevel},
+      target.FINDINGS_JSON=#{findingsJson,jdbcType=CLOB}, target.ASSESSED_TIME=#{assessedTime}
+    WHEN NOT MATCHED THEN INSERT
+      (ID,PROJECT_ID,RISK_SCORE,RISK_LEVEL,FINDINGS_JSON,ASSESSED_TIME)
+    VALUES
+      (#{id},#{projectId},#{riskScore},#{riskLevel},#{findingsJson,jdbcType=CLOB},#{assessedTime})
+  </update>
+  <select id="findSplitAssessment" resultMap="splitAssessment">SELECT ID,PROJECT_ID,RISK_SCORE,RISK_LEVEL,FINDINGS_JSON,ASSESSED_TIME FROM PROCUREMENT_SPLIT_PURCHASE_ASSESSMENT WHERE PROJECT_ID=#{projectId}</select>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.SanitizedDebugBundleMapper">
+  <sql id="columns">BUNDLE_ID, PROJECT_ID, CONTRACT_ID, RUN_ID, STEP_ID, ATTEMPT_ID, CONTENT_LEVEL, STATUS,
+    MANIFEST_JSON, STORAGE_KEY, ARTIFACT_SHA256, ARTIFACT_SIZE, GENERATED_BY, REQUESTED_AT, REQUEST_ID, TRACE_ID, VERSION_NO</sql>
+  <insert id="insert">
+    INSERT INTO SANITIZED_DEBUG_BUNDLE (<include refid="columns"/>) VALUES
+    (#{row.bundleId},#{row.projectId},#{row.contractId},#{row.runId},#{row.stepId,jdbcType=VARCHAR},#{row.attemptId,jdbcType=VARCHAR},
+     #{row.contentLevel},#{row.status},#{row.manifestJson,jdbcType=CLOB},#{row.storageKey},#{row.artifactSha256},#{row.artifactSize},
+     #{row.generatedBy},#{row.requestedAt,jdbcType=TIMESTAMP},#{row.requestId},#{row.traceId},#{row.versionNo})
+  </insert>
+  <select id="findById" resultType="com.fuquan.audit.integration.dm8.SanitizedDebugBundlePersistenceRow">
+    SELECT <include refid="columns"/> FROM SANITIZED_DEBUG_BUNDLE WHERE BUNDLE_ID=#{id}
+  </select>
+  <select id="findByRunId" resultType="com.fuquan.audit.integration.dm8.SanitizedDebugBundlePersistenceRow">
+    SELECT <include refid="columns"/> FROM SANITIZED_DEBUG_BUNDLE WHERE RUN_ID=#{runId} ORDER BY REQUESTED_AT,BUNDLE_ID
+  </select>
+  <update id="transition">
+    UPDATE SANITIZED_DEBUG_BUNDLE SET STATUS=#{nextStatus},VERSION_NO=#{nextVersion}
+    WHERE BUNDLE_ID=#{id} AND STATUS=#{status} AND VERSION_NO=#{version} AND STATUS IN ('GENERATING','UNKNOWN')
+  </update>
+</mapper>

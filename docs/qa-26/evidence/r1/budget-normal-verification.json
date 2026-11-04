@@ -1,0 +1,17 @@
+{
+  "label": "budget-normal",
+  "batchId": "22a8cf7f-9c3c-4eca-8d26-f310b84ced12",
+  "jobs": [
+    "70c4bb6c-5e76-4caf-802a-6d6dda2b9180",
+    "7a1f0da2-8611-4a6f-9390-1f181ab2db77"
+  ],
+  "statuses": [
+    "PARSED",
+    "PARSED"
+  ],
+  "lines": 2,
+  "reportFingerprint": "c0c030e67becd1094fc5df2f15dc6055ef38dc16760dddf86494023073d41860",
+  "failures": [],
+  "realModel": true,
+  "synthetic": true
+}

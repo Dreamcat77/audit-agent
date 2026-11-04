@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ProjectMapper">
+    <sql id="columns">ID, NAME, PROJECT_NO, CATEGORY, CREATED_BY, VERSION_NO, CREATED_AT, UPDATED_AT</sql>
+    <insert id="insert">INSERT INTO PROJECT (ID, NAME, PROJECT_NO, CATEGORY, CREATED_BY, VERSION_NO, CREATED_AT, UPDATED_AT) VALUES (#{row.id}, #{row.name}, #{row.projectNo}, #{row.category}, #{row.createdBy}, #{row.versionNo}, #{row.createdAt}, #{row.updatedAt})</insert>
+    <select id="findById" resultType="com.fuquan.audit.integration.dm8.ProjectPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT WHERE ID = #{id}</select>
+    <select id="findByIdForUpdate" resultType="com.fuquan.audit.integration.dm8.ProjectPersistenceRow">SELECT <include refid="columns"/> FROM PROJECT WHERE ID = #{id} FOR UPDATE</select>
+    <select id="findPage" resultType="com.fuquan.audit.integration.dm8.ProjectPersistenceRow">
+        SELECT <include refid="columns"/> FROM (
+            SELECT <include refid="columns"/>, ROW_NUMBER() OVER (ORDER BY CREATED_AT DESC, ID DESC) ROW_NO FROM PROJECT
+            WHERE VERSION_NO &gt; 0
+            <if test="keyword != null and keyword != ''">AND (INSTR(UPPER(NAME), UPPER(#{keyword})) &gt; 0 OR INSTR(UPPER(PROJECT_NO), UPPER(#{keyword})) &gt; 0)</if>
+        ) X WHERE ROW_NO &gt; #{offset} AND ROW_NO &lt;= #{endRow} ORDER BY ROW_NO
+    </select>
+    <select id="count" resultType="long">SELECT COUNT(*) FROM PROJECT WHERE VERSION_NO &gt; 0 <if test="keyword != null and keyword != ''">AND (INSTR(UPPER(NAME), UPPER(#{keyword})) &gt; 0 OR INSTR(UPPER(PROJECT_NO), UPPER(#{keyword})) &gt; 0)</if></select>
+    <select id="findIntakeDraftPage" resultType="com.fuquan.audit.integration.dm8.ProjectPersistenceRow">
+        SELECT ID, NAME, PROJECT_NO, CATEGORY, CREATED_BY, VERSION_NO, CREATED_AT, UPDATED_AT FROM (
+            SELECT P.ID, P.NAME, P.PROJECT_NO, P.CATEGORY, P.CREATED_BY, P.VERSION_NO, P.CREATED_AT, P.UPDATED_AT,
+                   ROW_NUMBER() OVER (ORDER BY P.CREATED_AT DESC, P.ID DESC) ROW_NO
+            FROM PROJECT P
+            WHERE P.VERSION_NO = 0
+              AND EXISTS (SELECT 1 FROM PROJECT_FILE PF WHERE PF.PROJECT_ID = P.ID AND PF.CATEGORY = 'PACKAGE')
+        ) X WHERE ROW_NO &gt; #{offset} AND ROW_NO &lt;= #{endRow} ORDER BY ROW_NO
+    </select>
+    <select id="countIntakeDrafts" resultType="long">
+        SELECT COUNT(*) FROM PROJECT P WHERE P.VERSION_NO = 0
+          AND EXISTS (SELECT 1 FROM PROJECT_FILE PF WHERE PF.PROJECT_ID = P.ID AND PF.CATEGORY = 'PACKAGE')
+    </select>
+    <select id="findPreparationDraftPage" resultType="com.fuquan.audit.integration.dm8.ProjectPreparationDraftPersistenceRow">
+        SELECT PROJECT_ID, CREATED_AT, UPLOADED_FILE_COUNT FROM (
+            SELECT P.ID PROJECT_ID, P.CREATED_AT,
+                   (SELECT COUNT(*) FROM PROJECT_FILE PFC WHERE PFC.PROJECT_ID = P.ID) UPLOADED_FILE_COUNT,
+                   ROW_NUMBER() OVER (ORDER BY P.CREATED_AT DESC, P.ID DESC) ROW_NO
+            FROM PROJECT P
+            WHERE P.VERSION_NO = 0
+              AND EXISTS (SELECT 1 FROM PROJECT_FILE PF WHERE PF.PROJECT_ID = P.ID)
+              AND NOT EXISTS (
+                  SELECT 1 FROM PROJECT_FILE PF
+                  WHERE PF.PROJECT_ID = P.ID AND PF.CATEGORY = 'PACKAGE'
+              )
+        ) X WHERE ROW_NO &gt; #{offset} AND ROW_NO &lt;= #{endRow} ORDER BY ROW_NO
+    </select>
+    <select id="countPreparationDrafts" resultType="long">
+        SELECT COUNT(*) FROM PROJECT P
+        WHERE P.VERSION_NO = 0
+          AND EXISTS (SELECT 1 FROM PROJECT_FILE PF WHERE PF.PROJECT_ID = P.ID)
+          AND NOT EXISTS (
+              SELECT 1 FROM PROJECT_FILE PF
+              WHERE PF.PROJECT_ID = P.ID AND PF.CATEGORY = 'PACKAGE'
+          )
+    </select>
+    <update id="compareAndSet">UPDATE PROJECT SET NAME=#{row.name}, PROJECT_NO=#{row.projectNo}, CATEGORY=#{row.category}, VERSION_NO=#{row.versionNo}, UPDATED_AT=#{row.updatedAt} WHERE ID=#{row.id} AND VERSION_NO=#{expectedVersion}</update>
+</mapper>

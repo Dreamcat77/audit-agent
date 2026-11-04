@@ -1,0 +1,17 @@
+{
+  "scenario": "valid-amendment-clear",
+  "caseId": "ba8ac0c9-eba4-3e79-93fb-1cbf247bda3d",
+  "status": "PARTIAL",
+  "documents": 2,
+  "facts": 15,
+  "clauses": 12,
+  "risks": 0,
+  "followUps": 2,
+  "evidenceChecks": 39,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-valid-amendment-clear",
+  "reportFingerprint": "a0a91e213ebd9defbd422798079242c534a377d406f9a768363e4e40ac4dc09b"
+}

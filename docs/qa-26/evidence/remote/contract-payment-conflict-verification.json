@@ -1,0 +1,17 @@
+{
+  "scenario": "payment-conflict",
+  "caseId": "759d4c24-ab9c-3434-b033-3727da71bdc5",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 10,
+  "clauses": 8,
+  "risks": 1,
+  "followUps": 0,
+  "evidenceChecks": 26,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-payment-conflict",
+  "reportFingerprint": "6f3f03e2ddc2752bd5a65ef96d3b2eeeaf45cd0616965614be9dc0b93a57e4ce"
+}

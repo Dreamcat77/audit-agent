@@ -1,0 +1,17 @@
+{
+  "scenario": "award-conflict",
+  "caseId": "e21426c0-a319-34ca-988f-dec81b81d78d",
+  "status": "COMPLETED",
+  "documents": 2,
+  "facts": 14,
+  "clauses": 8,
+  "risks": 4,
+  "followUps": 1,
+  "evidenceChecks": 47,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "label": "contract-award-conflict",
+  "reportFingerprint": "aa2fc2fb3788fc723ef285539808f722f17191a9e4121bdaafd831b8c420715a"
+}

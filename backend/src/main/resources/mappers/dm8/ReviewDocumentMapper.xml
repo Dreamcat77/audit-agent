@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuquan.audit.integration.dm8.ReviewDocumentMapper">
+    <resultMap id="documentRow" type="com.fuquan.audit.integration.dm8.ReviewDocumentPersistenceRow">
+        <id property="id" column="ID"/>
+        <result property="sessionId" column="SESSION_ID"/>
+        <result property="documentKind" column="DOCUMENT_KIND"/>
+        <result property="slotKey" column="SLOT_KEY"/>
+        <result property="originalFileName" column="ORIGINAL_FILE_NAME"/>
+        <result property="fileExtension" column="FILE_EXTENSION"/>
+        <result property="contentType" column="CONTENT_TYPE"/>
+        <result property="fileSize" column="FILE_SIZE"/>
+        <result property="sha256" column="SHA256"/>
+        <result property="storageKey" column="STORAGE_KEY"/>
+        <result property="status" column="STATUS"/>
+        <result property="replacesDocumentId" column="REPLACES_DOCUMENT_ID"/>
+        <result property="requestedSessionVersion" column="REQUESTED_SESSION_VERSION"/>
+        <result property="reservedSessionVersion" column="RESERVED_SESSION_VERSION"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <result property="updatedAt" column="UPDATED_AT"/>
+        <result property="storedAt" column="STORED_AT"/>
+        <result property="failedAt" column="FAILED_AT"/>
+        <result property="versionNo" column="VERSION_NO"/>
+    </resultMap>
+    <sql id="columns">
+        ID, SESSION_ID, DOCUMENT_KIND, SLOT_KEY, ORIGINAL_FILE_NAME, FILE_EXTENSION,
+        CONTENT_TYPE, FILE_SIZE, SHA256, STORAGE_KEY, STATUS, REPLACES_DOCUMENT_ID,
+        REQUESTED_SESSION_VERSION, RESERVED_SESSION_VERSION, CREATED_BY, CREATED_AT,
+        UPDATED_AT, STORED_AT, FAILED_AT, VERSION_NO
+    </sql>
+    <insert id="insert">
+        INSERT INTO CONTRACT_REVIEW_DOCUMENT (
+            ID, SESSION_ID, DOCUMENT_KIND, SLOT_KEY, ORIGINAL_FILE_NAME, FILE_EXTENSION,
+            CONTENT_TYPE, FILE_SIZE, SHA256, STORAGE_KEY, STATUS, REPLACES_DOCUMENT_ID,
+            REQUESTED_SESSION_VERSION, RESERVED_SESSION_VERSION, CREATED_BY, CREATED_AT,
+            UPDATED_AT, STORED_AT, FAILED_AT, VERSION_NO
+        ) VALUES (
+            #{id}, #{sessionId}, #{documentKind}, #{slotKey}, #{originalFileName}, #{fileExtension},
+            #{contentType}, #{fileSize}, #{sha256}, #{storageKey}, #{status}, #{replacesDocumentId},
+            #{requestedSessionVersion}, #{reservedSessionVersion}, #{createdBy}, #{createdAt},
+            #{updatedAt}, #{storedAt}, #{failedAt}, #{versionNo}
+        )
+    </insert>
+    <select id="findById" resultMap="documentRow">
+        SELECT <include refid="columns"/> FROM CONTRACT_REVIEW_DOCUMENT WHERE ID = #{id}
+    </select>
+    <select id="findBySessionAndId" resultMap="documentRow">
+        SELECT <include refid="columns"/> FROM CONTRACT_REVIEW_DOCUMENT
+        WHERE SESSION_ID = #{sessionId} AND ID = #{id}
+    </select>
+    <select id="findBySessionId" resultMap="documentRow">
+        SELECT <include refid="columns"/> FROM CONTRACT_REVIEW_DOCUMENT
+        WHERE SESSION_ID = #{sessionId} ORDER BY CREATED_AT, ID
+    </select>
+    <select id="findPendingBySessionId" resultMap="documentRow">
+        SELECT <include refid="columns"/> FROM CONTRACT_REVIEW_DOCUMENT
+        WHERE SESSION_ID = #{sessionId} AND STATUS = 'UPLOAD_PENDING' ORDER BY CREATED_AT, ID
+    </select>
+    <update id="markAvailable">
+        UPDATE CONTRACT_REVIEW_DOCUMENT
+        SET STATUS = 'AVAILABLE', STORED_AT = #{storedAt}, UPDATED_AT = #{storedAt},
+            VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id} AND STATUS = 'UPLOAD_PENDING' AND VERSION_NO = #{expectedVersion}
+    </update>
+    <update id="markFailed">
+        UPDATE CONTRACT_REVIEW_DOCUMENT
+        SET STATUS = 'UPLOAD_FAILED', FAILED_AT = #{failedAt}, UPDATED_AT = #{failedAt},
+            VERSION_NO = VERSION_NO + 1
+        WHERE ID = #{id} AND STATUS = 'UPLOAD_PENDING' AND VERSION_NO = #{expectedVersion}
+    </update>
+</mapper>
