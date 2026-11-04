@@ -98,7 +98,7 @@ public class ContractAnalysisReport {
         }return List.copyOf(map.values());
     }
     private static <T> List<T> deduplicate(List<T> values,java.util.function.Function<T,String> key){var map=new LinkedHashMap<String,T>();for(var v:values)map.putIfAbsent(key.apply(v),v);return List.copyOf(map.values());}
-    static String label(State s){return switch(s){case QUEUED->"等待处理";case RUNNING->"正在分析";case COMPLETED->"分析完成";case PARTIAL->"已生成部分结果";case DATA_INSUFFICIENT->"材料不足以支持分析";case FAILED->"未能完成处理";case UNKNOWN->"处理已停止，结果待核查";};}
+    static String label(State s){return switch(s){case QUEUED->"等待处理";case RUNNING->"正在分析";case COMPLETED->"分析完成";case PARTIAL->"已生成结果";case DATA_INSUFFICIENT->"材料不足以支持分析";case FAILED->"未能完成处理";case UNKNOWN->"处理已停止，结果待核查";};}
     static String projectName(ContractAnalysisCase c,String established,List<String> texts){
         var names=new ArrayList<String>();
         if(established!=null&&!com.fuquan.audit.contract.application.project.AutomaticProjectMetadataService.isGeneratedName(established))names.add(established);
