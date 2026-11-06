@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import {ProcessingStatusCard} from "../../../components/status/ProcessingStatusCard";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -176,8 +177,8 @@ export default function ProcurementReviewWizard({ project, embedded = false, onB
     }
   }
 
-  if (intakeState.pending) return <div role="status" className="flex items-center gap-2 rounded border border-blue-200 bg-blue-50 px-4 py-5 text-xs text-blue-700"><LoaderCircle size={14} className="shrink-0 animate-spin" /><span>采购需求已保存，正在分析已上传的材料并生成结果，无需再次上传。可以切换功能，稍后从该项目查看结果。</span></div>;
-  if (loading) return <div className="flex items-center gap-2 rounded border border-blue-200 bg-blue-50 px-4 py-5 text-xs text-blue-700"><LoaderCircle size={14} className="animate-spin" />正在加载采购材料与结果...</div>;
+  if (intakeState.pending) return <ProcessingStatusCard title="正在分析材料" description="材料已保存，无需再次上传。处理完成后可从项目中查看结果。" />;
+  if (loading) return <ProcessingStatusCard title="正在读取审查结果" description="正在加载已保存的采购材料与结果，请稍候。" />;
   if (error) return <div className="space-y-3"><ErrorBlock message={error} />{!embedded && onBack && <button type="button" onClick={onBack} className="inline-flex items-center gap-2 rounded border border-slate-300 bg-white px-3 py-2 text-xs text-slate-700"><ArrowLeft size={14} />返回项目详情</button>}</div>;
 
 

@@ -1,0 +1,53 @@
+.processing-status-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 144px;
+  padding: 24px;
+  border: 1px solid #dce3eb;
+  border-radius: 10px;
+  background: #fafbfd;
+  color: #263c56;
+  text-align: center;
+}
+.processing-status-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  background: #fff3e5;
+}
+.processing-status-card__spinner {
+  display: block;
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #ead8bf;
+  border-top-color: #d58a32;
+  border-radius: 50%;
+  animation: processing-status-spin .9s linear infinite;
+}
+.processing-status-card__content { min-width: 0; max-width: 400px; }
+.processing-status-card__title { margin: 0; color: #263c56; font-size: 15px; font-weight: 600; line-height: 1.6; overflow-wrap: break-word; }
+.processing-status-card__description { margin: 6px 0 0; color: #64748b; font-size: 13px; line-height: 1.75; overflow-wrap: break-word; }
+.processing-status-card--compact { flex-direction: row; justify-content: flex-start; min-height: 0; padding: 16px; text-align: left; }
+.processing-status-card--compact .processing-status-card__icon { width: 34px; height: 34px; margin: 0 12px 0 0; }
+.processing-status-card--compact .processing-status-card__content { max-width: 320px; }
+.processing-status-card--compact .processing-status-card__title { font-size: 14px; }
+.processing-status-card--compact .processing-status-card__description { margin-top: 4px; font-size: 12px; }
+.result-project-actions > .processing-status-card { width: 360px; max-width: 100%; }
+@keyframes processing-status-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .processing-status-card__spinner { animation: none; } }
+@media (max-width: 767px) {
+  .processing-status-card { padding: 20px 16px; }
+  .processing-status-card--compact { padding: 14px; }
+  .result-project-main > .result-project-actions { max-width: calc(100% - 52px); }
+  .result-project-actions > .processing-status-card { max-width: 100%; }
+}

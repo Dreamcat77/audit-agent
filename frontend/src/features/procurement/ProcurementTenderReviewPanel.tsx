@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import {ProcessingStatusCard} from "../../components/status/ProcessingStatusCard";
 import { ResultCopyButton } from './ResultCopyButton';
 import { tenderExplanationText } from './review/tenderFindingDisplay';
 import { AlertTriangle, CheckCircle, FileSearch, FileText, LoaderCircle, Upload, XCircle } from "lucide-react";
@@ -218,16 +219,16 @@ export default function ProcurementTenderReviewPanel({ projectId, analyzed = fal
       <input ref={inputRef} type="file" multiple accept={OFFICE_MATERIAL_ACCEPT} className="hidden" onChange={event => void upload(Array.from(event.target.files ?? []))} />
       <div className="flex items-center gap-2">
         <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading || analyzing || loading} className="inline-flex items-center gap-2 rounded border border-slate-300 px-3 py-2 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50">{uploading ? <LoaderCircle size={14} className="animate-spin" /> : <Upload size={14} />}{uploading ? "正在上传…" : "上传材料"}</button>
-        {analyzing && <span role="status" className="inline-flex items-center gap-1 text-xs text-indigo-700"><LoaderCircle size={13} className="animate-spin" />系统自动解析并生成结果</span>}
       </div>
     </div>
     <div className="space-y-4 p-4">
-      {loading && <p role="status" className="text-xs text-slate-500">正在加载已保存的材料和结果…</p>}
+      {loading && <ProcessingStatusCard title="正在读取审查结果" description="正在加载已保存的材料与结果，请稍候。" />}
+      {!loading && analyzing && <ProcessingStatusCard title="正在分析材料" description="系统正在提取文件内容并生成审查结果，请稍候。" />}
       {error && <div role="alert" className="rounded border border-red-200 bg-red-50 p-3 text-xs text-red-700">{error}</div>}
       {!loading && !batch?.files.length && <div className="rounded border border-dashed border-slate-300 bg-slate-50 px-4 py-5 text-center text-xs leading-6 text-slate-500">支持多选 Word、PDF、Excel、演示文稿、文本及图片扫描件；单文件最大 500 MB。上传后系统自动解析并生成结果，无法识别的信息显示“暂未识别”。</div>}
       {!!batch?.files.length && <p className="text-xs font-medium text-slate-700">已上传材料（{batch.files.length} 份）</p>}
       {batch?.notices.map((notice, i) => <p key={i} role="status" className="rounded bg-slate-50 p-3 text-xs text-slate-600">{notice}</p>)}
-      {batch?.files.map((file, index) => <MaterialResult key={file.document?.id ?? `${file.fileName}-${index}`} file={file} processing={analyzing || uploading} />)}
+      {!loading&&!analyzing&&!uploading&&batch?.files.map((file, index) => <MaterialResult key={file.document?.id ?? `${file.fileName}-${index}`} file={file} processing={false} />)}
     </div>
   </section>;
 }

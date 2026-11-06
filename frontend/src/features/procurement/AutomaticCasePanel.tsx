@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {ResultProjectHeader,ResultSection,ResultItem,ResultEmpty} from '../../components/results/ResultLayout';
+import {ProcessingStatusCard} from '../../components/status/ProcessingStatusCard';
 import { ApiError, apiUrl, request } from '../../api/client';
 import { uploadRequest } from '../../api/clientUpload';
 import { userFacingError } from '../../api/userFacingError';
@@ -207,9 +208,7 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
         <span className="text-sm text-slate-500">支持常用办公文档、PDF 和扫描图片</span>
       </label>
     </div>}
-    {busy && <div role="status" aria-live="polite" className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
-      正在上传本批材料{uploadProgress ? ` ${Math.min(100, Math.floor(uploadProgress.loaded / uploadProgress.total * 100))}%` : '…'}
-    </div>}
+    {busy && !current && <ProcessingStatusCard title="正在上传材料" description="请稍候，文件上传后将自动开始审查。" />}
     {uncertain && files.length > 0 && <button type="button" className="rounded border px-4 py-2 text-sm" disabled={busy} onClick={() => void upload(files)}>继续原批上传</button>}
     {!current && historyOpen && <section className="space-y-4 rounded-xl border border-slate-200 bg-white p-5" aria-label="采购历史结果">
       {historyError && <p role="alert" className="text-sm text-red-700">{historyError}</p>}
@@ -223,15 +222,17 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
         <p className="mt-2 text-xs text-slate-500">{c.createdAt ? new Date(c.createdAt).toLocaleString() : ''} · {c.fileNames.length} 份材料 · {['QUEUED','RUNNING','UPLOADING'].includes(c.status) ? '正在处理' : '处理已结束'}</p>
         <p className="mt-2 truncate text-xs text-slate-500" title={c.fileNames.join('、')}>{c.fileNames.join('、')}</p>
       </button>)}</div>
-      {!visibleCases.length && <p className="py-5 text-center text-sm text-slate-500">暂无符合条件的记录{nextCursor ? '，可继续读取更多历史结果。' : '。'}</p>}
+      {historyBusy&&!visibleCases.length&&<ProcessingStatusCard title="正在读取分析记录" description="正在加载已保存的采购记录，请稍候。" />}
+      {!historyBusy&&!visibleCases.length && <p className="py-5 text-center text-sm text-slate-500">暂无符合条件的记录{nextCursor ? '，可继续读取更多历史结果。' : '。'}</p>}
       {nextCursor && <button type="button" className="rounded-lg border px-4 py-2 text-sm" disabled={historyBusy} onClick={() => void moreHistory()}>{historyBusy ? '正在读取…' : '更多历史结果'}</button>}
     </section>}
     {current && <>
       <ResultProjectHeader kind="采购审查结果" name={current.projectName || report?.projectName || '采购材料分析'} metadata={<>{current.documents.length} 份材料{current.createdAt ? ` · ${new Date(current.createdAt).toLocaleString('zh-CN')}` : ''}</>}
-        actions={caseProcessing?<span role="status" className="text-sm text-blue-700">正在分析…</span>:undefined}>
-        {[['预算金额',report?.budget],['最高限价',report?.ceilingAmount],['中标金额',report?.awardAmount]].map(([label,value])=><div key={label}><p>{label}</p><p>{value==null?'—':`${Number(value).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})} 元`}</p></div>)}
+        actions={caseProcessing?<ProcessingStatusCard variant="compact" title={current.status==='UPLOADING'?'正在上传材料':current.status==='QUEUED'?'正在准备审查':'正在分析材料'}
+          description={current.status==='UPLOADING'?(uploadProgress&&uploadProgress.total>0?`已上传 ${Math.min(100,Math.floor(uploadProgress.loaded/uploadProgress.total*100))}%，请稍候。`:'请稍候，文件上传后将自动开始审查。'):'系统正在处理材料，完成后将自动展示结果。'} />:undefined}>
+        {!caseProcessing&&[['预算金额',report?.budget],['最高限价',report?.ceilingAmount],['中标金额',report?.awardAmount]].map(([label,value])=><div key={label}><p>{label}</p><p>{value==null?'—':`${Number(value).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})} 元`}</p></div>)}
       </ResultProjectHeader>
-      {report && <section key={current.id} aria-label="本批采购审查结果" className="space-y-5">
+      {!caseProcessing&&report && <section key={current.id} aria-label="本批采购审查结果" className="space-y-5">
         <ResultSection title="优先关注" number="01" tone={findings.length||report.quoteComparisons?.some(c=>c.status==='OVER_BUDGET')||report.ceilingComparisons?.some(c=>c.status==='OVER_CEILING')?'attention':'default'} actions={<>
           {findings.length > 0 && <button type="button" onClick={() => void copy('all',reportText)} className="delivery-secondary-action">{copied === 'all' ? '已复制' : '复制问题清单'}</button>}
           <a href={apiUrl(`${path}/${current.id}/report.html`)} className="delivery-secondary-action" download>导出完整报告</a></>}>
@@ -266,9 +267,9 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
         })}</div>
 
       </section>}
-      <details className="rounded-xl border border-slate-200 bg-white p-5 text-sm"><summary className="cursor-pointer font-medium text-slate-700">本批材料（{current.documents.length} 份）</summary><ul className="mt-3 divide-y divide-slate-100">{current.documents.map(d => <li key={d.id} className="flex flex-wrap items-center justify-between gap-3 py-3"><span>{d.name}</span><div className="flex gap-3 text-xs"><button type="button" className="text-blue-700" onClick={() => void showEvidence(d.id)}>查看提取内容</button><a className="text-blue-700" href={apiUrl(`${path}/${current.id}/files/${d.id}/original`)}>原文件</a></div></li>)}</ul></details>
+      {!caseProcessing&&<details className="rounded-xl border border-slate-200 bg-white p-5 text-sm"><summary className="cursor-pointer font-medium text-slate-700">本批材料（{current.documents.length} 份）</summary><ul className="mt-3 divide-y divide-slate-100">{current.documents.map(d => <li key={d.id} className="flex flex-wrap items-center justify-between gap-3 py-3"><span>{d.name}</span><div className="flex gap-3 text-xs"><button type="button" className="text-blue-700" onClick={() => void showEvidence(d.id)}>查看提取内容</button><a className="text-blue-700" href={apiUrl(`${path}/${current.id}/files/${d.id}/original`)}>原文件</a></div></li>)}</ul></details>}
     </>}
-    {evidence && <details open className="rounded-xl border border-slate-200 bg-white p-5"><summary className="text-sm font-medium">{evidence.fileName} · 提取内容</summary>
+    {!caseProcessing&&evidence && <details open className="rounded-xl border border-slate-200 bg-white p-5"><summary className="text-sm font-medium">{evidence.fileName} · 提取内容</summary>
       <ul className="mt-3 space-y-3 text-sm">{evidence.facts.filter(f => f.verification === 'SOURCE_VERIFIED').map((f,index) => <li key={index}><strong>{automaticFactLabel(f.type)}：{f.value}</strong><blockquote className="mt-1 whitespace-pre-wrap text-xs leading-6 text-slate-500">{f.excerpt}</blockquote></li>)}</ul></details>}
   </section>;
 }

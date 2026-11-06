@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import {ResultProjectHeader,ResultSection,ResultItem,ResultEmpty} from '../../components/results/ResultLayout';
+import {ProcessingStatusCard} from '../../components/status/ProcessingStatusCard';
 import * as XLSX from 'xlsx';
-import { CircleAlert, FileSearch, FileText, Loader2 } from 'lucide-react';
+import { CircleAlert, FileSearch, FileText } from 'lucide-react';
 import { getBudgetMaterialBatch, getBudgetReview } from '../../api';
 import { ApiError } from '../../api/client';
 import type { BudgetMaterialBatchView, BudgetReviewResponse } from '../../api';
@@ -18,10 +19,11 @@ const money = (value: number | null) => value == null ? '本批材料未找到' 
 function ResultMessage({ title, description, pending = false, attention = false }: {
   title: string; description: string; pending?: boolean; attention?: boolean;
 }) {
-  const Icon = pending ? Loader2 : attention ? CircleAlert : FileSearch;
-  return <div className="budget-result-message" role={pending ? 'status' : undefined}>
+  if (pending) return <ProcessingStatusCard title={title} description={description} />;
+  const Icon = attention ? CircleAlert : FileSearch;
+  return <div className="budget-result-message">
     <span className={`budget-result-message-icon${attention ? ' budget-result-message-icon-attention' : ''}`}>
-      <Icon size={24} aria-hidden="true" className={pending ? 'animate-spin' : undefined} />
+      <Icon size={24} aria-hidden="true" />
     </span>
     <div className="budget-result-message-content">
       <h3>{title}</h3><p>{description}</p>
@@ -155,12 +157,15 @@ export function BudgetFileResults({ taskId, batchId, onComplete }: {
   };
   const projectNames=[...new Set(referenceGroups.map(group=>group.project).filter(Boolean))];
   const reportName=projectNames.length?projectNames.slice(0,2).join('、')+(projectNames.length>2?` 等${projectNames.length}个项目`:''):'预算材料分析';
+  if(pending)return <section aria-label="预算文件结果" className="budget-results-panel result-workspace space-y-5">
+    <ResultProjectHeader kind="预算审查结果" name={reportName} metadata={batchFiles.length?`${batchFiles.length} 份材料`:undefined}
+      actions={<ProcessingStatusCard variant="compact" title="正在分析材料" description="正在提取文件内容并核对预算信息，请稍候。" />} />
+  </section>;
   if(reference)return <section aria-label="预算文件结果" className="budget-results-panel result-workspace space-y-5">
     <ResultProjectHeader kind="预算审查结果" name={reportName} metadata={<>{batchFiles.length} 份材料{state.batch?.createdAt?` · ${new Date(state.batch.createdAt).toLocaleString('zh-CN')}`:''}</>}
       actions={reference.lines.length>0?<button type="button" onClick={exportReference} className="delivery-secondary-action">导出</button>:undefined}>
       {[[reference.lines.length,'预算科目'],[differences.length,'差异项'],[uncertainCount,'信息待核对']].map(([count,label])=><div key={label}><p>{label}</p><p>{count} 项</p></div>)}
     </ResultProjectHeader>
-    {pending&&<p role="status" className="text-sm text-slate-600">正在整理本批预算结果…</p>}
     {state.unavailable&&<p role="alert" className="text-sm text-amber-800">部分结果暂时无法读取，当前展示并不完整。</p>}
     {incompleteFiles.length>0&&<details className="result-source-list"><summary>{incompleteFiles.length} 份材料未生成完整结果</summary><ul className="mt-3 space-y-2 text-sm">{incompleteFiles.map(file=><li key={file.taskId??file.fileName}>{file.fileName}：{budgetResultStatus(file.status)}</li>)}</ul></details>}
     {copyError&&<p role="alert" className="text-sm text-red-700">{copyError}</p>}
