@@ -69,7 +69,7 @@ test('shared full and compact cards expose consistent status text without action
     for(const card of await page.locator('.processing-status-card').all()){
       assert.equal(await card.getAttribute('aria-live'),'polite');assert.equal(await card.getAttribute('aria-atomic'),'true');
     }
-    await page.screenshot({path:path.resolve(root,'../../../.runtime/processing-status-gallery.png'),fullPage:true});
+    await page.screenshot({path:path.resolve(root,'../../../.runtime/processing-status-gallery-borderless.png'),fullPage:true});
   }finally{await page.close();}
 });
 
@@ -80,7 +80,8 @@ test('procurement waiting card replaces partial results and all document operati
     assert.equal(await page.getByRole('button',{name:'查看提取内容'}).count(),0);
     assert.equal(await page.locator('a[href$="/original"]').count(),0);
     assert.equal(await page.getByLabel('本批采购审查结果').count(),0);
-    await page.screenshot({path:path.resolve(root,'../../../.runtime/processing-status-procurement.png'),fullPage:true});
+    await page.screenshot({path:path.resolve(root,'../../../.runtime/processing-status-procurement-borderless.png'),fullPage:true});
+    await page.locator('.result-project-header').screenshot({path:path.resolve(root,'../../../.runtime/processing-status-header-borderless.png')});
     view.setPhase('COMPLETED');await page.clock.fastForward(2600);
     await page.locator('.processing-status-card').waitFor({state:'hidden'});
     await page.getByText('本批材料（1 份）',{exact:true}).click();
