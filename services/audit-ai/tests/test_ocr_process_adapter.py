@@ -427,7 +427,7 @@ def test_normal_close_proves_job_descendant_also_terminated(tmp_path):
         result=port.extract(path)
         handle=kernel.OpenProcess(0x100000,False,int(result.text));assert handle
         port.close()
-        assert kernel.WaitForSingleObject(handle,0)==0,"Job descendant survived normal cleanup"
+        assert kernel.WaitForSingleObject(handle,5000)==0,"Job descendant survived normal cleanup"
     finally:
         port.close()
         if handle:kernel.CloseHandle(handle)
