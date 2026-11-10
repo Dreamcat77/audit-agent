@@ -1,0 +1,8 @@
+{
+  "caseId": "7fb732bc-55ad-3127-91c3-b940882a7d30",
+  "model": "audit-qwen-27b-16k:latest",
+  "visibleRisk": true,
+  "atLeastTwoOriginalSources": true,
+  "aggregate": "DATA_INSUFFICIENT",
+  "pageErrors": []
+}

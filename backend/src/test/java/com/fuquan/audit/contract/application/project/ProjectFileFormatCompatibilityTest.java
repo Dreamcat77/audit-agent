@@ -92,7 +92,7 @@ class ProjectFileFormatCompatibilityTest {
                         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         "invalid-docx-renamed.docx"),
                 new UploadCase("zip.pdf", "application/pdf", "nested.zip"),
-                new UploadCase("renamed.doc", "application/msword", "valid.docx"),
+                new UploadCase("executable.doc", "application/msword", "invalid-pdf-renamed.pdf"),
                 new UploadCase("legacy.xls", "application/vnd.ms-excel", "valid.xls"),
                 new UploadCase("sheet.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                         "valid.xlsx"),

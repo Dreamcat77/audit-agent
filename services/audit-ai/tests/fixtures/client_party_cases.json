@@ -1,0 +1,420 @@
+{
+  "names": [
+    "北辰市公安局",
+    "市公安局",
+    "市局",
+    "警保处"
+  ],
+  "cases": [
+    {
+      "id": "formal-A",
+      "text": "甲方：北辰市公安局\n乙方：远景软件有限公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "formal-B",
+      "text": "甲方：远景软件有限公司\n乙方：北辰市公安局",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "short-city-A",
+      "text": "甲方：北辰公安局\n乙方：远景软件有限公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "short-city-B",
+      "text": "甲方：远景软件有限公司\n乙方：北辰公安局",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "alias-A",
+      "text": "甲方：市局\n乙方：远景软件有限公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "alias-B",
+      "text": "甲方：远景软件有限公司\n乙方：市局",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "department-A",
+      "text": "甲方：警保处\n乙方：远景软件有限公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "department-B",
+      "text": "甲方：远景软件有限公司\n乙方：警保处",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "expanded-department-A",
+      "text": "甲方：警务保障处\n乙方：远景软件有限公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "expanded-department-B",
+      "text": "甲方：远景软件有限公司\n乙方：警务保障处",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "prefixed-department-A",
+      "text": "甲方：北辰市公安局警务保障处\n乙方：远景软件有限公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "prefixed-department-B",
+      "text": "甲方：远景软件有限公司\n乙方：北辰市公安局警务保障处",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "bracket-department-A",
+      "text": "甲方：北辰市公安局（警务保障处）\n乙方：远景软件有限公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "bracket-department-B",
+      "text": "甲方：远景软件有限公司\n乙方：北辰市公安局（警务保障处）",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "ocr-city-A",
+      "text": "甲方：北辰巿公安局\n乙方：远景软件有限公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "ocr-city-B",
+      "text": "甲方：远景软件有限公司\n乙方：北辰巿公安局",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "role-before-name",
+      "text": "采购人（甲方）：北辰市公安局\n供应商（乙方）：远景软件有限公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "buyer-is-b",
+      "text": "委托人（乙方）：北辰市公安局\n服务方（甲方）：远景软件有限公司",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "role-after-name",
+      "text": "采购人：北辰市公安局（以下简称“乙方”）",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "declaration-label",
+      "text": "甲方（以下简称采购人）：北辰市公安局",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "name-annotation",
+      "text": "甲方：北辰市公安局（以下简称“甲方”）",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "alias-annotation",
+      "text": "甲方：北辰市公安局（以下简称“市局”）",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "agency-annotation",
+      "text": "甲方：北辰市公安局警务保障处（盖章）",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "name-quoted",
+      "text": "乙方：“北辰市公安局”。",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "fullwidth",
+      "text": "甲方（采购人）：北　辰　市　公　安　局",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "invisible",
+      "text": "甲方：北辰市公​安局",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "wrapped-name",
+      "text": "甲方：北辰市公\n安局\n乙方：远景公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "three-line-name",
+      "text": "甲方：北辰\n市公安\n局\n乙方：远景公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "wrapped-label",
+      "text": "甲方\n北辰市公安局\n乙方\n远景公司",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "spaced-label",
+      "text": "甲 方：北辰市公安局",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "name-label",
+      "text": "乙方名称：北辰市公安局",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "same-line-address",
+      "text": "甲方：北辰市公安局，地址：测试地址",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "seal-before-name",
+      "text": "甲方：（盖章）北辰市公安局",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "parent-unit",
+      "text": "甲方：北辰市公安局本级",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "spaces-separator",
+      "text": "乙方  北辰市公安局",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "table",
+      "text": "|采购人（乙方）|\n|乙方：北辰市公安局|",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "semicolon",
+      "text": "甲方：远景公司；乙方：北辰市公安局",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "dual-matches",
+      "text": "甲方：北辰市公安局\n乙方：警保处",
+      "expected": "AMBIGUOUS"
+    },
+    {
+      "id": "contradictory-label",
+      "text": "采购人（甲方）：北辰市公安局（以下简称乙方）",
+      "expected": "AMBIGUOUS"
+    },
+    {
+      "id": "body-mention",
+      "text": "甲方：远景公司\n乙方：新晨公司\n说明：材料抄送北辰市公安局。",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "other-city",
+      "text": "甲方：南辰市公安局\n乙方：远景公司",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "other-district",
+      "text": "甲方：北辰市公安局东城分局",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "company-suffix",
+      "text": "甲方：北辰市公安局后勤服务有限公司",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "wrapped-company",
+      "text": "甲方：北辰市公安局\n后勤服务有限公司\n乙方：其他单位",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "unapproved-unit",
+      "text": "甲方：北辰市公安局治安管理处",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "unbound-buyer",
+      "text": "采购人：北辰市公安局\n供应商：远景公司",
+      "expected": "PURCHASER"
+    },
+    {
+      "id": "unbound-agent",
+      "text": "采购代理机构：北辰市公安局\n甲方：其他单位",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "header-only",
+      "text": "项目名称：北辰市公安局软件维护\n甲方：远景公司",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "similar-short",
+      "text": "甲方：市局后勤服务公司",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "unexplained-typo",
+      "text": "甲方：北辰市公女局",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "blank",
+      "text": "甲方：________\n乙方：远景公司",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "reference-attachment",
+      "text": "甲方：远景公司\n乙方：新晨公司\n附件三：历史业绩合同\n甲方：北辰市公安局\n乙方：另一公司",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "history-no-flip",
+      "text": "甲方：北辰市公安局\n乙方：远景公司\n附件三：历史业绩合同\n甲方：另一公司\n乙方：北辰市公安局",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "ordinary-appendix",
+      "text": "附件一：服务清单\n服务季度四次\n甲方（盖章）：北辰市公安局",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "not-arbitrary-suffix",
+      "text": "甲方：北辰市公安局及其下属企业",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "two-parties-same-row",
+      "text": "甲方：远景公司|乙方：北辰市公安局",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "unbound-department",
+      "text": "需求部门：警务保障处\n甲方：远景公司",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "functional-principal",
+      "text": "委托方：北辰市公安局",
+      "expected": "PRINCIPAL"
+    },
+    {
+      "id": "functional-purchaser",
+      "text": "采购单位：北辰市公安局",
+      "expected": "PURCHASER"
+    },
+    {
+      "id": "functional-buyer",
+      "text": "买方：北辰市公安局",
+      "expected": "BUYER"
+    },
+    {
+      "id": "functional-seller",
+      "text": "卖方：北辰市公安局",
+      "expected": "SELLER"
+    },
+    {
+      "id": "functional-supplier",
+      "text": "供应商：北辰市公安局",
+      "expected": "SUPPLIER"
+    },
+    {
+      "id": "functional-service_provider",
+      "text": "服务方：北辰市公安局",
+      "expected": "SERVICE_PROVIDER"
+    },
+    {
+      "id": "functional-lessor",
+      "text": "出租人：北辰市公安局",
+      "expected": "LESSOR"
+    },
+    {
+      "id": "functional-lessee",
+      "text": "承租方：北辰市公安局",
+      "expected": "LESSEE"
+    },
+    {
+      "id": "functional-employer",
+      "text": "发包方：北辰市公安局",
+      "expected": "EMPLOYER"
+    },
+    {
+      "id": "functional-contractor",
+      "text": "承包人：北辰市公安局",
+      "expected": "CONTRACTOR"
+    },
+    {
+      "id": "unbound-two-functional-roles",
+      "text": "采购人：北辰市公安局\n供应商：警保处",
+      "expected": "AMBIGUOUS"
+    },
+    {
+      "id": "buyer-b-binding",
+      "text": "甲方（供应商）：远景公司\n乙方（采购人）：北辰市公安局\n采购人：警务保障处",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "not-contact-suffix",
+      "text": "甲方：北辰市公安局，关联单位：另一个单位",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "nearby-city-character-not-folded",
+      "text": "甲方：北辰市公安县",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "reference-reverse-functional",
+      "text": "采购人：远景公司\n供应商：新晨公司\n附件三：历史业绩合同\n采购人：北辰市公安局",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "short-parent-department",
+      "text": "委托人（乙方）：市局警保处",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "short-parent-bracket",
+      "text": "甲方：市局（警务保障处）",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "city-alias-department",
+      "text": "采购人：市公安局警务保障处",
+      "expected": "PURCHASER"
+    },
+    {
+      "id": "document-defined-alias",
+      "text": "委托方：北辰市公安局（以下简称“本局”）\n乙方：本局",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "alias-not-learned-from-other-file",
+      "text": "甲方：本局",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "alias-definition-conflict",
+      "text": "委托方：北辰市公安局（以下简称“本局”）\n供应商：远景公司（以下简称“本局”）\n乙方：本局",
+      "expected": "PRINCIPAL"
+    },
+    {
+      "id": "alias-history-does-not-bridge",
+      "text": "甲方：本局\n附录二：历史合同\n委托方：北辰市公安局（以下简称“本局”）",
+      "expected": "UNMATCHED"
+    },
+    {
+      "id": "supervisor-annotation",
+      "text": "甲方：北辰市公安局（主管）",
+      "expected": "PARTY_A"
+    },
+    {
+      "id": "supervisor-unit-annotation",
+      "text": "乙方：北辰市公安局(主管单位)",
+      "expected": "PARTY_B"
+    },
+    {
+      "id": "different-supervisor-company",
+      "text": "甲方：北辰市公安局后勤服务有限公司（主管）",
+      "expected": "UNMATCHED"
+    }
+  ]
+}

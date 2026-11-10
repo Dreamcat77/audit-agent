@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public final class RmbAmountParser {
     private RmbAmountParser() {}
     private static final String DIGITS="零壹贰叁肆伍陆柒捌玖";
-    private static final Pattern ARABIC=Pattern.compile("\\+?((?:[0-9]+|[0-9]{1,3}(?:,[0-9]{3})+)(?:\\.[0-9]+)?)(亿元?|万元?|千元?|元)?");
+    private static final Pattern ARABIC=Pattern.compile("\\+?((?:[0-9]+|[0-9]{1,3}(?:,[0-9]{3})+)(?:\\.[0-9]+)?)(?:(亿元?|万元?|千元?|元)整?)?");
     private static final Pattern DUAL=Pattern.compile("(.+?)[(]?(?:人民币)?大写[:：](.+?)[)]?");
     private static final Pattern PAREN_DUAL=Pattern.compile("([^()]+)\\(([^()]+)\\)");
     private static final Pattern FRACTION=Pattern.compile("(?:([零壹贰叁肆伍陆柒捌玖])角)?零?(?:([零壹贰叁肆伍陆柒捌玖])分)?");

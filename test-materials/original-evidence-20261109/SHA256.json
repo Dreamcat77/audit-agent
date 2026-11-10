@@ -1,0 +1,27 @@
+[
+  {
+    "path": "使用步骤.txt",
+    "sha256": "1c3b3f650782cdf17505da5b11cac8a5370b6813f693901d586b1373506189ea",
+    "size": 746
+  },
+  {
+    "path": "合同/中标通知书.pdf",
+    "sha256": "55194308efdb044aa5449cf79db90aabe365369e01e19e9f4db8f7fc8ad7c924",
+    "size": 33381
+  },
+  {
+    "path": "合同/合同书.pdf",
+    "sha256": "e65f24fe7e330be750f38f0ca2fe59ccb77d7b2eadf709e2819a7bd7fcdc0de2",
+    "size": 345689
+  },
+  {
+    "path": "采购/招标与投标材料.pdf",
+    "sha256": "a4212222f61ab155d4ab5bc7c5bd426fdaaeb89162c80404700d074dd459ea49",
+    "size": 278363
+  },
+  {
+    "path": "预算/预算申报批复.pdf",
+    "sha256": "e02468e3c7084e4d90cdfcdd740abd1360fdbfc46b58bd7b3ba6de1edd0549e6",
+    "size": 271148
+  }
+]

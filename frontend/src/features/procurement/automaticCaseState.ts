@@ -9,13 +9,23 @@ export function caseHistoryLabel(value: { id: string; createdAt?: string; fileNa
 }
 
 const factLabels: Record<string, string> = {
-  documentType: '材料类型', projectName: '项目名称', projectNo: '项目编号', purchaserName: '采购单位',
+  documentType: '材料类型', projectName: '项目名称', projectNo: '项目编号', purchaserName: '采购单位', agencyName: '采购代理机构', packageName: '采购包',
   budgetAmount: '预算金额', ceilingAmount: '最高限价', supplierName: '供应商', quoteAmount: '报价总额',
   awardAmount: '中标金额', productDescription: '采购内容', itemName: '明细名称', quantity: '数量',
   unitPrice: '单价', lineAmount: '明细金额',
 };
 export function automaticFactLabel(type: string): string {
   return factLabels[type] || '材料信息';
+}
+export function automaticCheckTitle(code: string): string {
+  if (code.startsWith('IDENTITY_')) return automaticFactLabel(code.slice(9));
+  const titles: Record<string,string> = {
+    IDENTITY:'项目及参与单位', BUDGET_VS_AWARD:'预算、报价与成交金额', QUANTITY:'采购内容与数量', DATE_AND_PLAN:'采购节点与履约安排',
+    TECHNICAL_REQUIREMENTS:'采购需求与限制条件', SCORING_METHOD:'评审办法与评分依据', PAYMENT_CLARIFICATION:'付款、验收及澄清',
+    BUDGET_CONFLICT:'预算金额与适用范围', QUANTITY_CONFLICT:'数量与配置范围', QUOTE_BUDGET:'报价与预算',
+    QUOTE_LINE_ARITHMETIC:'报价明细核算', QUOTE_CONCENTRATION:'报价分布', AWARD_QUOTE_MISMATCH:'成交结果与供应商报价', PRICE_BASIS:'金额适用范围',
+  };
+  return titles[code] || '核对意见';
 }
 export function automaticCheckExplanation(check: { code: string; status: string; explanation: string }): string {
   if (check.code.startsWith('IDENTITY_')) {
@@ -28,7 +38,7 @@ export function automaticCheckExplanation(check: { code: string; status: string;
   if (check.code === 'QUOTE_BUDGET' && check.status === 'UNKNOWN') {
     return '本批材料尚不足以核实预算上限，已保留报价信息，本项不作是否超预算的结论。';
   }
-  return check.explanation;
+  return check.explanation.replace(/\bJava[ \t]+checks\b|系统\s*checks\b/g, '系统核算结果');
 }
 
 /** Omit empty filters: URLSearchParams otherwise sends the literal word undefined. */

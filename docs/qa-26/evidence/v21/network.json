@@ -1,0 +1,7 @@
+{
+  "model_configured": true,
+  "proxy_environment_present": false,
+  "tcp": "timeout",
+  "duration_ms": 5007,
+  "route_exists": true
+}

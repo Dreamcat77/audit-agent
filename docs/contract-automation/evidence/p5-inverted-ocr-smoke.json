@@ -1,0 +1,9 @@
+{
+  "synthetic": true,
+  "realOcr": true,
+  "seconds": 102.25,
+  "chars": 539,
+  "pages": 1,
+  "missingExpectedTokens": [],
+  "contractModelE2E": "NOT_EXECUTED_BY_THIS_SMOKE"
+}

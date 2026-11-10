@@ -1,0 +1,12 @@
+{
+  "previous": "/opt/audit-agent/releases/v19.material-20261029-r3",
+  "release": "/opt/audit-agent/releases/v20.material-20261029-r3",
+  "schemaChanged": false,
+  "status": "PASS",
+  "configurationPreserved": true,
+  "nginxPreserved": true,
+  "backendHealth": 200,
+  "aiHealth": 200,
+  "jar": "a399e6d875862309e14f878564da6f4a74848be18016a899cf28ae0514d9f102",
+  "index": "ebb5a5d08ecc5c8e42a1aa8f9784921472f7e2f41a1f01c942cce61ba1e6aee9"
+}

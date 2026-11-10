@@ -5,7 +5,7 @@ import java.util.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 @RestController @RequestMapping("/api/v1/budget/material-risk")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','FINANCE_REVIEWER')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','FINANCE_REVIEWER','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class BudgetMaterialRiskController {
     private final BudgetMaterialRiskService service;
     public BudgetMaterialRiskController(BudgetMaterialRiskService service){this.service=service;}

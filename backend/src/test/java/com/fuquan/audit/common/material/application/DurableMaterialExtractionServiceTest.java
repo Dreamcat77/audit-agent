@@ -14,6 +14,41 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 
 class DurableMaterialExtractionServiceTest {
+    @Test void procurementCanReadOnlyProvenAcknowledgmentsAfterLaterUnitFailsWithoutRetryOrLedgerMutation() {
+        var ledger=new InMemoryMaterialExtractionLedger();var gateway=new Gateway(){
+            @Override public Reply extractUnit(String kind,String id,String sha,List<Segment> parts,String policy,int limit,long time){
+                if(calls==1){calls++;throw new IllegalStateException("invalid later JSON");}
+                return super.extractUnit(kind,id,sha,parts,policy,limit,time);
+            }};
+        var service=service(ledger,gateway);
+        assertThatThrownBy(()->service.extract("PROCUREMENT_AUTO",ID,SHA,source)).isInstanceOf(MaterialExtractionUnknown.class);
+        var before=ledger.find(operation("PROCUREMENT_AUTO")).orElseThrow();
+        var known=service.acknowledgedResult("PROCUREMENT_AUTO",ID,SHA,source).orElseThrow();
+        assertThat(known.rows()).hasSize(1);assertThat(known.rows().get(0).facts().get(0).locator()).isEqualTo("p1");
+        assertThat(service(ledger,new Gateway()).acknowledgedResult("PROCUREMENT_AUTO",ID,SHA,source)).contains(known);
+        assertThat(ledger.find(before.id())).contains(before);assertThat(gateway.calls).isEqualTo(2);
+        assertThat(service.acknowledgedResult("BUDGET",ID,SHA,source)).isEmpty();
+        assertThatThrownBy(()->service.acknowledgedResult("PROCUREMENT_AUTO",ID,"c".repeat(64),source)).hasMessageContaining("SOURCE_DRIFT");
+    }
+    @Test void partialReadRejectsForeignEvidenceAndNeverExposesActiveOrPurgedTimeoutCandidates() {
+        for(String state:List.of("CALLING","UNKNOWN")) {
+            var ledger=new InMemoryMaterialExtractionLedger();var gateway=new Gateway(){
+                @Override public Reply extractUnit(String kind,String id,String sha,List<Segment> parts,String policy,int limit,long time){
+                    if(calls==1){calls++;throw new IllegalStateException("lost");}
+                    return super.extractUnit(kind,id,sha,parts,policy,limit,time);
+                }};
+            assertThatThrownBy(()->service(ledger,gateway).extract("PROCUREMENT_AUTO",ID,SHA,source));
+            var saved=ledger.find(operation("PROCUREMENT_AUTO")).orElseThrow();
+            var altered=new InMemoryMaterialExtractionLedger();
+            altered.insert(new Entry(saved.id(),saved.sourceHash(),saved.policyHash(),saved.unitCount(),saved.nextUnit(),saved.calls(),saved.usedMillis(),state,
+                    "token",saved.updatedAt(),saved.resultsJson(),state.equals("UNKNOWN")?"MATERIAL_CALL_TIMEOUT":null));
+            assertThat(service(altered,gateway).acknowledgedResult("PROCUREMENT_AUTO",ID,SHA,source)).isEmpty();
+            var corrupt=new InMemoryMaterialExtractionLedger();
+            corrupt.insert(new Entry(saved.id(),saved.sourceHash(),saved.policyHash(),saved.unitCount(),saved.nextUnit(),saved.calls(),saved.usedMillis(),"UNKNOWN",null,
+                    saved.updatedAt(),saved.resultsJson().replace("p1","foreign"),"UNACKNOWLEDGED_CALL"));
+            assertThatThrownBy(()->service(corrupt,gateway).acknowledgedResult("PROCUREMENT_AUTO",ID,SHA,source)).hasMessageContaining("FOREIGN_UNIT_SOURCE");
+        }
+    }
     @Test void dm8GenericUniqueViolationIsRecoveredOnlyWhenWinningRecordCanBeProven() {
         var winner=new InMemoryMaterialExtractionLedger(){@Override public synchronized void insert(Entry e){
             super.insert(e);throw new org.springframework.dao.DataIntegrityViolationException("synthetic duplicate");}};

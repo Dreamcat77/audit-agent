@@ -1,0 +1,96 @@
+{
+  "aliases": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 8,
+    "findings": 0
+  },
+  "auxiliary": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 12,
+    "findings": 1
+  },
+  "blank-party": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 7,
+    "findings": 2
+  },
+  "dates": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 8,
+    "findings": 2
+  },
+  "local-prices": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 11,
+    "findings": 2
+  },
+  "normal": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 16,
+    "findings": 0
+  },
+  "placeholders": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 6,
+    "findings": 3
+  },
+  "reference": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 12,
+    "findings": 0
+  },
+  "repeat-a": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 8,
+    "findings": 0
+  },
+  "repeat-b": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 8,
+    "findings": 0
+  },
+  "repeat-c": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 8,
+    "findings": 0
+  },
+  "scan12": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 9,
+    "findings": 1
+  },
+  "scan4": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 8,
+    "findings": 0
+  },
+  "word-html": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 8,
+    "findings": 0
+  },
+  "word-real": {
+    "status": "PASS",
+    "categories": 8,
+    "facts": 5,
+    "findings": 3
+  },
+  "repeat-stability": {
+    "status": "PASS",
+    "runs": 3
+  }
+}

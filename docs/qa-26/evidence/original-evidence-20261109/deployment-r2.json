@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/releases/evidence-original-20261109-r2",
+  "previous": "/opt/audit-agent/releases/evidence-original-20261109-r1",
+  "jarSha256": "d840b3e23246670ea1c7c3e6259da79bc99e4cc06e89d5c988671b71d2abf2d8",
+  "indexSha256": "2bda2d8dc1169828d962f056ed3c8d10d25b9ddb5877798f2f14efbaa4453242",
+  "schemaChanged": false,
+  "chrome109Build": true,
+  "configsPreserved": true,
+  "contractReview": "PENDING_REAL_MODEL_E2E"
+}

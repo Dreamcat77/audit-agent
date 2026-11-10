@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+from collections import deque
 from concurrent.futures import ThreadPoolExecutor
 import json
 import logging
@@ -25,7 +26,7 @@ _COMMAND_LIMIT = 8192
 _MAX_RELAYED_STAGES = 2048  # bounded for 1024 pages plus initialization/request events
 _STAGES = frozenset({"OCR_INITIALIZATION_WAIT", "OCR_INITIALIZATION_START", "OCR_INITIALIZATION_END",
                      "OCR_PREDICTION_WAIT", "OCR_PREDICT_START", "OCR_PREDICT_END",
-                     "OCR_ORIENTATION_SELECTED", "OCR_ACCURACY_FALLBACK"})
+                     "OCR_ORIENTATION_SELECTED", "OCR_ACCURACY_FALLBACK", "OCR_PAGE_GEOMETRY"})
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -62,7 +63,7 @@ class _StageRelay(logging.Handler):
         fields = {key: value for key, value in fields.items()
                   if key in {"stage", "outcome", "duration_ms", "page_count", "rotation_degrees",
                              "deskew_millidegrees", "input_chars", "orientation_candidates",
-                             "orientation_quality_milli", "classifier_confidence_milli", "ocr_page_count"}}
+                             "orientation_quality_milli", "classifier_confidence_milli", "ocr_page_count", "item_count", "validation_error_count"}}
         self.pipe.send_bytes(_encoded({"kind": "STAGE", "event": record.args[0], "fields": fields}, _PACKET))
 
 
@@ -144,9 +145,13 @@ def _result(payload: bytes) -> OcrExtraction:
         raise OcrPredictionInvalid("OCR worker duration invalid")
     pages = []
     for page in value["pages"]:
-        if not isinstance(page, dict) or set(page) != {"page_num", "text", "confidence"} or not isinstance(page["text"], str) or not isinstance(page["page_num"], int) or isinstance(page["page_num"], bool):
+        if not isinstance(page, dict) or not {"page_num", "text", "confidence"} <= set(page) or set(page)-{"page_num", "text", "confidence", "regions", "width", "height"} or not isinstance(page["text"], str) or not isinstance(page["page_num"], int) or isinstance(page["page_num"], bool):
             raise OcrPredictionInvalid("OCR worker page invalid")
-        pages.append(OcrPage(**page))
+        from audit_ai.ocr.geometry import OcrRegion
+        regions=page.get("regions",[])
+        if not isinstance(regions,list) or len(regions)>10000:
+            raise OcrPredictionInvalid("OCR worker regions invalid")
+        pages.append(OcrPage(**{**page,"regions":tuple(OcrRegion(**r) for r in regions)}))
     return OcrExtraction(**{**value, "pages": tuple(pages)})
 
 
@@ -334,7 +339,91 @@ class LinuxChildOwner:
             self.child.kill()
 
 
+class ProcessOcrPool(OcrPort):
+    """Bounded independent pipelines; never shares a Paddle instance across threads.
+
+    An uncertain/failed slot is not replaced or replayed. Existing requests drain,
+    new requests stop until service replacement. close() waits for file owners.
+    """
+
+    def __init__(self, settings: Settings, *, worker_factory=ProcessOcrAdapter,
+                 wait_seconds: float = 1800, resource_reader=None) -> None:
+        if not math.isfinite(wait_seconds) or wait_seconds <= 0:
+            raise ValueError("OCR pool wait must be finite and positive")
+        from audit_ai.ocr.resources import capacity, linux_resources
+        resources = (resource_reader or linux_resources)()
+        self.worker_count = capacity(settings.ocr_worker_processes, *resources,
+                                     settings.ocr_memory_budget_mb, settings.ocr_memory_reserve_mb,
+                                     settings.ocr_worker_memory_mb)
+        self._workers = []
+        try:
+            for _ in range(self.worker_count):
+                self._workers.append(worker_factory(settings))
+        except BaseException:
+            for worker in self._workers:
+                worker.close()
+            raise
+        self._available = list(self._workers)
+        self._condition = threading.Condition()
+        self._closed = self._broken = False
+        self._active = 0
+        self._wait_seconds = wait_seconds
+        self._tickets = deque()
+        log_event(_LOGGER,"OCR_POOL_CONFIGURED",stage="OCR",outcome="READY",
+                  worker_count=self.worker_count,requested_workers=settings.ocr_worker_processes,
+                  memory_budget_mb=settings.ocr_memory_budget_mb)
+
+    def extract(self, path: Path) -> OcrExtraction:
+        deadline = time.monotonic() + self._wait_seconds
+        with self._condition:
+            ticket=object();self._tickets.append(ticket)
+            try:
+                while not self._closed and not self._broken:
+                    if self._tickets[0] is ticket and self._available:
+                        break
+                    left = deadline - time.monotonic()
+                    if left <= 0:
+                        raise OcrRuntimeUnavailable("OCR pool capacity deadline before dispatch")
+                    self._condition.wait(left)
+                if self._closed or self._broken:
+                    raise OcrRuntimeUnavailable("OCR pool is closed or outcome unknown")
+                worker = self._available.pop(0)
+                self._active += 1
+            finally:
+                self._tickets.remove(ticket);self._condition.notify_all()
+        try:
+            return worker.extract(path)
+        except BaseException:
+            with self._condition:
+                self._broken = True
+                self._condition.notify_all()
+            raise
+        finally:
+            with self._condition:
+                self._active -= 1
+                self._available.append(worker)
+                self._condition.notify_all()
+
+    def close(self) -> None:
+        with self._condition:
+            self._closed = True
+            self._condition.notify_all()
+            while self._active:
+                self._condition.wait()
+        first_error = None
+        for worker in self._workers:
+            try:
+                worker.close()
+            except BaseException as error:
+                if first_error is None:
+                    first_error = error
+        if first_error is not None:
+            raise first_error
+
+
 def create_ocr_port(settings: Settings) -> OcrPort:
     # Linux29 retains its independently verified legacy runtime/configuration.
     # No unproved cross-platform parent-death fallback, no Windows in-process retry.
+    if settings.ocr_worker_processes > 1:
+        return ProcessOcrPool(settings)
     return ProcessOcrAdapter(settings) if (sys.platform == "win32" or settings.ocr_process_isolation) else PaddleOcrAdapter(settings)

@@ -1,0 +1,16 @@
+{
+  "scenario": "award-conflict",
+  "caseId": "1c00dcc2-1b2a-3140-a7ee-b9a043915d99",
+  "status": "PARTIAL",
+  "documents": 2,
+  "facts": 22,
+  "clauses": 8,
+  "risks": 2,
+  "followUps": 3,
+  "evidenceChecks": 50,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "freshVerifier": true
+}

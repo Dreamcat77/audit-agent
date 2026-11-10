@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/releases/scan-20261030-r1",
+  "runningJavaAndAiReleaseVerified": true,
+  "jarSha256": "1a0d7d64137ca84170d15ab4fa5ad4afeac988c59bf6f5d97a1aa593cea2be43",
+  "aiSourceHashesVerified": true,
+  "httpOcrRecovery": "JAVA_HTTP_OCR_RECOVERY=PASS pages=4 calls=4 repeatedAcknowledgedPages=0 budget=true quotation=true award=true contract=true uppercaseAmounts=true dates=true",
+  "httpOcrTestSeconds": 48.14,
+  "healthyRequestsDuringOcr": 48,
+  "maxHealthResponseMs": 7.53,
+  "realModel": "NOT_VERIFIED_CONNECT_TIMEOUT",
+  "frontendChanged": false,
+  "schemaChanged": false,
+  "configPreserved": true
+}

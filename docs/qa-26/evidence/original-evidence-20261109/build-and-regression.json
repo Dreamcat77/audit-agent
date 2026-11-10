@@ -1,0 +1,41 @@
+{
+  "release": "evidence-original-20261109-r2",
+  "checks": {
+    "backend": {
+      "tests": 3642,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 24
+    },
+    "python": {
+      "passed": 2229,
+      "skipped": 17,
+      "subtestsPassed": 43
+    },
+    "geometry": {
+      "passed": 49
+    },
+    "focused": {
+      "passed": 22,
+      "skipped": 2
+    },
+    "browser": {
+      "passed": 10
+    },
+    "frontend": {
+      "status": "PASS",
+      "chrome109Colors": 220
+    }
+  },
+  "logHashes": {
+    "backend": "2e9c5530479aae5229b84cfc900c9defc230ad4d9f06e5637b2a97c1c698f2c7",
+    "python": "1570ec7bf80ef26d8367c189e6f06eaad77fa924828005692c893e0c4940ffe9",
+    "geometry": "06294a4715f65821d16787d872077106d46af61d698787b02836c08cfecc22c3",
+    "focused": "4ff4fbc938bbde58eeb696af932346d39f9e5a74f6bb6bb4a61ddb71eae21766",
+    "browser": "4b40ca207b6fad7a66b7e189e74755d81fb54f52e8e874a9af633aceeb0bde5d",
+    "frontend": "f64a8a243273c2d8adc0c68049070c8081b2c8fc54c79d6de769ae1592739cf4"
+  },
+  "gitCommitted": false,
+  "customerPackageCreated": false,
+  "customerARM64": "NOT VERIFIED"
+}

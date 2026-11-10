@@ -1,0 +1,20 @@
+{
+  "samples": [
+    {
+      "workers": 1,
+      "seconds": 430.334,
+      "peakWorkerRssBytes": 3086344192
+    },
+    {
+      "workers": 2,
+      "seconds": 289.44,
+      "peakWorkerRssBytes": 4711776256
+    },
+    {
+      "workers": 4,
+      "seconds": 215.795,
+      "peakWorkerRssBytes": 7181520896
+    }
+  ],
+  "textIdentical": true
+}

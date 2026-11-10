@@ -17,47 +17,40 @@ public final class CaseFactPolicy {
                 value.documents().stream().flatMap(d->d.segments().stream()).map(MaterialFieldAiPort.Segment::text).toList(),
                 "采购材料分析 " + value.createdAt().atZone(java.time.ZoneId.systemDefault()).toLocalDate());
     }
-    static final Set<String> TYPES=Set.of("documentType","projectName","projectNo","purchaserName",
+    static final Set<String> TYPES=Set.of("documentType","projectName","projectNo","purchaserName","agencyName","packageName",
             "budgetAmount","ceilingAmount","supplierName","quoteAmount","awardAmount","productDescription",
             "itemName","quantity","unitPrice","lineAmount");
     public static List<Fact> validate(Document doc,MaterialFieldAiPort.Result reply) {
         if(reply==null||reply.rows()==null||reply.model()==null||reply.promptVersion()==null)throw new IllegalArgumentException("invalid extraction");
         var out=new LinkedHashSet<Fact>();
+        var index=new ProcurementMaterialSemantics.Index(doc);
         if(reply.rows().size()>10000)throw new IllegalArgumentException("extraction limit");
         for(var row:reply.rows())for(var f:row.facts()) {
             if(f==null||!TYPES.contains(f.field())||f.value()==null||f.value().isBlank()||f.value().length()>2000
                     ||f.excerpt()==null||f.excerpt().isBlank()||f.excerpt().length()>2400||f.locator()==null)continue;
             boolean grounded=f.excerpt().contains(f.value())&&doc.segments().stream().anyMatch(s->s.locator().equals(f.locator())&&s.text().contains(f.excerpt()));
             boolean amount=f.field().endsWith("Amount")||f.field().equals("unitPrice");
-            // A bare table number cannot silently inherit yuan when the source uses larger units.
-            boolean unitProven=f.value().matches("(?s).*[元圆圓角分万萬亿億千仟币].*")
-                    ||doc.segments().stream().noneMatch(s->s.text().matches("(?s).*(万元|萬元|亿元|億元|千元).*"));
-            boolean typed=!amount||unitProven&&RmbAmountParser.parse(f.value()).isPresent();
-            boolean role=switch(f.field()) {
-                case "budgetAmount" -> boundRole(f,"(?:预算(?:总金额|金额|总额|价|上限|控制价)?|经费(?:控制上限|金额|总额)?|批复(?:金额|控制数|总额))");
-                case "quoteAmount" -> {
-                    var explicit=com.fuquan.audit.procurement.application.ProcurementBidQuotationExtractor.extract(f.excerpt());
-                    var parsed=RmbAmountParser.parse(f.value());
-                    yield explicit!=null&&parsed.isPresent()&&explicit.compareTo(parsed.get())==0;
-                }
-                case "awardAmount" -> boundRole(f,"(?:中标|成交)(?:金额|价|价格|总价|总额)");
-                case "ceilingAmount" -> boundRole(f,"(?:最高(?:投标|响应|采购)?限价|投标最高限价|预算控制价|经费控制上限|采购控制价)");
-                default -> true;
-            };
-            out.add(new Fact(row.rowKey(),f.field(),f.value(),amount?"MONEY":f.field().equals("quantity")?"DECIMAL":"TEXT",
-                    f.locator(),f.excerpt(),grounded&&typed&&role?"SOURCE_VERIFIED":"UNVERIFIED",reply.model(),reply.promptVersion()));
+            boolean typed=!amount||ProcurementMaterialSemantics.money(doc,f.value(),f.excerpt(),f.locator()).isPresent();
+            boolean role=ProcurementMaterialSemantics.amountRole(f.field(),f.value(),f.excerpt(),f.subjectScope(),f.amountScope())
+                    &&ProcurementMaterialSemantics.compatibleTableRole(doc,f.field(),f.excerpt(),f.locator());
+            String excerpt=amount&&grounded&&typed?ProcurementMaterialSemantics.amountExcerpt(doc,f.excerpt(),f.locator()):f.excerpt();
+            var candidate=new Fact(row.rowKey(),f.field(),f.value(),amount?"MONEY":f.field().equals("quantity")?"DECIMAL":"TEXT",
+                    f.locator(),excerpt,grounded&&typed&&role?"SOURCE_VERIFIED":"UNVERIFIED",reply.model(),reply.promptVersion(),f.subjectScope(),f.amountScope());
+            ProcurementMaterialSemantics.project(doc,candidate,index).ifPresent(out::add);
             if(out.size()>10000)throw new IllegalArgumentException("fact limit");
         }
         return List.copyOf(out);
     }
-    private static boolean boundRole(MaterialFieldAiPort.Fact fact,String role) {
-        return java.util.regex.Pattern.compile(role+"(?:人民币|RMB|CNY|[¥￥\\s:：为是()（）])*"
-                +java.util.regex.Pattern.quote(fact.value())+"(?![0-9.,，零壹贰叁肆伍陆柒捌玖拾佰仟万萬亿億千])").matcher(fact.excerpt()).find();
+    static List<Fact> facts(Document d,String type){
+        var index=new ProcurementMaterialSemantics.Index(d);
+        return d.facts().stream().filter(f->f.verification().equals("SOURCE_VERIFIED"))
+                .map(f->ProcurementMaterialSemantics.project(d,f,index)).flatMap(Optional::stream).filter(f->f.type().equals(type)).distinct().toList();
     }
-    static List<Fact> facts(Document d,String type){return d.facts().stream().filter(f->f.type().equals(type)&&f.verification().equals("SOURCE_VERIFIED")).toList();}
-    static String scalar(Document d,String type){var values=facts(d,type).stream().map(Fact::value).map(String::strip).distinct().toList();return values.size()==1?values.get(0):null;}
+    static List<Fact> totals(Document d,String type){return facts(d,type).stream().filter(ProcurementMaterialSemantics::total).toList();}
+    static String scalar(Document d,String type){var values=facts(d,type).stream().map(Fact::value)
+        .map(v->Set.of("supplierName","purchaserName","agencyName").contains(type)?ProcurementMaterialSemantics.key(v):v.strip()).distinct().toList();return values.size()==1?values.get(0):null;}
     static BigDecimal amount(Document d,String type) {
-        var values=new TreeSet<BigDecimal>();facts(d,type).forEach(f->RmbAmountParser.parse(f.value()).ifPresent(values::add));
+        var values=new TreeSet<BigDecimal>();totals(d,type).forEach(f->ProcurementMaterialSemantics.money(d,f).ifPresent(values::add));
         return values.size()==1?values.first():null;
     }
     static boolean quoteDocument(Document d) {
@@ -83,44 +76,40 @@ public final class CaseFactPolicy {
             var role=scalar(d,"documentType");
             // The source may be a tender, demand or approval document. The fact's
             // verbatim budget role is validated above; a filename is not authority.
-            facts(d,"budgetAmount").forEach(f->RmbAmountParser.parse(f.value()).ifPresent(budgets::add));
-            facts(d,"ceilingAmount").forEach(f->RmbAmountParser.parse(f.value()).ifPresent(ceilings::add));
-            if(role!=null&&(role.contains("中标")||role.contains("成交")))facts(d,"awardAmount").forEach(f->RmbAmountParser.parse(f.value()).ifPresent(awards::add));
+            totals(d,"budgetAmount").forEach(f->ProcurementMaterialSemantics.money(d,f).ifPresent(budgets::add));
+            totals(d,"ceilingAmount").forEach(f->ProcurementMaterialSemantics.money(d,f).ifPresent(ceilings::add));
+            if(role!=null&&(role.contains("中标")||role.contains("成交")))totals(d,"awardAmount").forEach(f->ProcurementMaterialSemantics.money(d,f).ifPresent(awards::add));
             if(!quoteDocument(d))continue;
             String supplier=scalar(d,"supplierName");BigDecimal total=amount(d,"quoteAmount");
             if(supplier==null||total==null||total.signum()<=0){notices.add(d.name()+"：供应商或报价总额缺失/冲突，未参与计算");continue;}
             var lines=new ArrayList<Line>();
             var grouped=new LinkedHashMap<String,List<Fact>>();
-            for(var f:d.facts())if(f.verification().equals("SOURCE_VERIFIED")&&Set.of("itemName","quantity","unitPrice","lineAmount").contains(f.type()))grouped.computeIfAbsent(f.row(),x->new ArrayList<>()).add(f);
-            boolean valid=true;
+            for(String type:List.of("itemName","quantity","unitPrice","lineAmount"))for(var f:facts(d,type))grouped.computeIfAbsent(f.row(),x->new ArrayList<>()).add(f);
+            boolean valid=true,complete=true;
             for(var row:grouped.values()) {
                 String item=one(row,"itemName"),q=one(row,"quantity"),price=one(row,"unitPrice"),sum=one(row,"lineAmount");
-                if(item==null||q==null||price==null||sum==null){valid=false;continue;}
+                if(item==null||q==null||price==null||sum==null){complete=false;continue;}
                 try {
-                    var qty=com.fuquan.audit.common.domain.ChineseNumber.parse(q.strip().replaceFirst("(?:台|套|项|个|份|件|批)$","")).orElseThrow().setScale(4,RoundingMode.UNNECESSARY);var unit=RmbAmountParser.parse(price).orElseThrow();var line=RmbAmountParser.parse(sum).orElseThrow();
-                    if(qty.signum()<=0||qty.precision()>18) {valid=false;continue;}
+                    var qty=com.fuquan.audit.common.domain.ChineseNumber.parse(q.strip().replaceFirst("(?:台|套|项|个|份|件|批)$","")).orElseThrow().setScale(4,RoundingMode.UNNECESSARY);
+                    var unit=row.stream().filter(f->f.type().equals("unitPrice")).map(f->ProcurementMaterialSemantics.money(d,f)).flatMap(Optional::stream).findFirst().orElseThrow();
+                    var line=row.stream().filter(f->f.type().equals("lineAmount")).map(f->ProcurementMaterialSemantics.money(d,f)).flatMap(Optional::stream).findFirst().orElseThrow();
+                    if(qty.signum()<=0||qty.precision()>18) {complete=false;continue;}
                     if(qty.multiply(unit).compareTo(line)!=0)valid=false;
                     lines.add(new Line(item,qty,unit,line,row.get(0).locator()));
-                }catch(RuntimeException e){valid=false;}
+                }catch(RuntimeException e){complete=false;}
             }
-            String lineStatus=lines.isEmpty()?"DATA_INSUFFICIENT":valid&&lines.stream().map(Line::amount).reduce(BigDecimal.ZERO,BigDecimal::add).compareTo(total)==0?"VERIFIED":"CONFLICT";
+            String lineStatus=!valid?"CONFLICT":lines.isEmpty()||!complete?"DATA_INSUFFICIENT":lines.stream().map(Line::amount).reduce(BigDecimal.ZERO,BigDecimal::add).compareTo(total)==0?"VERIFIED":"CONFLICT";
             if(!lineStatus.equals("VERIFIED"))notices.add(d.name()+"：明细核算"+lineStatus+"，总价来自原文，未用明细填造总价");
             offers.add(new Offer(supplier,total,d.id(),lines,lineStatus));
         }
         boolean duplicate=offers.stream().map(Offer::supplier).distinct().count()!=offers.size();
         if(duplicate)notices.add("同一供应商存在多份报价，未擅自选择有效版本");
-        if(identities.size()>1)notices.add("材料项目编号冲突，未跨项目关联报价与预算");
         BigDecimal budget=budgets.size()==1?budgets.first():null;
         BigDecimal ceiling=ceilings.size()==1?ceilings.first():null;
-        if(identities.size()>1||identities.isEmpty()&&projectNames.size()>1) {
-            budget=null;
-            ceiling=null;
-            notices.add("本批存在不同项目，已保留各份报价，未跨项目套用预算金额。");
-        }
         if(budget==null)notices.add("材料中的预算金额不足或冲突，超预算检查未执行；已识别报价仍保留");
         if(offers.size()<3)notices.add("可靠供应商报价少于三家，三方询比价数据不足");
         ProcurementQuoteCheck calculation=null;
-        if(!duplicate&&identities.size()<=1&&offers.size()>=3&&budget!=null) {
+        if(!duplicate&&offers.size()>=3&&budget!=null) {
             var input=new ArrayList<ProcurementQuoteCheck.QuoteInput>();
             for(var o:offers)input.add(new ProcurementQuoteCheck.QuoteInput(input.size()+1,o.supplier(),o.amount(),null));
             calculation=ProcurementQuoteCheck.analyze(caseId.toString(),budget,input);

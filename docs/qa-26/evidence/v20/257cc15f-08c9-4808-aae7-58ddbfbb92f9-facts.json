@@ -1,0 +1,76 @@
+{
+  "fileName": "报价承诺函.docx",
+  "sha256": "4bd85566a1b600aeb436eff781ffe82e217054a0e683964e2b3bf055a7d3aeb1",
+  "segments": [
+    {
+      "locator": "docx/body/node:1/part:1",
+      "text": "合成测试材料，仅用于功能验收。\n"
+    },
+    {
+      "locator": "docx/body/node:2/part:2",
+      "text": "项目名称：澄湾阅览室终端更新项目\n"
+    },
+    {
+      "locator": "docx/body/node:3/part:3",
+      "text": "项目编号：SYN-V20-P01\n"
+    },
+    {
+      "locator": "docx/body/node:4/part:4",
+      "text": "供应商名称：澄湾合成终端有限公司\n"
+    },
+    {
+      "locator": "docx/body/node:5/part:5",
+      "text": "本公司承诺完成全部货物供货及安装，含税总报价为人民币叁拾伍万伍仟元整。\n"
+    },
+    {
+      "locator": "docx/body/node:6/part:6",
+      "text": "保证金5000元单列，不计入上述报价。\n"
+    }
+  ],
+  "facts": [
+    {
+      "row": "0:0",
+      "type": "projectName",
+      "value": "澄湾阅览室终端更新项目",
+      "dataType": "TEXT",
+      "locator": "docx/body/node:2/part:2",
+      "excerpt": "项目名称：澄湾阅览室终端更新项目",
+      "verification": "SOURCE_VERIFIED",
+      "model": "audit-qwen-27b-16k:latest",
+      "extractionVersion": "procurement-auto-fields-v3"
+    },
+    {
+      "row": "0:1",
+      "type": "projectNo",
+      "value": "SYN-V20-P01",
+      "dataType": "TEXT",
+      "locator": "docx/body/node:3/part:3",
+      "excerpt": "项目编号：SYN-V20-P01",
+      "verification": "SOURCE_VERIFIED",
+      "model": "audit-qwen-27b-16k:latest",
+      "extractionVersion": "procurement-auto-fields-v3"
+    },
+    {
+      "row": "0:2",
+      "type": "supplierName",
+      "value": "澄湾合成终端有限公司",
+      "dataType": "TEXT",
+      "locator": "docx/body/node:4/part:4",
+      "excerpt": "供应商名称：澄湾合成终端有限公司",
+      "verification": "SOURCE_VERIFIED",
+      "model": "audit-qwen-27b-16k:latest",
+      "extractionVersion": "procurement-auto-fields-v3"
+    },
+    {
+      "row": "0:3",
+      "type": "quoteAmount",
+      "value": "人民币叁拾伍万伍仟元整",
+      "dataType": "MONEY",
+      "locator": "docx/body/node:5/part:5",
+      "excerpt": "含税总报价为人民币叁拾伍万伍仟元整",
+      "verification": "SOURCE_VERIFIED",
+      "model": "audit-qwen-27b-16k:latest",
+      "extractionVersion": "procurement-auto-fields-v3"
+    }
+  ]
+}

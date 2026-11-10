@@ -1,0 +1,69 @@
+{
+  "id": "e04588af-98dd-3cb9-8416-9ab2b85eb9d5",
+  "status": "PARTIAL",
+  "categories": [
+    {
+      "id": "QUANTITATIVE",
+      "status": "DATA_INSUFFICIENT",
+      "items": 0
+    },
+    {
+      "id": "DRAFT_STRUCTURE",
+      "status": "AVAILABLE",
+      "items": 1
+    },
+    {
+      "id": "BREACH",
+      "status": "DATA_INSUFFICIENT",
+      "items": 0
+    },
+    {
+      "id": "TERM",
+      "status": "AVAILABLE",
+      "items": 3
+    },
+    {
+      "id": "PARTY_QUALIFICATION",
+      "status": "AVAILABLE",
+      "items": 2
+    },
+    {
+      "id": "ATTACHMENT_COMPLETENESS",
+      "status": "DATA_INSUFFICIENT",
+      "items": 0
+    },
+    {
+      "id": "EFFECTIVENESS_COPIES",
+      "status": "AVAILABLE",
+      "items": 1
+    },
+    {
+      "id": "CLAUSE_RISK",
+      "status": "AVAILABLE",
+      "items": 2
+    }
+  ],
+  "formalContracts": 0,
+  "checks": [
+    [
+      "F02_AMOUNT_WORDS_MATCH",
+      "NOT_EVALUATED"
+    ],
+    [
+      "F02_LINE_ITEM_ARITHMETIC",
+      "NOT_EVALUATED"
+    ],
+    [
+      "F02_LINE_SUM_MATCH",
+      "NOT_EVALUATED"
+    ],
+    [
+      "F02_AWARD_AMOUNT_MATCH",
+      "NOT_EVALUATED"
+    ],
+    [
+      "F02_AWARD_SUPPLIER_MATCH",
+      "NOT_EVALUATED"
+    ]
+  ]
+}

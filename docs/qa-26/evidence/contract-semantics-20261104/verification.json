@@ -1,0 +1,218 @@
+{
+  "status": "PASS",
+  "environment": "26 default HTTP",
+  "browser": "109.0.5412.0",
+  "oldStepsUnchanged": true,
+  "oldReportFacts": 5,
+  "categories": 8,
+  "oldClauseRiskItems": 0,
+  "results": [
+    {
+      "scenario": "bid-history",
+      "status": "COMPLETED",
+      "files": 1,
+      "factTypes": [
+        "PROJECT_NO",
+        "BID_AMOUNT",
+        "PROJECT_NAME",
+        "PURCHASER",
+        "AGENCY",
+        "BIDDER"
+      ],
+      "clauses": 2,
+      "risks": 0,
+      "categories": [
+        {
+          "id": "QUANTITATIVE",
+          "items": 1
+        },
+        {
+          "id": "DRAFT_STRUCTURE",
+          "items": 0
+        },
+        {
+          "id": "BREACH",
+          "items": 0
+        },
+        {
+          "id": "TERM",
+          "items": 1
+        },
+        {
+          "id": "PARTY_QUALIFICATION",
+          "items": 3
+        },
+        {
+          "id": "ATTACHMENT_COMPLETENESS",
+          "items": 0
+        },
+        {
+          "id": "EFFECTIVENESS_COPIES",
+          "items": 0
+        },
+        {
+          "id": "CLAUSE_RISK",
+          "items": 1
+        }
+      ],
+      "warningCodes": []
+    },
+    {
+      "scenario": "joint-contract",
+      "status": "PARTIAL",
+      "files": 1,
+      "factTypes": [
+        "CONTRACT_NAME",
+        "CONTRACT_NO",
+        "PARTY_B",
+        "AMOUNT_WORDS",
+        "PROJECT_NAME",
+        "PARTY_A",
+        "TOTAL_AMOUNT",
+        "SIGN_DATE"
+      ],
+      "clauses": 7,
+      "risks": 0,
+      "categories": [
+        {
+          "id": "QUANTITATIVE",
+          "items": 3
+        },
+        {
+          "id": "DRAFT_STRUCTURE",
+          "items": 2
+        },
+        {
+          "id": "BREACH",
+          "items": 2
+        },
+        {
+          "id": "TERM",
+          "items": 3
+        },
+        {
+          "id": "PARTY_QUALIFICATION",
+          "items": 3
+        },
+        {
+          "id": "ATTACHMENT_COMPLETENESS",
+          "items": 0
+        },
+        {
+          "id": "EFFECTIVENESS_COPIES",
+          "items": 2
+        },
+        {
+          "id": "CLAUSE_RISK",
+          "items": 3
+        }
+      ],
+      "warningCodes": []
+    },
+    {
+      "scenario": "current-contract",
+      "status": "PARTIAL",
+      "files": 1,
+      "factTypes": [
+        "CONTRACT_NAME",
+        "PARTY_B",
+        "AMOUNT_WORDS",
+        "TOTAL_AMOUNT",
+        "TAX_BASIS"
+      ],
+      "clauses": 19,
+      "risks": 2,
+      "categories": [
+        {
+          "id": "QUANTITATIVE",
+          "items": 8
+        },
+        {
+          "id": "DRAFT_STRUCTURE",
+          "items": 1
+        },
+        {
+          "id": "BREACH",
+          "items": 5
+        },
+        {
+          "id": "TERM",
+          "items": 6
+        },
+        {
+          "id": "PARTY_QUALIFICATION",
+          "items": 2
+        },
+        {
+          "id": "ATTACHMENT_COMPLETENESS",
+          "items": 1
+        },
+        {
+          "id": "EFFECTIVENESS_COPIES",
+          "items": 2
+        },
+        {
+          "id": "CLAUSE_RISK",
+          "items": 8
+        }
+      ],
+      "warningCodes": [
+        "DATE_FORMAT_COMPLETENESS",
+        "PARTY_A_NAME_COMPLETENESS"
+      ],
+      "hasFabricatedPartyA": false
+    }
+  ],
+  "layouts": [
+    {
+      "width": 1440,
+      "noOverflow": true
+    },
+    {
+      "width": 1024,
+      "noOverflow": true
+    }
+  ],
+  "pageErrors": [],
+  "deployment": {
+    "status": "PASS",
+    "release": "/opt/audit-agent/releases/contract-semantics-20261104-r4",
+    "previous": "/opt/audit-agent/releases/contract-semantics-20261104-r3",
+    "jarSha256": "c9f3e9a47ddd5ff9a97ef0da0c6f5e4ff95fc401796f1d319e25d39dc1edbd2c",
+    "indexSha256": "6d18781c4431ee0a22a408d0ed42eca6fd13946929f860e0556a052901d634c7",
+    "schemaChanged": false,
+    "frontendChanged": true,
+    "existingConfigPreserved": true,
+    "ocrConcurrencyCap": 4,
+    "perProcessThreads": 1,
+    "mkldnn": false
+  },
+  "build": {
+    "sourceManifestMatches": true,
+    "applicationFilesMatchFinalCleanBuild": true,
+    "applicationFiles": 1927,
+    "deployedJarSha256": "c9f3e9a47ddd5ff9a97ef0da0c6f5e4ff95fc401796f1d319e25d39dc1edbd2c",
+    "fullVerify": {
+      "tests": 3511,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 24
+    }
+  },
+  "ocr": {
+    "httpStatus": 200,
+    "seconds": 149.75,
+    "characters": 676,
+    "pages": 1,
+    "expectedUppercaseGlyphPresent": true,
+    "suspectUppercaseGlyphPresent": false
+  },
+  "privateArtifactsGitIgnored": true,
+  "pythonLinux": {
+    "passed": 89,
+    "skipped": 0,
+    "warnings": 1
+  },
+  "fullLargeDocumentReprocessed": false,
+  "customerEnvironment": "NOT VERIFIED"
+}

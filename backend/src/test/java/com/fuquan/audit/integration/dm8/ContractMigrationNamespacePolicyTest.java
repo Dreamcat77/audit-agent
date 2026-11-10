@@ -76,7 +76,8 @@ class ContractMigrationNamespacePolicyTest {
                 "V055__material_extraction_ledger.sql",
                 "V056__procurement_full_report_snapshot.sql",
                 "V057__material_extraction_deadline.sql",
-                "V058__client_review_identity.sql");
+                "V058__personal_upload_roles.sql",
+                "V059__client_review_identity.sql");
     }
 
     @Test

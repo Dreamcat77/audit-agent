@@ -1,0 +1,9 @@
+{
+  "base": "26 default port 80",
+  "browser": "109.0.5412.0",
+  "procurementZeroForm": true,
+  "budgetBatchHistory": true,
+  "contractAutomaticDefault": true,
+  "eightCategories": true,
+  "runtimeErrors": []
+}

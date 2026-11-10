@@ -23,11 +23,11 @@ class CaseFactPolicyTest {
         assertThat(reviewed.ceilingAmount()).isEqualByComparingTo(r.ceilingAmount());
         assertThat(CaseFactPolicy.report(UUID.randomUUID(),List.of(d("说明",f("supplierName","供应商"),f("budgetAmount","100元")))).offers()).isEmpty();
     }
-    @Test void conflictingProjectsDoNotShareCeilingsAndLimitsNeverBecomeBudgets() {
+    @Test void batchIsOneProjectAndDifferentReferenceNumbersDoNotEraseCeiling() {
         var a=d("a",f("projectNo","A"),f("ceilingAmount","350000元"));
         var b=d("b",f("projectNo","B"),f("supplierName","供应商"),f("quoteAmount","360000元"));
         assertThat(CaseFactPolicy.report(UUID.randomUUID(),List.of(a)).budget()).isNull();
-        assertThat(CaseFactPolicy.report(UUID.randomUUID(),List.of(a,b)).ceilingAmount()).isNull();
+        assertThat(CaseFactPolicy.report(UUID.randomUUID(),List.of(a,b)).ceilingAmount()).isEqualByComparingTo("350000");
     }
     @Test void inventedValueForeignLocatorAndRelabelledBudgetCannotBecomeQuote() {
         String source="报价单 含税报价合计：人民币100元；预算金额：200元";
@@ -74,7 +74,7 @@ class CaseFactPolicyTest {
         var b=d("b.pdf",f("documentType","预算批复"),f("budgetAmount","100元"),f("budgetAmount","200元"),f("projectNo","A"));
         var q=d("q.pdf",f("documentType","报价单"),f("supplierName","公司"),f("quoteAmount","90元"),f("projectNo","B"));
         var r=CaseFactPolicy.report(UUID.randomUUID(),List.of(b,q));assertThat(r.budget()).isNull();assertThat(r.calculation()).isNull();
-        assertThat(r.notices()).anyMatch(n->n.contains("编号冲突"));
+        assertThat(r.notices()).noneMatch(n->n.contains("编号冲突"));
     }
     @Test void duplicateSupplierAndAwardDocumentAreNotThreeIndependentQuotes() {
         var budget=d("b",f("documentType","预算批复"),f("budgetAmount","100元"));

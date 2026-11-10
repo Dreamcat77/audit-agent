@@ -1,0 +1,30 @@
+{
+  "browser": "109.0.5412.0",
+  "results": [
+    {
+      "module": "budget",
+      "realUpload": true,
+      "autoResult": true,
+      "exactDifference": true,
+      "excelExport": true,
+      "historyFilter": true
+    },
+    {
+      "module": "procurement",
+      "budgetAndCeilingDistinct": true,
+      "naturalQuotation": true,
+      "htmlExport": true,
+      "singleCopyState": true,
+      "noUploadInResult": true
+    },
+    {
+      "module": "contract",
+      "eightCategories": true,
+      "amountMismatch": true,
+      "incompleteStillReport": true,
+      "compactFormal": true,
+      "confirmationPersisted": true
+    }
+  ],
+  "runtimeErrors": []
+}

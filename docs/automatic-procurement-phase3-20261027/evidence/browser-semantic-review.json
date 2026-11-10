@@ -1,0 +1,7 @@
+{
+  "caseId": "dd79a596-5f85-3c67-b304-57b54962f07a",
+  "model": "audit-qwen-27b-16k:latest",
+  "technicalEvidence16GB512GBVisible": true,
+  "realBrowser": true,
+  "pageErrors": []
+}

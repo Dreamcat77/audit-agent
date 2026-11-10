@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/contract-analysis-cases")
 @ConditionalOnProperty(name="audit.contract.analysis.enabled",havingValue="true")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class ContractAnalysisController {
     private final ContractAnalysisService service;private final AuthContext auth;private final ContractAnalysisReport reports;private final ContractAnalysisIntake intake;private final ProjectApplicationService projects;
     public ContractAnalysisController(ContractAnalysisService service,AuthContext auth,ContractAnalysisReport reports,ContractAnalysisIntake intake,ProjectApplicationService projects){this.service=service;this.auth=auth;this.reports=reports;this.intake=intake;this.projects=projects;}

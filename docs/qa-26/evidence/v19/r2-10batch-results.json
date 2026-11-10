@@ -1,0 +1,961 @@
+[
+  {
+    "module": "budget",
+    "label": "budget-prose",
+    "failures": [],
+    "details": {
+      "batchId": "eb9e36bb-4874-4e57-b78d-dd4a34a71db2",
+      "jobStates": [
+        "PARSED"
+      ],
+      "lines": [
+        {
+          "project": "青榆阅览室更新项目",
+          "projectCode": "SYN-V19-B01",
+          "subject": "设备购置",
+          "subjectCode": null,
+          "year": "2026",
+          "department": null,
+          "declaredAmount": 120000.0,
+          "approvalAmount": 100000.0,
+          "status": "OVER_APPROVAL",
+          "opinion": "材料所列申报金额超过对应批复金额 20000.00 元，建议核对申报依据与批复版本。",
+          "sources": [
+            {
+              "taskId": "51136618-d3d9-4988-a45c-c144aeb3e4d3",
+              "fileName": "经费说明.docx",
+              "field": "declaredAmount",
+              "value": "人民币壹拾贰万元整",
+              "locator": "docx/body/node:7/part:7/line:0",
+              "excerpt": "本次申报金额为人民币壹拾贰万元整"
+            },
+            {
+              "taskId": "51136618-d3d9-4988-a45c-c144aeb3e4d3",
+              "fileName": "经费说明.docx",
+              "field": "spendingPurpose",
+              "value": "购买阅览终端",
+              "locator": "docx/body/node:7/part:7/line:0",
+              "excerpt": "用于购买阅览终端"
+            },
+            {
+              "taskId": "51136618-d3d9-4988-a45c-c144aeb3e4d3",
+              "fileName": "经费说明.docx",
+              "field": "projectCode",
+              "value": "SYN-V19-B01",
+              "locator": "docx/body/node:4/part:4/line:0",
+              "excerpt": "项目编号：SYN-V19-B01"
+            },
+            {
+              "taskId": "51136618-d3d9-4988-a45c-c144aeb3e4d3",
+              "fileName": "经费说明.docx",
+              "field": "budgetYear",
+              "value": "2026",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "预算年度：2026"
+            },
+            {
+              "taskId": "51136618-d3d9-4988-a45c-c144aeb3e4d3",
+              "fileName": "经费说明.docx",
+              "field": "subjectName",
+              "value": "设备购置",
+              "locator": "docx/body/node:6/part:6/line:0",
+              "excerpt": "科目名称：设备购置"
+            },
+            {
+              "taskId": "51136618-d3d9-4988-a45c-c144aeb3e4d3",
+              "fileName": "经费说明.docx",
+              "field": "projectName",
+              "value": "青榆阅览室更新项目",
+              "locator": "docx/body/node:3/part:3/line:0",
+              "excerpt": "项目名称：青榆阅览室更新项目"
+            },
+            {
+              "taskId": "51136618-d3d9-4988-a45c-c144aeb3e4d3",
+              "fileName": "经费说明.docx",
+              "field": "projectName",
+              "value": "青榆阅览室更新项目",
+              "locator": "docx/body/node:2/part:2/line:0",
+              "excerpt": "青榆阅览室更新项目"
+            },
+            {
+              "taskId": "51136618-d3d9-4988-a45c-c144aeb3e4d3",
+              "fileName": "经费说明.docx",
+              "field": "approvalAmount",
+              "value": "人民币拾万元整",
+              "locator": "docx/body/node:8/part:8/line:0",
+              "excerpt": "批复参考金额为人民币拾万元整"
+            }
+          ]
+        }
+      ],
+      "historyName": "青榆阅览室更新项目"
+    }
+  },
+  {
+    "module": "budget",
+    "label": "budget-purpose-missing",
+    "failures": [],
+    "details": {
+      "batchId": "2d41ecbd-c088-4875-a4c2-f7bcb374a77c",
+      "jobStates": [
+        "PARSED",
+        "PARSED"
+      ],
+      "lines": [
+        {
+          "project": "青榆后勤改善项目",
+          "projectCode": "SYN-V19-B05",
+          "subject": "设备购置",
+          "subjectCode": null,
+          "year": "2026",
+          "department": null,
+          "declaredAmount": 5000.0,
+          "approvalAmount": 5000.0,
+          "status": "WITHIN_APPROVAL",
+          "opinion": "材料所列申报金额未超过对应批复金额。本结果仅供工作参考，不代表正式审批结论。",
+          "sources": [
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "subjectName",
+              "value": "设备购置",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "科目名称：设备购置"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "approvalAmount",
+              "value": "5000元",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "批复金额：5000元"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "approvedPurpose",
+              "value": "采购办公电脑",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "批准用途：采购办公电脑"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "projectCode",
+              "value": "SYN-V19-B05",
+              "locator": "docx/body/node:3/part:3/line:0",
+              "excerpt": "项目编号：SYN-V19-B05"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "budgetYear",
+              "value": "2026",
+              "locator": "docx/body/node:4/part:4/line:0",
+              "excerpt": "预算年度：2026"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "projectName",
+              "value": "青榆后勤改善项目",
+              "locator": "docx/body/node:2/part:2/line:0",
+              "excerpt": "项目名称：青榆后勤改善项目"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "subjectName",
+              "value": "设备购置",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "科目名称：设备购置"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "declaredAmount",
+              "value": "5000元",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "申报金额：5000元"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "spendingPurpose",
+              "value": "组织旅游",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "支出用途：组织旅游"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "projectCode",
+              "value": "SYN-V19-B05",
+              "locator": "docx/body/node:3/part:3/line:0",
+              "excerpt": "项目编号：SYN-V19-B05"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "budgetYear",
+              "value": "2026",
+              "locator": "docx/body/node:4/part:4/line:0",
+              "excerpt": "预算年度：2026"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "projectName",
+              "value": "青榆后勤改善项目",
+              "locator": "docx/body/node:2/part:2/line:0",
+              "excerpt": "项目名称：青榆后勤改善项目"
+            }
+          ]
+        },
+        {
+          "project": "青榆后勤改善项目",
+          "projectCode": "SYN-V19-B05",
+          "subject": "差旅",
+          "subjectCode": null,
+          "year": "2026",
+          "department": null,
+          "declaredAmount": 3000.0,
+          "approvalAmount": null,
+          "status": "UNAPPROVED_SUBJECT",
+          "opinion": "疑似错支：本批同一项目的批复材料中未找到此申报科目，请核对是否超出批复范围，或尚有批复材料未上传。",
+          "sources": [
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "subjectName",
+              "value": "差旅",
+              "locator": "docx/body/node:6/part:6/line:0",
+              "excerpt": "科目名称：差旅"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "declaredAmount",
+              "value": "3000元",
+              "locator": "docx/body/node:6/part:6/line:0",
+              "excerpt": "申报金额：3000元"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "spendingPurpose",
+              "value": "现场调研",
+              "locator": "docx/body/node:6/part:6/line:0",
+              "excerpt": "支出用途：现场调研"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "projectCode",
+              "value": "SYN-V19-B05",
+              "locator": "docx/body/node:3/part:3/line:0",
+              "excerpt": "项目编号：SYN-V19-B05"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "budgetYear",
+              "value": "2026",
+              "locator": "docx/body/node:4/part:4/line:0",
+              "excerpt": "预算年度：2026"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "projectName",
+              "value": "青榆后勤改善项目",
+              "locator": "docx/body/node:2/part:2/line:0",
+              "excerpt": "项目名称：青榆后勤改善项目"
+            }
+          ]
+        },
+        {
+          "project": "青榆后勤改善项目",
+          "projectCode": "SYN-V19-B05",
+          "subject": "设备购置",
+          "subjectCode": null,
+          "year": "2026",
+          "department": null,
+          "declaredAmount": 5000.0,
+          "approvalAmount": 5000.0,
+          "status": "WITHIN_APPROVAL",
+          "opinion": "材料所列申报金额未超过对应批复金额。本结果仅供工作参考，不代表正式审批结论。",
+          "sources": [
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "subjectName",
+              "value": "设备购置",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "科目名称：设备购置"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "approvalAmount",
+              "value": "5000元",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "批复金额：5000元"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "approvedPurpose",
+              "value": "采购办公电脑",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "批准用途：采购办公电脑"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "projectCode",
+              "value": "SYN-V19-B05",
+              "locator": "docx/body/node:3/part:3/line:0",
+              "excerpt": "项目编号：SYN-V19-B05"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "budgetYear",
+              "value": "2026",
+              "locator": "docx/body/node:4/part:4/line:0",
+              "excerpt": "预算年度：2026"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "projectName",
+              "value": "青榆后勤改善项目",
+              "locator": "docx/body/node:2/part:2/line:0",
+              "excerpt": "项目名称：青榆后勤改善项目"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "subjectName",
+              "value": "设备购置",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "科目名称：设备购置"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "declaredAmount",
+              "value": "5000元",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "申报金额：5000元"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "spendingPurpose",
+              "value": "组织旅游",
+              "locator": "docx/body/node:5/part:5/line:0",
+              "excerpt": "支出用途：组织旅游"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "projectCode",
+              "value": "SYN-V19-B05",
+              "locator": "docx/body/node:3/part:3/line:0",
+              "excerpt": "项目编号：SYN-V19-B05"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "budgetYear",
+              "value": "2026",
+              "locator": "docx/body/node:4/part:4/line:0",
+              "excerpt": "预算年度：2026"
+            },
+            {
+              "taskId": "d1157f1c-aa44-49e6-b1af-5a0e262c6f44",
+              "fileName": "申报说明.docx",
+              "field": "projectName",
+              "value": "青榆后勤改善项目",
+              "locator": "docx/body/node:2/part:2/line:0",
+              "excerpt": "项目名称：青榆后勤改善项目"
+            }
+          ]
+        },
+        {
+          "project": "青榆后勤改善项目",
+          "projectCode": "SYN-V19-B05",
+          "subject": "工程修缮",
+          "subjectCode": null,
+          "year": "2026",
+          "department": null,
+          "declaredAmount": null,
+          "approvalAmount": 7000.0,
+          "status": "MISSING_DECLARATION",
+          "opinion": "疑似漏项：本批同一项目的申报材料中未找到此批复科目，请核对是否遗漏申报，或尚有申报材料未上传。",
+          "sources": [
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "subjectName",
+              "value": "工程修缮",
+              "locator": "docx/body/node:6/part:6/line:0",
+              "excerpt": "科目名称：工程修缮"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "approvalAmount",
+              "value": "7000元",
+              "locator": "docx/body/node:6/part:6/line:0",
+              "excerpt": "批复金额：7000元"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "approvedPurpose",
+              "value": "修补库房屋顶",
+              "locator": "docx/body/node:6/part:6/line:0",
+              "excerpt": "批准用途：修补库房屋顶"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "projectCode",
+              "value": "SYN-V19-B05",
+              "locator": "docx/body/node:3/part:3/line:0",
+              "excerpt": "项目编号：SYN-V19-B05"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "budgetYear",
+              "value": "2026",
+              "locator": "docx/body/node:4/part:4/line:0",
+              "excerpt": "预算年度：2026"
+            },
+            {
+              "taskId": "73258443-d3e9-42c8-beec-1fbdfa7905bc",
+              "fileName": "预算批复.docx",
+              "field": "projectName",
+              "value": "青榆后勤改善项目",
+              "locator": "docx/body/node:2/part:2/line:0",
+              "excerpt": "项目名称：青榆后勤改善项目"
+            }
+          ]
+        }
+      ],
+      "historyName": "青榆后勤改善项目"
+    }
+  },
+  {
+    "module": "procurement",
+    "label": "proc-role-money",
+    "failures": [],
+    "details": {
+      "id": "857c1c8a-8985-33e8-a4be-158cf42ec374",
+      "status": "DATA_INSUFFICIENT",
+      "budget": 2200000.0,
+      "ceiling": 2100000.0,
+      "offers": [
+        {
+          "supplier": "青榆合成设备有限公司",
+          "amount": 2150000.0,
+          "documentId": "7c164906-720c-4331-b016-a858c65bae93",
+          "lines": [
+            {
+              "item": "办公终端",
+              "quantity": 100.0,
+              "unitPrice": 21500.0,
+              "amount": 2150000.0,
+              "locator": "docx/body/node:7/part:7"
+            }
+          ],
+          "lineValidation": "VERIFIED"
+        }
+      ],
+      "documents": [
+        {
+          "id": "7bdcf07b-2081-4589-b330-4312bc7ec427",
+          "name": "招标文件.docx",
+          "status": "EXTRACTED",
+          "parseMethod": "OFFICE_TEXT",
+          "errorCode": null,
+          "factCount": 8
+        },
+        {
+          "id": "7c164906-720c-4331-b016-a858c65bae93",
+          "name": "响应报价.docx",
+          "status": "EXTRACTED",
+          "parseMethod": "OFFICE_TEXT",
+          "errorCode": null,
+          "factCount": 9
+        }
+      ]
+    }
+  },
+  {
+    "module": "budget",
+    "label": "sample.xls",
+    "failures": [
+      "DECLARED_AMOUNT_MISSING"
+    ],
+    "details": {
+      "batchId": "94aa96f0-82c4-4ef2-a651-0488b2f1b670",
+      "jobStates": [
+        "PARSED"
+      ],
+      "lines": [
+        {
+          "project": "仿真办公设备更新项目",
+          "projectCode": "SYN-OFFICE-2026",
+          "subject": "办公设备",
+          "subjectCode": "SYN-OFFICE",
+          "year": null,
+          "department": "采购管理部",
+          "declaredAmount": null,
+          "approvalAmount": 32760.0,
+          "status": "INVALID_AMOUNT",
+          "opinion": "材料中有金额的格式、单位、精度、数值范围或重复明细无法确认，暂不作金额比较。",
+          "sources": [
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "excel/sheet:1/row:12/part:12/col:1",
+              "excerpt": "科目名称：办公设备"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "declaredAmount",
+              "value": "31200",
+              "locator": "excel/sheet:1/row:12/part:12/col:2",
+              "excerpt": "申报金额：31200"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "approvalAmount",
+              "value": "32760",
+              "locator": "excel/sheet:1/row:12/part:12/col:3",
+              "excerpt": "批复参考金额：32760"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "supplierName",
+              "value": "仿真办公供应公司",
+              "locator": "excel/sheet:1/row:12/part:12/col:4",
+              "excerpt": "供应商名称：仿真办公供应公司"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "excel/sheet:1/row:12/part:12/col:5",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "departmentName",
+              "value": "采购管理部",
+              "locator": "excel/sheet:1/row:3/part:3/line:0",
+              "excerpt": "申请部门：采购管理部"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "departmentName",
+              "value": "采购管理部",
+              "locator": "excel/sheet:2/row:3/part:15/line:0",
+              "excerpt": "申请部门：采购管理部"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "subjectCode",
+              "value": "SYN-OFFICE",
+              "locator": "excel/sheet:1/row:6/part:6/line:0",
+              "excerpt": "科目编码：SYN-OFFICE"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "subjectCode",
+              "value": "SYN-OFFICE",
+              "locator": "excel/sheet:2/row:6/part:18/line:0",
+              "excerpt": "科目编码：SYN-OFFICE"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "projectName",
+              "value": "仿真办公设备更新项目",
+              "locator": "excel/sheet:1/row:1/part:1/line:0",
+              "excerpt": "项目名称：仿真办公设备更新项目"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "projectName",
+              "value": "仿真办公设备更新项目",
+              "locator": "excel/sheet:2/row:1/part:13/line:0",
+              "excerpt": "项目名称：仿真办公设备更新项目"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "excel/sheet:1/row:2/part:2/line:0",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "excel/sheet:2/row:2/part:14/line:0",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "excel/sheet:1/row:7/part:7/line:0",
+              "excerpt": "科目名称：办公设备"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "excel/sheet:2/row:7/part:19/line:0",
+              "excerpt": "科目名称：办公设备"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "excel/sheet:2/row:12/part:24/col:1",
+              "excerpt": "科目名称：办公设备"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "declaredAmount",
+              "value": "31200",
+              "locator": "excel/sheet:2/row:12/part:24/col:2",
+              "excerpt": "申报金额：31200"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "approvalAmount",
+              "value": "32760",
+              "locator": "excel/sheet:2/row:12/part:24/col:3",
+              "excerpt": "批复参考金额：32760"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "supplierName",
+              "value": "仿真办公供应公司",
+              "locator": "excel/sheet:2/row:12/part:24/col:4",
+              "excerpt": "供应商名称：仿真办公供应公司"
+            },
+            {
+              "taskId": "bdf3682f-2512-4c58-9f39-71f4d2c50d83",
+              "fileName": "sample.xls",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "excel/sheet:2/row:12/part:24/col:5",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            }
+          ]
+        }
+      ],
+      "historyName": "仿真办公设备更新项目"
+    }
+  },
+  {
+    "module": "contract",
+    "label": "contract-incomplete",
+    "failures": [],
+    "details": {
+      "id": "00b2b7e7-5c07-39ed-9103-0a5ee89899ab",
+      "status": "PARTIAL",
+      "projectName": "自动整理项目-4a4dd1fe",
+      "formal": 0,
+      "categories": [
+        {
+          "title": "合同条款量化一致性审查",
+          "status": "DATA_INSUFFICIENT",
+          "items": 0
+        },
+        {
+          "title": "合同草本结构对标审查",
+          "status": "AVAILABLE",
+          "items": 1
+        },
+        {
+          "title": "违约责任条款量化审查",
+          "status": "DATA_INSUFFICIENT",
+          "items": 0
+        },
+        {
+          "title": "合同期限与终止条件格式审查",
+          "status": "DATA_INSUFFICIENT",
+          "items": 0
+        },
+        {
+          "title": "合同主体资格审查",
+          "status": "AVAILABLE",
+          "items": 2
+        },
+        {
+          "title": "附件清单完整性审查",
+          "status": "DATA_INSUFFICIENT",
+          "items": 0
+        },
+        {
+          "title": "合同生效条件与份数审查",
+          "status": "DATA_INSUFFICIENT",
+          "items": 0
+        },
+        {
+          "title": "合同条款风险提示",
+          "status": "AVAILABLE",
+          "items": 1
+        }
+      ]
+    }
+  },
+  {
+    "module": "contract",
+    "label": "contract-case-mismatch",
+    "failures": [],
+    "details": {
+      "id": "5ccb9dd8-3e94-3be0-90b7-9cf032d60c1f",
+      "status": "COMPLETED",
+      "projectName": "青榆展柜采购项目",
+      "formal": 0,
+      "categories": [
+        {
+          "title": "合同条款量化一致性审查",
+          "status": "ATTENTION",
+          "items": 3
+        },
+        {
+          "title": "合同草本结构对标审查",
+          "status": "AVAILABLE",
+          "items": 2
+        },
+        {
+          "title": "违约责任条款量化审查",
+          "status": "AVAILABLE",
+          "items": 1
+        },
+        {
+          "title": "合同期限与终止条件格式审查",
+          "status": "AVAILABLE",
+          "items": 2
+        },
+        {
+          "title": "合同主体资格审查",
+          "status": "AVAILABLE",
+          "items": 2
+        },
+        {
+          "title": "附件清单完整性审查",
+          "status": "DATA_INSUFFICIENT",
+          "items": 0
+        },
+        {
+          "title": "合同生效条件与份数审查",
+          "status": "ATTENTION",
+          "items": 2
+        },
+        {
+          "title": "合同条款风险提示",
+          "status": "ATTENTION",
+          "items": 2
+        }
+      ]
+    }
+  },
+  {
+    "module": "contract",
+    "label": "contract-missing-annex",
+    "failures": [],
+    "details": {
+      "id": "c1d27ced-6350-3960-ba7f-5130003519b0",
+      "status": "PARTIAL",
+      "projectName": "青榆机房节能改造项目",
+      "formal": 0,
+      "categories": [
+        {
+          "title": "合同条款量化一致性审查",
+          "status": "ATTENTION",
+          "items": 5
+        },
+        {
+          "title": "合同草本结构对标审查",
+          "status": "AVAILABLE",
+          "items": 3
+        },
+        {
+          "title": "违约责任条款量化审查",
+          "status": "ATTENTION",
+          "items": 2
+        },
+        {
+          "title": "合同期限与终止条件格式审查",
+          "status": "AVAILABLE",
+          "items": 2
+        },
+        {
+          "title": "合同主体资格审查",
+          "status": "AVAILABLE",
+          "items": 2
+        },
+        {
+          "title": "附件清单完整性审查",
+          "status": "ATTENTION",
+          "items": 2
+        },
+        {
+          "title": "合同生效条件与份数审查",
+          "status": "AVAILABLE",
+          "items": 2
+        },
+        {
+          "title": "合同条款风险提示",
+          "status": "ATTENTION",
+          "items": 4
+        }
+      ]
+    }
+  },
+  {
+    "module": "procurement",
+    "label": "proc-negated-restrictions",
+    "failures": [],
+    "details": {
+      "id": "62a4c7b1-411e-3be0-911a-0f6f4e23e2a7",
+      "status": "DATA_INSUFFICIENT",
+      "budget": 200000.0,
+      "ceiling": null,
+      "offers": [],
+      "documents": [
+        {
+          "id": "87366096-31c3-4c72-a1d9-74d56abe2940",
+          "name": "招标文件.docx",
+          "status": "EXTRACTED",
+          "parseMethod": "OFFICE_TEXT",
+          "errorCode": null,
+          "factCount": 4
+        }
+      ]
+    }
+  },
+  {
+    "module": "contract",
+    "label": "contract-semantics",
+    "failures": [],
+    "details": {
+      "id": "5c604662-5980-34e0-9169-969347f80d64",
+      "status": "PARTIAL",
+      "projectName": "青榆机房节能改造项目",
+      "formal": 0,
+      "categories": [
+        {
+          "title": "合同条款量化一致性审查",
+          "status": "ATTENTION",
+          "items": 5
+        },
+        {
+          "title": "合同草本结构对标审查",
+          "status": "AVAILABLE",
+          "items": 3
+        },
+        {
+          "title": "违约责任条款量化审查",
+          "status": "ATTENTION",
+          "items": 2
+        },
+        {
+          "title": "合同期限与终止条件格式审查",
+          "status": "AVAILABLE",
+          "items": 3
+        },
+        {
+          "title": "合同主体资格审查",
+          "status": "AVAILABLE",
+          "items": 2
+        },
+        {
+          "title": "附件清单完整性审查",
+          "status": "AVAILABLE",
+          "items": 2
+        },
+        {
+          "title": "合同生效条件与份数审查",
+          "status": "AVAILABLE",
+          "items": 2
+        },
+        {
+          "title": "合同条款风险提示",
+          "status": "ATTENTION",
+          "items": 4
+        }
+      ]
+    }
+  },
+  {
+    "module": "procurement",
+    "label": "proc-scans",
+    "failures": [],
+    "details": {
+      "id": "8cb9e501-5bee-3219-9f74-bf41cf0718ad",
+      "status": "DATA_INSUFFICIENT",
+      "budget": 2200000.0,
+      "ceiling": null,
+      "offers": [],
+      "documents": [
+        {
+          "id": "4632aac8-e41e-4263-a080-2afb8eba1015",
+          "name": "采购需求表-倒置.png",
+          "status": "EXTRACTED",
+          "parseMethod": "OFFICE_TEXT_OCR",
+          "errorCode": null,
+          "factCount": 5
+        },
+        {
+          "id": "65591ec9-61c8-47c2-9141-9a5032c1c2de",
+          "name": "采购需求表-混合扫描.pdf",
+          "status": "EXTRACTED",
+          "parseMethod": "OFFICE_TEXT_OCR",
+          "errorCode": null,
+          "factCount": 8
+        },
+        {
+          "id": "04121c11-cefa-4728-b441-d4f9643752fd",
+          "name": "采购需求表-内嵌倒置.docx",
+          "status": "EXTRACTED",
+          "parseMethod": "OFFICE_TEXT_OCR",
+          "errorCode": null,
+          "factCount": 5
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,66 @@
+{
+  "reopenIdentical": true,
+  "case": "eee63216-0126-33fc-b02a-2eca6e6c5474",
+  "originals": [
+    {
+      "file": "01_办公终端及打印设备采购需求申请书.docx",
+      "sha256": "1175341a3b8335daccb439eef2003392642bff901d7338234bb1b142184bace2",
+      "bytes": 38881
+    },
+    {
+      "file": "02_办公终端采购技术需求表.pdf",
+      "sha256": "87e50a7b0c6f9dd7404db41a823c34b0ef78b25182c4dfa34a7a55ba09aa9ab8",
+      "bytes": 78004
+    },
+    {
+      "file": "03_办公设备采购实施计划.docx",
+      "sha256": "a15f3f1c79022c7116611c8292d78b7c50888ae13818ee5ab393943a9ca7fe83",
+      "bytes": 38265
+    },
+    {
+      "file": "04_办公设备更新项目预算批复.pdf",
+      "sha256": "116c6aa362cd756bb2b8048ba51c76f48dc3b7ba06b8e7ce4b0efcde756032c4",
+      "bytes": 67164
+    },
+    {
+      "file": "05_办公终端及打印设备采购招标文件.docx",
+      "sha256": "fdb01fff100d6bee87fcbf9f1b264e0ce25ab03004dd8d6c800c7c2a23cc13d2",
+      "bytes": 39497
+    },
+    {
+      "file": "06_办公设备采购评审办法.pdf",
+      "sha256": "165ca2bb14d2803d0546c949ce1b57ccd1700d2f34dda24ddd0b42f2054adf1d",
+      "bytes": 61228
+    },
+    {
+      "file": "07_澄川星河办公设备有限公司报价单.pdf",
+      "sha256": "5dedf7d854f945769db35d4aa6925e38a9be59577dfa47d0c8f873e9a740ca1e",
+      "bytes": 60961
+    },
+    {
+      "file": "08_澄川明川数字设备有限公司报价单.pdf",
+      "sha256": "86495b4d4687d813ca40c677691893508458bfb009061ac70408f84e64de5154",
+      "bytes": 60879
+    },
+    {
+      "file": "09_澄川启衡信息设备有限公司报价单.pdf",
+      "sha256": "bf4b23e99cd118b6281735d602e0d69b3b700808e3e86f1f82e46004812c1f25",
+      "bytes": 61331
+    },
+    {
+      "file": "10_办公设备采购文件澄清答复.docx",
+      "sha256": "31238059f27fbc75cf01ea611d74f8c93c3970ad0a39abbbfd1df1721d15a207",
+      "bytes": 38241
+    },
+    {
+      "file": "11_办公设备采购中标通知书.docx",
+      "sha256": "3994d74c6868f5ba28f116f79dc8becc23d77aece871a4c7252aa7fa12b4c4aa",
+      "bytes": 38059
+    },
+    {
+      "file": "12_办公设备采购履约验收方案.docx",
+      "sha256": "f94391cfe087e268d926d63e019204b201cfc2a7eb49511707bebe70c94de2c8",
+      "bytes": 38254
+    }
+  ]
+}

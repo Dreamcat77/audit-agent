@@ -1,0 +1,181 @@
+{
+  "capturedAt": "2026-10-29T17:19:22.549710+00:00",
+  "events": [
+    {
+      "duration_ms": "5011",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "budget-material-dd9c17fa-101a-4efa-8f6f-68c80d29f8cb",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5009",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "budget-material-e04f1747-7ada-4366-ad2f-558f59d269d3",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5011",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "e113ae62-df13-4684-b417-4f5abb4a1208",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5011",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "c448df75-ecd5-4196-a8dc-8c74c5f29d9e",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5011",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "CONTRACT_CASE_ANALYSIS",
+      "outcome": "TIMEOUT",
+      "request_id": "5283e56e-e010-4d7a-9072-c304414509a1",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5012",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "6ed1f53a-a273-475c-af68-672ab3a40ea8",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5011",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "CONTRACT_CASE_ANALYSIS",
+      "outcome": "TIMEOUT",
+      "request_id": "34e9b69c-872e-4af2-9f65-32ff9b386d97",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5010",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "62d4e3e9-3559-4500-a598-74184f19077e",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5010",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "PROCUREMENT_CASE_REVIEW",
+      "outcome": "TIMEOUT",
+      "request_id": "750996fb-1714-4673-8cae-d1755b07b672",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5010",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "PROCUREMENT_CASE_REVIEW",
+      "outcome": "TIMEOUT",
+      "request_id": "18d22e76-eead-4b58-a8cc-df7e8bbdaf57",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5010",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "budget-material-5b74ce8e-57d8-4bb8-9c8f-f9f310d8fa07",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5010",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "CONTRACT_CASE_ANALYSIS",
+      "outcome": "TIMEOUT",
+      "request_id": "8e5dbebb-bf0f-41ec-bb4f-6595caa5fba6",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5010",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "5338f758-9297-4b8c-a072-c32ed1169655",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5010",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "budget-material-0d1e7c7e-2ad1-4908-b6d1-6b1db16e3c0e",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5009",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "PROCUREMENT_CASE_REVIEW",
+      "outcome": "TIMEOUT",
+      "request_id": "3c8dee74-9862-4eae-8735-cd376a68ced2",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5011",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "PROCUREMENT_CASE_REVIEW",
+      "outcome": "TIMEOUT",
+      "request_id": "8bb557e2-d69e-4d12-9042-a0ea7de51eb4",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5010",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "budget-material-2fdab442-8480-4962-a1c6-01457325c771",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5011",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "ed8d30ee-0080-450c-91e2-2b9a2449bd43",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5011",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "MATERIAL_FIELD_EXTRACTION",
+      "outcome": "TIMEOUT",
+      "request_id": "f1250582-66d2-4749-8f51-1a63ce2e19f8",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5010",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "PROCUREMENT_CASE_REVIEW",
+      "outcome": "TIMEOUT",
+      "request_id": "d33df5ab-1bac-479e-b78b-0d01574fffd5",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5011",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "CONTRACT_CASE_ANALYSIS",
+      "outcome": "TIMEOUT",
+      "request_id": "73790068-f168-44f3-a33f-f8e3abdb6194",
+      "stage": "MODEL_HTTP"
+    },
+    {
+      "duration_ms": "5012",
+      "gateway_reason": "CONNECT_TIMEOUT",
+      "operation": "CONTRACT_CASE_ANALYSIS",
+      "outcome": "TIMEOUT",
+      "request_id": "33763906-e44a-490f-83ba-30ecd043fe79",
+      "stage": "MODEL_HTTP"
+    }
+  ]
+}

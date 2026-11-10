@@ -1,0 +1,84 @@
+{
+  "normal": [
+    {
+      "path": "01正常合同及配套材料/01正常合同.pdf",
+      "sha256": "7c95c432acb8e853c978e7012c198fc26c50958301a8ec57b129a0489defde86"
+    },
+    {
+      "path": "01正常合同及配套材料/08中标通知书.pdf",
+      "sha256": "022abba1fee6f4c42c91d8184ae74371151393778d559a21491897627477c544"
+    },
+    {
+      "path": "01正常合同及配套材料/09招标文件.pdf",
+      "sha256": "7918f39498948ae9664ec95e5bde3926df614ce8307b764c417a083549908a24"
+    }
+  ],
+  "blank-party": [
+    {
+      "path": "02乙方空白/02空白乙方合同.pdf",
+      "sha256": "fb4e247ffa39a6a70939cc02a6f0470fdd0ab56ada50d15149dc8810d0bd52e5"
+    }
+  ],
+  "local-prices": [
+    {
+      "path": "03多处金额及保证金/03多处金额合同.pdf",
+      "sha256": "97b4eeb07da93964d66d6796f10880cb93077cc9026c455d9d78604aaa5310ee"
+    }
+  ],
+  "aliases": [
+    {
+      "path": "04主体全称简称/04主体简称合同.pdf",
+      "sha256": "2c6d784aeb5c67bfa801b615af37715b1ecdc7639ff5cac84eb658c56f2fbdfc"
+    }
+  ],
+  "dates": [
+    {
+      "path": "05日期空栏/05日期空白合同.pdf",
+      "sha256": "2297c80c095f610bb98fad53c8f81a9ae8bf172e8986408f2c9464665ca42f5d"
+    }
+  ],
+  "reference": [
+    {
+      "path": "06历史业绩干扰/01正常合同.pdf",
+      "sha256": "7c95c432acb8e853c978e7012c198fc26c50958301a8ec57b129a0489defde86"
+    },
+    {
+      "path": "06历史业绩干扰/06历史业绩投标文件.pdf",
+      "sha256": "b48dff9ded70a18de2278fd75a3bd4e69f7a601c6260731ce9850111c5e15e8d"
+    }
+  ],
+  "auxiliary": [
+    {
+      "path": "07配套协议主体/01正常合同.pdf",
+      "sha256": "7c95c432acb8e853c978e7012c198fc26c50958301a8ec57b129a0489defde86"
+    },
+    {
+      "path": "07配套协议主体/07保密协议.pdf",
+      "sha256": "a96a4ce480f7574c7fbb4fcc5c24a9d8ea7eedfe099d359bb0dd0555249b01ee"
+    }
+  ],
+  "placeholders": [
+    {
+      "path": "08主体名称占位/12占位主体合同.pdf",
+      "sha256": "13e774311adb31146838b9cef127db55958d8e92a0a8fcf2c058321bdb47d39b"
+    }
+  ],
+  "scan4": [
+    {
+      "path": "09四页旋转扫描/10四页旋转扫描合同.pdf",
+      "sha256": "0dc8ec8917db3f50102165ec2e5c672df06803b83d795db8b4364bd57677496b"
+    }
+  ],
+  "scan12": [
+    {
+      "path": "10十二页混合扫描/11十二页混合扫描合同.pdf",
+      "sha256": "fc05b1be4233cadbc251958fd41f81b07e81536b9d979208c4a307f698dd6700"
+    }
+  ],
+  "word-html": [
+    {
+      "path": "11网页导出的DOC/14网页导出合同.doc",
+      "sha256": "75307cf28cbe2c2221113f4bb4b646b7a45570ad3d3b0141ae154e3a613bf34a"
+    }
+  ]
+}

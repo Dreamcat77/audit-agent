@@ -1,0 +1,19 @@
+{
+  "scope": "Python deterministic recheck of preserved real-model excerpts against the final role-binding expression; not a new model call, source parsing or full end-to-end test",
+  "results": [
+    {
+      "field": "budgetAmount",
+      "value": "人民币222600.00元",
+      "boundRole": true,
+      "checkpointSha256": "bf058bbe99bbfa7fdd0bdf1e9d9881cd98035ee522588433b1508900c6873aea",
+      "excerpt": "同意安排本项目经费人民币222600.00元"
+    },
+    {
+      "field": "awardAmount",
+      "value": "212000.00元",
+      "boundRole": true,
+      "checkpointSha256": "73556cc7352af184216f538c21fb5aa5c4ee286636dbf03be08947f1e1995ca3",
+      "excerpt": "中标金额人民币212000.00元"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "backupFiles": 4728,
+  "backupBytes": 1323070453,
+  "changedSourceFiles": 28,
+  "counts": {
+    "ADDED": 19,
+    "MODIFIED": 9
+  },
+  "preservedBaselineFilesOutsideModifiedSource": 4719,
+  "unexpectedBaselineChanges": [],
+  "databaseDdlChanged": false,
+  "finalGitStatusLines": 213,
+  "git": {
+    "worktree": "E:/audit-agent-new/.runtime/budget-home-e17-20261014",
+    "commonDir": "E:/audit-agent-new/.runtime/integration-repo/.git",
+    "branch": "fix/budget-procurement-ready-20261019",
+    "head": "35f95499c4d5efa475dffc3a3628222750124672"
+  }
+}

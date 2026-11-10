@@ -1,0 +1,209 @@
+{
+  "id": "1a40717d-0e34-32f2-94f8-671de115842d",
+  "caseNumber": "AC-1a40717d-0e34-32f2-94f8-671de115842d",
+  "projectName": "采购材料分析",
+  "status": "DATA_INSUFFICIENT",
+  "createdAt": "2026-10-29T15:42:31.380824281Z",
+  "documents": [
+    {
+      "id": "54a93bc0-f4ae-46a4-bc6c-02279f95c36a",
+      "name": "工作说明.docx",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 0
+    }
+  ],
+  "report": {
+    "quoteStatus": "DATA_INSUFFICIENT",
+    "budget": null,
+    "awardAmount": null,
+    "offers": [],
+    "calculation": null,
+    "notices": [
+      "材料中的预算金额不足或冲突，超预算检查未执行；已识别报价仍保留",
+      "可靠供应商报价少于三家，三方询比价数据不足"
+    ],
+    "modules": {
+      "AGENT_PRECHECK": "PARTIAL",
+      "TENDER_COMPLIANCE": "DATA_INSUFFICIENT",
+      "BLACKLIST": "DATA_INSUFFICIENT",
+      "QUOTE": "DATA_INSUFFICIENT",
+      "COLLUSION": "NOT_EXECUTED",
+      "SPLIT_PURCHASE": "NOT_EXECUTED"
+    },
+    "reviews": {
+      "AGENT_PRECHECK": {
+        "status": "PARTIAL",
+        "inputDigest": "868dfa115fe54b3a8a46264ae699e613786ea38b6d23c59da3ca0b71550675c1",
+        "version": "case-cross-file-v2",
+        "model": "audit-qwen-27b-16k:latest",
+        "startedAt": "2026-10-29T15:42:33.813811829Z",
+        "completedAt": "2026-10-29T15:42:49.381588072Z",
+        "scope": [
+          {
+            "documentId": "54a93bc0-f4ae-46a4-bc6c-02279f95c36a",
+            "fileName": "工作说明.docx",
+            "role": "OTHER",
+            "sourceChars": 55,
+            "suppliedChars": 55
+          }
+        ],
+        "coverageGaps": [
+          "UPLOADED_SCOPE_MISSING_DEMAND",
+          "UPLOADED_SCOPE_MISSING_BUDGET",
+          "UPLOADED_SCOPE_MISSING_QUOTATION",
+          "UPLOADED_SCOPE_MISSING_AWARD"
+        ],
+        "checks": [
+          {
+            "code": "IDENTITY_projectName",
+            "status": "UNKNOWN",
+            "explanation": "projectName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_projectNo",
+            "status": "UNKNOWN",
+            "explanation": "projectNo：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_purchaserName",
+            "status": "UNKNOWN",
+            "explanation": "purchaserName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "BUDGET_CONFLICT",
+            "status": "UNKNOWN",
+            "explanation": "仅比较预算角色金额，不将成交价或已付款作为预算：[]",
+            "evidence": []
+          },
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 1 份材料，本项选取 1 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "本模块仅包含一份标注为“合成测试材料”的工作说明，未提供项目名称、编号或采购单位等身份信息，无法进行跨文件核对。",
+            "evidence": [
+              {
+                "id": "E-6a02fb1bf294365f833cea31",
+                "documentId": "54a93bc0-f4ae-46a4-bc6c-02279f95c36a",
+                "fileName": "工作说明.docx",
+                "sha256": "80a218a902c837fd356b8f768612214b876e4c28e06a1bad9e712230565ef244",
+                "locator": "docx/body/node:1/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n"
+              }
+            ]
+          },
+          {
+            "code": "BUDGET_VS_AWARD",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "材料明确声明“不涉及采购报价”，且未包含任何预算金额或成交金额数据，无法进行预算与成交价的比对。",
+            "evidence": [
+              {
+                "id": "E-eac970eb44a565f3c37b9414",
+                "documentId": "54a93bc0-f4ae-46a4-bc6c-02279f95c36a",
+                "fileName": "工作说明.docx",
+                "sha256": "80a218a902c837fd356b8f768612214b876e4c28e06a1bad9e712230565ef244",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "资料室开放时间调整为工作日九点至十七点，员工按表轮值。本说明不涉及采购报价。\n"
+              }
+            ]
+          },
+          {
+            "code": "QUANTITY",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "材料内容为行政办公说明，未涉及任何采购标的的数量信息，无法进行数量一致性核对。",
+            "evidence": [
+              {
+                "id": "E-eac970eb44a565f3c37b9414",
+                "documentId": "54a93bc0-f4ae-46a4-bc6c-02279f95c36a",
+                "fileName": "工作说明.docx",
+                "sha256": "80a218a902c837fd356b8f768612214b876e4c28e06a1bad9e712230565ef244",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "资料室开放时间调整为工作日九点至十七点，员工按表轮值。本说明不涉及采购报价。\n"
+              }
+            ]
+          },
+          {
+            "code": "DATE_AND_PLAN",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "材料仅提及工作时间调整，未包含采购业务发生日期、计划日期或验收日期，无法进行业务日期顺序及计划与实际完成的核对。",
+            "evidence": [
+              {
+                "id": "E-eac970eb44a565f3c37b9414",
+                "documentId": "54a93bc0-f4ae-46a4-bc6c-02279f95c36a",
+                "fileName": "工作说明.docx",
+                "sha256": "80a218a902c837fd356b8f768612214b876e4c28e06a1bad9e712230565ef244",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "资料室开放时间调整为工作日九点至十七点，员工按表轮值。本说明不涉及采购报价。\n"
+              }
+            ]
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "SEMANTIC_OR_SOURCE_COVERAGE_INCOMPLETE"
+      },
+      "BLACKLIST": {
+        "status": "DATA_INSUFFICIENT",
+        "inputDigest": "57eae196751583d32d9ba755a8fe6826aa7587c288956f2bda565af75c7dce28",
+        "version": "case-blacklist-v1",
+        "model": null,
+        "startedAt": "2026-10-29T15:42:33.803820284Z",
+        "completedAt": "2026-10-29T15:42:33.803820414Z",
+        "scope": [
+          {
+            "documentId": "54a93bc0-f4ae-46a4-bc6c-02279f95c36a",
+            "fileName": "工作说明.docx",
+            "role": "OTHER",
+            "sourceChars": 55,
+            "suppliedChars": 55
+          }
+        ],
+        "coverageGaps": [],
+        "checks": [],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": null
+      },
+      "TENDER_COMPLIANCE": {
+        "status": "DATA_INSUFFICIENT",
+        "inputDigest": "b7080fdf00fdaf99cbd25ce44908ceef19774a4738b8cc0bc9e4182ccf637b0b",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-29T15:42:49.389149944Z",
+        "completedAt": "2026-10-29T15:42:49.392424653Z",
+        "scope": [],
+        "coverageGaps": [
+          "UPLOADED_SCOPE_MISSING_TECHNICAL",
+          "UPLOADED_SCOPE_MISSING_TENDER",
+          "UPLOADED_SCOPE_MISSING_EVALUATION",
+          "UPLOADED_SCOPE_MISSING_CLARIFICATION"
+        ],
+        "checks": [
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 1 份材料，本项选取 0 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "NO_READABLE_SOURCE"
+      }
+    },
+    "projectName": "采购材料分析",
+    "ceilingAmount": null,
+    "quoteComparisons": [],
+    "ceilingComparisons": []
+  },
+  "findingIds": {}
+}

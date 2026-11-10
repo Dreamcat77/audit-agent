@@ -24,9 +24,9 @@ public class CaseReviewEngine {
     public Request prepare(UUID id,String module,List<Document> docs) {
         var context=CaseReviewContext.select(module,docs);
         var facts=new ArrayList<InputFact>();
-        for(var d:context.documents())for(var f:d.facts())if(f.verification().equals("SOURCE_VERIFIED")) {
+        for(var d:context.documents())for(String type:CaseFactPolicy.TYPES)for(var f:CaseFactPolicy.facts(d,type)) {
             var evidence=CaseReviewContext.factEvidence(context,d,f);
-            if(!evidence.isEmpty())facts.add(new InputFact(d.id(),f.row(),f.type(),f.value(),evidence.stream().map(SourceEvidence::id).toList()));
+            if(!evidence.isEmpty())facts.add(new InputFact(d.id(),f.row(),f.type(),f.value(),evidence.stream().map(SourceEvidence::id).toList(),f.subjectScope(),f.amountScope()));
         }
         var inventory=docs.stream().map(d->new UploadedDocument(d.id(),d.name(),CaseReviewContext.role(d),d.status(),
                 d.segments().stream().anyMatch(s->!s.text().isBlank()))).toList();
@@ -37,9 +37,10 @@ public class CaseReviewEngine {
                 +"未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",List.of()));
         var signals=new ArrayList<RuleSignal>();
         if(module.equals("TENDER_COMPLIANCE"))for(var rule:rules.findEnabled())for(var e:context.evidence()) {
+            if(context.scope().stream().anyMatch(s->s.documentId().equals(e.documentId())&&Set.of("BID","EVALUATION_REPORT").contains(s.role())))continue;
             try {if(TenderRuleMatcher.hasAffirmativeMatch(rule,e.excerpt())) {
                 signals.add(new RuleSignal(rule.ruleCode(),rule.ruleName(),e.id(),rule.ruleExplanation()));
-                checks.add(new ReviewCheck("F10_RULE:"+rule.ruleCode(),"RULE_SIGNAL_"+rule.riskLevel(),
+                checks.add(new ReviewCheck("F10_RULE:"+rule.ruleCode(),"RULE_CANDIDATE",
                         rule.ruleName()+"："+rule.ruleExplanation()+"；依据："+rule.legalBasis()+"；建议："+rule.remediationSuggestion(),List.of(e)));
             }}
             catch(java.util.regex.PatternSyntaxException invalid){throw new IllegalStateException("F10_RULE_CONFIGURATION_INVALID",invalid);}
@@ -70,20 +71,46 @@ public class CaseReviewEngine {
             var findings=new ArrayList<>(running.findings());var checks=new ArrayList<>(running.checks());int rejected=0;
             for(var candidate:result.findings()) {
                 var evidence=resolve(candidate.evidenceIds(),catalog);
+                // Award/quote arithmetic is system-owned. A valid quotation and
+                // budget do not establish that an award even exists. Keep the
+                // deterministic finding once; never relabel excess budget as an award mismatch.
+                if("AWARD_QUOTE_MISMATCH".equals(candidate.code())) {
+                    if(input.checks().stream().noneMatch(c->c.code().equals(candidate.code())&&c.status().equals("CONFLICT")))rejected++;
+                    continue;
+                }
                 String text=candidate.title()+" "+candidate.explanation()+" "+candidate.suggestion();
+                // A missing uploaded comparator is a scope limitation, not a
+                // source-proven risk. Keep all independent available observations.
                 boolean cross=Set.of("IDENTITY_CONFLICT","BUDGET_CONFLICT","QUANTITY_CONFLICT","AWARD_QUOTE_MISMATCH","PAYMENT_CONFLICT","CLARIFICATION_CONFLICT","BUSINESS_CONFLICT").contains(candidate.code());
-                if(evidence.isEmpty()||cross&&evidence.stream().map(SourceEvidence::documentId).distinct().count()<2
-                        ||!CODES.contains(candidate.code())||!Set.of("INFO","WARNING").contains(Objects.toString(candidate.level(),""))
+                if(evidence.isEmpty()||cross&&evidence.size()<2
+                        ||!CODES.contains(candidate.code())||!Set.of("INFO","WARNING","CRITICAL").contains(Objects.toString(candidate.level(),""))
+                        ||candidate.basis()!=null&&!Set.of("CLAUSE_ISSUE","MATERIAL_SCOPE","IMPROVEMENT").contains(candidate.basis())
                         ||!validText(candidate.title(),200)||!validText(candidate.explanation(),2000)||!validText(candidate.suggestion(),800)
                         ||text.matches("(?s).*(违法|违规已确认|串标成立|现实中不存在|已经验收完成|已经支付完成).*")
-                        ||contradictedMaterialAbsence(text,input.uploadedDocuments())) {rejected++;continue;}
-                findings.add(new ReviewFinding(candidate.code(),candidate.level(),candidate.title(),candidate.explanation(),candidate.suggestion(),evidence,"MODEL"));
+                        ||contradictedMaterialAbsence(text,input.uploadedDocuments())) {
+                    rejected++;
+                    // Only schema-owned metadata; neither document names, source
+                    // excerpts nor model explanations belong in technical logs.
+                    org.slf4j.LoggerFactory.getLogger(CaseReviewEngine.class).info(
+                            "CASE_FINDING_REJECTED module={} code={} reason={}",input.module(),
+                            CODES.contains(Objects.toString(candidate.code(),""))?candidate.code():"UNSUPPORTED",
+                            evidence.isEmpty()?"CITATION_INVALID":cross&&evidence.size()<2?"CROSS_REFERENCE_INCOMPLETE":
+                            !CODES.contains(Objects.toString(candidate.code(),""))?"CODE_INVALID":
+                            text.matches("(?s).*(违法|违规已确认|串标成立|现实中不存在|已经验收完成|已经支付完成).*")?"UNSUPPORTED_ASSERTION":
+                            contradictedMaterialAbsence(text,input.uploadedDocuments())?"UPLOADED_MATERIAL_PRESENT":"TEXT_OR_LEVEL_INVALID");
+                    continue;
+                }
+                if("MATERIAL_SCOPE".equals(candidate.basis())||CaseAvailableResults.scopeOnly(text,evidence))continue;
+                if("INFO".equals(candidate.level())||"IMPROVEMENT".equals(candidate.basis()))
+                    checks.add(new ReviewCheck(candidate.code(),"SOURCE_GROUNDED_OBSERVATION",candidate.explanation(),evidence));
+                else findings.add(new ReviewFinding(candidate.code(),candidate.level(),candidate.title(),candidate.explanation(),candidate.suggestion(),evidence,"MODEL"));
             }
             for(var observation:result.observations()) {
                 var evidence=resolve(observation.evidenceIds(),catalog);
                 if(evidence.isEmpty()||!validText(observation.explanation(),2000)||!OBSERVATIONS.contains(observation.code())
                         ||observation.explanation().matches("(?s).*(违法|全部合规|全部通过|已经验收完成|已经支付完成).*")
                         ||contradictedMaterialAbsence(observation.explanation(),input.uploadedDocuments())){rejected++;continue;}
+                if(CaseAvailableResults.scopeOnly(observation.explanation(),evidence))continue;
                 checks.add(new ReviewCheck(observation.code(),"SOURCE_GROUNDED_OBSERVATION",observation.explanation(),evidence));
             }
             var required=input.module().equals("AGENT_PRECHECK")?Set.of("IDENTITY","BUDGET_VS_AWARD","QUANTITY","DATE_AND_PLAN")
@@ -104,8 +131,11 @@ public class CaseReviewEngine {
                 "TECHNICAL","技术需求表|技术需求文件","EVALUATION","评审办法|评分办法|评分细则","CLARIFICATION","澄清文件|澄清答复","AWARD","中标通知书|成交通知书","TENDER","招标文件|采购文件");
         for(var entry:terms.entrySet())if(inventory.stream().anyMatch(d->d.role().equals(entry.getKey()))) {
             String role="(?:"+entry.getValue()+")";
-            if(java.util.regex.Pattern.compile("(?:未提供|未上传|没有上传|缺少|缺乏|缺失|未见)[^。；;，,\\n]{0,45}"+role
-                    +"|"+role+"(?:均|都|尚|仍|并|还|全部|的|\\s){0,5}(?:未提供|未上传|没有上传|缺失)").matcher(text).find())return true;
+            // A document can exist while lacking a scoring standard or clause.
+            // "采购文件未提供评分细则" describes the contents, not a missing file.
+            String modifiers="(?:(?:本批|本次|对应|相关|完整|正式|有效|独立|单独|相应|所需|可用|该项目|任何|一份|的|\\s)){0,12}";
+            if(java.util.regex.Pattern.compile("(?:未提供|未上传|没有上传|缺少|缺乏|缺失|未见)"+modifiers+role
+                    +"|"+role+"(?:均|都|尚|仍|并|还|全部|的|\\s){0,5}(?:未提供|未上传|没有上传|缺失)(?=$|[。；;，,\\n])").matcher(text).find())return true;
         }
         return false;
     }
@@ -118,9 +148,9 @@ public class CaseReviewEngine {
         return new ModuleReview(status,v.inputDigest(),v.version(),model,v.startedAt()==null?clock.instant():v.startedAt(),end,v.scope(),v.coverageGaps(),checks,findings,rejected,error);
     }
     private static List<ReviewFinding> deterministicFindings(List<ReviewCheck> checks) {
-        return checks.stream().filter(c->(c.status().equals("CONFLICT")||c.status().equals("STATISTICAL_SIGNAL")||c.status().startsWith("RULE_SIGNAL_"))&&!c.evidence().isEmpty()).map(c->new ReviewFinding(c.code(),
-                c.status().equals("RULE_SIGNAL_CRITICAL")?"CRITICAL":"WARNING",c.status().startsWith("RULE_SIGNAL_")?"招标条款命中审查规则":c.code().startsWith("QUOTE_")?"报价核对需关注":"跨文件核对需关注",c.explanation(),
-                "结合所列原文与上下文核对；规则线索不直接认定违规。",c.evidence(),"DETERMINISTIC")).toList();
+        return checks.stream().filter(c->(c.status().equals("CONFLICT")||c.status().equals("STATISTICAL_SIGNAL"))&&!c.evidence().isEmpty()).map(c->new ReviewFinding(c.code(),
+                "WARNING",c.code().equals("QUOTE_BUDGET")?"报价超过预算":c.code().equals("QUOTE_LINE_ARITHMETIC")?"报价明细计算不一致":c.code().equals("QUOTE_CONCENTRATION")?"供应商报价较集中":c.code().equals("AWARD_QUOTE_MISMATCH")?"中标金额与同一供应商报价不一致":"金额或数量存在差异",c.explanation(),
+                "核对所列金额、数量及其对应采购范围。",c.evidence(),"DETERMINISTIC")).toList();
     }
     private static List<ReviewCheck> deterministic(CaseReviewContext.Context ctx,List<Document> docs) {
         var checks=new ArrayList<ReviewCheck>();
@@ -129,17 +159,22 @@ public class CaseReviewEngine {
             for(var d:docs)for(var f:CaseFactPolicy.facts(d,type)) {
                 var e=CaseReviewContext.factEvidence(ctx,d,f);if(!e.isEmpty())values.computeIfAbsent(f.value().replaceAll("\\s+",""),x->new ArrayList<>()).addAll(e);
             }
-            checks.add(new ReviewCheck("IDENTITY_"+type,values.size()>1?"CONFLICT":values.isEmpty()?"UNKNOWN":"CONSISTENT_IN_OBSERVED",
-                    CaseReviewText.identityLabel(type)+"："+String.join(" / ",values.keySet())+"；未载明此信息的材料不参与本项比对",values.values().stream().flatMap(List::stream).distinct().toList()));
+            checks.add(new ReviewCheck("IDENTITY_"+type,values.size()>1?"SEMANTIC_REVIEW_REQUIRED":values.isEmpty()?"UNKNOWN":"CONSISTENT_IN_OBSERVED",
+                    CaseReviewText.identityLabel(type)+"："+String.join(" / ",values.keySet()),values.values().stream().flatMap(List::stream).distinct().toList()));
         }
         var budgets=new TreeMap<BigDecimal,List<SourceEvidence>>();
-        for(var d:docs)for(var f:CaseFactPolicy.facts(d,"budgetAmount"))RmbAmountParser.parse(f.value()).ifPresent(v->{var e=CaseReviewContext.factEvidence(ctx,d,f);if(!e.isEmpty())budgets.computeIfAbsent(v,x->new ArrayList<>()).addAll(e);});
-        checks.add(new ReviewCheck("BUDGET_CONFLICT",budgets.size()>1?"CONFLICT":budgets.isEmpty()?"UNKNOWN":"CONSISTENT_IN_OBSERVED",
+        for(var d:docs)for(var f:CaseFactPolicy.totals(d,"budgetAmount"))ProcurementMaterialSemantics.money(d,f).ifPresent(v->{var e=CaseReviewContext.factEvidence(ctx,d,f);if(!e.isEmpty())budgets.computeIfAbsent(v,x->new ArrayList<>()).addAll(e);});
+        for(var d:docs)for(String type:List.of("budgetAmount","ceilingAmount","quoteAmount"))for(var f:CaseFactPolicy.facts(d,type))if(!ProcurementMaterialSemantics.total(f)){
+            var ev=CaseReviewContext.factEvidence(ctx,d,f);
+            if(!ev.isEmpty())checks.add(new ReviewCheck("PRICE_BASIS","SOURCE_GROUNDED_OBSERVATION",
+                    ("ANNUAL".equals(f.amountScope())?"年度金额":"PACKAGE".equals(f.amountScope())?"分包金额":"单位或范围尚不明确的金额")+"："+f.value()+"；保留原文计价范围，未直接与项目总预算比较。",ev));
+        }
+        checks.add(new ReviewCheck("BUDGET_CONFLICT",budgets.size()>1?"SEMANTIC_REVIEW_REQUIRED":budgets.isEmpty()?"UNKNOWN":"CONSISTENT_IN_OBSERVED",
                 "仅比较预算角色金额，不将成交价或已付款作为预算："+budgets.keySet(),budgets.values().stream().flatMap(List::stream).distinct().toList()));
         var quantities=new TreeMap<String,Map<BigDecimal,List<SourceEvidence>>>();
         for(var d:docs) {
             var rows=new TreeMap<String,List<Fact>>();
-            d.facts().stream().filter(f->f.verification().equals("SOURCE_VERIFIED")&&Set.of("itemName","quantity").contains(f.type())).forEach(f->rows.computeIfAbsent(f.row(),x->new ArrayList<>()).add(f));
+            for(String type:List.of("itemName","quantity"))CaseFactPolicy.facts(d,type).forEach(f->rows.computeIfAbsent(f.row(),x->new ArrayList<>()).add(f));
             for(var row:rows.values()) {
                 var items=row.stream().filter(f->f.type().equals("itemName")).map(Fact::value).distinct().toList();
                 if(items.size()!=1)continue;
@@ -150,7 +185,7 @@ public class CaseReviewEngine {
                 }catch(IllegalArgumentException | NoSuchElementException unknown){ /* Units or ambiguous text are left for cited semantic analysis. */ }
             }
         }
-        for(var item:quantities.entrySet())checks.add(new ReviewCheck("QUANTITY_CONFLICT",item.getValue().size()>1?"CONFLICT":"CONSISTENT_IN_OBSERVED",
+        for(var item:quantities.entrySet())checks.add(new ReviewCheck("QUANTITY_CONFLICT",item.getValue().size()>1?"SEMANTIC_REVIEW_REQUIRED":"CONSISTENT_IN_OBSERVED",
                 "同名采购项 "+item.getKey()+" 数量："+item.getValue().keySet()+"；不同名称/配置不强行合并",item.getValue().values().stream().flatMap(List::stream).distinct().toList()));
         var quote=CaseFactPolicy.report(UUID.randomUUID(),docs);
         for(var offer:quote.offers()) {

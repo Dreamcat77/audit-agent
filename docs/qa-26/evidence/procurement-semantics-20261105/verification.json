@@ -1,0 +1,129 @@
+{
+  "batches": 10,
+  "files": 22,
+  "checkedCitations": 234,
+  "results": [
+    {
+      "scenario": "early-stage-normal",
+      "files": 2,
+      "reviewStatuses": {
+        "AGENT_PRECHECK": "COMPLETED",
+        "BLACKLIST": "DATA_INSUFFICIENT",
+        "TENDER_COMPLIANCE": "COMPLETED"
+      },
+      "findingCodes": [],
+      "executedRelease": "r5"
+    },
+    {
+      "scenario": "quote-and-restrictions",
+      "files": 4,
+      "reviewStatuses": {
+        "AGENT_PRECHECK": "COMPLETED",
+        "BLACKLIST": "COMPLETED",
+        "TENDER_COMPLIANCE": "COMPLETED"
+      },
+      "findingCodes": [
+        "QUOTE_BUDGET",
+        "RESTRICTIVE_CONDITION",
+        "SCORE_INCONSISTENCY"
+      ],
+      "executedRelease": "r6"
+    },
+    {
+      "scenario": "bid-history-annual",
+      "files": 1,
+      "reviewStatuses": {
+        "TENDER_COMPLIANCE": "PARTIAL",
+        "AGENT_PRECHECK": "COMPLETED",
+        "BLACKLIST": "COMPLETED"
+      },
+      "findingCodes": [],
+      "executedRelease": "r3"
+    },
+    {
+      "scenario": "package-prices",
+      "files": 2,
+      "reviewStatuses": {
+        "TENDER_COMPLIANCE": "PARTIAL",
+        "AGENT_PRECHECK": "COMPLETED",
+        "BLACKLIST": "DATA_INSUFFICIENT"
+      },
+      "findingCodes": [],
+      "executedRelease": "r3"
+    },
+    {
+      "scenario": "table-units",
+      "files": 2,
+      "reviewStatuses": {
+        "TENDER_COMPLIANCE": "PARTIAL",
+        "AGENT_PRECHECK": "COMPLETED",
+        "BLACKLIST": "COMPLETED"
+      },
+      "findingCodes": [],
+      "executedRelease": "r3"
+    },
+    {
+      "scenario": "real-current-inconsistency",
+      "files": 2,
+      "reviewStatuses": {
+        "TENDER_COMPLIANCE": "PARTIAL",
+        "AGENT_PRECHECK": "COMPLETED",
+        "BLACKLIST": "COMPLETED"
+      },
+      "findingCodes": [
+        "IDENTITY_CONFLICT"
+      ],
+      "executedRelease": "r3"
+    },
+    {
+      "scenario": "clarification-replaces-old-term",
+      "files": 2,
+      "reviewStatuses": {
+        "TENDER_COMPLIANCE": "COMPLETED",
+        "AGENT_PRECHECK": "COMPLETED",
+        "BLACKLIST": "DATA_INSUFFICIENT"
+      },
+      "findingCodes": [],
+      "executedRelease": "r3"
+    },
+    {
+      "scenario": "vague-scoring-and-unequal-scope",
+      "files": 2,
+      "reviewStatuses": {
+        "AGENT_PRECHECK": "PARTIAL",
+        "BLACKLIST": "COMPLETED",
+        "TENDER_COMPLIANCE": "COMPLETED"
+      },
+      "findingCodes": [
+        "EVALUATION_BASIS",
+        "QUOTE_SCOPE"
+      ],
+      "executedRelease": "r6"
+    },
+    {
+      "scenario": "policy-eligibility-and-voluntary-brand",
+      "files": 2,
+      "reviewStatuses": {
+        "AGENT_PRECHECK": "COMPLETED",
+        "BLACKLIST": "COMPLETED",
+        "TENDER_COMPLIANCE": "COMPLETED"
+      },
+      "findingCodes": [],
+      "executedRelease": "r6"
+    },
+    {
+      "scenario": "award-vs-same-supplier-quote",
+      "files": 3,
+      "reviewStatuses": {
+        "AGENT_PRECHECK": "PARTIAL",
+        "BLACKLIST": "COMPLETED",
+        "TENDER_COMPLIANCE": "PARTIAL"
+      },
+      "findingCodes": [
+        "AWARD_QUOTE_MISMATCH"
+      ],
+      "executedRelease": "r5"
+    }
+  ],
+  "failures": []
+}

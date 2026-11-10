@@ -1,0 +1,36 @@
+[
+  {
+    "query": "",
+    "status": 200,
+    "code": 200,
+    "count": 5
+  },
+  {
+    "query": "?keyword=undefined&from=undefined&to=undefined",
+    "status": 400,
+    "code": 400
+  },
+  {
+    "query": "?keyword=%E6%B5%8B%E8%AF%95",
+    "status": 200,
+    "code": 200,
+    "count": 0
+  },
+  {
+    "query": "?from=2026-10-28T16%3A00%3A00.000Z&to=2026-10-29T16%3A00%3A00.000Z",
+    "status": 200,
+    "code": 200,
+    "count": 1
+  },
+  {
+    "query": "?size=2",
+    "status": 200,
+    "code": 200,
+    "count": 2
+  },
+  {
+    "query": "cursor",
+    "status": 200,
+    "code": 200
+  }
+]

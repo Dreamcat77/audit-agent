@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController @Validated
 @RequestMapping("/api/v1/projects/{projectId}/contracts/{contractId}/review-runs/{runId}")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class ContractReviewCloseoutController {
     private final ContractReviewAcknowledgementService acknowledgements;
     private final ContractReviewReportService reports;

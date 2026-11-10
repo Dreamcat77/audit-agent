@@ -1,0 +1,16 @@
+{
+  "scenario": "payment-conflict",
+  "http": 502,
+  "seconds": 0.34,
+  "realModel": true,
+  "synthetic": true,
+  "failures": [
+    "HTTP_502"
+  ],
+  "result": {
+    "code": "CONTRACT_ANALYSIS_MODEL_FAILED",
+    "message": "contract model call failed",
+    "data": null,
+    "requestId": "05a94f22-42be-4102-87ab-916c99cff4af"
+  }
+}

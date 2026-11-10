@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "browser": "109.0.5412.0",
+  "httpStatus": 200,
+  "analysisId": "f52207dd-363d-4d67-ad15-9b07c4bd4b00",
+  "version": "SELECTED_SUM_V3",
+  "complete": false,
+  "totalAmount": 0,
+  "bandCode": null,
+  "summary": "所选 2 项中有 2 项未识别有效申报金额，暂不能确定全部申报总额及金额区间。",
+  "historyReopened": true,
+  "pageErrors": [],
+  "completeAnalysis": {
+    "id": "fa99df0d-5caa-4724-99cc-617940e4e611",
+    "httpStatus": 200,
+    "totalAmount": 195200,
+    "bandCode": "BELOW_1M",
+    "summary": "已合计所选 2 项申报金额，所属金额区间：低于 100 万元。未触发 100 万元的额外审批门槛。",
+    "historyReopened": true
+  },
+  "candidatePagesChecked": 1
+}

@@ -1,0 +1,49 @@
+{
+  "batch": {
+    "batchId": "b11c2e9a-f1d1-4f1c-99a6-c6c1de99840b",
+    "status": "REVIEWED",
+    "budgetYear": "",
+    "departmentCode": "",
+    "createdAt": "2026-10-29T17:03:21.751341Z",
+    "files": [
+      {
+        "taskId": "e04f1747-7ada-4366-ad2f-558f59d269d3",
+        "fileName": "预算申报与批复.csv",
+        "status": "UNKNOWN"
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "task": {
+        "taskId": "e04f1747-7ada-4366-ad2f-558f59d269d3",
+        "fileName": "预算申报与批复.csv",
+        "contentType": "text/csv",
+        "fileSize": 265,
+        "status": "UNKNOWN",
+        "parsedLineCount": 0,
+        "errorDetail": "智能分析服务未能正常返回结果，本次处理已结束。",
+        "budgetYear": "",
+        "departmentCode": "",
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T17:03:21.978332Z",
+        "updatedTime": "2026-10-29T17:03:32.323777Z"
+      },
+      "allPassed": false,
+      "totalItems": 0,
+      "passedItems": 0,
+      "exceptionItems": 0,
+      "items": [],
+      "materialReference": {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "这份材料的处理状态尚未确认，不能视为没有预算信息。本批仍有材料或部分信息未能核实，结果依据尚不完整；未列出的内容不代表没有问题。",
+        "lines": [],
+        "assessments": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "denied": [
+    {
+      "endpoint": "visual",
+      "status": 404
+    },
+    {
+      "endpoint": "image",
+      "status": 404
+    },
+    {
+      "endpoint": "visual",
+      "status": 404
+    },
+    {
+      "endpoint": "image",
+      "status": 404
+    },
+    {
+      "endpoint": "visual",
+      "status": 404
+    },
+    {
+      "endpoint": "image",
+      "status": 404
+    }
+  ]
+}

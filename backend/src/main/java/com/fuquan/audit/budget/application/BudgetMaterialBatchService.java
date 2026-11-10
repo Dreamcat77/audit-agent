@@ -20,6 +20,9 @@ public class BudgetMaterialBatchService {
     private final BudgetMaterialBatchTransactions tx;
     private final BudgetUploadedMaterialAnalyzer analyzer;
     private final ObjectMapper json;
+    private BudgetBatchReviewService batchReview;
+    @org.springframework.beans.factory.annotation.Autowired
+    public void setBatchReview(BudgetBatchReviewService batchReview){this.batchReview=batchReview;}
     public BudgetMaterialBatchService(BudgetMaterialBatchRepository batches,BudgetMaterialJobRepository jobs,BudgetReviewTaskRepository tasks,
             BudgetMaterialBatchTransactions tx,BudgetUploadedMaterialAnalyzer analyzer,ObjectMapper json) {
         this.batches=batches;this.jobs=jobs;this.tasks=tasks;this.tx=tx;this.analyzer=analyzer;this.json=json;
@@ -62,16 +65,9 @@ public class BudgetMaterialBatchService {
     }
     private BatchHistoryRecord historyRecord(BudgetMaterialBatch batch) {
         var sources=batches.sources(batch.id());
-        String name=null;
-        for(var source:sources) {
-            if(source.factsJson()==null)continue;
-            var snapshot=decode(source.factsJson(),BudgetUploadedFacts.Snapshot.class);
-            name=snapshot.rows().stream().flatMap(r->r.facts().stream()).filter(f->f.field().equals("projectName"))
-                    .map(com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Fact::value)
-                    .filter(v->v!=null&&!v.isBlank()).findFirst().orElse(null);
-            if(name!=null)break;
-        }
-        if(name==null)name="预算材料-"+batch.createdAt().atZone(ZoneId.of("Asia/Shanghai")).toLocalDate();
+        String name=BudgetBatchReviewService.projectName(sources.stream().filter(s->s.factsJson()!=null)
+                .map(s->new BudgetUploadedFacts.Input(s.taskId(),"", "PARSED",decode(s.factsJson(),BudgetUploadedFacts.Snapshot.class))).toList());
+        if(name.equals("预算材料分析"))name="预算材料-"+batch.createdAt().atZone(ZoneId.of("Asia/Shanghai")).toLocalDate();
         return new BatchHistoryRecord(batch.id(),null,historyStatus(batch,sources),batch.budgetYear(),batch.departmentCode(),batch.createdAt(),
                 batch.members().size(),batch.members().stream().limit(3).map(Member::fileName).toList(),name);
     }
@@ -141,7 +137,9 @@ public class BudgetMaterialBatchService {
                     if(job.status().equals("PARSED")&&facts==null)throw new IllegalStateException("budget snapshot missing");
                     inputs.add(new BudgetUploadedFacts.Input(task.id(),task.fileName(),job.status(),facts));
                 }
-                var analyzed=analyzer.analyze(inputs);var encoded=new LinkedHashMap<UUID,String>();
+                var analyzed=analyzer.analyzeBatch(inputs);
+                if(batchReview!=null)analyzed=batchReview.review(id,inputs,analyzed);
+                var encoded=new LinkedHashMap<UUID,String>();
                 for(var entry:analyzed.entrySet())encoded.put(entry.getKey(),encode(entry.getValue()));
                 if(Thread.currentThread().isInterrupted())return;
                 tx.complete(id,token,analyzed,encoded);

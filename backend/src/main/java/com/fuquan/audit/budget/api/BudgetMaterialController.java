@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/budget/material-uploads")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','FINANCE_REVIEWER')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','FINANCE_REVIEWER','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class BudgetMaterialController {
     private final BudgetMaterialService service;private final AuthContext auth;
     private final com.fuquan.audit.budget.application.BudgetMaterialBatchService batches;
@@ -46,6 +46,14 @@ public class BudgetMaterialController {
     }
     @GetMapping("/operations/{key}") public ApiResponse<Result> operation(@PathVariable UUID key) {return ApiResponse.success(service.operation(user(),key.toString()).map(this::result).orElse(null));}
     @GetMapping("/{id}") public ApiResponse<Result> get(@PathVariable UUID id) {return ApiResponse.success(result(service.owned(id,user())));}
+    @GetMapping("/{id}/source-text") public ApiResponse<SourceText> sourceText(@PathVariable UUID id,
+            @RequestParam(defaultValue="0") int start,@RequestParam(defaultValue="20000") int size) {
+        service.owned(id,user());
+        if(start<0||size<1||size>20000)throw new BusinessException(BusinessErrorCode.INVALID_ARGUMENT);
+        var snapshot=batches.snapshot(id);String text=snapshot==null?"":com.fuquan.audit.budget.application.BudgetSourceText.text(snapshot);
+        int at=Math.min(start,text.length());return ApiResponse.success(new SourceText(text.substring(at,Math.min(text.length(),at+size)),at,text.length()));
+    }
+    public record SourceText(String text,int start,int totalChars) {}
     @GetMapping("/batches/{id}")
     public ApiResponse<com.fuquan.audit.budget.application.BudgetMaterialBatchService.BatchView> batch(@PathVariable UUID id) {
         return ApiResponse.success(batches.view(id, user()));

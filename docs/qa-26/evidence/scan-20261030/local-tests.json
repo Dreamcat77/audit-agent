@@ -1,0 +1,18 @@
+{
+  "java": {
+    "command": "backend/.\\mvnw.cmd clean verify",
+    "tests": 3435,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 24,
+    "result": "BUILD SUCCESS",
+    "logSha256": "38f9c7768eac0379c44039d491d617df7c89529a20342da6fa38d6e3aecf3167"
+  },
+  "python": {
+    "command": "python -m pytest services/audit-ai/tests -q -o addopts=--basetemp=.test-runtime/scan-python-final",
+    "passed": 2049,
+    "skipped": 14,
+    "subtestsPassed": 43,
+    "logSha256": "6a1c8e09127f8179236b20be4550cc65fe721c51bf4b8086afce1497ea1ee965"
+  }
+}

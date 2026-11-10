@@ -156,7 +156,7 @@ export function DeliveryWorkbenchPage({ dataSource = contractAuditTaskDataSource
       if (!controller.signal.aborted) setLoading(false);
     });
     return () => controller.abort();
-  }, [dataSource, nonce]);
+  }, [dataSource, nonce, user?.userId]);
 
   const view = useMemo(() => workbenchPresentation(summary, recentTasks, todayTotal), [summary, recentTasks, todayTotal]);
   return <section className="delivery-page space-y-6">

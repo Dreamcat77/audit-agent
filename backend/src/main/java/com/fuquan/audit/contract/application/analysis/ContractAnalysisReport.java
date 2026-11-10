@@ -9,6 +9,8 @@ import static com.fuquan.audit.contract.application.analysis.ContractAnalysisCas
 /** Read-only projection of immutable step outputs; GET never creates work or invokes a model. */
 @Service
 public class ContractAnalysisReport {
+    private ContractVisualQuality visualQuality;
+    @org.springframework.beans.factory.annotation.Autowired public void setVisualQuality(ContractVisualQuality value){this.visualQuality=value;}
     public record Summary(UUID id,String status,String statusLabel,String headline,int files,int risks,
                           Instant createdAt,UUID projectId,String projectName) {}
     public record Document(UUID fileId,String name,String status,String role,String profile,List<Fact> facts,List<Clause> clauses,List<Check> checks,List<Finding> findings,int sourceChars,int reviewedChars,boolean fullyReviewed) {}
@@ -17,25 +19,56 @@ public class ContractAnalysisReport {
     private final ContractAnalysisService service;private final ContractAnalysisSources sources;private final ContractAnalysisRelations relations;
     public ContractAnalysisReport(ContractAnalysisService service,ContractAnalysisSources sources,ContractAnalysisRelations relations){this.service=service;this.sources=sources;this.relations=relations;}
     public Summary summary(ContractAnalysisCase c){return summary(c,null);}
-    public Summary summary(ContractAnalysisCase c,String projectName){String name=projectName(c,projectName,List.of());return new Summary(c.id(),c.status().name(),label(c.status()),name,Math.max(c.expectedUploads(),c.sources().size()),(int)uniqueFindings(c.steps()).stream().filter(f->f.level().equals("WARNING")).count(),c.createdAt(),c.projectId(),name);}
+    public Summary summary(ContractAnalysisCase c,String projectName){
+        String name=projectName(c,projectName,List.of());
+        var texts=new HashMap<UUID,Optional<String>>();
+        long risks=uniqueFindings(c.steps()).stream().map(f->ContractAnalysisEvidence.ancillaryPartyDifference(f,c.sources())).filter(f->f.level().equals("WARNING"))
+            .filter(f->visualQuality==null||c.sources().stream().filter(s->s.status()==SourceState.READY).noneMatch(s->{
+                var text=texts.computeIfAbsent(s.fileId(),key->{try{return Optional.of(sources.load(c.projectId(),s).canonicalText());}catch(IllegalStateException unavailable){return Optional.empty();}});
+                return text.isPresent()&&visualQuality.uncertain(s,text.get(),f.evidence());
+            }))
+            .filter(f->!ContractFindingSupport.temporal(f)||c.sources().stream().filter(s->s.status()==SourceState.READY)
+                .filter(s->f.evidence().stream().anyMatch(e->e.fileId().equals(s.fileId())))
+                .allMatch(s->{
+                    var text=texts.computeIfAbsent(s.fileId(),key->{
+                        if(sources==null)return Optional.empty();
+                        try{return Optional.of(sources.load(c.projectId(),s).canonicalText());}
+                        catch(IllegalStateException unavailable){return Optional.empty();}
+                    });
+                    return text.isEmpty()||ContractFindingSupport.supports(f,s,text.get());
+                })).count();
+        return new Summary(c.id(),c.status().name(),label(c.status()),name,Math.max(c.expectedUploads(),c.sources().size()),(int)risks,c.createdAt(),c.projectId(),name);
+    }
     public Report report(UUID id,CurrentUser actor){return project(service.owned(id,actor));}
     public Report project(ContractAnalysisCase c){
         List<Document> docs=new ArrayList<>();List<String> limits=new ArrayList<>();var checks=new ArrayList<Check>();var texts=new ArrayList<String>();
+        var originals=new HashMap<UUID,String>();
         for(var source:c.sources()){
             var work=c.steps().stream().filter(s->source.fileId().equals(s.fileId())&&s.output()!=null&&!s.kind().startsWith("CROSS")).toList();
-            var out=work.stream().map(Step::output).toList();int length=0;
-            if(source.status()==SourceState.READY)try{var parsed=sources.load(c.projectId(),source);length=parsed.canonicalText().length();texts.add(parsed.canonicalText());if(parsed.engine().contains("PARTIAL"))limits.add("“"+source.name()+"”：部分页面未取得文字，结果仅覆盖已读取内容");}catch(IllegalStateException unavailable){limits.add("“"+source.name()+"”的原文暂时无法核对，不能将相关判断当作已核实结论。");}
+            int length=0;String canonical=null;boolean ocr=false;
+            if(source.status()==SourceState.READY)try{var parsed=sources.load(c.projectId(),source);length=parsed.canonicalText().length();canonical=parsed.canonicalText();ocr=(parsed.parseMethod().name()+"/"+parsed.engine()).toUpperCase(Locale.ROOT).contains("OCR");texts.add(ContractAnalysisSemantics.currentNamingText(parsed.canonicalText()));if(parsed.engine().contains("PARTIAL"))limits.add("“"+source.name()+"”：部分页面未取得文字，结果仅覆盖已读取内容");}catch(IllegalStateException unavailable){limits.add("“"+source.name()+"”的原文暂时无法核对，不能将相关判断当作已核实结论。");}
+            if(canonical!=null&&!canonical.isEmpty()){
+                originals.put(source.fileId(),canonical);
+                final String original=canonical;final boolean scanned=ocr;
+                work=work.stream().map(s->new Step(s.id(),s.fileId(),s.kind(),s.start(),s.end(),s.inputDigest(),s.status(),
+                    s.startedAt(),s.completedAt(),quality(ContractAnalysisSemantics.project(s.output(),source,original,scanned),source,original),s.reasonCode())).toList();
+            }
+            var out=work.stream().map(Step::output).toList();
             int reviewed=covered(work,length);boolean full=length>0&&reviewed==length&&limits.stream().noneMatch(v->v.startsWith("“"+source.name()+"”：部分页面"));
             String profile=out.stream().map(Output::profile).filter(p->!p.equals("GENERAL")).findFirst().orElse("GENERAL");
             var localChecks=out.stream().flatMap(o->o.checks().stream()).distinct().toList();checks.addAll(localChecks);
             docs.add(new Document(source.fileId(),source.name(),source.status().name(),relations.role(source,c.steps()),profile,
-                mergedFacts(out.stream().flatMap(o->o.facts().stream()).toList()),
+                ContractFactConsolidation.merge(out.stream().flatMap(o->o.facts().stream()).toList(),canonical==null?"":canonical),
                 deduplicate(out.stream().flatMap(o->o.clauses().stream()).toList(),v->v.topic()+"/"+v.summary()+"/"+v.evidence()),
                 localChecks,uniqueFindings(work),length,reviewed,full));
             if(source.status()!=SourceState.READY)limits.add("“"+source.name()+"”："+sourceReason(source));
             else if(c.terminal()&&!full)limits.add("“"+source.name()+"”：仅展示已取得依据的内容，部分原文未完成模型审查，不能据此认定整份合同无风险。");
         }
-        c.steps().stream().filter(s->s.kind().equals("CROSS_RULES")&&s.output()!=null).flatMap(s->s.output().checks().stream()).forEach(checks::add);
+        var crossWork=c.steps().stream().filter(s->s.kind().startsWith("CROSS")&&s.output()!=null).map(s->{
+            var output=s.output();for(var source:c.sources())if(originals.containsKey(source.fileId()))output=quality(output,source,originals.get(source.fileId()));
+            return new Step(s.id(),s.fileId(),s.kind(),s.start(),s.end(),s.inputDigest(),s.status(),s.startedAt(),s.completedAt(),output,s.reasonCode());
+        }).toList();
+        crossWork.stream().filter(s->s.kind().equals("CROSS_RULES")).flatMap(s->s.output().checks().stream()).forEach(checks::add);
         if(c.terminal())for(String code:List.of(com.fuquan.audit.contract.domain.F02RuleCodes.AWARD_AMOUNT_MATCH,com.fuquan.audit.contract.domain.F02RuleCodes.AWARD_SUPPLIER_MATCH))
             if(checks.stream().noneMatch(check->check.code().equals(code)))checks.add(ContractAnalysisRules.missing(code,"现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论"));
         if(c.steps().stream().anyMatch(s->s.status()==StepState.UNKNOWN))limits.add("部分模型请求的最终结果无法确认，系统已停止自动重发；已取得的有效结果仍保留。");
@@ -50,11 +83,15 @@ public class ContractAnalysisReport {
             case UNKNOWN->"本次处理的部分结果无法确认，系统已安全停止，请联系维护人员核查。";
             default->"系统正在处理本批材料，可离开页面，稍后从历史记录查看结果。";
         };
-        var comparisons=deduplicate(c.steps().stream().filter(s->s.kind().equals("CROSS_FILE")&&s.output()!=null)
+        var comparisons=deduplicate(crossWork.stream().filter(s->s.kind().equals("CROSS_FILE"))
             .flatMap(s->s.output().clauses().stream()).toList(),v->v.topic()+"/"+v.summary()+"/"+v.evidence());
+        var projectedFindings=new ArrayList<Finding>();docs.forEach(d->projectedFindings.addAll(d.findings()));
+        projectedFindings.addAll(uniqueFindings(crossWork).stream()
+                .map(f->ContractAnalysisEvidence.ancillaryPartyDifference(f,c.sources())).toList());
         String projectName=projectName(c,sources.projectName(c),texts);
-        return new Report(c.id(),c.status().name(),label(c.status()),projectName,explanation,c.createdAt(),List.copyOf(docs),uniqueFindings(c.steps()),checks.stream().distinct().toList(),limits.stream().distinct().toList(),comparisons,ContractAnalysisCategories.project(docs,checks.stream().distinct().toList(),uniqueFindings(c.steps())),c.projectId(),projectName);
+        return new Report(c.id(),c.status().name(),label(c.status()),projectName,explanation,c.createdAt(),List.copyOf(docs),List.copyOf(projectedFindings),checks.stream().distinct().toList(),limits.stream().distinct().toList(),comparisons,ContractAnalysisCategories.project(docs,checks.stream().distinct().toList(),projectedFindings),c.projectId(),projectName);
     }
+    private Output quality(Output output,Source source,String text){return visualQuality==null?output:visualQuality.project(output,source,text);}
     public Text text(UUID id,UUID fileId,int start,int size,CurrentUser actor){
         if(start<0||size<1||size>20000)throw new com.fuquan.audit.common.exception.BusinessException(com.fuquan.audit.common.exception.BusinessErrorCode.INVALID_ARGUMENT);
         var c=service.owned(id,actor);var s=c.sources().stream().filter(f->f.fileId().equals(fileId)).findFirst().orElseThrow(()->new com.fuquan.audit.common.exception.BusinessException(com.fuquan.audit.common.exception.BusinessErrorCode.NOT_FOUND));
@@ -71,10 +108,18 @@ public class ContractAnalysisReport {
         // operands and frozen evidence. Other semantic concerns stay visible.
         var result=new ArrayList<Finding>();
         for(var finding:findings){
-            var duplicate=findings.stream().filter(rule->sameLineSumIssue(finding,rule)).findFirst();
+            var duplicate=findings.stream().filter(rule->sameLineSumIssue(finding,rule)||sameFormIssue(finding,rule)).findFirst();
             if(duplicate.isEmpty())result.add(finding);
         }
-        return List.copyOf(result);
+        return ContractResultConsolidation.findings(result);
+    }
+    private static boolean sameFormIssue(Finding ai,Finding rule){
+        if(!"AI_REVIEW_SUGGESTION".equals(ai.origin())||!"DETERMINISTIC_FORM".equals(rule.origin())
+                ||!Objects.equals(ai.level(),rule.level())||!ContractAnalysisEvidence.compact(ai.title()).equals(ContractAnalysisEvidence.compact(rule.title()))
+                ||ai.evidence().isEmpty())return false;
+        return ai.evidence().stream().allMatch(a->rule.evidence().stream().anyMatch(b->
+                a.fileId().equals(b.fileId())&&a.fileSha256().equals(b.fileSha256())&&a.parseResultId().equals(b.parseResultId())
+                &&a.parseVersion()==b.parseVersion()&&a.textSha256().equals(b.textSha256())&&a.start()>=b.start()&&a.end()<=b.end()));
     }
     private static boolean sameLineSumIssue(Finding ai,Finding rule){
         if(!"AI_REVIEW_SUGGESTION".equals(ai.origin())||!"OTHER_CONCRETE_RISK".equals(ai.code())||!"WARNING".equals(ai.level())
@@ -90,13 +135,7 @@ public class ContractAnalysisReport {
         var result=new HashSet<java.math.BigDecimal>();var matcher=java.util.regex.Pattern.compile("\\d+(?:,\\d{3})*(?:\\.\\d+)?").matcher(value);
         while(matcher.find())result.add(new java.math.BigDecimal(matcher.group().replace(",","")).stripTrailingZeros());return result;
     }
-    private static List<Fact> mergedFacts(List<Fact> facts){
-        var map=new LinkedHashMap<String,Fact>();for(var f:facts){String key=f.type()+"/"+ContractAnalysisEvidence.compact(f.value());
-            if(f.type().endsWith("AMOUNT"))key=f.type()+"/"+ContractAnalysisRules.money(f.value()).map(v->v.stripTrailingZeros().toPlainString()).orElse(f.value());
-            if(f.type().startsWith("ITEM_"))key+="/"+f.evidence();
-            var old=map.get(key);if(old==null)map.put(key,f);else map.put(key,new Fact(old.type(),old.value(),old.method(),java.util.stream.Stream.concat(old.evidence().stream(),f.evidence().stream()).distinct().toList()));
-        }return List.copyOf(map.values());
-    }
+    private static List<Fact> mergedFacts(List<Fact> facts){return ContractFactConsolidation.merge(facts,"");}
     private static <T> List<T> deduplicate(List<T> values,java.util.function.Function<T,String> key){var map=new LinkedHashMap<String,T>();for(var v:values)map.putIfAbsent(key.apply(v),v);return List.copyOf(map.values());}
     static String label(State s){return switch(s){case QUEUED->"等待处理";case RUNNING->"正在分析";case COMPLETED->"分析完成";case PARTIAL->"已生成结果";case DATA_INSUFFICIENT->"材料不足以支持分析";case FAILED->"未能完成处理";case UNKNOWN->"处理已停止，结果待核查";};}
     static String projectName(ContractAnalysisCase c,String established,List<String> texts){

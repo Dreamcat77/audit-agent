@@ -103,4 +103,13 @@ class ContractAnalysisProcessorTest {
         verify(ai,atLeast(3)).analyze(captor.capture());
         assertThat(captor.getAllValues().stream().map(ContractAnalysisAiPort.Request::inputDigest)).doesNotHaveDuplicates();
     }
+    @Test void semanticContextComesFromFrozenSourceNotMutableProjectDisplayName(){
+        String text="项目名称：青禾档案整理项目\n验收合格后付款";
+        var c=caseFor(text);when(sources.projectName(any())).thenReturn("后来修改的其他项目");
+        when(ai.analyze(any())).thenAnswer(i->{var request=(ContractAnalysisAiPort.Request)i.getArgument(0);var document=request.documents().get(0);
+            assertThat(document.header()).isEqualTo(text);assertThat(document.projectName()).isEqualTo("青禾档案整理项目");
+            assertThat(document.name()).isEqualTo(c.sources().get(0).name());return clauses(request);});
+        run(c.id());verify(ai,atLeastOnce()).analyze(any());verify(sources,never()).projectName(any());
+    }
+
 }

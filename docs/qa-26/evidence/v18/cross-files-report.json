@@ -1,0 +1,1057 @@
+{
+  "id": "35fc31fb-534a-3f27-a59d-9517bb44ddbd",
+  "status": "PARTIAL",
+  "statusLabel": "已生成部分结果",
+  "headline": "青榆办公终端更新项目",
+  "explanation": "已形成可参考的阶段结果，请优先查看有原文依据的关注事项；尚未完成的范围单独列出。",
+  "createdAt": "2026-10-29T12:55:08.727932932Z",
+  "documents": [
+    {
+      "fileId": "0a8a612d-fdd8-46aa-bf0c-a124dd1943a0",
+      "name": "采购委托协议书.docx",
+      "status": "READY",
+      "role": "CONTRACT",
+      "profile": "PROCUREMENT",
+      "facts": [
+        {
+          "type": "CONTRACT_NAME",
+          "value": "采购委托协议书",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0a8a612d-fdd8-46aa-bf0c-a124dd1943a0",
+              "fileSha256": "b584cbdf1640492f58338fe59d4c3e619d0b0efa2ed11ea5c6ad8424b5984bc3",
+              "parseResultId": "62e32fa7-eaa0-4f53-90f1-0c6b9e90e18c",
+              "parseVersion": 1,
+              "textSha256": "e1db4892c39e54c189da66314d004334323a7e4526d341fd95b1e94deaf830af",
+              "start": 18,
+              "end": 25,
+              "excerpt": "采购委托协议书"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_TYPE",
+          "value": "委托采购",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0a8a612d-fdd8-46aa-bf0c-a124dd1943a0",
+              "fileSha256": "b584cbdf1640492f58338fe59d4c3e619d0b0efa2ed11ea5c6ad8424b5984bc3",
+              "parseResultId": "62e32fa7-eaa0-4f53-90f1-0c6b9e90e18c",
+              "parseVersion": 1,
+              "textSha256": "e1db4892c39e54c189da66314d004334323a7e4526d341fd95b1e94deaf830af",
+              "start": 30,
+              "end": 42,
+              "excerpt": "委托采购代理办理采购服务"
+            }
+          ]
+        }
+      ],
+      "clauses": [
+        {
+          "topic": "OTHER",
+          "summary": "约定委托代理办理采购服务，具体范围指向需求表。",
+          "evidence": [
+            {
+              "fileId": "0a8a612d-fdd8-46aa-bf0c-a124dd1943a0",
+              "fileSha256": "b584cbdf1640492f58338fe59d4c3e619d0b0efa2ed11ea5c6ad8424b5984bc3",
+              "parseResultId": "62e32fa7-eaa0-4f53-90f1-0c6b9e90e18c",
+              "parseVersion": 1,
+              "textSha256": "e1db4892c39e54c189da66314d004334323a7e4526d341fd95b1e94deaf830af",
+              "start": 27,
+              "end": 51,
+              "excerpt": "本协议委托采购代理办理采购服务，范围另见需求表。"
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "code": "F02_AMOUNT_WORDS_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_ITEM_ARITHMETIC",
+          "status": "NOT_EVALUATED",
+          "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_SUM_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+          "evidence": []
+        }
+      ],
+      "findings": [
+        {
+          "code": "MATERIAL_SCOPE_NOTE",
+          "level": "INFO",
+          "title": "需核实需求表及主体信息",
+          "explanation": "当前文本仅提及范围另见需求表，未包含甲乙方名称、具体采购标的、金额、期限及违约责任等核心条款，无法进行实质性审查。",
+          "suggestion": "请补充完整合同文本及需求表附件。",
+          "evidence": [
+            {
+              "fileId": "0a8a612d-fdd8-46aa-bf0c-a124dd1943a0",
+              "fileSha256": "b584cbdf1640492f58338fe59d4c3e619d0b0efa2ed11ea5c6ad8424b5984bc3",
+              "parseResultId": "62e32fa7-eaa0-4f53-90f1-0c6b9e90e18c",
+              "parseVersion": 1,
+              "textSha256": "e1db4892c39e54c189da66314d004334323a7e4526d341fd95b1e94deaf830af",
+              "start": 43,
+              "end": 50,
+              "excerpt": "范围另见需求表"
+            }
+          ],
+          "origin": "AI_REVIEW_SUGGESTION"
+        }
+      ],
+      "sourceChars": 52,
+      "reviewedChars": 52,
+      "fullyReviewed": true
+    },
+    {
+      "fileId": "5c0d8862-f0a3-407f-ba28-dff1bbe809f4",
+      "name": "需求标准.docx",
+      "status": "READY",
+      "role": "OTHER",
+      "profile": "PROCUREMENT",
+      "facts": [
+        {
+          "type": "PROJECT_NO",
+          "value": "SYN-NAME-05",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "5c0d8862-f0a3-407f-ba28-dff1bbe809f4",
+              "fileSha256": "e50548b43d6c5b3cd9b82ab7d09f018b4cdefe6f80db972e6d76f43b20126c74",
+              "parseResultId": "bd9307b3-494d-408b-a803-20c6fce70144",
+              "parseVersion": 1,
+              "textSha256": "179cdc0d783d9194c36b5d732651f9b98f9ef0d011a97e7df8cff6c5f63b6d9b",
+              "start": 41,
+              "end": 57,
+              "excerpt": "项目编号：SYN-NAME-05"
+            }
+          ]
+        },
+        {
+          "type": "PROJECT_NAME",
+          "value": "青榆办公终端更新项目",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "5c0d8862-f0a3-407f-ba28-dff1bbe809f4",
+              "fileSha256": "e50548b43d6c5b3cd9b82ab7d09f018b4cdefe6f80db972e6d76f43b20126c74",
+              "parseResultId": "bd9307b3-494d-408b-a803-20c6fce70144",
+              "parseVersion": 1,
+              "textSha256": "179cdc0d783d9194c36b5d732651f9b98f9ef0d011a97e7df8cff6c5f63b6d9b",
+              "start": 24,
+              "end": 39,
+              "excerpt": "项目名称：青榆办公终端更新项目"
+            }
+          ]
+        },
+        {
+          "type": "ITEM_QUANTITY",
+          "value": "10台",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "5c0d8862-f0a3-407f-ba28-dff1bbe809f4",
+              "fileSha256": "e50548b43d6c5b3cd9b82ab7d09f018b4cdefe6f80db972e6d76f43b20126c74",
+              "parseResultId": "bd9307b3-494d-408b-a803-20c6fce70144",
+              "parseVersion": 1,
+              "textSha256": "179cdc0d783d9194c36b5d732651f9b98f9ef0d011a97e7df8cff6c5f63b6d9b",
+              "start": 76,
+              "end": 85,
+              "excerpt": "采购办公终端10台"
+            }
+          ]
+        }
+      ],
+      "clauses": [],
+      "checks": [
+        {
+          "code": "F02_AMOUNT_WORDS_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_ITEM_ARITHMETIC",
+          "status": "NOT_EVALUATED",
+          "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_SUM_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+          "evidence": []
+        }
+      ],
+      "findings": [],
+      "sourceChars": 87,
+      "reviewedChars": 0,
+      "fullyReviewed": false
+    },
+    {
+      "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+      "name": "合同书.docx",
+      "status": "READY",
+      "role": "CONTRACT",
+      "profile": "PROCUREMENT",
+      "facts": [
+        {
+          "type": "PROJECT_NO",
+          "value": "SYN-NAME-05",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 40,
+              "end": 56,
+              "excerpt": "项目编号：SYN-NAME-05"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NAME",
+          "value": "青榆办公终端采购合同",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 58,
+              "end": 73,
+              "excerpt": "合同名称：青榆办公终端采购合同"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NO",
+          "value": "SYN-NAME-HT05",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 86,
+              "end": 104,
+              "excerpt": "合同编号：SYN-NAME-HT05"
+            }
+          ]
+        },
+        {
+          "type": "PARTY_A",
+          "value": "青榆合成档案中心",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 106,
+              "end": 117,
+              "excerpt": "甲方：青榆合成档案中心"
+            }
+          ]
+        },
+        {
+          "type": "PARTY_B",
+          "value": "青榆合成设备有限公司",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 119,
+              "end": 132,
+              "excerpt": "乙方：青榆合成设备有限公司"
+            }
+          ]
+        },
+        {
+          "type": "TOTAL_AMOUNT",
+          "value": "190000元",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 134,
+              "end": 146,
+              "excerpt": "合同金额：190000元"
+            }
+          ]
+        },
+        {
+          "type": "AMOUNT_WORDS",
+          "value": "壹拾玖万元整",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 148,
+              "end": 159,
+              "excerpt": "金额大写：壹拾玖万元整"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_TYPE",
+          "value": "货物采购",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 75,
+              "end": 84,
+              "excerpt": "合同类型：货物采购"
+            }
+          ]
+        },
+        {
+          "type": "PROJECT_NAME",
+          "value": "青榆办公终端更新项目",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 23,
+              "end": 38,
+              "excerpt": "项目名称：青榆办公终端更新项目"
+            }
+          ]
+        },
+        {
+          "type": "SIGN_DATE",
+          "value": "2026年10月29日",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 161,
+              "end": 177,
+              "excerpt": "签订日期：2026年10月29日"
+            }
+          ]
+        }
+      ],
+      "clauses": [
+        {
+          "topic": "EFFECTIVENESS",
+          "summary": "双方签章后生效，合同一式肆份，双方各执贰份。",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 179,
+              "end": 202,
+              "excerpt": "双方签章后生效。本合同一式肆份，双方各执贰份。"
+            }
+          ]
+        },
+        {
+          "topic": "DELIVERY",
+          "summary": "乙方采购办公终端10台，含安装调试。",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 204,
+              "end": 235,
+              "excerpt": "采购办公终端10台，每台19000元，含安装调试，验收后付款。"
+            }
+          ]
+        },
+        {
+          "topic": "PAYMENT",
+          "summary": "验收后付款。",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 204,
+              "end": 235,
+              "excerpt": "采购办公终端10台，每台19000元，含安装调试，验收后付款。"
+            }
+          ]
+        },
+        {
+          "topic": "ATTACHMENT",
+          "summary": "附件一为技术规格书。",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 237,
+              "end": 247,
+              "excerpt": "附件一：技术规格书。"
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "code": "F02_AMOUNT_WORDS_MATCH",
+          "status": "PASS",
+          "explanation": "合同金额大小写核对：190000元，与依据金额190000.00元一致",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 134,
+              "end": 146,
+              "excerpt": "合同金额：190000元"
+            },
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 148,
+              "end": 159,
+              "excerpt": "金额大写：壹拾玖万元整"
+            }
+          ]
+        },
+        {
+          "code": "F02_LINE_ITEM_ARITHMETIC",
+          "status": "NOT_EVALUATED",
+          "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_SUM_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+          "evidence": []
+        },
+        {
+          "code": "COPY_COUNT_REQUIREMENT_COMPARISON",
+          "status": "PASS",
+          "explanation": "合同约定一式4份；各方留存合计4份，与总份数一致。",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 190,
+              "end": 194,
+              "excerpt": "一式肆份"
+            },
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 195,
+              "end": 201,
+              "excerpt": "双方各执贰份"
+            }
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "code": "MATERIAL_SCOPE_NOTE",
+          "level": "INFO",
+          "title": "附件未上传",
+          "explanation": "合同提及附件一技术规格书，但本次输入未包含该附件内容，无法核实具体技术规格。",
+          "suggestion": "请补充上传技术规格书以便核对。",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 237,
+              "end": 247,
+              "excerpt": "附件一：技术规格书。"
+            }
+          ],
+          "origin": "AI_REVIEW_SUGGESTION"
+        }
+      ],
+      "sourceChars": 248,
+      "reviewedChars": 248,
+      "fullyReviewed": true
+    }
+  ],
+  "findings": [
+    {
+      "code": "MATERIAL_SCOPE_NOTE",
+      "level": "INFO",
+      "title": "需核实需求表及主体信息",
+      "explanation": "当前文本仅提及范围另见需求表，未包含甲乙方名称、具体采购标的、金额、期限及违约责任等核心条款，无法进行实质性审查。",
+      "suggestion": "请补充完整合同文本及需求表附件。",
+      "evidence": [
+        {
+          "fileId": "0a8a612d-fdd8-46aa-bf0c-a124dd1943a0",
+          "fileSha256": "b584cbdf1640492f58338fe59d4c3e619d0b0efa2ed11ea5c6ad8424b5984bc3",
+          "parseResultId": "62e32fa7-eaa0-4f53-90f1-0c6b9e90e18c",
+          "parseVersion": 1,
+          "textSha256": "e1db4892c39e54c189da66314d004334323a7e4526d341fd95b1e94deaf830af",
+          "start": 43,
+          "end": 50,
+          "excerpt": "范围另见需求表"
+        }
+      ],
+      "origin": "AI_REVIEW_SUGGESTION"
+    },
+    {
+      "code": "MATERIAL_SCOPE_NOTE",
+      "level": "INFO",
+      "title": "附件未上传",
+      "explanation": "合同提及附件一技术规格书，但本次输入未包含该附件内容，无法核实具体技术规格。",
+      "suggestion": "请补充上传技术规格书以便核对。",
+      "evidence": [
+        {
+          "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+          "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+          "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+          "parseVersion": 1,
+          "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+          "start": 237,
+          "end": 247,
+          "excerpt": "附件一：技术规格书。"
+        }
+      ],
+      "origin": "AI_REVIEW_SUGGESTION"
+    }
+  ],
+  "checks": [
+    {
+      "code": "F02_AMOUNT_WORDS_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+      "evidence": []
+    },
+    {
+      "code": "F02_LINE_ITEM_ARITHMETIC",
+      "status": "NOT_EVALUATED",
+      "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+      "evidence": []
+    },
+    {
+      "code": "F02_LINE_SUM_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+      "evidence": []
+    },
+    {
+      "code": "F02_AMOUNT_WORDS_MATCH",
+      "status": "PASS",
+      "explanation": "合同金额大小写核对：190000元，与依据金额190000.00元一致",
+      "evidence": [
+        {
+          "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+          "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+          "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+          "parseVersion": 1,
+          "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+          "start": 134,
+          "end": 146,
+          "excerpt": "合同金额：190000元"
+        },
+        {
+          "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+          "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+          "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+          "parseVersion": 1,
+          "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+          "start": 148,
+          "end": 159,
+          "excerpt": "金额大写：壹拾玖万元整"
+        }
+      ]
+    },
+    {
+      "code": "COPY_COUNT_REQUIREMENT_COMPARISON",
+      "status": "PASS",
+      "explanation": "合同约定一式4份；各方留存合计4份，与总份数一致。",
+      "evidence": [
+        {
+          "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+          "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+          "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+          "parseVersion": 1,
+          "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+          "start": 190,
+          "end": 194,
+          "excerpt": "一式肆份"
+        },
+        {
+          "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+          "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+          "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+          "parseVersion": 1,
+          "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+          "start": 195,
+          "end": 201,
+          "excerpt": "双方各执贰份"
+        }
+      ]
+    },
+    {
+      "code": "F02_AWARD_AMOUNT_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+      "evidence": []
+    },
+    {
+      "code": "F02_AWARD_SUPPLIER_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+      "evidence": []
+    }
+  ],
+  "limitations": [
+    "“需求标准.docx”：仅展示已取得依据的内容，部分原文未完成模型审查，不能据此认定整份合同无风险。",
+    "个别模型描述未能通过原文核对，未纳入本报告。",
+    "材料之间尚无足够明确的合同关联依据，分别展示结果，未将不同文件的主体或金额强行合并。"
+  ],
+  "comparisons": [],
+  "categories": [
+    {
+      "id": "QUANTITATIVE",
+      "order": 1,
+      "title": "合同条款量化一致性审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "核对结果",
+          "summary": "合同金额大小写核对：190000元，与依据金额190000.00元一致",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 134,
+              "end": 146,
+              "excerpt": "合同金额：190000元"
+            },
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 148,
+              "end": 159,
+              "excerpt": "金额大写：壹拾玖万元整"
+            }
+          ]
+        },
+        {
+          "title": "合同金额",
+          "summary": "合同金额：190000元",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 134,
+              "end": 146,
+              "excerpt": "合同金额：190000元"
+            }
+          ]
+        },
+        {
+          "title": "大写金额",
+          "summary": "大写金额：壹拾玖万元整",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 148,
+              "end": 159,
+              "excerpt": "金额大写：壹拾玖万元整"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DRAFT_STRUCTURE",
+      "order": 2,
+      "title": "合同草本结构对标审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "合同名称",
+          "summary": "合同名称：采购委托协议书",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0a8a612d-fdd8-46aa-bf0c-a124dd1943a0",
+              "fileSha256": "b584cbdf1640492f58338fe59d4c3e619d0b0efa2ed11ea5c6ad8424b5984bc3",
+              "parseResultId": "62e32fa7-eaa0-4f53-90f1-0c6b9e90e18c",
+              "parseVersion": 1,
+              "textSha256": "e1db4892c39e54c189da66314d004334323a7e4526d341fd95b1e94deaf830af",
+              "start": 18,
+              "end": 25,
+              "excerpt": "采购委托协议书"
+            }
+          ]
+        },
+        {
+          "title": "合同名称",
+          "summary": "合同名称：青榆办公终端采购合同",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 58,
+              "end": 73,
+              "excerpt": "合同名称：青榆办公终端采购合同"
+            }
+          ]
+        },
+        {
+          "title": "合同编号",
+          "summary": "合同编号：SYN-NAME-HT05",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 86,
+              "end": 104,
+              "excerpt": "合同编号：SYN-NAME-HT05"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "BREACH",
+      "order": 3,
+      "title": "违约责任条款量化审查",
+      "status": "DATA_INSUFFICIENT",
+      "summary": "材料不足，未生成",
+      "items": []
+    },
+    {
+      "id": "TERM",
+      "order": 4,
+      "title": "合同期限与终止条件格式审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "签订日期",
+          "summary": "签订日期：2026年10月29日",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 161,
+              "end": 177,
+              "excerpt": "签订日期：2026年10月29日"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "乙方采购办公终端10台，含安装调试。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 204,
+              "end": 235,
+              "excerpt": "采购办公终端10台，每台19000元，含安装调试，验收后付款。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PARTY_QUALIFICATION",
+      "order": 5,
+      "title": "合同主体资格审查",
+      "status": "AVAILABLE",
+      "summary": "已整理合同主体信息；资质结论以材料中的证明为依据",
+      "items": [
+        {
+          "title": "甲方",
+          "summary": "甲方：青榆合成档案中心",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 106,
+              "end": 117,
+              "excerpt": "甲方：青榆合成档案中心"
+            }
+          ]
+        },
+        {
+          "title": "乙方",
+          "summary": "乙方：青榆合成设备有限公司",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 119,
+              "end": 132,
+              "excerpt": "乙方：青榆合成设备有限公司"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ATTACHMENT_COMPLETENESS",
+      "order": 6,
+      "title": "附件清单完整性审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "条款内容",
+          "summary": "附件一为技术规格书。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 237,
+              "end": 247,
+              "excerpt": "附件一：技术规格书。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "EFFECTIVENESS_COPIES",
+      "order": 7,
+      "title": "合同生效条件与份数审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "核对结果",
+          "summary": "合同约定一式4份；各方留存合计4份，与总份数一致。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 190,
+              "end": 194,
+              "excerpt": "一式肆份"
+            },
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 195,
+              "end": 201,
+              "excerpt": "双方各执贰份"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "双方签章后生效，合同一式肆份，双方各执贰份。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 179,
+              "end": 202,
+              "excerpt": "双方签章后生效。本合同一式肆份，双方各执贰份。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CLAUSE_RISK",
+      "order": 8,
+      "title": "合同条款风险提示",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "条款内容",
+          "summary": "约定委托代理办理采购服务，具体范围指向需求表。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0a8a612d-fdd8-46aa-bf0c-a124dd1943a0",
+              "fileSha256": "b584cbdf1640492f58338fe59d4c3e619d0b0efa2ed11ea5c6ad8424b5984bc3",
+              "parseResultId": "62e32fa7-eaa0-4f53-90f1-0c6b9e90e18c",
+              "parseVersion": 1,
+              "textSha256": "e1db4892c39e54c189da66314d004334323a7e4526d341fd95b1e94deaf830af",
+              "start": 27,
+              "end": 51,
+              "excerpt": "本协议委托采购代理办理采购服务，范围另见需求表。"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "验收后付款。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 204,
+              "end": 235,
+              "excerpt": "采购办公终端10台，每台19000元，含安装调试，验收后付款。"
+            }
+          ]
+        },
+        {
+          "title": "需核实需求表及主体信息",
+          "summary": "当前文本仅提及范围另见需求表，未包含甲乙方名称、具体采购标的、金额、期限及违约责任等核心条款，无法进行实质性审查。 建议：请补充完整合同文本及需求表附件。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0a8a612d-fdd8-46aa-bf0c-a124dd1943a0",
+              "fileSha256": "b584cbdf1640492f58338fe59d4c3e619d0b0efa2ed11ea5c6ad8424b5984bc3",
+              "parseResultId": "62e32fa7-eaa0-4f53-90f1-0c6b9e90e18c",
+              "parseVersion": 1,
+              "textSha256": "e1db4892c39e54c189da66314d004334323a7e4526d341fd95b1e94deaf830af",
+              "start": 43,
+              "end": 50,
+              "excerpt": "范围另见需求表"
+            }
+          ]
+        },
+        {
+          "title": "附件未上传",
+          "summary": "合同提及附件一技术规格书，但本次输入未包含该附件内容，无法核实具体技术规格。 建议：请补充上传技术规格书以便核对。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "625b2358-023b-48ee-aa74-3bbbf462cf7a",
+              "fileSha256": "a66d79c0fd6e65ca726bc196eff195b50141a5d5cb8f46352e659fd55a5a0abc",
+              "parseResultId": "e236192e-c0fa-4ec2-857d-8209f7a89d88",
+              "parseVersion": 1,
+              "textSha256": "ea29929f17ae851fda6a476b9a51317d9b39c5b46d709545a1d99da552a91a62",
+              "start": 237,
+              "end": 247,
+              "excerpt": "附件一：技术规格书。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "projectId": "4854f8f2-7380-4ca6-a2ae-9a9843a79c65",
+  "projectName": "青榆办公终端更新项目"
+}

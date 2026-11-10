@@ -16,6 +16,15 @@ AMOUNT='2200000'
 FID='a2f9da97-93f9-4365-a755-c28f110b5f40'
 
 class DiagnosticsTest(unittest.TestCase):
+    def test_capacity_and_grounding_keep_only_public_counts(self):
+        vocabulary=set(json.loads((ROOT/'vocabulary.json').read_text(encoding='utf-8')))
+        row=collector.safe_event({'MESSAGE':'PIPELINE_STAGE_END stage=OCR_PAGE_CAPACITY pageNumber=3 workerCount=4 queueWaitMs=1820 filename='+SECRET+' excerpt='+AMOUNT},vocabulary)
+        self.assertEqual((row['pageNumber'],row['workerCount'],row['queueWaitMs']),(3,4,1820))
+        self.assert_private(row)
+        row=collector.safe_event({'MESSAGE':'CONTRACT_MODEL_GROUNDING scope=FILE candidateCount=8 acceptedCount=6 evidenceRejectedCount=2 clauseCount=9 findingCount=1 text='+SECRET},vocabulary)
+        self.assertEqual((row['candidateCount'],row['acceptedCount'],row['evidenceRejectedCount']),(8,6,2))
+        self.assert_private(row)
+
     def assert_private(self,value):
         encoded=json.dumps(value,ensure_ascii=False)
         for secret in (SECRET,AMOUNT,'hidden-person-name','SECRET_CANARY_UPPERCASE'):

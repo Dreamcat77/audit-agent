@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/releases/identity-variants-20261105-r1",
+  "previous": "/opt/audit-agent/releases/git-identity-20261105-r3",
+  "jarSha256": "a3a1d6b756329b0bdbac989535643971558a16a420845792982b0331f3c29d0a",
+  "indexSha256": "8d3e25d85c4170898188c70c9382d8e69316588f7a0dfb22f2e6a570acae7bd9",
+  "schemaChanged": false,
+  "clientIdentityRequired": true,
+  "configuredIdentityCount": 4,
+  "frontendChanged": false,
+  "existingConfigPreserved": true,
+  "ocrConcurrencyCap": 4,
+  "perProcessThreads": 1,
+  "mkldnn": false
+}

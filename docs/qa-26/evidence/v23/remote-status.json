@@ -1,0 +1,18 @@
+{
+  "status": "NOT_VERIFIED",
+  "environment": "26",
+  "checkedAt": "2026-10-30T05:26:20.869953+00:00",
+  "probes": [
+    {
+      "port": 22,
+      "connected": false
+    },
+    {
+      "port": 80,
+      "connected": false
+    }
+  ],
+  "reason": "CONNECTION_TIMEOUT",
+  "deployed": false,
+  "lastVerifiedRelease": "v22.material-20261029-r1"
+}

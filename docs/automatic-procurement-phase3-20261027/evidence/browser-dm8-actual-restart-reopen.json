@@ -1,0 +1,13 @@
+{
+  "caseId": "dd79a596-5f85-3c67-b304-57b54962f07a",
+  "equalAfterProcessRestart": true,
+  "modules": {
+    "AGENT_PRECHECK": "COMPLETED",
+    "TENDER_COMPLIANCE": "COMPLETED",
+    "BLACKLIST": "NOT_EXECUTED",
+    "QUOTE": "COMPLETED",
+    "COLLUSION": "NOT_EXECUTED",
+    "SPLIT_PURCHASE": "NOT_EXECUTED"
+  },
+  "repository": "REAL_DM8"
+}

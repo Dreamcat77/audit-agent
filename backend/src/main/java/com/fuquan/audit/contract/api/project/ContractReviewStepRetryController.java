@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @Profile({"local-dev", "dev29", "customer"})
 @ConditionalOnProperty(name = "audit.contract.review-worker.enabled", havingValue = "true")
 @RequestMapping("/api/v1/projects/{projectId}/contracts/{contractId}/review-runs/{runId}/steps/{stepId}/retries")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class ContractReviewStepRetryController {
     private static final Set<String> FIELDS = Set.of("expectedRunVersion", "expectedStepVersion", "previousAttemptId",
             "previousAttemptNo", "previousAttemptVersion", "previousStatus", "previousExternalCallState", "reason");

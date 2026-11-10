@@ -1,0 +1,713 @@
+{
+  "id": "565cfe44-1f62-3bd1-bb49-4b937f1b04a6",
+  "projectId": "6cb49c5a-491d-45ae-b258-a76f447b3ce9",
+  "owner": "9a7b5b49-0597-45f4-81a2-000000000001",
+  "inputDigest": "61d74bc739023d75493322a853c19426f7f2b510c21f74c3995c29d5a7224b84",
+  "status": "COMPLETED",
+  "version": 22,
+  "leaseToken": null,
+  "leaseUntil": null,
+  "attempts": 6,
+  "createdAt": "2026-10-27T17:56:38.429609400Z",
+  "deadline": "2026-10-27T18:26:38.429609400Z",
+  "sources": [
+    {
+      "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+      "name": "办公设备采购合同.docx",
+      "sha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+      "size": 37911,
+      "status": "READY",
+      "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+      "parseVersion": 1,
+      "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+      "reasonCode": null
+    }
+  ],
+  "steps": [
+    {
+      "id": "recall/b92a504a-f134-4881-8615-73c263d69485",
+      "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+      "kind": "RECALL",
+      "start": 0,
+      "end": 673,
+      "inputDigest": "7d9eec241e23e38e85f77b315e89e99d7837d6b39cd90c786f4e83d211ef0b29",
+      "status": "COMPLETED",
+      "startedAt": "2026-10-27T17:56:46.402577100Z",
+      "completedAt": "2026-10-27T17:56:47.360473100Z",
+      "output": {
+        "role": "CONTRACT",
+        "profile": "PROCUREMENT",
+        "complete": true,
+        "facts": [
+          {
+            "type": "CONTRACT_NAME",
+            "value": "澄川办公设备采购合同",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 37,
+                "end": 52,
+                "excerpt": "合同名称：澄川办公设备采购合同"
+              }
+            ]
+          },
+          {
+            "type": "CONTRACT_NO",
+            "value": "SYN-GOODS-2026-01",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 53,
+                "end": 75,
+                "excerpt": "合同编号：SYN-GOODS-2026-01"
+              }
+            ]
+          },
+          {
+            "type": "PROJECT_NO",
+            "value": "SYN-GOODS-P01",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 76,
+                "end": 94,
+                "excerpt": "项目编号：SYN-GOODS-P01"
+              }
+            ]
+          },
+          {
+            "type": "PARTY_A",
+            "value": "澄川测试服务中心",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 95,
+                "end": 106,
+                "excerpt": "甲方：澄川测试服务中心"
+              }
+            ]
+          },
+          {
+            "type": "PARTY_B",
+            "value": "澄川星河设备有限公司",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 107,
+                "end": 120,
+                "excerpt": "乙方：澄川星河设备有限公司"
+              }
+            ]
+          },
+          {
+            "type": "TOTAL_AMOUNT",
+            "value": "120000.00元",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 123,
+                "end": 137,
+                "excerpt": "总金额：120000.00元"
+              }
+            ]
+          },
+          {
+            "type": "AMOUNT_WORDS",
+            "value": "壹拾贰万元整",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 138,
+                "end": 150,
+                "excerpt": "人民币大写：壹拾贰万元整"
+              }
+            ]
+          }
+        ],
+        "clauses": [],
+        "checks": [],
+        "findings": [],
+        "rejectedCitations": 0,
+        "model": null,
+        "version": "contract-rule-recall-v1"
+      },
+      "reasonCode": null
+    },
+    {
+      "id": "analyze/b92a504a-f134-4881-8615-73c263d69485/0",
+      "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+      "kind": "FILE",
+      "start": 0,
+      "end": 673,
+      "inputDigest": "10cf153da963e2015551acc8c669fbbd0dfbedec44c4bdc790dbcc95168440af",
+      "status": "COMPLETED",
+      "startedAt": "2026-10-27T17:56:49.270442Z",
+      "completedAt": "2026-10-27T17:58:47.544831900Z",
+      "output": {
+        "role": "CONTRACT",
+        "profile": "PROCUREMENT",
+        "complete": true,
+        "facts": [
+          {
+            "type": "CONTRACT_NAME",
+            "value": "澄川办公设备采购合同",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 37,
+                "end": 52,
+                "excerpt": "合同名称：澄川办公设备采购合同"
+              }
+            ]
+          },
+          {
+            "type": "CONTRACT_NO",
+            "value": "SYN-GOODS-2026-01",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 53,
+                "end": 75,
+                "excerpt": "合同编号：SYN-GOODS-2026-01"
+              }
+            ]
+          },
+          {
+            "type": "PROJECT_NO",
+            "value": "SYN-GOODS-P01",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 76,
+                "end": 94,
+                "excerpt": "项目编号：SYN-GOODS-P01"
+              }
+            ]
+          },
+          {
+            "type": "PARTY_A",
+            "value": "澄川测试服务中心",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 95,
+                "end": 106,
+                "excerpt": "甲方：澄川测试服务中心"
+              }
+            ]
+          },
+          {
+            "type": "PARTY_B",
+            "value": "澄川星河设备有限公司",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 107,
+                "end": 120,
+                "excerpt": "乙方：澄川星河设备有限公司"
+              }
+            ]
+          },
+          {
+            "type": "TOTAL_AMOUNT",
+            "value": "120000.00元",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 121,
+                "end": 138,
+                "excerpt": "合同总金额：120000.00元。"
+              }
+            ]
+          },
+          {
+            "type": "AMOUNT_WORDS",
+            "value": "壹拾贰万元整",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 138,
+                "end": 151,
+                "excerpt": "人民币大写：壹拾贰万元整。"
+              }
+            ]
+          },
+          {
+            "type": "ITEM_QUANTITY",
+            "value": "20",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 209,
+                "end": 235,
+                "excerpt": "办公计算机\t20\t5000.00\t100000.00"
+              }
+            ]
+          },
+          {
+            "type": "ITEM_UNIT_PRICE",
+            "value": "5000.00",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 209,
+                "end": 235,
+                "excerpt": "办公计算机\t20\t5000.00\t100000.00"
+              }
+            ]
+          },
+          {
+            "type": "ITEM_AMOUNT",
+            "value": "100000.00",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 209,
+                "end": 235,
+                "excerpt": "办公计算机\t20\t5000.00\t100000.00"
+              }
+            ]
+          },
+          {
+            "type": "ITEM_QUANTITY",
+            "value": "10",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 236,
+                "end": 261,
+                "excerpt": "办公打印机\t10\t2000.00\t20000.00"
+              }
+            ]
+          },
+          {
+            "type": "ITEM_UNIT_PRICE",
+            "value": "2000.00",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 236,
+                "end": 261,
+                "excerpt": "办公打印机\t10\t2000.00\t20000.00"
+              }
+            ]
+          },
+          {
+            "type": "ITEM_AMOUNT",
+            "value": "20000.00",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 236,
+                "end": 261,
+                "excerpt": "办公打印机\t10\t2000.00\t20000.00"
+              }
+            ]
+          },
+          {
+            "type": "LINE_TABLE_COMPLETE",
+            "value": "完整合同价款明细表",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 152,
+                "end": 186,
+                "excerpt": "第一条 完整合同价款明细表如下，表内已列全部货物及费用，无其他收费。"
+              }
+            ]
+          },
+          {
+            "type": "TAX_BASIS",
+            "value": "含税人民币",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 663,
+                "end": 673,
+                "excerpt": "价款均为含税人民币。"
+              }
+            ]
+          },
+          {
+            "type": "CURRENCY",
+            "value": "人民币",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 138,
+                "end": 151,
+                "excerpt": "人民币大写：壹拾贰万元整。"
+              }
+            ]
+          }
+        ],
+        "clauses": [
+          {
+            "topic": "SUBJECT",
+            "summary": "采购标的为办公计算机20台、办公打印机10台，要求全新合格并满足附件技术参数。",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 262,
+                "end": 299,
+                "excerpt": "第二条 质量：产品必须为全新合格产品，满足合同附件技术参数，附出厂合格证。"
+              }
+            ]
+          },
+          {
+            "topic": "DELIVERY",
+            "summary": "乙方在合同生效后30日内送至甲方指定地点，运输风险及费用由乙方承担。",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 300,
+                "end": 341,
+                "excerpt": "第三条 交付：乙方在生效后30日内送至甲方指定办公地点，运输风险及费用由乙方承担。"
+              }
+            ]
+          },
+          {
+            "topic": "ACCEPTANCE",
+            "summary": "甲方到货后10日内逐台验收，不合格乙方7日内更换，合格后签署验收单。",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 342,
+                "end": 391,
+                "excerpt": "第四条 验收：甲方到货后10日内逐台按技术参数验收；不合格的乙方7日内更换，合格后双方签署验收单。"
+              }
+            ]
+          },
+          {
+            "topic": "PAYMENT",
+            "summary": "分三期支付：生效并收预付款发票付30%；验收合格且收合规发票后30日内付65%；质保期满无质量问题后30日内付5%。",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 392,
+                "end": 471,
+                "excerpt": "第五条 付款：合同生效并收到预付款发票后支付30%；全部设备验收合格且收到合规发票后30日内支付65%；剩余5%在质保期届满且无未解决质量问题后30日内支付。"
+              }
+            ]
+          },
+          {
+            "topic": "WARRANTY",
+            "summary": "质保期为验收合格之日起三年，乙方需24小时响应、48小时到场处理。",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 472,
+                "end": 513,
+                "excerpt": "第六条 质保：设备验收合格之日起三年。质保期内乙方24小时响应、48小时到场处理。"
+              }
+            ]
+          },
+          {
+            "topic": "BREACH",
+            "summary": "乙方逾期交付按逾期货物价款日万分之五付违约金；甲方逾期付款按逾期应付款项日万分之二付违约金。",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 514,
+                "end": 575,
+                "excerpt": "第七条 违约：乙方逾期交付，每天按逾期货物价款的万分之五承担违约金；甲方逾期付款，每天按逾期应付价款的万分之二承担违约金。"
+              }
+            ]
+          },
+          {
+            "topic": "TERMINATION",
+            "summary": "违约方经催告15日仍不履约，守约方可解除未履行部分，双方据实结算已验收合格设备。",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 576,
+                "end": 626,
+                "excerpt": "第八条 解除：违约方收到催告后15日仍不履约的，守约方可解除未履行部分；双方据实结算已验收合格设备。"
+              }
+            ]
+          },
+          {
+            "topic": "DISPUTE",
+            "summary": "协商不成向合同履行地人民法院起诉，合同双方签字盖章生效。",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 627,
+                "end": 663,
+                "excerpt": "第九条 争议及生效：协商不成向合同履行地人民法院起诉。双方签字盖章生效。"
+              }
+            ]
+          }
+        ],
+        "checks": [],
+        "findings": [
+          {
+            "code": "MATERIAL_SCOPE_NOTE",
+            "level": "INFO",
+            "title": "技术参数附件未上传",
+            "explanation": "合同第二条约定产品需满足“合同附件技术参数”，但本次上传范围未包含该附件，无法核实具体技术指标是否与采购需求一致。",
+            "suggestion": "建议补充上传技术参数附件以便核对。",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 262,
+                "end": 299,
+                "excerpt": "第二条 质量：产品必须为全新合格产品，满足合同附件技术参数，附出厂合格证。"
+              }
+            ],
+            "origin": "AI_REVIEW_SUGGESTION"
+          }
+        ],
+        "rejectedCitations": 0,
+        "model": "audit-qwen-27b-16k:latest",
+        "version": "contract-case-v1"
+      },
+      "reasonCode": null
+    },
+    {
+      "id": "rules/b92a504a-f134-4881-8615-73c263d69485",
+      "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+      "kind": "RULES",
+      "start": 0,
+      "end": 673,
+      "inputDigest": "da453a08fc016c551d19121e9062a6c4f3098328f9c6a2192a8bdc70a342fa91",
+      "status": "COMPLETED",
+      "startedAt": "2026-10-27T17:58:50.830363300Z",
+      "completedAt": "2026-10-27T17:58:51.635155700Z",
+      "output": {
+        "role": "OTHER",
+        "profile": "GENERAL",
+        "complete": true,
+        "facts": [],
+        "clauses": [],
+        "checks": [
+          {
+            "code": "F02_AMOUNT_WORDS_MATCH",
+            "status": "PASS",
+            "explanation": "合同金额大小写核对：120000.00元，与依据金额120000.00元一致",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 123,
+                "end": 137,
+                "excerpt": "总金额：120000.00元"
+              },
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 138,
+                "end": 150,
+                "excerpt": "人民币大写：壹拾贰万元整"
+              }
+            ]
+          },
+          {
+            "code": "F02_LINE_ITEM_ARITHMETIC",
+            "status": "PASS",
+            "explanation": "第1项数量与单价核对：100000.00元，与依据金额100000.00元一致",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 209,
+                "end": 235,
+                "excerpt": "办公计算机\t20\t5000.00\t100000.00"
+              }
+            ]
+          },
+          {
+            "code": "F02_LINE_ITEM_ARITHMETIC",
+            "status": "PASS",
+            "explanation": "第2项数量与单价核对：20000.00元，与依据金额20000.00元一致",
+            "evidence": [
+              {
+                "fileId": "b92a504a-f134-4881-8615-73c263d69485",
+                "fileSha256": "e9af966f0b142daf56fac6313451ef5718c4f3c097b959b87a437d2d8f65d32e",
+                "parseResultId": "4c1ced48-ffaf-489a-9020-afcc6f21f00e",
+                "parseVersion": 1,
+                "textSha256": "22b3c85e2df123289fa8dbe83c8476073d8281360b1c4db090f163ab3cc13a0a",
+                "start": 236,
+                "end": 261,
+                "excerpt": "办公打印机\t10\t2000.00\t20000.00"
+              }
+            ]
+          },
+          {
+            "code": "F02_LINE_SUM_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "model": null,
+        "version": "f02-independent-v1"
+      },
+      "reasonCode": null
+    }
+  ],
+  "reasonCode": null,
+  "expectedUploads": 1
+}

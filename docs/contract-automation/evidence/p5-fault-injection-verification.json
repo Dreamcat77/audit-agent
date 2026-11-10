@@ -1,0 +1,50 @@
+[
+  {
+    "mode": "unavailable",
+    "caseId": "13828267-05c5-3a00-b582-b0f5b7269781",
+    "state": "PARTIAL",
+    "modelStep": "FAILED",
+    "facts": 7,
+    "realModel": false,
+    "faultInjection": true,
+    "realDm8": true,
+    "restartPreserved": true,
+    "failures": []
+  },
+  {
+    "mode": "unknown",
+    "caseId": "ef3dd7b5-8d68-3ea8-917b-63802dc5f4ce",
+    "state": "PARTIAL",
+    "modelStep": "UNKNOWN",
+    "facts": 7,
+    "realModel": false,
+    "faultInjection": true,
+    "realDm8": true,
+    "restartPreserved": true,
+    "failures": []
+  },
+  {
+    "mode": "malformed",
+    "caseId": "cb2951e5-6feb-3cbd-bffc-138b1f9748ea",
+    "state": "PARTIAL",
+    "modelStep": "FAILED",
+    "facts": 7,
+    "realModel": false,
+    "faultInjection": true,
+    "realDm8": true,
+    "restartPreserved": true,
+    "failures": []
+  },
+  {
+    "mode": "empty",
+    "caseId": "72d77cd9-6cd5-3e3a-adc5-2ed84d582acb",
+    "state": "PARTIAL",
+    "modelStep": "DATA_INSUFFICIENT",
+    "facts": 7,
+    "realModel": false,
+    "faultInjection": true,
+    "realDm8": true,
+    "restartPreserved": true,
+    "failures": []
+  }
+]

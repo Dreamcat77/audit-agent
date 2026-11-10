@@ -33,6 +33,28 @@ public class DurableMaterialExtractionService implements MaterialFieldAiPort {
     @Override public Result extract(String kind,String materialId,String sha,List<Segment> source) {
         try(var admission=gateway.admit()){return extractAdmitted(kind,materialId,sha,source);}
     }
+    @Override public Optional<Result> acknowledgedResult(String kind,String materialId,String sha,List<Segment> source) {
+        // Procurement can publish individually proven facts while the document remains
+        // incomplete. Other consumers retain their existing all-or-nothing contract.
+        if(!"PROCUREMENT_AUTO".equals(kind))return Optional.empty();
+        if(materialId==null||materialId.isBlank()||materialId.length()>36||sha==null||!sha.matches("[a-f0-9]{64}")
+                ||source==null||source.isEmpty()||source.size()>10000
+                ||source.stream().mapToLong(s->s.text().codePointCount(0,s.text().length())).sum()>192000
+                ||source.stream().map(Segment::locator).distinct().count()!=source.size())throw failure("INVALID_SOURCE");
+        var plan=plan(List.copyOf(source));
+        if(plan.isEmpty()||plan.size()>512)throw failure("UNIT_LIMIT");
+        UUID id=UUID.nameUUIDFromBytes(("material-extraction/"+kind+"/"+materialId).getBytes(StandardCharsets.UTF_8));
+        var entry=ledger.find(id).orElse(null);
+        if(entry==null)return Optional.empty();
+        if(!hash(encode(List.of(STRATEGY,kind,materialId,sha,source))).equals(entry.sourceHash())||entry.unitCount()!=plan.size())throw failure("SOURCE_DRIFT");
+        // Timeout termination deliberately purges unpublished candidates. Neither an
+        // active executor nor a missing/unknown commit is evidence of acknowledgement.
+        if(!"UNKNOWN".equals(entry.status())||!Set.of("UNACKNOWLEDGED_CALL","EXECUTOR_LOST").contains(Objects.toString(entry.reasonCode(),"")))return Optional.empty();
+        var results=decode(entry.resultsJson());
+        if(entry.nextUnit()!=results.size()||entry.nextUnit()>plan.size())throw failure("CHECKPOINT_INVALID");
+        for(int i=0;i<results.size();i++)results.set(i,validate(results.get(i),plan.get(i),i));
+        return results.isEmpty()?Optional.empty():Optional.of(finalResult(kind,results));
+    }
     private Result extractAdmitted(String kind,String materialId,String sha,List<Segment> source) {
         if(!Set.of("BUDGET","PROCUREMENT","PROCUREMENT_REVIEW","PROCUREMENT_AUTO").contains(kind)||materialId==null||materialId.isBlank()||materialId.length()>36
                 ||sha==null||!sha.matches("[a-f0-9]{64}"))throw failure("INVALID_SOURCE");

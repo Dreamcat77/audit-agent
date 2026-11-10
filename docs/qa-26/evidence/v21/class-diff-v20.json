@@ -1,0 +1,5 @@
+{
+  "productionClassChanges": [
+    "BOOT-INF/classes/com/fuquan/audit/procurement/application/TenderRuleMatcher.class"
+  ]
+}

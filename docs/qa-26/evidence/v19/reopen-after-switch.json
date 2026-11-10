@@ -1,0 +1,26 @@
+[
+  {
+    "label": "contract-semantics",
+    "unchanged": true,
+    "categories": 8
+  },
+  {
+    "label": "contract-case-mismatch",
+    "unchanged": true,
+    "categories": 8
+  },
+  {
+    "label": "contract-missing-annex",
+    "unchanged": true,
+    "categories": 8
+  },
+  {
+    "label": "contract-incomplete",
+    "unchanged": true,
+    "categories": 8
+  },
+  {
+    "label": "proc-role-money",
+    "unchanged": true
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "backend": {
+    "requests": 10,
+    "all200": true,
+    "maxMillis": 7
+  },
+  "ai": {
+    "requests": 10,
+    "all200": true,
+    "maxMillis": 6
+  },
+  "web": {
+    "requests": 10,
+    "all200": true,
+    "maxMillis": 2
+  }
+}

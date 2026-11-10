@@ -94,7 +94,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Validated
 @RequestMapping("/api/v1/projects")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class ProjectController {
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private com.fuquan.audit.contract.application.project.port.ProjectFileJobRepository fileJobs;

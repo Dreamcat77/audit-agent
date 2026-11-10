@@ -1,0 +1,16 @@
+{
+  "scenario": "amount-conflict",
+  "caseId": "3f688b0f-4385-32a3-a004-47c6cc97859d",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 16,
+  "clauses": 8,
+  "risks": 2,
+  "followUps": 0,
+  "evidenceChecks": 33,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "freshVerifier": true
+}

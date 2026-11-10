@@ -1,0 +1,5 @@
+{
+  "disabledHttpStatus": 404,
+  "reenabledOriginalCaseIdentical": true,
+  "scope": "isolated harness only; no existing service or production switch changed"
+}

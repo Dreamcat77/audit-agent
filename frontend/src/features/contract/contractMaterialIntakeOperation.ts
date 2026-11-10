@@ -17,6 +17,8 @@ export interface ContractMaterialIntakeDependencies {
   dataSource: IntakeDataSource;
   retained?:{actorId:string;storage:IntakeKeyStorage;projectId?:string};
   automaticAnalysis?:boolean;
+  /** Each explicit upload selection starts one new project; old receipts remain recoverable. */
+  newProjectPerBatch?:boolean;
 }
 
 export type ContractMaterialIntakeResult =
@@ -129,12 +131,13 @@ export function createContractMaterialIntakeOperation(
   return {
     start(files) {
       if (inFlight) return inFlight;
-      if (mode) return Promise.reject(new Error("当前材料上传结果尚未确认，请继续原操作"));
+      if (mode && !dependencies.newProjectPerBatch) return Promise.reject(new Error("当前材料上传结果尚未确认，请继续原操作"));
       if (files.length === 0) return Promise.resolve({ kind: "CANCELLED" });
 
       const zips = files.filter((file) => file.name.toLocaleLowerCase().endsWith(".zip"));
       if (zips.length > 0) {
         if (files.length !== 1) return Promise.reject(new Error("ZIP 资料包不能与普通材料同时上传"));
+        if (dependencies.newProjectPerBatch) { project = null; createProjectOperation.clear(); succeeded = []; unresolved = []; }
         selectedFiles = files;
         mode = "ZIP";
         zipOperation = createProjectIntakeOperation(createKey, undefined, dependencies.automaticAnalysis ? 1 : undefined);
@@ -146,6 +149,7 @@ export function createContractMaterialIntakeOperation(
       if (accepted.rejected.length > 0 || accepted.accepted.length !== files.length) {
         return Promise.reject(new Error("包含不支持的材料格式，仅支持 PDF、DOC（Word 97-2003）、DOCX、PNG、JPG/JPEG"));
       }
+      if (dependencies.newProjectPerBatch) { project = null; createProjectOperation.clear(); zipOperation = null; }
       selectedFiles = files;
       mode = "SUPPLEMENTS";
       createProjectOperation.key();

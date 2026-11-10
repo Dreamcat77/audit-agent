@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "mode": "qa",
+  "release": "/opt/audit-agent/pilots/scan-20261030-r1",
+  "jarSha256": "1a0d7d64137ca84170d15ab4fa5ad4afeac988c59bf6f5d97a1aa593cea2be43",
+  "configPreserved": true,
+  "schemaChanged": false,
+  "frontendChanged": false
+}

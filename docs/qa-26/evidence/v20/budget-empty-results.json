@@ -1,0 +1,49 @@
+{
+  "batch": {
+    "batchId": "c17ded51-6728-4e77-9b3b-a40c9898a7bf",
+    "status": "REVIEWED",
+    "budgetYear": "",
+    "departmentCode": "",
+    "createdAt": "2026-10-29T15:40:57.685171Z",
+    "files": [
+      {
+        "taskId": "6edf46cd-94ba-4887-ae66-81cc9b12e096",
+        "fileName": "会议纪要.docx",
+        "status": "REVIEWED"
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "task": {
+        "taskId": "6edf46cd-94ba-4887-ae66-81cc9b12e096",
+        "fileName": "会议纪要.docx",
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "fileSize": 36825,
+        "status": "REVIEWED",
+        "parsedLineCount": 0,
+        "errorDetail": null,
+        "budgetYear": "",
+        "departmentCode": "",
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T15:40:57.928550Z",
+        "updatedTime": "2026-10-29T15:41:00.753228Z"
+      },
+      "allPassed": false,
+      "totalItems": 0,
+      "passedItems": 0,
+      "exceptionItems": 0,
+      "items": [],
+      "materialReference": {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": []
+      }
+    }
+  ]
+}

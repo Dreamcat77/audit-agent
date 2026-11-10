@@ -10,12 +10,12 @@ import org.springframework.stereotype.Repository;
 public class InMemoryAuditCaseRepository implements AuditCaseRepository {
     private final Map<UUID,AuditCase> values=new HashMap<>();
     public synchronized Optional<AuditCase> find(UUID id){return Optional.ofNullable(values.get(id));}
-    public synchronized List<AuditCase> recent(String owner){return values.values().stream().filter(v->v.owner().equals(owner)).sorted(Comparator.comparing(AuditCase::createdAt).reversed()).limit(100).toList();}
+    public synchronized List<AuditCase> recent(String owner){return values.values().stream().filter(v->owner==null||v.owner().equals(owner)).sorted(Comparator.comparing(AuditCase::createdAt).reversed()).limit(100).toList();}
     public synchronized List<AuditCaseHistoryEntry> history(String owner,UUID beforeId,int limit){
         var cursor=beforeId==null?null:values.get(beforeId);
-        if(beforeId!=null&&(cursor==null||!cursor.owner().equals(owner)))return List.of();
+        if(beforeId!=null&&(cursor==null||owner!=null&&!cursor.owner().equals(owner)))return List.of();
         var before=cursor==null?null:cursor.createdAt();
-        return values.values().stream().filter(v->v.owner().equals(owner))
+        return values.values().stream().filter(v->owner==null||v.owner().equals(owner))
                 .filter(v->before==null||v.createdAt().isBefore(before)||v.createdAt().equals(before)&&v.id().toString().compareTo(beforeId.toString())>0)
                 .sorted(Comparator.comparing(AuditCase::createdAt).reversed().thenComparing(v->v.id().toString()))
                 .limit(limit).map(AuditCaseHistoryEntry::from).toList();

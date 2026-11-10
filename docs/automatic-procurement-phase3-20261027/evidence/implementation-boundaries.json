@@ -1,0 +1,8 @@
+{
+  "actualWorktree": "E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014",
+  "backup": "E:\\audit-agent-new\\.backups\\automatic-case-phase3-20261027-040540",
+  "baselinePhase2HashMatch": true,
+  "originalDatabaseWritesAllowed": false,
+  "productionEntryEnabled": false,
+  "databaseDdlChanges": false
+}

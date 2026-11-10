@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "browser": "109.0.5412.0",
+  "normalApprovalNoWarning": true,
+  "historicalAmountExcluded": true,
+  "crossFileIssueNames": true,
+  "sourceHighlight": true,
+  "responsiveWidths": [
+    1440,
+    900,
+    390
+  ],
+  "pageErrors": []
+}

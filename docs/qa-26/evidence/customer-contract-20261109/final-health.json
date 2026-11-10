@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "release": "contract-customer-20261109-r4",
+  "jarSha256": "dd885e7a61ee1cc9315f84a4dda6edbdfc71768bae538aacaffd2e309e0ff1ee",
+  "indexSha256": "6e8471bb5b1b64ba6fbdfc23674edff23b304ff109444ae999ad3a94eb1c15c0",
+  "actualProcessDirectories": "PASS",
+  "dm8Connection": "PASS",
+  "dm8ActiveJobs": 0,
+  "dm8AdversarialPredicate": "PASS",
+  "http": [
+    {
+      "port": 8001,
+      "path": "/health",
+      "status": 200
+    },
+    {
+      "port": 8080,
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "port": 80,
+      "path": "/",
+      "status": 200
+    }
+  ],
+  "schemaChanged": false
+}

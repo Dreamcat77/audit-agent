@@ -68,6 +68,11 @@ public class BudgetMaterialService {
         return jobs.find(id).filter(j->j.actorId().equals(user.userId())).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));
     }
     public BudgetReviewTask task(UUID id) {return tasks.findById(id).orElseThrow();}
+    public InputStream openOriginal(UUID id,CurrentUser actor)throws IOException {
+        owned(id,actor);var task=task(id);
+        if(task.tempFilePath()==null)throw new BusinessException(BusinessErrorCode.NOT_FOUND);
+        return storage.open(task.tempFilePath());
+    }
     public void process(UUID id,CurrentUser user,java.util.function.Consumer<String> claimed) {
         String token=UUID.randomUUID().toString();Instant now=Instant.now();
         if(!tx.claim(id,token,now,now.plusSeconds(1200))) return;

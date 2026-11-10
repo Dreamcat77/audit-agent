@@ -1,0 +1,125 @@
+{
+  "status": "PASS",
+  "contract": {
+    "id": "c3a762e5-0ce1-311a-a19e-43df1d40cf98",
+    "status": "PARTIAL",
+    "categories": 8,
+    "populated": 8,
+    "warnings": 4
+  },
+  "procurement": {
+    "id": "7a66744d-7db0-322e-a65f-feb2b1f26dab",
+    "status": "DATA_INSUFFICIENT"
+  },
+  "budget": {
+    "id": "bfb997ee-5d09-46c5-881b-c6e732fbc606",
+    "batchId": "e98a8fdc-f69d-41fc-aaa1-9eec3f9fd2af",
+    "status": "REVIEWED"
+  },
+  "originalPages": [
+    {
+      "module": "CONTRACT",
+      "fileId": "a85ca2f4-ffbc-47ba-816a-d34183bca75f",
+      "page": 1,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "CONTRACT",
+      "fileId": "a85ca2f4-ffbc-47ba-816a-d34183bca75f",
+      "page": 2,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "CONTRACT",
+      "fileId": "a85ca2f4-ffbc-47ba-816a-d34183bca75f",
+      "page": 3,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "CONTRACT",
+      "fileId": "a85ca2f4-ffbc-47ba-816a-d34183bca75f",
+      "page": 4,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "CONTRACT",
+      "fileId": "ea7c58d4-66c8-4a87-b0d5-9ebcdc4e3ef5",
+      "page": 1,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 1
+    },
+    {
+      "module": "PROCUREMENT",
+      "fileId": "ce0bcfa8-faf6-4ce5-814a-f3123f34c681",
+      "page": 1,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "PROCUREMENT",
+      "fileId": "ce0bcfa8-faf6-4ce5-814a-f3123f34c681",
+      "page": 2,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "PROCUREMENT",
+      "fileId": "ce0bcfa8-faf6-4ce5-814a-f3123f34c681",
+      "page": 3,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "PROCUREMENT",
+      "fileId": "ce0bcfa8-faf6-4ce5-814a-f3123f34c681",
+      "page": 4,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "BUDGET",
+      "fileId": "bfb997ee-5d09-46c5-881b-c6e732fbc606",
+      "page": 1,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "BUDGET",
+      "fileId": "bfb997ee-5d09-46c5-881b-c6e732fbc606",
+      "page": 2,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "BUDGET",
+      "fileId": "bfb997ee-5d09-46c5-881b-c6e732fbc606",
+      "page": 3,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    },
+    {
+      "module": "BUDGET",
+      "fileId": "bfb997ee-5d09-46c5-881b-c6e732fbc606",
+      "page": 4,
+      "anchors": 1,
+      "status": "LOCATED",
+      "pageCount": 4
+    }
+  ]
+}

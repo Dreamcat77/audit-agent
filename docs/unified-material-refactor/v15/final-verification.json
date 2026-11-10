@@ -1,0 +1,98 @@
+{
+  "verifiedAt": "2026-10-29T08:25:17.353899+00:00",
+  "sourceIntegrated": true,
+  "gitCommitted": false,
+  "gitPushed": false,
+  "java": {
+    "release": {
+      "command": "backend/mvnw.cmd clean verify",
+      "environment": "Windows JDK17",
+      "total": 3376,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 24,
+      "log": ".runtime\\release-v15-source\\verify-v15-final.log"
+    },
+    "integrated": {
+      "command": "backend/mvnw.cmd clean verify",
+      "environment": "Windows JDK17",
+      "total": 3377,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 24,
+      "log": ".runtime\\verify-v15-integrated-final.log"
+    }
+  },
+  "frontend": {
+    "nodePassed": 835,
+    "productionBuild": "PASS",
+    "chrome109Replay": {
+      "browser": "109.0.5412.0",
+      "productionArtifact": true,
+      "api": "REPLAY_OF_REAL_26_MODEL_DM8_RESPONSES",
+      "syntheticDocuments": true,
+      "eightTitles": [
+        "合同条款量化一致性审查",
+        "合同草本结构对标审查",
+        "违约责任条款量化审查",
+        "合同期限与终止条件格式审查",
+        "合同主体资格审查",
+        "附件清单完整性审查",
+        "合同生效条件与份数审查",
+        "合同条款风险提示"
+      ],
+      "pageErrors": [],
+      "unexpectedWrites": [],
+      "unknownRequests": []
+    },
+    "default26NewUpload": {
+      "host": "DEFAULT_26_PORT_80",
+      "browser": "109.0.5412.0",
+      "login": "PASS",
+      "historyReopen": "NEW_UPLOAD_AND_MODEL_RESULT",
+      "uploadedCaseId": "e2d5ee77-9eab-3165-a68b-a7efbc88b619",
+      "eightTitles": true,
+      "pageErrors": [],
+      "badAssets": []
+    },
+    "default26AfterRestart": {
+      "host": "DEFAULT_26_PORT_80",
+      "browser": "109.0.5412.0",
+      "login": "PASS",
+      "historyReopen": "PASS",
+      "uploadedCaseId": null,
+      "eightTitles": true,
+      "pageErrors": [],
+      "badAssets": []
+    }
+  },
+  "pythonContractEndpoint": {
+    "passed": 24,
+    "log": ".runtime\\v15-model-tests.log"
+  },
+  "privacyDiagnostics": {
+    "passed": 13,
+    "log": ".runtime\\field-diag-v15-tests.log"
+  },
+  "deployment": {
+    "release": "/opt/audit-agent/releases/v15.material-20261029-r1",
+    "previous": "/opt/audit-agent/releases/v15.material-20261029",
+    "schemaChanges": false,
+    "status": "PASS",
+    "backendHealth": 200,
+    "aiHealth": 200,
+    "configPreserved": true,
+    "jarSha256": "148c7768ac51ab778abd909d555e30874433064c5bfdb6b41ffa86e61944f0c9",
+    "indexSha256": "b58008636f69c2d00fd8a985ac5b99ab173cdff9717a5c335d9fc9ddb7ce30d2"
+  },
+  "candidatePayloadSha256": "ee16169e42b9e275cc67d173647443bc6434505a8e55155c71c647da7368637c",
+  "productionProcessWorkingDirectoryVerified": true,
+  "customerArm64": "NOT_VERIFIED",
+  "customerRealMaterialAccuracy": "NOT_VERIFIED",
+  "limitations": [
+    "Partial OCR coverage remains explicit",
+    "Evidence-rejected cross-file model output remains PARTIAL/UNKNOWN",
+    "Missing fields are not invented to create formal contracts",
+    "Procurement quotation statistics do not establish collusion"
+  ]
+}

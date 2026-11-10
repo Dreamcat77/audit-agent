@@ -1,0 +1,29 @@
+{
+  "award-supplier": {
+    "caseId": "1b0b17ab-dfcb-3730-b50d-0ea98d26a17f",
+    "status": "COMPLETED",
+    "categories": 8,
+    "populatedCategories": 8,
+    "modelOutputs": 2,
+    "facts": 13,
+    "clauses": 11,
+    "warnings": 0,
+    "exactEvidence": 71,
+    "sourceChars": 777,
+    "elapsedSeconds": 152.6,
+    "reasonCodes": [],
+    "stepStates": {
+      "COMPLETED": 10,
+      "DATA_INSUFFICIENT": 1
+    }
+  },
+  "business": {
+    "status": "PASS",
+    "categories": 8,
+    "formalAwardSupplierExtracted": true,
+    "supplierMatch": "PASS",
+    "amountMatch": "PASS",
+    "observedAmountRolesSeparate": true,
+    "exactEvidence": 71
+  }
+}

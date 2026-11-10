@@ -1,0 +1,88 @@
+{
+  "totals": {
+    "tests": 3277,
+    "failures": 8,
+    "errors": 5,
+    "skipped": 24
+  },
+  "failures": [
+    {
+      "class": "com.fuquan.audit.procurement.api.ProcurementMaterialBatchApiIntegrationTest",
+      "test": "incrementalUploadsWaitForExplicitUnifiedAnalysisAndAutomaticallyPersistOneReport",
+      "type": "java.lang.AssertionError",
+      "message": "JSON path \"$.data.files[0].status\" expected:<READY> but was:<INCOMPLETE>"
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest",
+      "test": "stagedSpreadsheetIsSavedAsPendingAnalysisAndCannotRunComparisonOnUpload",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "\nexpected: \"READY\"\n but was: \"COMPLETED_WITH_PLACEHOLDER\""
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest",
+      "test": "explicitAnalysisRetainsPreviouslyConfirmedBidderWithoutRequestingConfirmationAgain",
+      "type": "java.lang.NullPointerException",
+      "message": "Cannot invoke \"com.fuquan.audit.procurement.application.ProcurementTenderDocumentService$TenderDocumentResult.id()\" because \"source\" is null"
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest",
+      "test": "oneUnreadableFileDoesNotDiscardAnotherFileResult",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "\nExpecting actual:\n  [\"INCOMPLETE\"]\nto contain exactly (and in same order):\n  [\"INCOMPLETE\", \"NOT_APPLICABLE\"]\nbut could not find the following elements:\n  [\"NOT_APPLICABLE\"]\n"
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest",
+      "test": "stagedUploadsAreRediscoverableWithoutRunningRiskAnalysisOrGeneratingReport",
+      "type": "org.mockito.exceptions.verification.NoInteractionsWanted",
+      "message": "\nNo interactions wanted here:\n-> at com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest.stagedUploadsAreRediscoverableWithoutRunningRiskAnalysisOrGeneratingReport(ProcurementMaterialBatchServiceTest.java:225)\nBut found these interactions on mock 'procurementReviewReportServi"
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest",
+      "test": "oneExplicitAnalysisProducesReportAndRetryReopensSameReport",
+      "type": "java.lang.NullPointerException",
+      "message": "Cannot invoke \"com.fuquan.audit.procurement.application.ProcurementTenderDocumentService$TenderDocumentResult.id()\" because \"source\" is null"
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest",
+      "test": "explicitAnalysisRetriesSavedAiFailuresButReusesOnlyAvailableResults",
+      "type": "java.lang.NullPointerException",
+      "message": "Cannot invoke \"com.fuquan.audit.procurement.application.ProcurementTenderDocumentService$TenderDocumentResult.id()\" because \"source\" is null"
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest",
+      "test": "unreadableMaterialStillReturnsAReportWithoutInventingFacts",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "\nexpected: \"PARSE_INCOMPLETE\"\n but was: \"COMPLETED_WITH_PLACEHOLDER\""
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest",
+      "test": "unreadableSavedSpreadsheetDoesNotStopOtherFilesAndStillGeneratesPartialReport",
+      "type": "java.lang.NullPointerException",
+      "message": "Cannot invoke \"com.fuquan.audit.procurement.application.ProcurementTenderDocumentService$TenderDocumentResult.id()\" because \"source\" is null"
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialClassifierTest",
+      "test": "quotationTemplatesAndConflictingSuppliersStayUnconfirmed",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "\nexpected: \"BIDDER_UNCONFIRMED\"\n but was: \"QUOTATION\""
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialClassifierTest",
+      "test": "scannedQuotationUsesExplicitSupplierAndNeverTheProjectOrBudget",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "\nexpected: \"BIDDER\"\n but was: \"QUOTATION\""
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementMaterialClassifierTest",
+      "test": "tenderContainingQuotationTemplatesDoesNotBecomeSupplierEvidence",
+      "type": "org.opentest4j.AssertionFailedError",
+      "message": "\nexpected: \"TENDER\"\n but was: \"OTHER\""
+    },
+    {
+      "class": "com.fuquan.audit.procurement.application.ProcurementReportSnapshotTest",
+      "test": "oldReportForDifferentMaterialScopeIsNotReturnedAsCurrentBatchResult",
+      "type": "com.fuquan.audit.common.exception.BusinessException",
+      "message": "采购审查报告不存在: 9a625ebb-5f21-445c-a2cf-cc468e26fb25"
+    }
+  ]
+}

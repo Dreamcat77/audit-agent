@@ -1,6 +1,6 @@
 # DM8 baseline SQL
 
-V058 (`V058__client_review_identity.sql`) adds the single-client formal-name/alias
+V058 (`V059__client_review_identity.sql`) adds the single-client formal-name/alias
 registry for deterministic review perspective and outbound model name protection.
 No customer identity is seeded. Apply through the controlled DM8 migration process,
 then provision approved names inside the deployment. See
@@ -403,3 +403,21 @@ The historical data-reset backup has a different catalog after migration and mus
 be restored by bypassing catalog gates or dropping new tables. No FK disable or restore
 of the deleted historical storage references is authorized. This local helper is not a
 customer deployment script; customer schema/execution remain NOT VERIFIED.
+
+### Personal upload roles (2026-11-04)
+
+`V058__personal_upload_roles.sql` inserts the active procurement, budget and contract
+personal roles into the existing `SYS_ROLE` table. It adds no schema objects and
+does not change existing user assignments or historical ownership. Reapplying the
+script is safe; role codes are the identity. Maintain account assignments directly
+in the existing SYS_USER_ROLE table. Files and results are scoped by
+the uploading account ID, including when a personal role is combined with an old
+role. See `docs/personal-upload-roles.md`.
+
+### Number reservation after workspace integration (2026-11-05)
+
+`V058__personal_upload_roles.sql` retains its deployed identity. The incoming
+client identity registry is `V059__client_review_identity.sql`. If the same
+registry was already created from the former incoming V058 script, verify its
+actual schema and retain its configuration; the rename does not authorize
+replaying CREATE TABLE, resetting rows or changing a historical migration.

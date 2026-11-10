@@ -1,0 +1,10 @@
+{
+  "environment": "26 default port 80",
+  "indexSha256": "0e5dca8f4f162610640d7cb92b9c4a9157b2939afdb2e38fe3f55dd55d36ab17",
+  "entryAssetsVerified": 3,
+  "loginHttp": 200,
+  "caseId": "90eaad3e-6789-3e60-867d-f14cbdeefd7a",
+  "caseStatus": "DATA_INSUFFICIENT",
+  "invertedScanBudget": "2200000",
+  "fullOcrToModel": true
+}

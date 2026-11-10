@@ -1,0 +1,16 @@
+{
+  "scenario": "supplement-conflict",
+  "caseId": "331f3360-e1de-3563-84b2-171c2c87281e",
+  "status": "PARTIAL",
+  "documents": 2,
+  "facts": 14,
+  "clauses": 11,
+  "risks": 2,
+  "followUps": 1,
+  "evidenceChecks": 38,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "freshVerifier": true
+}

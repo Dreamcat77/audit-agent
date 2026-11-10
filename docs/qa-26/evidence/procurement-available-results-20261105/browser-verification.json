@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "browser": "109.0.5412.0",
+  "results": [
+    {
+      "scenario": "original-ack-replay",
+      "id": "c9430386-5922-3fa8-8a9f-16f0bf4c0460",
+      "status": "DATA_INSUFFICIENT",
+      "files": 1,
+      "details": 4,
+      "offers": 1,
+      "findings": 1,
+      "observations": 8,
+      "html": 200,
+      "refreshUnchanged": true
+    },
+    {
+      "scenario": "single-bid",
+      "id": "8f1b8bae-e202-3de2-bfbd-1c127bdeae71",
+      "status": "DATA_INSUFFICIENT",
+      "files": 1,
+      "details": 3,
+      "offers": 1,
+      "findings": 0,
+      "observations": 7,
+      "html": 200,
+      "refreshUnchanged": true
+    },
+    {
+      "scenario": "tender-risk",
+      "id": "e6cac2c8-77a5-3ad5-b4b2-1ae4f2ab30f3",
+      "status": "DATA_INSUFFICIENT",
+      "files": 2,
+      "details": 6,
+      "offers": 1,
+      "findings": 4,
+      "observations": 11,
+      "html": 200,
+      "refreshUnchanged": true
+    },
+    {
+      "scenario": "annual-quote",
+      "id": "8ef4c332-3582-3840-94aa-dfb370b0425b",
+      "status": "DATA_INSUFFICIENT",
+      "files": 2,
+      "details": 4,
+      "offers": 0,
+      "findings": 0,
+      "observations": 9,
+      "html": 200,
+      "refreshUnchanged": true
+    },
+    {
+      "scenario": "minimal",
+      "id": "006f3add-99bb-38e1-885c-07b62c249f8a",
+      "status": "DATA_INSUFFICIENT",
+      "files": 1,
+      "details": 0,
+      "offers": 0,
+      "findings": 0,
+      "observations": 0,
+      "html": 200,
+      "refreshUnchanged": true
+    }
+  ],
+  "pageErrors": []
+}

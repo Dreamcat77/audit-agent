@@ -1,0 +1,29 @@
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "id": "7fb732bc-55ad-3127-91c3-b940882a7d30",
+    "caseNumber": "AC-7fb732bc-55ad-3127-91c3-b940882a7d30",
+    "status": "QUEUED",
+    "createdAt": "2026-10-27T08:54:15.766568500Z",
+    "documents": [
+      {
+        "id": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+        "name": "采购招标文件.docx",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "ec480212-770f-4679-8a50-843258687069",
+        "name": "采购澄清答复.docx",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      }
+    ],
+    "report": null
+  }
+}

@@ -9,6 +9,8 @@ import static com.fuquan.audit.contract.application.analysis.ContractAnalysisCas
 /** One durable checkpoint per bounded action. External calls never hold database transactions. */
 @Service
 public class ContractAnalysisProcessor {
+    private ContractVisualQuality visualQuality;
+    @org.springframework.beans.factory.annotation.Autowired public void setVisualQuality(ContractVisualQuality value){this.visualQuality=value;}
     private final ContractAnalysisRepository repository;private final ContractAnalysisTransactions tx;
     private final ContractAnalysisSources sources;private final ContractAnalysisPlan planner;
     private final ContractAnalysisRules rules;private final ContractAnalysisAiPort ai;
@@ -29,7 +31,7 @@ public class ContractAnalysisProcessor {
     }
     public void process(UUID id,CurrentUser actor){
         var previous=repository.find(id).orElseThrow();if(!previous.owner().equals(actor.userId())||!previous.claimable(clock.instant()))return;
-        if(Collections.disjoint(actor.roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL")))return;
+        if(Collections.disjoint(actor.roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER")))return;
         var c=previous.claim(UUID.randomUUID().toString(),clock.instant());if(!tx.save(previous,c,actor))return;
         if(c.sources().isEmpty()){
             if(!clock.instant().isBefore(c.deadline())||!clock.instant().isBefore(c.createdAt().plusSeconds(Math.min(7200,1800+180L*c.expectedUploads())))){
@@ -134,12 +136,17 @@ public class ContractAnalysisProcessor {
             }else {
                 // Keep enough time for the configured single provider timeout and result transaction.
                 if(clock.instant().plusSeconds(175).isAfter(c.deadline()))throw new CaseDeadline();
-                var scope=new ContractAnalysisEvidence.Scope(source,text,step.start(),step.end());
-                var request=new ContractAnalysisAiPort.Request(c.id(),step.inputDigest(),step.kind(),List.of(new ContractAnalysisAiPort.Document(source.fileId(),scope.supplied())),
+                var parsed=sources.load(c.projectId(),source);
+                boolean ocr=(parsed.parseMethod().name()+"/"+parsed.engine()).toUpperCase(java.util.Locale.ROOT).contains("OCR");
+                var scope=new ContractAnalysisEvidence.Scope(source,text,step.start(),step.end(),ocr);
+                var request=new ContractAnalysisAiPort.Request(c.id(),step.inputDigest(),step.kind(),List.of(new ContractAnalysisAiPort.Document(source.fileId(),scope.supplied(),source.name(),relations.role(source,work),
+                        bounded(com.fuquan.audit.common.material.ProjectNameResolver.resolve(List.of(),List.of(text.substring(0,Math.min(1200,text.length()))),null),120),text.substring(0,Math.min(800,text.length())),ContractAnalysisSemantics.section(text,step.start()))),
                     reviewParties(texts,List.of(source.fileId())));
                 output=evidence.validate(ai.analyze(request),List.of(scope),step.kind());
             }
             // Verify the exact parse tuple still exists immediately before publication.
+            if(visualQuality!=null)for(var selected:files)if(texts.containsKey(selected.fileId()))
+                output=visualQuality.project(output,selected,texts.get(selected.fileId()));
             sources.load(c.projectId(),source);
             result=output.complete()?StepState.COMPLETED:StepState.PARTIAL;
             if(!output.useful()&&!step.kind().equals("FORMAL_LINK")){result=StepState.DATA_INSUFFICIENT;reason="NO_SUPPORTED_ANALYSIS_IN_SCOPE";}
@@ -166,5 +173,6 @@ public class ContractAnalysisProcessor {
             files.stream().anyMatch(s->s.status()==SourceState.READY)&&work.stream().noneMatch(s->s.status()==StepState.FAILED)?State.DATA_INSUFFICIENT:State.FAILED;
         tx.save(c,c.release(state,files,work,reason!=null?reason:!complete?"ANALYSIS_COVERAGE_LIMITED":null),actor);
     }
+    private static String bounded(String value,int max){return value==null?null:value.substring(0,Math.min(max,value.length()));}
     private static class CaseDeadline extends RuntimeException {}
 }

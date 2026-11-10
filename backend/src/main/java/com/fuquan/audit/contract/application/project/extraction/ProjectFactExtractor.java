@@ -476,7 +476,8 @@ public class ProjectFactExtractor {
 
     private static boolean validTypedValue(ValueKind kind, String value, String raw) {
         return switch (kind) {
-            case ORGANIZATION -> value.codePoints().filter(Character::isLetter).count() >= 2;
+            case ORGANIZATION -> value.codePoints().filter(Character::isLetter).count() >= 2
+                    && com.fuquan.audit.contract.domain.ContractPartyName.isPresent(value);
             case UPPERCASE -> validUppercaseAmount(value, raw);
             default -> true;
         };

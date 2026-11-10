@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import {partitionAnalysisFindings,analysisBusy,showAnalysisIntakeNotice,aggregateMaterialHighlights,findingCopyText,findingSourceNames} from "./contractAnalysisPresentation.ts";
+import {partitionAnalysisFindings,analysisBusy,aggregateMaterialHighlights,findingCopyText,findingSourceNames} from "./contractAnalysisPresentation.ts";
 
 test("optional follow-ups remain visible but do not inflate observed risk counts",()=>{
   const optional={level:"INFO",title:"补充核对附件"};
@@ -15,16 +15,6 @@ test("optional follow-ups remain visible but do not inflate observed risk counts
 test("uncertain and partial terminal results are never displayed as still running",()=>{
   for(const status of ["UNKNOWN","PARTIAL","DATA_INSUFFICIENT","FAILED","COMPLETED"] as const)assert.equal(analysisBusy(status),false);
   assert.equal(analysisBusy("QUEUED"),true);assert.equal(analysisBusy("RUNNING"),true);
-});
-
-test("completed report hides stale intake progress while another upload remains visible",()=>{
-  for(const status of ["UNKNOWN","PARTIAL","DATA_INSUFFICIENT","FAILED","COMPLETED"] as const){
-    assert.equal(showAnalysisIntakeNotice(status,false,false),false);
-    assert.equal(showAnalysisIntakeNotice(status,true,false),true);
-    assert.equal(showAnalysisIntakeNotice(status,false,true),true);
-  }
-  assert.equal(showAnalysisIntakeNotice("RUNNING",false,false),true);
-  assert.equal(showAnalysisIntakeNotice(undefined,false,false),true);
 });
 
 test("contract findings name only the source documents attached to their evidence", () => {

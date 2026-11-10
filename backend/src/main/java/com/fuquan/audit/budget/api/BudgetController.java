@@ -36,7 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("/api/v1/budget")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','FINANCE_REVIEWER')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','FINANCE_REVIEWER','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class BudgetController {
 
     private final BudgetCheckPort budgetCheckPort;
@@ -45,6 +45,14 @@ public class BudgetController {
     private final FlowDebugLogger flowDebugLogger;
     private final AuthContext authContext;
     private final com.fuquan.audit.budget.application.BudgetMaterialBatchService materialBatches;
+    private com.fuquan.audit.security.application.port.UploadOwnershipPort uploadOwnership;
+    @org.springframework.beans.factory.annotation.Autowired
+    public void setUploadOwnership(com.fuquan.audit.security.application.port.UploadOwnershipPort value) { uploadOwnership=value; }
+    private void requirePersonalOwnership(UUID taskId, CurrentUser user) {
+        if(com.fuquan.audit.security.domain.PersonalUploadRoles.applies(user)
+                && (uploadOwnership==null||!uploadOwnership.ownsBudgetTask(taskId,user.userId())))
+            throw new BusinessException(BusinessErrorCode.NOT_FOUND);
+    }
 
     public BudgetController(
             BudgetCheckPort budgetCheckPort,
@@ -182,6 +190,7 @@ public class BudgetController {
             @Valid @RequestBody ConfirmExceptionRequest request) {
         CurrentUser user = authContext.currentUser().orElseThrow(() ->
                 new BusinessException(BusinessErrorCode.UNAUTHENTICATED, "当前登录用户不存在"));
+        requirePersonalOwnership(parseBatchId(request.batchId()),user);
         BudgetReviewService.ConfirmationProgress progress = budgetReviewService.confirmException(
                 parseBatchId(request.batchId()), request.rowNumber(), request.confirmStep(),
                 request.abnormalReason(), request.remark(), user.userId(), user.displayName());
@@ -194,6 +203,7 @@ public class BudgetController {
             @Valid @RequestBody ConfirmRowRequest request) {
         CurrentUser user = authContext.currentUser().orElseThrow(() ->
                 new BusinessException(BusinessErrorCode.UNAUTHENTICATED, "当前登录用户不存在"));
+        requirePersonalOwnership(parseBatchId(request.batchId()),user);
         BudgetReviewService.ConfirmationProgress progress = budgetReviewService.confirmRow(
                 parseBatchId(request.batchId()), request.rowNumber(), request.remark(),
                 user.userId(), user.displayName());

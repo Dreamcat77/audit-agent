@@ -10,6 +10,20 @@ import org.junit.jupiter.api.Test;
 
 /** Fakes validate repository invariants; they do not prove real DM8 dialect/DDL behavior. */
 class Dm8AuditCaseRepositoryTest {
+    @Test void legacyFactDigestReopensAndMetadataTamperingStillFailsClosed()throws Exception{
+        var mapper=mock(AutoCaseMapper.class);var json=JsonMapper.builder().findAndAddModules().build();var repo=new Dm8AuditCaseRepository(mapper,json);
+        String legacy="{\"row\":\"r\",\"type\":\"budgetAmount\",\"value\":\"100元\",\"dataType\":\"MONEY\",\"locator\":\"p1\",\"excerpt\":\"预算100元\",\"verification\":\"SOURCE_VERIFIED\",\"model\":\"TEST\",\"extractionVersion\":\"v3\"}";
+        String digest=java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(("["+legacy+"]").getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+        var doc=new AuditCase.Document(UUID.randomUUID(),"预算.pdf",1,"a".repeat(64),"key","EXTRACTED",List.of(),List.of(),"PDF",null,1);
+        var value=value().update("COMPLETED",List.of(doc),null);
+        when(mapper.find(value.id().toString())).thenReturn(json.writeValueAsString(value));
+        when(mapper.files(value.id().toString())).thenReturn(List.of(json.writeValueAsString(new Dm8AuditCaseRepository.StoredDocument(doc,1,digest))));
+        when(mapper.facts(value.id().toString())).thenReturn(List.of(new AutoCaseMapper.StoredFact(doc.id().toString(),0,legacy)));
+        assertThat(repo.find(value.id()).orElseThrow().documents().get(0).facts()).singleElement().extracting(AuditCase.Fact::value).isEqualTo("100元");
+        String changed=legacy.substring(0,legacy.length()-1)+",\"subjectScope\":\"REFERENCE\"}";
+        when(mapper.facts(value.id().toString())).thenReturn(List.of(new AutoCaseMapper.StoredFact(doc.id().toString(),0,changed)));
+        assertThatThrownBy(()->repo.find(value.id())).isInstanceOf(IllegalStateException.class).hasMessageContaining("manifest corrupt");
+    }
     @Test void pdfCheckpointIsStoredInFileClobAndReopenedWithoutAnyNewSchema() throws Exception {
         var mapper=mock(AutoCaseMapper.class);var json=JsonMapper.builder().findAndAddModules().build();var repo=new Dm8AuditCaseRepository(mapper,json);
         var cp=new com.fuquan.audit.common.material.application.port.DocumentTextPort.PdfCheckpoint("a".repeat(64),"office-pdf-pages-v1",162,List.of(1),

@@ -19,7 +19,7 @@ import { ApiTestPage } from "./ApiTestPage";
 import { ConfirmDialog, FormDialog, NoticeDialog } from "./components/ConfirmDialog";
 import { SpreadsheetHeaderMappingDialog, type HeaderMappingSelection } from "./components/SpreadsheetHeaderMappingDialog";
 import { demoVisibleNavigationItems } from "./demoNavigation.ts";
-import { presentRoleLabels } from "./appShellPresentation.ts";
+import { canAccessPage, defaultPageForRoles, presentRoleLabels, usesPersonalUploads, visibleNavigationItems } from "./appShellPresentation.ts";
 import { PortalShell } from "./PortalShell";
 import { userFacingError } from "../api/userFacingError";
 import { ApiError } from "../api/client";
@@ -2163,7 +2163,7 @@ function ProcurementPage({ initialProjectId, onNavigationConsumed }: { initialPr
 
   if (!selectedProcurement) {
     return (
-      <div className="p-6 space-y-4">
+      <div className="procurement-page-shell p-6 space-y-4">
           {user && !showFormalProcurementManagement && <AutomaticCasePanel ownerId={user.userId} />}
 
         {showFormalProcurementManagement && <section id="formal-procurement-management" aria-label="正式采购需求与审批管理" className="space-y-4 border-t border-slate-200 pt-5">
@@ -5953,11 +5953,14 @@ function PlaceholderPage({ title, icon }: { title: string; icon: React.ReactNode
 // ── Root App ───────────────────────────────────────────────────────────────
 export default function App() {
   const { user, logout } = useAuth();
+  const roles = user?.roles ?? [];
+  const scopedToPersonalModule = usesPersonalUploads(roles);
+  const defaultPage = defaultPageForRoles(roles) as Page;
   const [restoredContractNavigation] = useState(() => {
-    if (!user?.userId || typeof window === "undefined") return null;
+    if (!user?.userId || typeof window === "undefined" || !canAccessPage(roles, "project")) return null;
     return loadContractReviewNavigation(window.sessionStorage, user.userId);
   });
-  const [page, setPage] = useState<Page>(() => restoredContractNavigation ? "project" : "dashboard");
+  const [page, setPage] = useState<Page>(() => restoredContractNavigation ? "project" : defaultPage);
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [logoutError, setLogoutError] = useState<string | null>(null);
   const [contractNavigationTarget, setContractNavigationTarget] = useState<ContractNavigationIntent | null>(null);
@@ -5971,6 +5974,10 @@ export default function App() {
   const [notificationLoading, setNotificationLoading] = useState(false);
   const [notificationError, setNotificationError] = useState<string | null>(null);
   const presentedRoles = presentRoleLabels(user?.roles ?? []);
+
+  useEffect(() => {
+    if (!canAccessPage(roles, page)) setPage(defaultPage);
+  }, [roles.join(","), page, defaultPage]);
 
   useEffect(() => {
     if (page !== "project" && user?.userId && typeof window !== "undefined") {
@@ -6081,9 +6088,10 @@ export default function App() {
     system: <SystemPage />,
   };
 
-  const activePortalPage: Page = page === "project"
+  const effectivePage = canAccessPage(roles, page) ? page : defaultPage;
+  const activePortalPage: Page = effectivePage === "project"
     ? "contract"
-    : page === "procurement-tasks" ? "procurement" : page;
+    : effectivePage === "procurement-tasks" ? "procurement" : effectivePage;
 
   const notificationSlot = (
     <div className="relative">
@@ -6126,7 +6134,7 @@ export default function App() {
 
   return (
     <PortalShell
-      items={demoVisibleNavigationItems(NAV_ITEMS)}
+      items={demoVisibleNavigationItems(visibleNavigationItems(roles, NAV_ITEMS))}
       activePage={activePortalPage}
       onNavigate={setPage}
       user={user}
@@ -6136,9 +6144,9 @@ export default function App() {
       logoutError={logoutError}
       notificationSlot={notificationSlot}
     >
-      {user?.userId && <ProcurementMaterialBackground actorId={user.userId} />}
-      {user?.userId && <BudgetMaterialBackground actorId={user.userId} />}
-      {pageComponents[page]}
+      {user?.userId && (!scopedToPersonalModule || roles.includes("PROCUREMENT_USER")) && <ProcurementMaterialBackground actorId={user.userId} />}
+      {user?.userId && (!scopedToPersonalModule || roles.includes("BUDGET_USER")) && <BudgetMaterialBackground actorId={user.userId} />}
+      {pageComponents[effectivePage]}
     </PortalShell>
   );
 }

@@ -19,7 +19,7 @@ public class ContractAnalysisWorker {
         try{for(var id:repository.pending(clock.instant(),20)){
             try{executor.execute(()->{
                 try{var c=repository.find(id).orElseThrow();var actor=users.findActiveById(c.owner());
-                    if(actor.isEmpty()||Collections.disjoint(actor.get().roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL"))){tx.blockOwner(c);return;}
+                    if(actor.isEmpty()||Collections.disjoint(actor.get().roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER"))){tx.blockOwner(c);return;}
                     processor.process(id,actor.get().toCurrentUser());
                 }catch(RuntimeException failure){log("EXECUTION",failure);}
             });}catch(RejectedExecutionException full){break;}

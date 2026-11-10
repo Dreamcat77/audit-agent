@@ -1,5 +1,6 @@
 import base64
 import json
+import unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from uuid import uuid4
 
@@ -54,7 +55,37 @@ def test_unrecognized_unicode_encoded_source_fails_before_send():
         identity.boundary({'messages':[{'content':'rules'},{'content':'prefix='+json.dumps({'name':NAMES[0]})}]})
 
 
-def test_actual_http_boundary_hides_names_and_restores_exact_citation(caplog):
+def test_provider_that_drops_private_glyphs_can_still_return_exact_evidence():
+    original = '乙方：北 辰 市 公 安 局；验收后付款。'
+    identity = ClientIdentity(NAMES, ())
+    boundary = identity.boundary({'messages': [{'content': 'JSON'}, {'content': original}]})
+    masked = boundary.body['messages'][1]['content']
+    # Reproduce a real gateway's glyph normalization, independent of token shape.
+    received = ''.join(' ' if unicodedata.category(c) == 'Co' else c for c in masked)
+    assert received != original
+    assert len(received) == len(original)
+    assert boundary.restore({'excerpt': received})['excerpt'] == original
+
+
+def test_many_short_aliases_are_distinct_and_avoid_existing_material_text():
+    names = tuple('甲' + chr(0x4E00 + i) for i in range(64))
+    original = '、'.join(names) + '；保留原编号AB、CD、EF、GH。'
+    boundary = ClientIdentity(names, ()).boundary({'messages': [{'content': 'JSON'}, {'content': original}]})
+    tokens = tuple(boundary.reverse)
+    assert len(tokens) == 64 and len(set(tokens)) == 64
+    assert all(token not in original for token in tokens)
+    assert boundary.restore(boundary.body['messages'][1]['content']) == original
+
+
+def test_token_collision_has_a_bound_and_does_not_corrupt_nested_json(monkeypatch):
+    monkeypatch.setattr('audit_ai.client_privacy.secrets.choice', lambda _: 'A')
+    original = json.dumps({'name': NAMES[0], 'reference': 'A' * len(NAMES[0])}, ensure_ascii=True)
+    with pytest.raises(ValueError, match='TOKEN_UNAVAILABLE'):
+        ClientIdentity(NAMES, ()).boundary({'messages': [{'content': 'JSON'}, {'content': original}]})
+
+
+@pytest.mark.parametrize('with_background', [False, True])
+def test_actual_http_boundary_hides_names_and_restores_exact_citation(caplog, with_background):
     doc=str(uuid4());original='乙方：北辰市公安局\n验收合格后付款。'
     sent=[]
     def provider(request):
@@ -68,6 +99,9 @@ def test_actual_http_boundary_hides_names_and_restores_exact_citation(caplog):
         model_api_key='fixture-only',model_name='fixture'),transport=httpx.MockTransport(provider))
     payload={'caseId':str(uuid4()),'inputDigest':'a'*64,'scope':'FRAGMENT',
         'documents':[{'id':doc,'text':original}], 'reviewParties':{doc:'PARTY_B'}}
+    if with_background:
+        payload['documents'][0].update(name='合成合同.docx',roleHint='CONTRACT',
+            projectName=NAMES[0]+'设备采购项目',header='乙方：'+NAMES[0],section='付款约定')
     with TestClient(create_app(model_gateway=gateway)) as client:
         response=client.post('/ai/v1/contracts/analyze-case',json=payload,headers={HEADER:header()})
     assert response.status_code==200,response.text
@@ -91,6 +125,38 @@ def test_context_does_not_cross_requests_or_threads():
     assert CURRENT.get() is None
 
 
+def test_material_checkpoints_do_not_reuse_a_different_identity_policy(monkeypatch):
+    gateway = OpenAiCompatibleModelGateway(Settings())
+    before = gateway.material_cache_namespace()
+    token = CURRENT.set(ClientIdentity(NAMES, ()))
+    try:
+        configured = gateway.material_cache_namespace()
+        assert configured != before
+        monkeypatch.setattr('audit_ai.model.gateway.POLICY_VERSION', 'next-policy')
+        assert gateway.material_cache_namespace() != configured
+    finally:
+        CURRENT.reset(token)
+
+
+def test_material_http_checkpoints_follow_the_current_identity_registry(tmp_path):
+    calls = []
+    def provider(request):
+        calls.append(1)
+        return httpx.Response(200, json={'model': 'fixture', 'choices': [{'finish_reason': 'stop',
+            'message': {'content': json.dumps({'rows': []})}}]})
+    settings = Settings(model_base_url='https://provider.invalid/v1', model_api_key='fixture',
+        model_name='fixture', material_checkpoint_root=str(tmp_path))
+    gateway = OpenAiCompatibleModelGateway(settings, transport=httpx.MockTransport(provider))
+    payload = {'businessType': 'BUDGET', 'materialId': 'same-material', 'sha256': 'a' * 64,
+        'segments': [{'locator': 'p1', 'text': '本次仅提供项目背景说明。'}]}
+    with TestClient(create_app(settings=settings, model_gateway=gateway)) as client:
+        for names in [NAMES, NAMES, ('南辰市警务处',)]:
+            response = client.post('/ai/v1/materials/extract-fields', json=payload,
+                headers={HEADER: header(names)})
+            assert response.status_code == 200
+    assert len(calls) == 2
+
+
 def test_bad_header_fails_without_echoing_or_calling_model():
     with TestClient(create_app()) as client:
         response=client.post('/ai/v1/contracts/analyze-case',json={},headers={HEADER:'not-base64'})
@@ -102,6 +168,18 @@ def test_production_switch_rejects_headerless_calls_but_keeps_health_available()
         response=client.post('/ai/v1/contracts/analyze-case',json={})
         assert response.status_code==503 and response.json()['code']=='CLIENT_IDENTITY_REQUIRED'
         assert client.get('/health').status_code==200
+
+
+def test_material_policy_get_accepts_identity_without_a_json_body():
+    with TestClient(create_app(settings=Settings(client_identity_required=True))) as client:
+        response = client.get('/ai/v1/materials/policy', headers={HEADER: header()})
+        assert response.status_code == 200
+        assert len(response.json()['policyId']) == 64
+        assert client.get('/ai/v1/materials/policy').status_code == 503
+        assert client.get('/ai/v1/materials/policy', headers={HEADER: 'invalid'}).status_code == 422
+        # Empty mutation bodies must not be treated as valid material requests.
+        assert client.post('/ai/v1/materials/extract-fields', headers={HEADER: header()}).status_code == 422
+    assert CURRENT.get() is None
 
 
 def test_all_provider_calls_including_repair_and_summary_remask_restored_names():

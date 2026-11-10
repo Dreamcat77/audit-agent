@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "defaultPort": 80,
+  "index": "ebb5a5d08ecc5c8e42a1aa8f9784921472f7e2f41a1f01c942cce61ba1e6aee9",
+  "resources": [
+    {
+      "path": "/assets/update-v20/index-DcC-_6Ev.js",
+      "sha256": "1e5aa6a91cdff293806eb5b58e1a19f75b0a87a0d0ab3fe70d9df0e2df5537a1",
+      "status": 200
+    },
+    {
+      "path": "/assets/update-v20/chrome109-colors-940b3e79e8d919b72ef7.css",
+      "sha256": "940b3e79e8d919b72ef7812d1eb973941001b49ca695be8874253d01ec7e5ab7",
+      "status": 200
+    },
+    {
+      "path": "/assets/update-v20/chrome109-currentcolor-f550a3c84117a6742e43.js",
+      "sha256": "f550a3c84117a6742e43f16d90ccbb1af538dd57e67d2ab5a6d92a3762ca2f29",
+      "status": 200
+    }
+  ],
+  "health": 200
+}

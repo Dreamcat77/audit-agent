@@ -1,0 +1,382 @@
+{
+  "id": "6908ad87-3ba3-3767-b4a1-d25d007f4252",
+  "caseNumber": "AC-6908ad87-3ba3-3767-b4a1-d25d007f4252",
+  "projectName": "澄湾阅览室终端更新项目",
+  "status": "DATA_INSUFFICIENT",
+  "createdAt": "2026-10-29T15:57:35.565896827Z",
+  "documents": [
+    {
+      "id": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+      "name": "采购需求表.pdf",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 5
+    },
+    {
+      "id": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+      "name": "报价承诺函.docx",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 4
+    }
+  ],
+  "report": {
+    "quoteStatus": "DATA_INSUFFICIENT",
+    "budget": 360000,
+    "awardAmount": null,
+    "offers": [
+      {
+        "supplier": "澄湾合成终端有限公司",
+        "amount": 355000,
+        "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+        "lines": [],
+        "lineValidation": "DATA_INSUFFICIENT"
+      }
+    ],
+    "calculation": null,
+    "notices": [
+      "报价承诺函.docx：明细核算DATA_INSUFFICIENT，总价来自原文，未用明细填造总价",
+      "可靠供应商报价少于三家，三方询比价数据不足"
+    ],
+    "modules": {
+      "TENDER_COMPLIANCE": "DATA_INSUFFICIENT",
+      "AGENT_PRECHECK": "PARTIAL",
+      "COLLUSION": "NOT_EXECUTED",
+      "SPLIT_PURCHASE": "NOT_EXECUTED",
+      "QUOTE": "DATA_INSUFFICIENT",
+      "BLACKLIST": "COMPLETED"
+    },
+    "reviews": {
+      "TENDER_COMPLIANCE": {
+        "status": "DATA_INSUFFICIENT",
+        "inputDigest": "eb6e240c7eece91abe225607d20c11eb2050c48389d38025f7c8abd422b1a447",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-29T15:59:10.839241085Z",
+        "completedAt": "2026-10-29T15:59:10.848940388Z",
+        "scope": [],
+        "coverageGaps": [
+          "UPLOADED_SCOPE_MISSING_TECHNICAL",
+          "UPLOADED_SCOPE_MISSING_TENDER",
+          "UPLOADED_SCOPE_MISSING_EVALUATION",
+          "UPLOADED_SCOPE_MISSING_CLARIFICATION"
+        ],
+        "checks": [
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 2 份材料，本项选取 0 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "NO_READABLE_SOURCE"
+      },
+      "AGENT_PRECHECK": {
+        "status": "PARTIAL",
+        "inputDigest": "7e953daa16eef557f79fa0b4c6f7997916c2e320a4dc84db5c6b4e8453816c93",
+        "version": "case-cross-file-v2",
+        "model": "audit-qwen-27b-16k:latest",
+        "startedAt": "2026-10-29T15:58:47.527043687Z",
+        "completedAt": "2026-10-29T15:59:10.827347949Z",
+        "scope": [
+          {
+            "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+            "fileName": "采购需求表.pdf",
+            "role": "OTHER",
+            "sourceChars": 162,
+            "suppliedChars": 162
+          },
+          {
+            "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+            "fileName": "报价承诺函.docx",
+            "role": "OTHER",
+            "sourceChars": 123,
+            "suppliedChars": 123
+          }
+        ],
+        "coverageGaps": [
+          "UPLOADED_SCOPE_MISSING_DEMAND",
+          "UPLOADED_SCOPE_MISSING_BUDGET",
+          "UPLOADED_SCOPE_MISSING_QUOTATION",
+          "UPLOADED_SCOPE_MISSING_AWARD"
+        ],
+        "checks": [
+          {
+            "code": "IDENTITY_projectName",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "projectName：澄湾阅览室终端更新项目；缺少该字段的文件不作为冲突依据",
+            "evidence": [
+              {
+                "id": "E-7b5d657222c2c662d4f9d0a4",
+                "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+                "fileName": "采购需求表.pdf",
+                "sha256": "66907294b58d6eac48293664830cf4a10e0364741a0b66847426c02f639b1c6a",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n项目名称：澄湾阅览室终端更新项目\n项目编号：SYN-V20-P01\n采购人：澄湾合成档案中心\n本项目采购预算为人民币叁拾陆万元整（含税），最高投标限价为350000元。\n投标保证金5000元不是货物报价。拟采购终端设备并完成安装。\n不得指定生产厂家、品牌或者要求供应商在投标前设立本地机构。\n"
+              },
+              {
+                "id": "E-c1a0331c56e5a8ce89bb31b7",
+                "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+                "fileName": "报价承诺函.docx",
+                "sha256": "4bd85566a1b600aeb436eff781ffe82e217054a0e683964e2b3bf055a7d3aeb1",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "项目名称：澄湾阅览室终端更新项目\n"
+              }
+            ]
+          },
+          {
+            "code": "IDENTITY_projectNo",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "projectNo：SYN-V20-P01；缺少该字段的文件不作为冲突依据",
+            "evidence": [
+              {
+                "id": "E-7b5d657222c2c662d4f9d0a4",
+                "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+                "fileName": "采购需求表.pdf",
+                "sha256": "66907294b58d6eac48293664830cf4a10e0364741a0b66847426c02f639b1c6a",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n项目名称：澄湾阅览室终端更新项目\n项目编号：SYN-V20-P01\n采购人：澄湾合成档案中心\n本项目采购预算为人民币叁拾陆万元整（含税），最高投标限价为350000元。\n投标保证金5000元不是货物报价。拟采购终端设备并完成安装。\n不得指定生产厂家、品牌或者要求供应商在投标前设立本地机构。\n"
+              },
+              {
+                "id": "E-2b8d04125b7d2ee48f1ec571",
+                "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+                "fileName": "报价承诺函.docx",
+                "sha256": "4bd85566a1b600aeb436eff781ffe82e217054a0e683964e2b3bf055a7d3aeb1",
+                "locator": "docx/body/node:3/part:3",
+                "excerpt": "项目编号：SYN-V20-P01\n"
+              }
+            ]
+          },
+          {
+            "code": "IDENTITY_purchaserName",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "purchaserName：澄湾合成档案中心；缺少该字段的文件不作为冲突依据",
+            "evidence": [
+              {
+                "id": "E-7b5d657222c2c662d4f9d0a4",
+                "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+                "fileName": "采购需求表.pdf",
+                "sha256": "66907294b58d6eac48293664830cf4a10e0364741a0b66847426c02f639b1c6a",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n项目名称：澄湾阅览室终端更新项目\n项目编号：SYN-V20-P01\n采购人：澄湾合成档案中心\n本项目采购预算为人民币叁拾陆万元整（含税），最高投标限价为350000元。\n投标保证金5000元不是货物报价。拟采购终端设备并完成安装。\n不得指定生产厂家、品牌或者要求供应商在投标前设立本地机构。\n"
+              }
+            ]
+          },
+          {
+            "code": "BUDGET_CONFLICT",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "仅比较预算角色金额，不将成交价或已付款作为预算：[360000.00]",
+            "evidence": [
+              {
+                "id": "E-7b5d657222c2c662d4f9d0a4",
+                "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+                "fileName": "采购需求表.pdf",
+                "sha256": "66907294b58d6eac48293664830cf4a10e0364741a0b66847426c02f639b1c6a",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n项目名称：澄湾阅览室终端更新项目\n项目编号：SYN-V20-P01\n采购人：澄湾合成档案中心\n本项目采购预算为人民币叁拾陆万元整（含税），最高投标限价为350000元。\n投标保证金5000元不是货物报价。拟采购终端设备并完成安装。\n不得指定生产厂家、品牌或者要求供应商在投标前设立本地机构。\n"
+              }
+            ]
+          },
+          {
+            "code": "QUOTE_BUDGET",
+            "status": "WITHIN_BUDGET",
+            "explanation": "澄湾合成终端有限公司 报价 355000.00；预算上限 360000.00",
+            "evidence": [
+              {
+                "id": "E-1387b75dd23eb2e89851abcc",
+                "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+                "fileName": "报价承诺函.docx",
+                "sha256": "4bd85566a1b600aeb436eff781ffe82e217054a0e683964e2b3bf055a7d3aeb1",
+                "locator": "docx/body/node:5/part:5",
+                "excerpt": "本公司承诺完成全部货物供货及安装，含税总报价为人民币叁拾伍万伍仟元整。\n"
+              },
+              {
+                "id": "E-7b5d657222c2c662d4f9d0a4",
+                "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+                "fileName": "采购需求表.pdf",
+                "sha256": "66907294b58d6eac48293664830cf4a10e0364741a0b66847426c02f639b1c6a",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n项目名称：澄湾阅览室终端更新项目\n项目编号：SYN-V20-P01\n采购人：澄湾合成档案中心\n本项目采购预算为人民币叁拾陆万元整（含税），最高投标限价为350000元。\n投标保证金5000元不是货物报价。拟采购终端设备并完成安装。\n不得指定生产厂家、品牌或者要求供应商在投标前设立本地机构。\n"
+              }
+            ]
+          },
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 2 份材料，本项选取 2 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "采购需求表与报价承诺函中的项目名称均为“澄湾阅览室终端更新项目”，项目编号均为“SYN-V20-P01”，采购人信息在需求表中明确为“澄湾合成档案中心”，跨文件身份要素一致。",
+            "evidence": [
+              {
+                "id": "E-7b5d657222c2c662d4f9d0a4",
+                "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+                "fileName": "采购需求表.pdf",
+                "sha256": "66907294b58d6eac48293664830cf4a10e0364741a0b66847426c02f639b1c6a",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n项目名称：澄湾阅览室终端更新项目\n项目编号：SYN-V20-P01\n采购人：澄湾合成档案中心\n本项目采购预算为人民币叁拾陆万元整（含税），最高投标限价为350000元。\n投标保证金5000元不是货物报价。拟采购终端设备并完成安装。\n不得指定生产厂家、品牌或者要求供应商在投标前设立本地机构。\n"
+              },
+              {
+                "id": "E-c1a0331c56e5a8ce89bb31b7",
+                "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+                "fileName": "报价承诺函.docx",
+                "sha256": "4bd85566a1b600aeb436eff781ffe82e217054a0e683964e2b3bf055a7d3aeb1",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "项目名称：澄湾阅览室终端更新项目\n"
+              },
+              {
+                "id": "E-2b8d04125b7d2ee48f1ec571",
+                "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+                "fileName": "报价承诺函.docx",
+                "sha256": "4bd85566a1b600aeb436eff781ffe82e217054a0e683964e2b3bf055a7d3aeb1",
+                "locator": "docx/body/node:3/part:3",
+                "excerpt": "项目编号：SYN-V20-P01\n"
+              }
+            ]
+          },
+          {
+            "code": "BUDGET_VS_AWARD",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "采购预算为36万元，最高投标限价35万元。供应商澄湾合成终端有限公司报价35.5万元，未超过预算上限，但超过了最高投标限价35万元。",
+            "evidence": [
+              {
+                "id": "E-7b5d657222c2c662d4f9d0a4",
+                "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+                "fileName": "采购需求表.pdf",
+                "sha256": "66907294b58d6eac48293664830cf4a10e0364741a0b66847426c02f639b1c6a",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n项目名称：澄湾阅览室终端更新项目\n项目编号：SYN-V20-P01\n采购人：澄湾合成档案中心\n本项目采购预算为人民币叁拾陆万元整（含税），最高投标限价为350000元。\n投标保证金5000元不是货物报价。拟采购终端设备并完成安装。\n不得指定生产厂家、品牌或者要求供应商在投标前设立本地机构。\n"
+              },
+              {
+                "id": "E-1387b75dd23eb2e89851abcc",
+                "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+                "fileName": "报价承诺函.docx",
+                "sha256": "4bd85566a1b600aeb436eff781ffe82e217054a0e683964e2b3bf055a7d3aeb1",
+                "locator": "docx/body/node:5/part:5",
+                "excerpt": "本公司承诺完成全部货物供货及安装，含税总报价为人民币叁拾伍万伍仟元整。\n"
+              }
+            ]
+          },
+          {
+            "code": "QUANTITY",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "现有材料仅提及“拟采购终端设备并完成安装”，未提供具体的设备数量、规格型号或清单明细，无法进行数量层面的跨文件核对。",
+            "evidence": [
+              {
+                "id": "E-7b5d657222c2c662d4f9d0a4",
+                "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+                "fileName": "采购需求表.pdf",
+                "sha256": "66907294b58d6eac48293664830cf4a10e0364741a0b66847426c02f639b1c6a",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n项目名称：澄湾阅览室终端更新项目\n项目编号：SYN-V20-P01\n采购人：澄湾合成档案中心\n本项目采购预算为人民币叁拾陆万元整（含税），最高投标限价为350000元。\n投标保证金5000元不是货物报价。拟采购终端设备并完成安装。\n不得指定生产厂家、品牌或者要求供应商在投标前设立本地机构。\n"
+              },
+              {
+                "id": "E-1387b75dd23eb2e89851abcc",
+                "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+                "fileName": "报价承诺函.docx",
+                "sha256": "4bd85566a1b600aeb436eff781ffe82e217054a0e683964e2b3bf055a7d3aeb1",
+                "locator": "docx/body/node:5/part:5",
+                "excerpt": "本公司承诺完成全部货物供货及安装，含税总报价为人民币叁拾伍万伍仟元整。\n"
+              }
+            ]
+          },
+          {
+            "code": "DATE_AND_PLAN",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "提供的采购需求表和报价承诺函中均未包含具体的业务日期、计划工期或验收时间，无法进行日期顺序及计划与实际完成的核对。",
+            "evidence": [
+              {
+                "id": "E-7b5d657222c2c662d4f9d0a4",
+                "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+                "fileName": "采购需求表.pdf",
+                "sha256": "66907294b58d6eac48293664830cf4a10e0364741a0b66847426c02f639b1c6a",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n项目名称：澄湾阅览室终端更新项目\n项目编号：SYN-V20-P01\n采购人：澄湾合成档案中心\n本项目采购预算为人民币叁拾陆万元整（含税），最高投标限价为350000元。\n投标保证金5000元不是货物报价。拟采购终端设备并完成安装。\n不得指定生产厂家、品牌或者要求供应商在投标前设立本地机构。\n"
+              },
+              {
+                "id": "E-97fcd981727d5578f484dfd1",
+                "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+                "fileName": "报价承诺函.docx",
+                "sha256": "4bd85566a1b600aeb436eff781ffe82e217054a0e683964e2b3bf055a7d3aeb1",
+                "locator": "docx/body/node:1/part:1",
+                "excerpt": "合成测试材料，仅用于功能验收。\n"
+              }
+            ]
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "SEMANTIC_OR_SOURCE_COVERAGE_INCOMPLETE"
+      },
+      "BLACKLIST": {
+        "status": "COMPLETED",
+        "inputDigest": "f6cc777a3205afdfbb41f7684edc4b95b5e3c46f89656043a9baa6d5d8339858",
+        "version": "case-blacklist-v1",
+        "model": null,
+        "startedAt": "2026-10-29T15:58:47.494944752Z",
+        "completedAt": "2026-10-29T15:58:47.494945122Z",
+        "scope": [
+          {
+            "documentId": "0d3adb43-33b4-4742-8e66-bc48a2a51222",
+            "fileName": "采购需求表.pdf",
+            "role": "OTHER",
+            "sourceChars": 162,
+            "suppliedChars": 162
+          },
+          {
+            "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+            "fileName": "报价承诺函.docx",
+            "role": "OTHER",
+            "sourceChars": 123,
+            "suppliedChars": 123
+          }
+        ],
+        "coverageGaps": [],
+        "checks": [
+          {
+            "code": "SUPPLIER_BLACKLIST",
+            "status": "NO_MATCH",
+            "explanation": "澄湾合成终端有限公司未命中当前已接入的有效黑名单。",
+            "evidence": [
+              {
+                "id": "E-95f78e14b6a187309d3bedd8",
+                "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+                "fileName": "报价承诺函.docx",
+                "sha256": "4bd85566a1b600aeb436eff781ffe82e217054a0e683964e2b3bf055a7d3aeb1",
+                "locator": "docx/body/node:4/part:4",
+                "excerpt": "供应商名称：澄湾合成终端有限公司\n"
+              }
+            ]
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": null
+      }
+    },
+    "projectName": "澄湾阅览室终端更新项目",
+    "ceilingAmount": 350000,
+    "quoteComparisons": [
+      {
+        "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+        "status": "WITHIN_BUDGET",
+        "difference": -5000
+      }
+    ],
+    "ceilingComparisons": [
+      {
+        "documentId": "6f55cc5c-be62-4357-b0df-acbb88f52ef4",
+        "status": "OVER_CEILING",
+        "difference": 5000
+      }
+    ]
+  },
+  "findingIds": {}
+}

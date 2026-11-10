@@ -1,0 +1,27 @@
+{
+  "runId": "c1cdb4cf-387a-41c7-a82f-a8176f1ff5c9",
+  "status": "COMPLETED",
+  "steps": [
+    [
+      "MATERIAL_VALIDATION",
+      "COMPLETED"
+    ],
+    [
+      "F02_DETERMINISTIC",
+      "COMPLETED"
+    ],
+    [
+      "SEMANTIC_AI",
+      "COMPLETED"
+    ],
+    [
+      "BREACH",
+      "COMPLETED"
+    ],
+    [
+      "TERM",
+      "COMPLETED"
+    ]
+  ],
+  "outputs": 5
+}

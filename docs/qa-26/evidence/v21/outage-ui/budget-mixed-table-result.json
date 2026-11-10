@@ -1,0 +1,719 @@
+{
+  "batch": {
+    "batchId": "db138232-9272-48d1-b884-c46928987e21",
+    "status": "REVIEWED",
+    "budgetYear": "",
+    "departmentCode": "",
+    "createdAt": "2026-10-29T17:03:18.668805Z",
+    "files": [
+      {
+        "taskId": "dd9c17fa-101a-4efa-8f6f-68c80d29f8cb",
+        "fileName": "经费申请说明.docx",
+        "status": "UNKNOWN"
+      },
+      {
+        "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+        "fileName": "预算批复明细.xlsx",
+        "status": "REVIEWED"
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "task": {
+        "taskId": "dd9c17fa-101a-4efa-8f6f-68c80d29f8cb",
+        "fileName": "经费申请说明.docx",
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "fileSize": 37117,
+        "status": "UNKNOWN",
+        "parsedLineCount": 0,
+        "errorDetail": "智能分析服务未能正常返回结果，本次处理已结束。",
+        "budgetYear": "",
+        "departmentCode": "",
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T17:03:18.897341Z",
+        "updatedTime": "2026-10-29T17:03:25.242112Z"
+      },
+      "allPassed": false,
+      "totalItems": 0,
+      "passedItems": 0,
+      "exceptionItems": 0,
+      "items": [],
+      "materialReference": {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "这份材料的处理状态尚未确认，不能视为没有预算信息。本批仍有材料或部分信息未能核实，结果依据尚不完整；未列出的内容不代表没有问题。",
+        "lines": [],
+        "assessments": []
+      }
+    },
+    {
+      "task": {
+        "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+        "fileName": "预算批复明细.xlsx",
+        "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "fileSize": 5151,
+        "status": "REVIEWED",
+        "parsedLineCount": 2,
+        "errorDetail": null,
+        "budgetYear": "",
+        "departmentCode": "",
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T17:03:19.244589Z",
+        "updatedTime": "2026-10-29T17:03:25.993747Z"
+      },
+      "allPassed": false,
+      "totalItems": 2,
+      "passedItems": 0,
+      "exceptionItems": 2,
+      "items": [
+        {
+          "id": "9948d43b-ed62-4e13-90fb-f5268fe8cf88",
+          "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+          "rowNumber": 1,
+          "subjectCode": null,
+          "subjectName": "设备购置",
+          "declaredAmount": null,
+          "supplierName": null,
+          "projectCode": "SYN-9D4325-B01",
+          "approvalSubjectCode": null,
+          "approvalSubjectName": "设备购置",
+          "approvalAmount": 40000,
+          "approvalSupplierName": null,
+          "matchStatus": "MATCHED",
+          "matchMethod": "UPLOADED_MATERIAL",
+          "matchDistance": null,
+          "amountStatus": "NOT_CHECKED",
+          "differenceAmount": null,
+          "exceptionType": "INSUFFICIENT",
+          "errorDetail": "已读取现有材料，尚缺少可对应的申报金额，暂不能判断是否超过批复。",
+          "createdTime": "2026-10-29T17:03:25.988481Z",
+          "riskLevel": "WARNING",
+          "missingFields": null,
+          "amountFormatErrors": null,
+          "codeFormatError": null,
+          "requiredFieldsStatus": "NOT_CHECKED",
+          "amountFormatStatus": "NOT_CHECKED",
+          "categoryAttributionStatus": "NOT_CHECKED",
+          "categorySuggestion": null,
+          "projectCodeStatus": "NOT_CHECKED",
+          "projectDepartmentStatus": "NOT_CHECKED",
+          "budgetYearValidityStatus": "NOT_CHECKED",
+          "abnormalReasons": [
+            "已读取现有材料，尚缺少可对应的申报金额，暂不能判断是否超过批复。"
+          ],
+          "checks": [
+            {
+              "checkType": "REQUIRED_FIELDS",
+              "expectedValue": "科目编码、科目名称、申报金额、供应商名称、项目编号",
+              "actualValue": "2/5",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "必填信息完整"
+            },
+            {
+              "checkType": "AMOUNT_FORMAT",
+              "expectedValue": "正数，≤2位小数",
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "金额格式合法"
+            },
+            {
+              "checkType": "SUBJECT_CODE",
+              "expectedValue": null,
+              "actualValue": null,
+              "passed": false,
+              "status": "FAILED",
+              "errorDetail": "科目编码为空或不一致"
+            },
+            {
+              "checkType": "SUBJECT_NAME",
+              "expectedValue": "设备购置",
+              "actualValue": "设备购置",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "科目名称匹配成功"
+            },
+            {
+              "checkType": "CATEGORY_ATTRIBUTION",
+              "expectedValue": "科目编码所属分类",
+              "actualValue": "设备购置",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "分类规则未配置，跳过校验"
+            },
+            {
+              "checkType": "BUDGET_AMOUNT",
+              "expectedValue": "40000.00",
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "申报金额不超过预算批复金额"
+            },
+            {
+              "checkType": "SUPPLIER_NAME",
+              "expectedValue": null,
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "供应商名称一致"
+            },
+            {
+              "checkType": "PROJECT_CODE",
+              "expectedValue": "同批次唯一",
+              "actualValue": "SYN-9D4325-B01",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "项目编号唯一"
+            },
+            {
+              "checkType": "PROJECT_DEPARTMENT",
+              "expectedValue": "项目属于当前部门",
+              "actualValue": "SYN-9D4325-B01",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "项目与部门匹配"
+            },
+            {
+              "checkType": "BUDGET_YEAR_VALIDITY",
+              "expectedValue": "所选年度在有效期内",
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "预算年度有效"
+            }
+          ],
+          "currentStep": 10,
+          "moduleGroups": [
+            {
+              "moduleKey": "DATA_VALIDATION",
+              "moduleName": "数据规范性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "REQUIRED_FIELDS",
+                  "expectedValue": "科目编码、科目名称、申报金额、供应商名称、项目编号",
+                  "actualValue": "2/5",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "必填信息完整"
+                },
+                {
+                  "checkType": "AMOUNT_FORMAT",
+                  "expectedValue": "正数，≤2位小数",
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "金额格式合法"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "SUBJECT_CONSISTENCY",
+              "moduleName": "科目一致性校验",
+              "moduleStatus": "ERROR",
+              "children": [
+                {
+                  "checkType": "SUBJECT_CODE",
+                  "expectedValue": null,
+                  "actualValue": null,
+                  "passed": false,
+                  "status": "FAILED",
+                  "errorDetail": "科目编码为空或不一致"
+                },
+                {
+                  "checkType": "SUBJECT_NAME",
+                  "expectedValue": "设备购置",
+                  "actualValue": "设备购置",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "科目名称匹配成功"
+                },
+                {
+                  "checkType": "CATEGORY_ATTRIBUTION",
+                  "expectedValue": "科目编码所属分类",
+                  "actualValue": "设备购置",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "分类规则未配置，跳过校验"
+                }
+              ],
+              "exceptionSummary": "科目编码为空或不一致"
+            },
+            {
+              "moduleKey": "AMOUNT_COMPLIANCE",
+              "moduleName": "金额合规性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "BUDGET_AMOUNT",
+                  "expectedValue": "40000.00",
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "申报金额不超过预算批复金额"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "SUPPLIER_CHECK",
+              "moduleName": "关联方校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "SUPPLIER_NAME",
+                  "expectedValue": null,
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "供应商名称一致"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "PROJECT_COMPLIANCE",
+              "moduleName": "项目合规性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "PROJECT_CODE",
+                  "expectedValue": "同批次唯一",
+                  "actualValue": "SYN-9D4325-B01",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "项目编号唯一"
+                },
+                {
+                  "checkType": "PROJECT_DEPARTMENT",
+                  "expectedValue": "项目属于当前部门",
+                  "actualValue": "SYN-9D4325-B01",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "项目与部门匹配"
+                },
+                {
+                  "checkType": "BUDGET_YEAR_VALIDITY",
+                  "expectedValue": "所选年度在有效期内",
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "预算年度有效"
+                }
+              ],
+              "exceptionSummary": ""
+            }
+          ],
+          "aiSemanticAnalysis": {
+            "operation": "BUDGET_SEMANTIC_ANALYSIS",
+            "available": false,
+            "suggestedCategory": null,
+            "hint": null,
+            "model": null,
+            "durationMs": null,
+            "confidence": null,
+            "judgment": null,
+            "similarityScore": null,
+            "enhancedDescription": null,
+            "suggestion": null
+          }
+        },
+        {
+          "id": "f23d9775-4cff-46a5-8cd4-cd499ab721a9",
+          "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+          "rowNumber": 2,
+          "subjectCode": null,
+          "subjectName": "工程安装",
+          "declaredAmount": null,
+          "supplierName": null,
+          "projectCode": "SYN-9D4325-B01",
+          "approvalSubjectCode": null,
+          "approvalSubjectName": "工程安装",
+          "approvalAmount": 20000,
+          "approvalSupplierName": null,
+          "matchStatus": "MATCHED",
+          "matchMethod": "UPLOADED_MATERIAL",
+          "matchDistance": null,
+          "amountStatus": "NOT_CHECKED",
+          "differenceAmount": null,
+          "exceptionType": "INSUFFICIENT",
+          "errorDetail": "已读取现有材料，尚缺少可对应的申报金额，暂不能判断是否超过批复。",
+          "createdTime": "2026-10-29T17:03:25.988547Z",
+          "riskLevel": "WARNING",
+          "missingFields": null,
+          "amountFormatErrors": null,
+          "codeFormatError": null,
+          "requiredFieldsStatus": "NOT_CHECKED",
+          "amountFormatStatus": "NOT_CHECKED",
+          "categoryAttributionStatus": "NOT_CHECKED",
+          "categorySuggestion": null,
+          "projectCodeStatus": "NOT_CHECKED",
+          "projectDepartmentStatus": "NOT_CHECKED",
+          "budgetYearValidityStatus": "NOT_CHECKED",
+          "abnormalReasons": [
+            "已读取现有材料，尚缺少可对应的申报金额，暂不能判断是否超过批复。"
+          ],
+          "checks": [
+            {
+              "checkType": "REQUIRED_FIELDS",
+              "expectedValue": "科目编码、科目名称、申报金额、供应商名称、项目编号",
+              "actualValue": "2/5",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "必填信息完整"
+            },
+            {
+              "checkType": "AMOUNT_FORMAT",
+              "expectedValue": "正数，≤2位小数",
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "金额格式合法"
+            },
+            {
+              "checkType": "SUBJECT_CODE",
+              "expectedValue": null,
+              "actualValue": null,
+              "passed": false,
+              "status": "FAILED",
+              "errorDetail": "科目编码为空或不一致"
+            },
+            {
+              "checkType": "SUBJECT_NAME",
+              "expectedValue": "工程安装",
+              "actualValue": "工程安装",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "科目名称匹配成功"
+            },
+            {
+              "checkType": "CATEGORY_ATTRIBUTION",
+              "expectedValue": "科目编码所属分类",
+              "actualValue": "工程安装",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "分类规则未配置，跳过校验"
+            },
+            {
+              "checkType": "BUDGET_AMOUNT",
+              "expectedValue": "20000.00",
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "申报金额不超过预算批复金额"
+            },
+            {
+              "checkType": "SUPPLIER_NAME",
+              "expectedValue": null,
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "供应商名称一致"
+            },
+            {
+              "checkType": "PROJECT_CODE",
+              "expectedValue": "同批次唯一",
+              "actualValue": "SYN-9D4325-B01",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "项目编号唯一"
+            },
+            {
+              "checkType": "PROJECT_DEPARTMENT",
+              "expectedValue": "项目属于当前部门",
+              "actualValue": "SYN-9D4325-B01",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "项目与部门匹配"
+            },
+            {
+              "checkType": "BUDGET_YEAR_VALIDITY",
+              "expectedValue": "所选年度在有效期内",
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "预算年度有效"
+            }
+          ],
+          "currentStep": 10,
+          "moduleGroups": [
+            {
+              "moduleKey": "DATA_VALIDATION",
+              "moduleName": "数据规范性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "REQUIRED_FIELDS",
+                  "expectedValue": "科目编码、科目名称、申报金额、供应商名称、项目编号",
+                  "actualValue": "2/5",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "必填信息完整"
+                },
+                {
+                  "checkType": "AMOUNT_FORMAT",
+                  "expectedValue": "正数，≤2位小数",
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "金额格式合法"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "SUBJECT_CONSISTENCY",
+              "moduleName": "科目一致性校验",
+              "moduleStatus": "ERROR",
+              "children": [
+                {
+                  "checkType": "SUBJECT_CODE",
+                  "expectedValue": null,
+                  "actualValue": null,
+                  "passed": false,
+                  "status": "FAILED",
+                  "errorDetail": "科目编码为空或不一致"
+                },
+                {
+                  "checkType": "SUBJECT_NAME",
+                  "expectedValue": "工程安装",
+                  "actualValue": "工程安装",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "科目名称匹配成功"
+                },
+                {
+                  "checkType": "CATEGORY_ATTRIBUTION",
+                  "expectedValue": "科目编码所属分类",
+                  "actualValue": "工程安装",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "分类规则未配置，跳过校验"
+                }
+              ],
+              "exceptionSummary": "科目编码为空或不一致"
+            },
+            {
+              "moduleKey": "AMOUNT_COMPLIANCE",
+              "moduleName": "金额合规性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "BUDGET_AMOUNT",
+                  "expectedValue": "20000.00",
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "申报金额不超过预算批复金额"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "SUPPLIER_CHECK",
+              "moduleName": "关联方校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "SUPPLIER_NAME",
+                  "expectedValue": null,
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "供应商名称一致"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "PROJECT_COMPLIANCE",
+              "moduleName": "项目合规性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "PROJECT_CODE",
+                  "expectedValue": "同批次唯一",
+                  "actualValue": "SYN-9D4325-B01",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "项目编号唯一"
+                },
+                {
+                  "checkType": "PROJECT_DEPARTMENT",
+                  "expectedValue": "项目属于当前部门",
+                  "actualValue": "SYN-9D4325-B01",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "项目与部门匹配"
+                },
+                {
+                  "checkType": "BUDGET_YEAR_VALIDITY",
+                  "expectedValue": "所选年度在有效期内",
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "预算年度有效"
+                }
+              ],
+              "exceptionSummary": ""
+            }
+          ],
+          "aiSemanticAnalysis": {
+            "operation": "BUDGET_SEMANTIC_ANALYSIS",
+            "available": false,
+            "suggestedCategory": null,
+            "hint": null,
+            "model": null,
+            "durationMs": null,
+            "confidence": null,
+            "judgment": null,
+            "similarityScore": null,
+            "enhancedDescription": null,
+            "suggestion": null
+          }
+        }
+      ],
+      "materialReference": {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "根据本批上传材料整理了以下预算信息与核对意见，供工作参考。本批仍有材料或部分信息未能核实，结果依据尚不完整；未列出的内容不代表没有问题。",
+        "lines": [
+          {
+            "project": "昭宁办公网络改造项目9D4325",
+            "projectCode": "SYN-9D4325-B01",
+            "subject": "设备购置",
+            "subjectCode": null,
+            "year": "2026",
+            "department": null,
+            "declaredAmount": null,
+            "approvalAmount": 40000,
+            "status": "INSUFFICIENT",
+            "opinion": "已读取现有材料，尚缺少可对应的申报金额，暂不能判断是否超过批复。",
+            "sources": [
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "projectName",
+                "value": "昭宁办公网络改造项目9D4325",
+                "locator": "excel/sheet:1/row:2/part:2/col:1",
+                "excerpt": "项目名称：昭宁办公网络改造项目9D4325"
+              },
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "projectCode",
+                "value": "SYN-9D4325-B01",
+                "locator": "excel/sheet:1/row:2/part:2/col:2",
+                "excerpt": "项目编号：SYN-9D4325-B01"
+              },
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "budgetYear",
+                "value": "2026",
+                "locator": "excel/sheet:1/row:2/part:2/col:3",
+                "excerpt": "预算年度：2026"
+              },
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "subjectName",
+                "value": "设备购置",
+                "locator": "excel/sheet:1/row:2/part:2/col:4",
+                "excerpt": "预算科目：设备购置"
+              },
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "approvalAmount",
+                "value": "40000元",
+                "locator": "excel/sheet:1/row:2/part:2/col:5",
+                "excerpt": "批复金额（元）：40000元"
+              },
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "approvedPurpose",
+                "value": "交换设备采购",
+                "locator": "excel/sheet:1/row:2/part:2/col:6",
+                "excerpt": "批准用途：交换设备采购"
+              }
+            ]
+          },
+          {
+            "project": "昭宁办公网络改造项目9D4325",
+            "projectCode": "SYN-9D4325-B01",
+            "subject": "工程安装",
+            "subjectCode": null,
+            "year": "2026",
+            "department": null,
+            "declaredAmount": null,
+            "approvalAmount": 20000,
+            "status": "INSUFFICIENT",
+            "opinion": "已读取现有材料，尚缺少可对应的申报金额，暂不能判断是否超过批复。",
+            "sources": [
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "projectName",
+                "value": "昭宁办公网络改造项目9D4325",
+                "locator": "excel/sheet:1/row:3/part:3/col:1",
+                "excerpt": "项目名称：昭宁办公网络改造项目9D4325"
+              },
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "projectCode",
+                "value": "SYN-9D4325-B01",
+                "locator": "excel/sheet:1/row:3/part:3/col:2",
+                "excerpt": "项目编号：SYN-9D4325-B01"
+              },
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "budgetYear",
+                "value": "2026",
+                "locator": "excel/sheet:1/row:3/part:3/col:3",
+                "excerpt": "预算年度：2026"
+              },
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "subjectName",
+                "value": "工程安装",
+                "locator": "excel/sheet:1/row:3/part:3/col:4",
+                "excerpt": "预算科目：工程安装"
+              },
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "approvalAmount",
+                "value": "20000元",
+                "locator": "excel/sheet:1/row:3/part:3/col:5",
+                "excerpt": "批复金额（元）：20000元"
+              },
+              {
+                "taskId": "900db096-2591-46cb-a5f0-534753d9c608",
+                "fileName": "预算批复明细.xlsx",
+                "field": "approvedPurpose",
+                "value": "网络布线安装",
+                "locator": "excel/sheet:1/row:3/part:3/col:6",
+                "excerpt": "批准用途：网络布线安装"
+              }
+            ]
+          }
+        ],
+        "assessments": []
+      }
+    }
+  ]
+}

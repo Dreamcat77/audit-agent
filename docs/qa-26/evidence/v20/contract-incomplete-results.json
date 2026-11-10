@@ -1,0 +1,1021 @@
+{
+  "value": {
+    "id": "398a1ba6-8431-36de-9ba2-abd7ab193ae2",
+    "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+    "owner": "60acdf7f-da31-483b-a0bf-c9d4abb856bf",
+    "inputDigest": "0b83217f27a560afb7ec378d57edac47a26e6cdb344e5bca9f285c6ef7e89827",
+    "status": "COMPLETED",
+    "version": 27,
+    "leaseToken": null,
+    "leaseUntil": null,
+    "attempts": 7,
+    "createdAt": "2026-10-29T15:42:50.201675875Z",
+    "deadline": "2026-10-29T16:15:50.201675875Z",
+    "sources": [
+      {
+        "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "name": "采购委托协议书.docx",
+        "sha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+        "size": 36921,
+        "status": "READY",
+        "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+        "parseVersion": 1,
+        "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+        "reasonCode": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "recall/80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "kind": "RECALL",
+        "start": 0,
+        "end": 144,
+        "inputDigest": "b19fce9eb357f3339150e9b91503edf561ce9c0eec5d01fa450f40e8ef5a17af",
+        "status": "COMPLETED",
+        "startedAt": "2026-10-29T15:42:53.585644125Z",
+        "completedAt": "2026-10-29T15:42:53.594058433Z",
+        "output": {
+          "role": "CONTRACT",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [
+            {
+              "type": "PARTY_A",
+              "value": "澄湾合成档案中心",
+              "method": "RULE_RECALL_SOURCE_VERIFIED",
+              "evidence": [
+                {
+                  "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                  "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                  "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                  "parseVersion": 1,
+                  "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                  "start": 37,
+                  "end": 48,
+                  "excerpt": "甲方：澄湾合成档案中心"
+                }
+              ]
+            },
+            {
+              "type": "PARTY_B",
+              "value": "澄湾合成咨询有限公司",
+              "method": "RULE_RECALL_SOURCE_VERIFIED",
+              "evidence": [
+                {
+                  "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                  "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                  "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                  "parseVersion": 1,
+                  "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                  "start": 50,
+                  "end": 63,
+                  "excerpt": "乙方：澄湾合成咨询有限公司"
+                }
+              ]
+            }
+          ],
+          "clauses": [],
+          "checks": [],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "contract-rule-recall-v1"
+        },
+        "reasonCode": null
+      },
+      {
+        "id": "analyze-v2/80ec59f7-8680-42e1-ac21-ce977c377fbb/0",
+        "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "kind": "FILE",
+        "start": 0,
+        "end": 144,
+        "inputDigest": "5fc3540dee5ccf3bceb65106dfdf94a4b7cfa8f61582f471293881dc11527055",
+        "status": "COMPLETED",
+        "startedAt": "2026-10-29T15:42:55.584491831Z",
+        "completedAt": "2026-10-29T15:43:31.233054446Z",
+        "output": {
+          "role": "CONTRACT",
+          "profile": "SERVICE",
+          "complete": true,
+          "facts": [
+            {
+              "type": "CONTRACT_NAME",
+              "value": "合同书",
+              "method": "AI_SOURCE_VERIFIED",
+              "evidence": [
+                {
+                  "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                  "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                  "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                  "parseVersion": 1,
+                  "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                  "start": 17,
+                  "end": 20,
+                  "excerpt": "合同书"
+                }
+              ]
+            },
+            {
+              "type": "PROJECT_NAME",
+              "value": "澄湾咨询服务项目",
+              "method": "AI_SOURCE_VERIFIED",
+              "evidence": [
+                {
+                  "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                  "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                  "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                  "parseVersion": 1,
+                  "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                  "start": 22,
+                  "end": 35,
+                  "excerpt": "项目名称：澄湾咨询服务项目"
+                }
+              ]
+            },
+            {
+              "type": "PARTY_A",
+              "value": "澄湾合成档案中心",
+              "method": "AI_SOURCE_VERIFIED",
+              "evidence": [
+                {
+                  "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                  "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                  "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                  "parseVersion": 1,
+                  "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                  "start": 37,
+                  "end": 48,
+                  "excerpt": "甲方：澄湾合成档案中心"
+                }
+              ]
+            },
+            {
+              "type": "PARTY_B",
+              "value": "澄湾合成咨询有限公司",
+              "method": "AI_SOURCE_VERIFIED",
+              "evidence": [
+                {
+                  "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                  "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                  "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                  "parseVersion": 1,
+                  "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                  "start": 50,
+                  "end": 63,
+                  "excerpt": "乙方：澄湾合成咨询有限公司"
+                }
+              ]
+            }
+          ],
+          "clauses": [
+            {
+              "topic": "OTHER",
+              "summary": "乙方协助整理历史资料并提供咨询服务。",
+              "evidence": [
+                {
+                  "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                  "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                  "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                  "parseVersion": 1,
+                  "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                  "start": 65,
+                  "end": 90,
+                  "excerpt": "第一条 服务内容：协助整理历史资料并提供咨询服务。"
+                }
+              ]
+            },
+            {
+              "topic": "CONFIDENTIALITY",
+              "summary": "乙方不得泄露服务中接触的信息。",
+              "evidence": [
+                {
+                  "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                  "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                  "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                  "parseVersion": 1,
+                  "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                  "start": 92,
+                  "end": 112,
+                  "excerpt": "第二条 保密：不得泄露服务中接触的信息。"
+                }
+              ]
+            },
+            {
+              "topic": "PAYMENT",
+              "summary": "费用由双方另行约定，尚未确定合同价款和编号。",
+              "evidence": [
+                {
+                  "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                  "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                  "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                  "parseVersion": 1,
+                  "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                  "start": 114,
+                  "end": 143,
+                  "excerpt": "第三条 费用由双方另行约定，本协议尚未确定合同价款和编号。"
+                }
+              ]
+            }
+          ],
+          "checks": [],
+          "findings": [
+            {
+              "code": "OTHER_CONCRETE_RISK",
+              "level": "WARNING",
+              "title": "合同价款未确定",
+              "explanation": "第三条明确约定费用由双方另行约定，且声明尚未确定合同价款，导致核心对价条款缺失，合同主要权利义务不完整。",
+              "suggestion": "建议补充明确合同总价、计价方式及支付节点。",
+              "evidence": [
+                {
+                  "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                  "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                  "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                  "parseVersion": 1,
+                  "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                  "start": 114,
+                  "end": 143,
+                  "excerpt": "第三条 费用由双方另行约定，本协议尚未确定合同价款和编号。"
+                }
+              ],
+              "origin": "AI_REVIEW_SUGGESTION"
+            }
+          ],
+          "rejectedCitations": 0,
+          "model": "audit-qwen-27b-16k:latest",
+          "version": "contract-case-v1"
+        },
+        "reasonCode": null
+      },
+      {
+        "id": "rules/80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "kind": "RULES",
+        "start": 0,
+        "end": 144,
+        "inputDigest": "cbefadb8436b41027654b690bf8616e132fe4c318be6551e5577e7a609797243",
+        "status": "DATA_INSUFFICIENT",
+        "startedAt": "2026-10-29T15:43:31.601310824Z",
+        "completedAt": "2026-10-29T15:43:31.606187162Z",
+        "output": {
+          "role": "OTHER",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [],
+          "clauses": [],
+          "checks": [
+            {
+              "code": "F02_AMOUNT_WORDS_MATCH",
+              "status": "NOT_EVALUATED",
+              "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+              "evidence": []
+            },
+            {
+              "code": "F02_LINE_ITEM_ARITHMETIC",
+              "status": "NOT_EVALUATED",
+              "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+              "evidence": []
+            },
+            {
+              "code": "F02_LINE_SUM_MATCH",
+              "status": "NOT_EVALUATED",
+              "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+              "evidence": []
+            }
+          ],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "f02-independent-v1"
+        },
+        "reasonCode": "NO_SUPPORTED_ANALYSIS_IN_SCOPE"
+      },
+      {
+        "id": "formal/80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "kind": "FORMAL_LINK",
+        "start": 0,
+        "end": 0,
+        "inputDigest": "a1af7ab4b4f0f9c2eec9c3b659b2f2fb0b7204d77fc3d63b78c15752e0ca52e5",
+        "status": "COMPLETED",
+        "startedAt": "2026-10-29T15:43:33.603814066Z",
+        "completedAt": "2026-10-29T15:43:33.700293901Z",
+        "output": {
+          "role": "OTHER",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [],
+          "clauses": [],
+          "checks": [],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "formal-link-v1"
+        },
+        "reasonCode": null
+      },
+      {
+        "id": "document-rules/80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "kind": "DOCUMENT_RULES",
+        "start": 0,
+        "end": 0,
+        "inputDigest": "24bc798a1c034dcaf888153ef5c57f13c7ccb8fbf79674594d182a1423d37b6c",
+        "status": "DATA_INSUFFICIENT",
+        "startedAt": "2026-10-29T15:43:35.605483582Z",
+        "completedAt": "2026-10-29T15:43:35.613529615Z",
+        "output": {
+          "role": "OTHER",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [],
+          "clauses": [],
+          "checks": [],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "document-rules-v1"
+        },
+        "reasonCode": "NO_SUPPORTED_ANALYSIS_IN_SCOPE"
+      }
+    ],
+    "reasonCode": null,
+    "expectedUploads": 1
+  },
+  "report": {
+    "id": "398a1ba6-8431-36de-9ba2-abd7ab193ae2",
+    "status": "COMPLETED",
+    "statusLabel": "分析完成",
+    "headline": "澄湾咨询服务项目",
+    "explanation": "本次处理范围内的分析已完成。金额核算与条款分析分开展示；仍需核对的事项不会计为通过。",
+    "createdAt": "2026-10-29T15:42:50.201675875Z",
+    "documents": [
+      {
+        "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "name": "采购委托协议书.docx",
+        "status": "READY",
+        "role": "CONTRACT",
+        "profile": "SERVICE",
+        "facts": [
+          {
+            "type": "PARTY_A",
+            "value": "澄湾合成档案中心",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 37,
+                "end": 48,
+                "excerpt": "甲方：澄湾合成档案中心"
+              }
+            ]
+          },
+          {
+            "type": "PARTY_B",
+            "value": "澄湾合成咨询有限公司",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 50,
+                "end": 63,
+                "excerpt": "乙方：澄湾合成咨询有限公司"
+              }
+            ]
+          },
+          {
+            "type": "CONTRACT_NAME",
+            "value": "合同书",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 17,
+                "end": 20,
+                "excerpt": "合同书"
+              }
+            ]
+          },
+          {
+            "type": "PROJECT_NAME",
+            "value": "澄湾咨询服务项目",
+            "method": "AI_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 22,
+                "end": 35,
+                "excerpt": "项目名称：澄湾咨询服务项目"
+              }
+            ]
+          }
+        ],
+        "clauses": [
+          {
+            "topic": "OTHER",
+            "summary": "乙方协助整理历史资料并提供咨询服务。",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 65,
+                "end": 90,
+                "excerpt": "第一条 服务内容：协助整理历史资料并提供咨询服务。"
+              }
+            ]
+          },
+          {
+            "topic": "CONFIDENTIALITY",
+            "summary": "乙方不得泄露服务中接触的信息。",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 92,
+                "end": 112,
+                "excerpt": "第二条 保密：不得泄露服务中接触的信息。"
+              }
+            ]
+          },
+          {
+            "topic": "PAYMENT",
+            "summary": "费用由双方另行约定，尚未确定合同价款和编号。",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 114,
+                "end": 143,
+                "excerpt": "第三条 费用由双方另行约定，本协议尚未确定合同价款和编号。"
+              }
+            ]
+          }
+        ],
+        "checks": [
+          {
+            "code": "F02_AMOUNT_WORDS_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+            "evidence": []
+          },
+          {
+            "code": "F02_LINE_ITEM_ARITHMETIC",
+            "status": "NOT_EVALUATED",
+            "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+            "evidence": []
+          },
+          {
+            "code": "F02_LINE_SUM_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+            "evidence": []
+          }
+        ],
+        "findings": [
+          {
+            "code": "OTHER_CONCRETE_RISK",
+            "level": "WARNING",
+            "title": "合同价款未确定",
+            "explanation": "第三条明确约定费用由双方另行约定，且声明尚未确定合同价款，导致核心对价条款缺失，合同主要权利义务不完整。",
+            "suggestion": "建议补充明确合同总价、计价方式及支付节点。",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 114,
+                "end": 143,
+                "excerpt": "第三条 费用由双方另行约定，本协议尚未确定合同价款和编号。"
+              }
+            ],
+            "origin": "AI_REVIEW_SUGGESTION"
+          }
+        ],
+        "sourceChars": 144,
+        "reviewedChars": 144,
+        "fullyReviewed": true
+      }
+    ],
+    "findings": [
+      {
+        "code": "OTHER_CONCRETE_RISK",
+        "level": "WARNING",
+        "title": "合同价款未确定",
+        "explanation": "第三条明确约定费用由双方另行约定，且声明尚未确定合同价款，导致核心对价条款缺失，合同主要权利义务不完整。",
+        "suggestion": "建议补充明确合同总价、计价方式及支付节点。",
+        "evidence": [
+          {
+            "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+            "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+            "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+            "parseVersion": 1,
+            "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+            "start": 114,
+            "end": 143,
+            "excerpt": "第三条 费用由双方另行约定，本协议尚未确定合同价款和编号。"
+          }
+        ],
+        "origin": "AI_REVIEW_SUGGESTION"
+      }
+    ],
+    "checks": [
+      {
+        "code": "F02_AMOUNT_WORDS_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+        "evidence": []
+      },
+      {
+        "code": "F02_LINE_ITEM_ARITHMETIC",
+        "status": "NOT_EVALUATED",
+        "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+        "evidence": []
+      },
+      {
+        "code": "F02_LINE_SUM_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+        "evidence": []
+      },
+      {
+        "code": "F02_AWARD_AMOUNT_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+        "evidence": []
+      },
+      {
+        "code": "F02_AWARD_SUPPLIER_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+        "evidence": []
+      }
+    ],
+    "limitations": [],
+    "comparisons": [],
+    "categories": [
+      {
+        "id": "QUANTITATIVE",
+        "order": 1,
+        "title": "合同条款量化一致性审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "DRAFT_STRUCTURE",
+        "order": 2,
+        "title": "合同草本结构对标审查",
+        "status": "AVAILABLE",
+        "summary": "已整理材料中的相关约定，供审查参考",
+        "items": [
+          {
+            "title": "合同名称",
+            "summary": "合同名称：合同书",
+            "level": "INFO",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 17,
+                "end": 20,
+                "excerpt": "合同书"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "BREACH",
+        "order": 3,
+        "title": "违约责任条款量化审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "TERM",
+        "order": 4,
+        "title": "合同期限与终止条件格式审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "PARTY_QUALIFICATION",
+        "order": 5,
+        "title": "合同主体资格审查",
+        "status": "AVAILABLE",
+        "summary": "已整理合同主体信息；资质结论以材料中的证明为依据",
+        "items": [
+          {
+            "title": "甲方",
+            "summary": "甲方：澄湾合成档案中心",
+            "level": "INFO",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 37,
+                "end": 48,
+                "excerpt": "甲方：澄湾合成档案中心"
+              }
+            ]
+          },
+          {
+            "title": "乙方",
+            "summary": "乙方：澄湾合成咨询有限公司",
+            "level": "INFO",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 50,
+                "end": 63,
+                "excerpt": "乙方：澄湾合成咨询有限公司"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ATTACHMENT_COMPLETENESS",
+        "order": 6,
+        "title": "附件清单完整性审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "EFFECTIVENESS_COPIES",
+        "order": 7,
+        "title": "合同生效条件与份数审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "CLAUSE_RISK",
+        "order": 8,
+        "title": "合同条款风险提示",
+        "status": "ATTENTION",
+        "summary": "请优先查看以下问题及涉及材料",
+        "items": [
+          {
+            "title": "合同价款未确定",
+            "summary": "第三条明确约定费用由双方另行约定，且声明尚未确定合同价款，导致核心对价条款缺失，合同主要权利义务不完整。 建议：建议补充明确合同总价、计价方式及支付节点。",
+            "level": "WARNING",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 114,
+                "end": 143,
+                "excerpt": "第三条 费用由双方另行约定，本协议尚未确定合同价款和编号。"
+              }
+            ]
+          },
+          {
+            "title": "条款内容",
+            "summary": "乙方协助整理历史资料并提供咨询服务。",
+            "level": "INFO",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 65,
+                "end": 90,
+                "excerpt": "第一条 服务内容：协助整理历史资料并提供咨询服务。"
+              }
+            ]
+          },
+          {
+            "title": "条款内容",
+            "summary": "乙方不得泄露服务中接触的信息。",
+            "level": "INFO",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 92,
+                "end": 112,
+                "excerpt": "第二条 保密：不得泄露服务中接触的信息。"
+              }
+            ]
+          },
+          {
+            "title": "条款内容",
+            "summary": "费用由双方另行约定，尚未确定合同价款和编号。",
+            "level": "INFO",
+            "evidence": [
+              {
+                "fileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+                "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+                "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+                "parseVersion": 1,
+                "textSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+                "start": 114,
+                "end": 143,
+                "excerpt": "第三条 费用由双方另行约定，本协议尚未确定合同价款和编号。"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+    "projectName": "澄湾咨询服务项目"
+  },
+  "project": {
+    "project": {
+      "id": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+      "name": "澄湾咨询服务项目",
+      "projectNo": null,
+      "category": null,
+      "metadataConfirmed": true,
+      "versionNo": 1,
+      "createdAt": "2026-10-29T15:42:50.200008Z",
+      "updatedAt": "2026-10-29T15:43:33.640120Z"
+    },
+    "intakeStatus": "CANDIDATES_AVAILABLE",
+    "files": [
+      {
+        "id": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+        "parentArchiveFileId": null,
+        "normalizedRelativePath": null,
+        "originalFilename": "采购委托协议书.docx",
+        "mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "category": "CONTRACT_BODY",
+        "ingestionStatus": "AVAILABLE",
+        "parseStatus": "PARSED",
+        "sizeBytes": 36921,
+        "parsedText": "合成测试材料，仅用于功能验收。\n\n合同书\n\n项目名称：澄湾咨询服务项目\n\n甲方：澄湾合成档案中心\n\n乙方：澄湾合成咨询有限公司\n\n第一条 服务内容：协助整理历史资料并提供咨询服务。\n\n第二条 保密：不得泄露服务中接触的信息。\n\n第三条 费用由双方另行约定，本协议尚未确定合同价款和编号。\n",
+        "parseMethod": "DOCX_TEXT",
+        "parseEngine": "SHARED_MATERIAL",
+        "parseConfidence": null,
+        "pageCount": null,
+        "parseDurationMs": 24,
+        "safeReasonCode": null,
+        "createdAt": "2026-10-29T15:42:50.510382Z",
+        "updatedAt": "2026-10-29T15:42:51.654333Z",
+        "fileSha256": "c325c875fe8d67eac779f7e81dbd1ce8ed51748d4b577fb6acad7124dec54b13",
+        "canonicalTextSha256": "f721f8c5c55a1c6d4b367833ecc6c7bbdb70fd266dec1a6938a54b6c5e6b608a",
+        "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+        "parseVersion": 1,
+        "parseOrigin": "CURRENT_PIPELINE",
+        "roleAssessmentId": "19cfdfd0-0926-4702-be5d-f3135d2f00a6",
+        "suggestedRole": "CONTRACT_BODY",
+        "roleConfidence": 1,
+        "roleExecutionStatus": "COMPLETED",
+        "roleAssessmentSource": "MACHINE_DETERMINISTIC",
+        "roleSafeReasonCode": null,
+        "roleModelProvider": null,
+        "roleModelName": null,
+        "roleModelRevision": null,
+        "rolePromptVersion": null,
+        "roleSchemaVersion": null,
+        "aiRoleAssessmentId": null,
+        "aiRoleExecutionStatus": null,
+        "aiRoleSafeReasonCode": null,
+        "roleDecisionStatus": "CONFIRMED",
+        "effectiveRole": "CONTRACT_BODY",
+        "effectiveRoleSource": "SYSTEM_AUTO_DECISION",
+        "roleDecisionId": "e5cf81d1-06f4-4802-9c3e-31eff8cf3fec",
+        "roleDecisionVersion": 1,
+        "identityAssessmentId": "9e4bd9d2-0040-4dff-a311-70261da0a183",
+        "identityAssessmentStatus": "LIKELY_SAME_PROJECT",
+        "identityDecisionStatus": "CONFIRMED",
+        "effectiveIdentityStatus": "SAME_PROJECT",
+        "identityDecisionId": "738d4a01-a44f-4e23-adcc-4920a073fc7e",
+        "identityDecisionVersion": 1,
+        "identityCurrent": true,
+        "excludedFromProjectUse": false,
+        "progression": {
+          "stage": "IDENTITY_CONFIRMED",
+          "blocker": "FACT_EXTRACTION_PENDING",
+          "availableActions": [
+            "RESUME_FACT_EXTRACTION"
+          ],
+          "candidateId": null,
+          "contractId": null,
+          "recoveryInputFingerprint": "fd6d87027cd4a0afbdc8db49cded597245760e7fbf7fdae88d7f746a75f23f88"
+        }
+      }
+    ],
+    "candidates": [
+      {
+        "id": "d83168a7-d041-4654-a0bc-a191e8b9c8a3",
+        "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+        "sourceContractFileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "sourceParseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+        "sourceRoleDecisionId": "e5cf81d1-06f4-4802-9c3e-31eff8cf3fec",
+        "sourceIdentityDecisionId": "738d4a01-a44f-4e23-adcc-4920a073fc7e",
+        "sourceAuthoritySource": "SYSTEM_AUTO",
+        "sourceFactFingerprint": "f4886800a2f03084c04b4ea61988d0f2bc617abc8449de4676ea587848780c67",
+        "contractNo": null,
+        "contractName": "合同书",
+        "contractType": null,
+        "partyA": "澄湾合成档案中心",
+        "partyB": "澄湾合成咨询有限公司",
+        "partyBCreditCode": null,
+        "contractAmount": null,
+        "amountInWords": null,
+        "awardAmount": null,
+        "awardSupplier": null,
+        "awardSupplierCreditCode": null,
+        "lineItems": [],
+        "promotionState": "DRAFT",
+        "versionNo": 0,
+        "promotedContractId": null,
+        "promotedConfirmationId": null,
+        "promotedBy": null,
+        "promotedAt": null,
+        "createdAt": "2026-10-29T15:43:33.693093Z",
+        "updatedAt": "2026-10-29T15:43:33.693093Z"
+      }
+    ],
+    "extractionResults": [
+      {
+        "id": "0f0f21d4-8c06-3514-9013-81e219dbb2fe",
+        "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+        "sourceFileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+        "candidateId": "d83168a7-d041-4654-a0bc-a191e8b9c8a3",
+        "extractionKey": "828e3268aa1d352baaf2768880f0f1ae59f04b3573837859d29ec195d016f99c",
+        "extractionVersion": "contract-analysis-v2",
+        "factType": "CONTRACT_NAME",
+        "groupKey": null,
+        "valueText": "合同书",
+        "normalizedValue": "合同书",
+        "valueAmount": null,
+        "sourceText": "合同书",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "parse-result:0d3a2dd9-68f1-4933-8c07-b83337c114ce:canonical-codepoint:17-20",
+        "createdAt": "2026-10-29T15:43:33.613255Z"
+      },
+      {
+        "id": "f434056a-5d7e-4e4d-a65d-a10da2a908fc",
+        "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+        "sourceFileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+        "candidateId": "d83168a7-d041-4654-a0bc-a191e8b9c8a3",
+        "extractionKey": "2faf158fb3797acd7524efb686d6e547a26b988549db35544d4689459af3f457",
+        "extractionVersion": "project-extraction-v2",
+        "factType": "PARTY_A",
+        "groupKey": null,
+        "valueText": "澄湾合成档案中心",
+        "normalizedValue": "澄湾合成档案中心",
+        "valueAmount": null,
+        "sourceText": "甲方：澄湾合成档案中心",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "analysis/offset:37/fact:PARTY_A/occurrence:1",
+        "createdAt": "2026-10-29T15:43:33.607713Z"
+      },
+      {
+        "id": "51721f54-fff2-383e-b82a-126ec307ee52",
+        "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+        "sourceFileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+        "candidateId": "d83168a7-d041-4654-a0bc-a191e8b9c8a3",
+        "extractionKey": "3be66d0a9e428823fadbecb391d3a36cd28771896d6c15270a9081b18fb9778e",
+        "extractionVersion": "contract-analysis-v2",
+        "factType": "PARTY_A",
+        "groupKey": null,
+        "valueText": "澄湾合成档案中心",
+        "normalizedValue": "澄湾合成档案中心",
+        "valueAmount": null,
+        "sourceText": "甲方：澄湾合成档案中心",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "parse-result:0d3a2dd9-68f1-4933-8c07-b83337c114ce:canonical-codepoint:37-48",
+        "createdAt": "2026-10-29T15:43:33.612179Z"
+      },
+      {
+        "id": "3c658d45-bd37-4410-bb9e-aed363cecab8",
+        "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+        "sourceFileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+        "candidateId": "d83168a7-d041-4654-a0bc-a191e8b9c8a3",
+        "extractionKey": "16ea795d7615614bafdeb716d07d15dbfccefd5efbfd93008d984baee1fd28df",
+        "extractionVersion": "project-extraction-v2",
+        "factType": "PARTY_B",
+        "groupKey": null,
+        "valueText": "澄湾合成咨询有限公司",
+        "normalizedValue": "澄湾合成咨询有限公司",
+        "valueAmount": null,
+        "sourceText": "乙方：澄湾合成咨询有限公司",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "analysis/offset:50/fact:PARTY_B/occurrence:1",
+        "createdAt": "2026-10-29T15:43:33.607868Z"
+      },
+      {
+        "id": "8066b13e-2751-3633-8970-20dc39e6f76a",
+        "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+        "sourceFileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+        "candidateId": "d83168a7-d041-4654-a0bc-a191e8b9c8a3",
+        "extractionKey": "4b5849186a9259ba3d860f4ae7c96823830ccc406243614ebf5d16570f0df2b6",
+        "extractionVersion": "contract-analysis-v2",
+        "factType": "PARTY_B",
+        "groupKey": null,
+        "valueText": "澄湾合成咨询有限公司",
+        "normalizedValue": "澄湾合成咨询有限公司",
+        "valueAmount": null,
+        "sourceText": "乙方：澄湾合成咨询有限公司",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "parse-result:0d3a2dd9-68f1-4933-8c07-b83337c114ce:canonical-codepoint:50-63",
+        "createdAt": "2026-10-29T15:43:33.612784Z"
+      },
+      {
+        "id": "f15dde7b-8c25-4871-95e5-59bf9cbcaf9d",
+        "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+        "sourceFileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+        "candidateId": "d83168a7-d041-4654-a0bc-a191e8b9c8a3",
+        "extractionKey": "9588638d6e32b86939f018a101dbd598523a31a73c5e9dcab94592067f794cbb",
+        "extractionVersion": "project-extraction-v2",
+        "factType": "PROJECT_NAME",
+        "groupKey": null,
+        "valueText": "澄湾咨询服务项目",
+        "normalizedValue": "澄湾咨询服务项目",
+        "valueAmount": null,
+        "sourceText": "项目名称：澄湾咨询服务项目",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "analysis/offset:22/fact:PROJECT_NAME/occurrence:1",
+        "createdAt": "2026-10-29T15:43:33.607558Z"
+      },
+      {
+        "id": "0af1e382-1f2a-3f13-a365-b40c75e65e1b",
+        "projectId": "3fb0b980-b657-4ad6-b237-9aba93545eca",
+        "sourceFileId": "80ec59f7-8680-42e1-ac21-ce977c377fbb",
+        "parseResultId": "0d3a2dd9-68f1-4933-8c07-b83337c114ce",
+        "candidateId": "d83168a7-d041-4654-a0bc-a191e8b9c8a3",
+        "extractionKey": "1f07615ecfa63ff006fcc4f59783c06f9eff083b518e262dd229478be8509d85",
+        "extractionVersion": "contract-analysis-v2",
+        "factType": "PROJECT_NAME",
+        "groupKey": null,
+        "valueText": "澄湾咨询服务项目",
+        "normalizedValue": "澄湾咨询服务项目",
+        "valueAmount": null,
+        "sourceText": "项目名称：澄湾咨询服务项目",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "parse-result:0d3a2dd9-68f1-4933-8c07-b83337c114ce:canonical-codepoint:22-35",
+        "createdAt": "2026-10-29T15:43:33.613685Z"
+      }
+    ],
+    "associatedContracts": [],
+    "failedFileCount": 0,
+    "unsupportedFileCount": 0
+  }
+}

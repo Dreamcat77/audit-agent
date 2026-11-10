@@ -1,0 +1,855 @@
+{
+  "browser": "Playwright Chromium, real DOM and HTTP",
+  "caseId": "74c808d7-aaa3-313b-b59d-7c0fe400b055",
+  "files": 12,
+  "progress": [
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 0,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 1,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 1,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 1,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 2,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 2,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 2,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 2,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 2,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 2,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 2,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 2,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 3,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 3,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 3,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 3,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 3,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 3,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 4,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 5,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 5,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 5,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 5,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 5,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 5,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 6,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 7,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 8,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 9,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 9,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 9,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 9,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 9,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 9,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 9,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 9,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 9,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 10,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 11,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 11,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 11,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 11,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 11,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 11,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 11,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 12,
+      "total": 12
+    },
+    {
+      "state": "RUNNING",
+      "extracted": 12,
+      "total": 12
+    },
+    {
+      "state": "COMPLETED",
+      "extracted": 12,
+      "total": 12
+    }
+  ],
+  "uploaded": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": "74c808d7-aaa3-313b-b59d-7c0fe400b055",
+      "caseNumber": "AC-74c808d7-aaa3-313b-b59d-7c0fe400b055",
+      "status": "QUEUED",
+      "createdAt": "2026-10-27T07:22:28.017819Z",
+      "documents": [
+        {
+          "id": "4132f0c4-376b-4d64-9529-ff314463da89",
+          "name": "01_办公终端及打印设备采购需求申请书.docx",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "5ec63fe7-134c-43f3-9e12-814c2b0739f5",
+          "name": "02_办公终端采购技术需求表.pdf",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "37961fd5-e6da-4a00-aff1-62718bdf30ce",
+          "name": "03_办公设备采购实施计划.docx",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "f4f778e6-cbe0-48e0-a66d-8c148e6a0284",
+          "name": "04_办公设备更新项目预算批复.pdf",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "33036897-2fbe-479a-8c12-e611078e1ffc",
+          "name": "05_办公终端及打印设备采购招标文件.docx",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "6e17b7e1-5ef7-4187-85ad-e8c06a0bedb5",
+          "name": "06_办公设备采购评审办法.pdf",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "cc6c8baf-2d32-4415-84c2-9f0dcc5f69de",
+          "name": "07_澄川星河办公设备有限公司报价单.pdf",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "4c770632-5347-4c03-a4c8-32bb52307626",
+          "name": "08_澄川明川数字设备有限公司报价单.pdf",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "9be75216-7aa0-423c-924b-13efbc86848e",
+          "name": "09_澄川启衡信息设备有限公司报价单.pdf",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "5a49403d-960c-41aa-a852-e26385e0db1a",
+          "name": "10_办公设备采购文件澄清答复.docx",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "99aef461-c5f6-42bc-8387-465b1ebb40e1",
+          "name": "11_办公设备采购中标通知书.docx",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        },
+        {
+          "id": "d6cc9097-9527-4d82-977a-b9d2485b561d",
+          "name": "12_办公设备采购履约验收方案.docx",
+          "status": "STORED",
+          "parseMethod": null,
+          "errorCode": null,
+          "factCount": 0
+        }
+      ],
+      "report": null
+    }
+  },
+  "completedVisible": true,
+  "processingRefreshRecovered": true,
+  "completedRefreshRecovered": true,
+  "evidenceVisible": true,
+  "originalDownload": true,
+  "invalidSignatureHttpStatus": 400,
+  "failedUploadPreservedOperation": true,
+  "networkFailurePreservedOperation": true,
+  "pageErrors": []
+}

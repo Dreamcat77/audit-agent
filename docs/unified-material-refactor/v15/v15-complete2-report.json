@@ -1,0 +1,1641 @@
+{
+  "id": "e4bf4e2c-62aa-3cc1-a23a-82d5fbfd3393",
+  "status": "PARTIAL",
+  "statusLabel": "已生成部分结果",
+  "headline": "合同材料分析（3份）",
+  "explanation": "已形成可参考的阶段结果，请优先查看有原文依据的关注事项；尚未完成的范围单独列出。",
+  "createdAt": "2026-10-29T07:47:16.242255666Z",
+  "documents": [
+    {
+      "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+      "name": "中标通知书.docx",
+      "status": "READY",
+      "role": "AWARD",
+      "profile": "PROCUREMENT",
+      "facts": [
+        {
+          "type": "PROJECT_NO",
+          "value": "SYN-V15-001",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 25,
+              "end": 41,
+              "excerpt": "项目编号：SYN-V15-001"
+            }
+          ]
+        },
+        {
+          "type": "AWARD_SUPPLIER",
+          "value": "澄川星河办公设备有限公司",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 43,
+              "end": 61,
+              "excerpt": "中标供应商：澄川星河办公设备有限公司"
+            }
+          ]
+        },
+        {
+          "type": "AWARD_AMOUNT",
+          "value": "110000元",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 63,
+              "end": 75,
+              "excerpt": "中标金额：110000元"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NAME",
+          "value": "中标通知书",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 0,
+              "end": 5,
+              "excerpt": "中标通知书"
+            }
+          ]
+        },
+        {
+          "type": "PROJECT_NAME",
+          "value": "澄川档案数字化建设项目",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 7,
+              "end": 23,
+              "excerpt": "项目名称：澄川档案数字化建设项目"
+            }
+          ]
+        }
+      ],
+      "clauses": [
+        {
+          "topic": "OTHER",
+          "summary": "要求中标供应商按招标文件签订合同。",
+          "evidence": [
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 77,
+              "end": 88,
+              "excerpt": "请按招标文件签订合同。"
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "code": "F02_AMOUNT_WORDS_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_ITEM_ARITHMETIC",
+          "status": "NOT_EVALUATED",
+          "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_SUM_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+          "evidence": []
+        }
+      ],
+      "findings": [],
+      "sourceChars": 89,
+      "reviewedChars": 89,
+      "fullyReviewed": true
+    },
+    {
+      "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+      "name": "合同书.docx",
+      "status": "READY",
+      "role": "CONTRACT",
+      "profile": "PROCUREMENT",
+      "facts": [
+        {
+          "type": "PROJECT_NO",
+          "value": "SYN-V15-001",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 33,
+              "end": 49,
+              "excerpt": "项目编号：SYN-V15-001"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NAME",
+          "value": "澄川档案设备货物采购合同",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 51,
+              "end": 68,
+              "excerpt": "合同名称：澄川档案设备货物采购合同"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NO",
+          "value": "SYN-V15-C001",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 81,
+              "end": 98,
+              "excerpt": "合同编号：SYN-V15-C001"
+            }
+          ]
+        },
+        {
+          "type": "PARTY_A",
+          "value": "澄川档案服务中心",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 100,
+              "end": 111,
+              "excerpt": "甲方：澄川档案服务中心"
+            }
+          ]
+        },
+        {
+          "type": "PARTY_B",
+          "value": "澄川星河办公设备有限公司",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 113,
+              "end": 128,
+              "excerpt": "乙方：澄川星河办公设备有限公司"
+            }
+          ]
+        },
+        {
+          "type": "TOTAL_AMOUNT",
+          "value": "120000.00元",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 130,
+              "end": 145,
+              "excerpt": "合同金额：120000.00元"
+            }
+          ]
+        },
+        {
+          "type": "AMOUNT_WORDS",
+          "value": "壹拾贰万元整",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 147,
+              "end": 158,
+              "excerpt": "金额大写：壹拾贰万元整"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_TYPE",
+          "value": "货物采购",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 70,
+              "end": 79,
+              "excerpt": "合同类型：货物采购"
+            }
+          ]
+        },
+        {
+          "type": "PROJECT_NAME",
+          "value": "澄川档案数字化建设项目",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 15,
+              "end": 31,
+              "excerpt": "项目名称：澄川档案数字化建设项目"
+            }
+          ]
+        },
+        {
+          "type": "SIGN_DATE",
+          "value": "2026年10月29日",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 682,
+              "end": 699,
+              "excerpt": "签订日期：2026年10月29日。"
+            }
+          ]
+        }
+      ],
+      "clauses": [
+        {
+          "topic": "PAYMENT",
+          "summary": "甲方在合同签订后五个工作日内支付全部价款。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 226,
+              "end": 246,
+              "excerpt": "甲方在合同签订后五个工作日内支付全部价款"
+            }
+          ]
+        },
+        {
+          "topic": "DELIVERY",
+          "summary": "乙方收到款项后六十日内交货，交货期限为2026年12月30日前。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 247,
+              "end": 260,
+              "excerpt": "乙方收到款项后六十日内交货"
+            },
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 362,
+              "end": 379,
+              "excerpt": "交货期限为2026年12月30日前"
+            }
+          ]
+        },
+        {
+          "topic": "ACCEPTANCE",
+          "summary": "设备安装完成后按附件技术指标逐项验收，双方签署验收单。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 261,
+              "end": 287,
+              "excerpt": "设备安装完成后按附件技术指标逐项验收，双方签署验收单"
+            }
+          ]
+        },
+        {
+          "topic": "BREACH",
+          "summary": "乙方逾期交货按合同总价千分之一/日支付违约金；甲方逾期付款按未付款金额万分之五/日承担违约责任。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 299,
+              "end": 351,
+              "excerpt": "乙方每逾期交货一日，按合同总价千分之一支付违约金。甲方逾期付款的，按未付款金额每日万分之五承担违约责任。"
+            }
+          ]
+        },
+        {
+          "topic": "TERMINATION",
+          "summary": "乙方逾期交货超过三十日，甲方有权书面通知解除合同并要求返还已付款项。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 380,
+              "end": 412,
+              "excerpt": "乙方逾期超过三十日，甲方有权书面通知解除合同，并要求返还已付款项"
+            }
+          ]
+        },
+        {
+          "topic": "QUALIFICATION",
+          "summary": "乙方应具备有效营业执照，复印件见附件二；授权代表签署须提供授权委托书。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 424,
+              "end": 465,
+              "excerpt": "乙方应具备有效营业执照，营业执照复印件见附件二。乙方授权代表签署时须提供授权委托书"
+            }
+          ]
+        },
+        {
+          "topic": "ATTACHMENT",
+          "summary": "附件一为《设备技术参数与验收清单》，附件二为《营业执照复印件》，均为合同组成部分。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 475,
+              "end": 512,
+              "excerpt": "附件一《设备技术参数与验收清单》、附件二《营业执照复印件》为本合同组成部分"
+            }
+          ]
+        },
+        {
+          "topic": "EFFECTIVENESS",
+          "summary": "合同经双方法定代表人或授权代表签字并加盖公章后生效，一式肆份，双方各执贰份。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 541,
+              "end": 581,
+              "excerpt": "本合同经双方法定代表人或授权代表签字并加盖公章后生效，一式肆份，甲乙双方各执贰份"
+            }
+          ]
+        },
+        {
+          "topic": "WARRANTY",
+          "summary": "设备质保三年，报修后二十四小时响应。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 594,
+              "end": 611,
+              "excerpt": "设备质保三年，报修后二十四小时响应"
+            }
+          ]
+        },
+        {
+          "topic": "DISPUTE",
+          "summary": "争议先协商，协商不成向甲方所在地人民法院提起诉讼。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 612,
+              "end": 636,
+              "excerpt": "争议先协商，协商不成向甲方所在地人民法院提起诉讼"
+            }
+          ]
+        },
+        {
+          "topic": "STRUCTURE",
+          "summary": "正文共九条，附件两项，签章页应列明甲乙方名称、签署人及签订日期。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 648,
+              "end": 679,
+              "excerpt": "正文共九条，附件两项，签章页应列明甲乙方名称、签署人及签订日期"
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "code": "F02_AMOUNT_WORDS_MATCH",
+          "status": "PASS",
+          "explanation": "合同金额大小写核对：120000.00元，与依据金额120000.00元一致",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 130,
+              "end": 145,
+              "excerpt": "合同金额：120000.00元"
+            },
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 147,
+              "end": 158,
+              "excerpt": "金额大写：壹拾贰万元整"
+            }
+          ]
+        },
+        {
+          "code": "F02_LINE_ITEM_ARITHMETIC",
+          "status": "NOT_EVALUATED",
+          "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_SUM_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+          "evidence": []
+        }
+      ],
+      "findings": [
+        {
+          "code": "MATERIAL_SCOPE_NOTE",
+          "level": "INFO",
+          "title": "附件未在本次上传范围内",
+          "explanation": "合同提及附件一《设备技术参数与验收清单》及附件二《营业执照复印件》，但本次输入仅包含合同正文，未包含附件内容，无法核实具体技术指标及资质有效性。",
+          "suggestion": "建议补充上传附件一和附件二以完成完整审查。",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 475,
+              "end": 512,
+              "excerpt": "附件一《设备技术参数与验收清单》、附件二《营业执照复印件》为本合同组成部分"
+            }
+          ],
+          "origin": "AI_REVIEW_SUGGESTION"
+        }
+      ],
+      "sourceChars": 700,
+      "reviewedChars": 700,
+      "fullyReviewed": true
+    },
+    {
+      "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+      "name": "附件清单.docx",
+      "status": "READY",
+      "role": "ANNEX",
+      "profile": "PROCUREMENT",
+      "facts": [
+        {
+          "type": "PROJECT_NO",
+          "value": "SYN-V15-001",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+              "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+              "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+              "parseVersion": 1,
+              "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+              "start": 15,
+              "end": 31,
+              "excerpt": "项目编号：SYN-V15-001"
+            },
+            {
+              "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+              "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+              "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+              "parseVersion": 1,
+              "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+              "start": 13,
+              "end": 31,
+              "excerpt": "关联项目编号：SYN-V15-001"
+            }
+          ]
+        },
+        {
+          "type": "ITEM_QUANTITY",
+          "value": "二台",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+              "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+              "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+              "parseVersion": 1,
+              "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+              "start": 33,
+              "end": 39,
+              "excerpt": "扫描设备二台"
+            }
+          ]
+        },
+        {
+          "type": "ITEM_UNIT_PRICE",
+          "value": "60000元",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+              "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+              "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+              "parseVersion": 1,
+              "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+              "start": 40,
+              "end": 48,
+              "excerpt": "每台60000元"
+            }
+          ]
+        }
+      ],
+      "clauses": [
+        {
+          "topic": "ACCEPTANCE",
+          "summary": "约定扫描分辨率600DPI，连续扫描不少于100页，图像清晰且无缺页。",
+          "evidence": [
+            {
+              "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+              "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+              "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+              "parseVersion": 1,
+              "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+              "start": 49,
+              "end": 82,
+              "excerpt": "扫描分辨率600DPI，连续扫描不少于100页，图像清晰且无缺页。"
+            }
+          ]
+        },
+        {
+          "topic": "QUALIFICATION",
+          "summary": "营业执照复印件列为应交材料，附件声明不模拟真实工商证明。",
+          "evidence": [
+            {
+              "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+              "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+              "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+              "parseVersion": 1,
+              "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+              "start": 84,
+              "end": 114,
+              "excerpt": "营业执照复印件仅列为应交材料，本合成附件不模拟真实工商证明。"
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "code": "F02_AMOUNT_WORDS_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_ITEM_ARITHMETIC",
+          "status": "NOT_EVALUATED",
+          "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_SUM_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+          "evidence": []
+        }
+      ],
+      "findings": [
+        {
+          "code": "MATERIAL_SCOPE_NOTE",
+          "level": "INFO",
+          "title": "资质材料真实性待核实",
+          "explanation": "附件明确营业执照复印件仅为应交材料清单，且声明不模拟真实工商证明，需核实实际提交的资质文件。",
+          "suggestion": "核对实际提交的营业执照原件或有效复印件。",
+          "evidence": [
+            {
+              "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+              "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+              "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+              "parseVersion": 1,
+              "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+              "start": 84,
+              "end": 114,
+              "excerpt": "营业执照复印件仅列为应交材料，本合成附件不模拟真实工商证明。"
+            }
+          ],
+          "origin": "AI_REVIEW_SUGGESTION"
+        }
+      ],
+      "sourceChars": 115,
+      "reviewedChars": 115,
+      "fullyReviewed": true
+    }
+  ],
+  "findings": [
+    {
+      "code": "MATERIAL_SCOPE_NOTE",
+      "level": "INFO",
+      "title": "附件未在本次上传范围内",
+      "explanation": "合同提及附件一《设备技术参数与验收清单》及附件二《营业执照复印件》，但本次输入仅包含合同正文，未包含附件内容，无法核实具体技术指标及资质有效性。",
+      "suggestion": "建议补充上传附件一和附件二以完成完整审查。",
+      "evidence": [
+        {
+          "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+          "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+          "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+          "parseVersion": 1,
+          "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+          "start": 475,
+          "end": 512,
+          "excerpt": "附件一《设备技术参数与验收清单》、附件二《营业执照复印件》为本合同组成部分"
+        }
+      ],
+      "origin": "AI_REVIEW_SUGGESTION"
+    },
+    {
+      "code": "MATERIAL_SCOPE_NOTE",
+      "level": "INFO",
+      "title": "资质材料真实性待核实",
+      "explanation": "附件明确营业执照复印件仅为应交材料清单，且声明不模拟真实工商证明，需核实实际提交的资质文件。",
+      "suggestion": "核对实际提交的营业执照原件或有效复印件。",
+      "evidence": [
+        {
+          "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+          "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+          "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+          "parseVersion": 1,
+          "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+          "start": 84,
+          "end": 114,
+          "excerpt": "营业执照复印件仅列为应交材料，本合成附件不模拟真实工商证明。"
+        }
+      ],
+      "origin": "AI_REVIEW_SUGGESTION"
+    },
+    {
+      "code": "F02_AWARD_AMOUNT_MATCH",
+      "level": "WARNING",
+      "title": "合同与关联中标金额核对不一致",
+      "explanation": "合同与关联中标金额核对：120000.00元，与依据金额110000元不一致，差额10000.00元",
+      "suggestion": "请核对所引原文金额及适用口径。",
+      "evidence": [
+        {
+          "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+          "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+          "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+          "parseVersion": 1,
+          "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+          "start": 130,
+          "end": 145,
+          "excerpt": "合同金额：120000.00元"
+        },
+        {
+          "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+          "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+          "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+          "parseVersion": 1,
+          "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+          "start": 63,
+          "end": 75,
+          "excerpt": "中标金额：110000元"
+        }
+      ],
+      "origin": "DETERMINISTIC_F02"
+    },
+    {
+      "code": "CROSS_FILE_CONFLICT",
+      "level": "WARNING",
+      "title": "合同金额与中标金额不一致",
+      "explanation": "合同明确约定合同金额为120000元，并要求甲方支付全部价款；中标通知书载明中标金额为110000元。两份文件对同一项目的金额口径存在差异，且未提供补充协议或变更说明以解释该差异，可能导致付款依据不明确。",
+      "suggestion": "核实中标金额与合同金额差异原因，补充书面变更依据或修正合同金额。",
+      "evidence": [
+        {
+          "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+          "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+          "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+          "parseVersion": 1,
+          "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+          "start": 130,
+          "end": 246,
+          "excerpt": "合同金额：120000.00元\n\n金额大写：壹拾贰万元整\n\n第一条 合同标的。采购档案扫描设备二台，每台价款60000元，合计120000元，价格包含运输、安装和培训。\n\n第二条 付款与验收。甲方在合同签订后五个工作日内支付全部价款"
+        },
+        {
+          "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+          "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+          "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+          "parseVersion": 1,
+          "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+          "start": 43,
+          "end": 88,
+          "excerpt": "中标供应商：澄川星河办公设备有限公司\n\n中标金额：110000元\n\n请按招标文件签订合同。"
+        }
+      ],
+      "origin": "AI_REVIEW_SUGGESTION"
+    }
+  ],
+  "checks": [
+    {
+      "code": "F02_AMOUNT_WORDS_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+      "evidence": []
+    },
+    {
+      "code": "F02_LINE_ITEM_ARITHMETIC",
+      "status": "NOT_EVALUATED",
+      "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+      "evidence": []
+    },
+    {
+      "code": "F02_LINE_SUM_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+      "evidence": []
+    },
+    {
+      "code": "F02_AMOUNT_WORDS_MATCH",
+      "status": "PASS",
+      "explanation": "合同金额大小写核对：120000.00元，与依据金额120000.00元一致",
+      "evidence": [
+        {
+          "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+          "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+          "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+          "parseVersion": 1,
+          "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+          "start": 130,
+          "end": 145,
+          "excerpt": "合同金额：120000.00元"
+        },
+        {
+          "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+          "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+          "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+          "parseVersion": 1,
+          "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+          "start": 147,
+          "end": 158,
+          "excerpt": "金额大写：壹拾贰万元整"
+        }
+      ]
+    },
+    {
+      "code": "F02_AWARD_AMOUNT_MATCH",
+      "status": "FAIL",
+      "explanation": "合同与关联中标金额核对：120000.00元，与依据金额110000元不一致，差额10000.00元",
+      "evidence": [
+        {
+          "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+          "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+          "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+          "parseVersion": 1,
+          "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+          "start": 130,
+          "end": 145,
+          "excerpt": "合同金额：120000.00元"
+        },
+        {
+          "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+          "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+          "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+          "parseVersion": 1,
+          "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+          "start": 63,
+          "end": 75,
+          "excerpt": "中标金额：110000元"
+        }
+      ]
+    },
+    {
+      "code": "F02_AWARD_SUPPLIER_MATCH",
+      "status": "PASS",
+      "explanation": "合同乙方“澄川星河办公设备有限公司”与关联中标供应商“澄川星河办公设备有限公司”名称一致",
+      "evidence": [
+        {
+          "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+          "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+          "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+          "parseVersion": 1,
+          "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+          "start": 113,
+          "end": 128,
+          "excerpt": "乙方：澄川星河办公设备有限公司"
+        },
+        {
+          "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+          "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+          "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+          "parseVersion": 1,
+          "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+          "start": 43,
+          "end": 61,
+          "excerpt": "中标供应商：澄川星河办公设备有限公司"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "部分模型请求的最终结果无法确认，系统已停止自动重发；已取得的有效结果仍保留。"
+  ],
+  "comparisons": [
+    {
+      "topic": "PAYMENT",
+      "summary": "合同第二条约定甲方在签订后五个工作日内支付全部价款，合同金额为120000元；中标通知书载明中标金额为110000元。两份文件对交易金额口径不一致，且未说明中标金额与合同金额的对应关系或调整依据。",
+      "evidence": [
+        {
+          "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+          "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+          "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+          "parseVersion": 1,
+          "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+          "start": 130,
+          "end": 246,
+          "excerpt": "合同金额：120000.00元\n\n金额大写：壹拾贰万元整\n\n第一条 合同标的。采购档案扫描设备二台，每台价款60000元，合计120000元，价格包含运输、安装和培训。\n\n第二条 付款与验收。甲方在合同签订后五个工作日内支付全部价款"
+        },
+        {
+          "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+          "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+          "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+          "parseVersion": 1,
+          "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+          "start": 43,
+          "end": 88,
+          "excerpt": "中标供应商：澄川星河办公设备有限公司\n\n中标金额：110000元\n\n请按招标文件签订合同。"
+        }
+      ]
+    },
+    {
+      "topic": "PAYMENT",
+      "summary": "主合同约定甲方在签订后五个工作日内支付全部价款120000元；附件仅列明设备单价，未涉及付款时间或方式，两者在付款安排上无冲突。",
+      "evidence": [
+        {
+          "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+          "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+          "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+          "parseVersion": 1,
+          "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+          "start": 216,
+          "end": 246,
+          "excerpt": "第二条 付款与验收。甲方在合同签订后五个工作日内支付全部价款"
+        },
+        {
+          "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+          "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+          "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+          "parseVersion": 1,
+          "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+          "start": 33,
+          "end": 49,
+          "excerpt": "扫描设备二台，每台60000元。"
+        }
+      ]
+    },
+    {
+      "topic": "ACCEPTANCE",
+      "summary": "主合同约定设备安装完成后按附件技术指标逐项验收；附件明确了600DPI分辨率等具体技术指标，两者在验收标准上相互衔接，无冲突。",
+      "evidence": [
+        {
+          "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+          "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+          "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+          "parseVersion": 1,
+          "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+          "start": 261,
+          "end": 288,
+          "excerpt": "设备安装完成后按附件技术指标逐项验收，双方签署验收单。"
+        },
+        {
+          "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+          "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+          "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+          "parseVersion": 1,
+          "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+          "start": 49,
+          "end": 82,
+          "excerpt": "扫描分辨率600DPI，连续扫描不少于100页，图像清晰且无缺页。"
+        }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "QUANTITATIVE",
+      "order": 1,
+      "title": "合同条款量化一致性审查",
+      "status": "ATTENTION",
+      "summary": "请优先查看以下问题及涉及材料",
+      "items": [
+        {
+          "title": "金额及主体一致性核对",
+          "summary": "合同与关联中标金额核对：120000.00元，与依据金额110000元不一致，差额10000.00元",
+          "level": "WARNING",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 130,
+              "end": 145,
+              "excerpt": "合同金额：120000.00元"
+            },
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 63,
+              "end": 75,
+              "excerpt": "中标金额：110000元"
+            }
+          ]
+        },
+        {
+          "title": "金额及主体一致性核对",
+          "summary": "合同金额大小写核对：120000.00元，与依据金额120000.00元一致",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 130,
+              "end": 145,
+              "excerpt": "合同金额：120000.00元"
+            },
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 147,
+              "end": 158,
+              "excerpt": "金额大写：壹拾贰万元整"
+            }
+          ]
+        },
+        {
+          "title": "金额及主体一致性核对",
+          "summary": "合同乙方“澄川星河办公设备有限公司”与关联中标供应商“澄川星河办公设备有限公司”名称一致",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 113,
+              "end": 128,
+              "excerpt": "乙方：澄川星河办公设备有限公司"
+            },
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 43,
+              "end": 61,
+              "excerpt": "中标供应商：澄川星河办公设备有限公司"
+            }
+          ]
+        },
+        {
+          "title": "合同金额",
+          "summary": "合同金额：120000.00元",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 130,
+              "end": 145,
+              "excerpt": "合同金额：120000.00元"
+            }
+          ]
+        },
+        {
+          "title": "大写金额",
+          "summary": "大写金额：壹拾贰万元整",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 147,
+              "end": 158,
+              "excerpt": "金额大写：壹拾贰万元整"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DRAFT_STRUCTURE",
+      "order": 2,
+      "title": "合同草本结构对标审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "合同名称",
+          "summary": "合同名称：中标通知书",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 0,
+              "end": 5,
+              "excerpt": "中标通知书"
+            }
+          ]
+        },
+        {
+          "title": "合同名称",
+          "summary": "合同名称：澄川档案设备货物采购合同",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 51,
+              "end": 68,
+              "excerpt": "合同名称：澄川档案设备货物采购合同"
+            }
+          ]
+        },
+        {
+          "title": "合同编号",
+          "summary": "合同编号：SYN-V15-C001",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 81,
+              "end": 98,
+              "excerpt": "合同编号：SYN-V15-C001"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "正文共九条，附件两项，签章页应列明甲乙方名称、签署人及签订日期。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 648,
+              "end": 679,
+              "excerpt": "正文共九条，附件两项，签章页应列明甲乙方名称、签署人及签订日期"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "BREACH",
+      "order": 3,
+      "title": "违约责任条款量化审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "条款内容",
+          "summary": "乙方逾期交货按合同总价千分之一/日支付违约金；甲方逾期付款按未付款金额万分之五/日承担违约责任。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 299,
+              "end": 351,
+              "excerpt": "乙方每逾期交货一日，按合同总价千分之一支付违约金。甲方逾期付款的，按未付款金额每日万分之五承担违约责任。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TERM",
+      "order": 4,
+      "title": "合同期限与终止条件格式审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "签订日期",
+          "summary": "签订日期：2026年10月29日",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 682,
+              "end": 699,
+              "excerpt": "签订日期：2026年10月29日。"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "乙方收到款项后六十日内交货，交货期限为2026年12月30日前。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 247,
+              "end": 260,
+              "excerpt": "乙方收到款项后六十日内交货"
+            },
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 362,
+              "end": 379,
+              "excerpt": "交货期限为2026年12月30日前"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "乙方逾期交货超过三十日，甲方有权书面通知解除合同并要求返还已付款项。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 380,
+              "end": 412,
+              "excerpt": "乙方逾期超过三十日，甲方有权书面通知解除合同，并要求返还已付款项"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PARTY_QUALIFICATION",
+      "order": 5,
+      "title": "合同主体资格审查",
+      "status": "AVAILABLE",
+      "summary": "已整理合同主体信息；资质结论以材料中的证明为依据",
+      "items": [
+        {
+          "title": "甲方",
+          "summary": "甲方：澄川档案服务中心",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 100,
+              "end": 111,
+              "excerpt": "甲方：澄川档案服务中心"
+            }
+          ]
+        },
+        {
+          "title": "乙方",
+          "summary": "乙方：澄川星河办公设备有限公司",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 113,
+              "end": 128,
+              "excerpt": "乙方：澄川星河办公设备有限公司"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "乙方应具备有效营业执照，复印件见附件二；授权代表签署须提供授权委托书。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 424,
+              "end": 465,
+              "excerpt": "乙方应具备有效营业执照，营业执照复印件见附件二。乙方授权代表签署时须提供授权委托书"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "营业执照复印件列为应交材料，附件声明不模拟真实工商证明。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+              "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+              "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+              "parseVersion": 1,
+              "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+              "start": 84,
+              "end": 114,
+              "excerpt": "营业执照复印件仅列为应交材料，本合成附件不模拟真实工商证明。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ATTACHMENT_COMPLETENESS",
+      "order": 6,
+      "title": "附件清单完整性审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "条款内容",
+          "summary": "附件一为《设备技术参数与验收清单》，附件二为《营业执照复印件》，均为合同组成部分。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 475,
+              "end": 512,
+              "excerpt": "附件一《设备技术参数与验收清单》、附件二《营业执照复印件》为本合同组成部分"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "EFFECTIVENESS_COPIES",
+      "order": 7,
+      "title": "合同生效条件与份数审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "条款内容",
+          "summary": "合同经双方法定代表人或授权代表签字并加盖公章后生效，一式肆份，双方各执贰份。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 541,
+              "end": 581,
+              "excerpt": "本合同经双方法定代表人或授权代表签字并加盖公章后生效，一式肆份，甲乙双方各执贰份"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CLAUSE_RISK",
+      "order": 8,
+      "title": "合同条款风险提示",
+      "status": "ATTENTION",
+      "summary": "请优先查看以下问题及涉及材料",
+      "items": [
+        {
+          "title": "合同与关联中标金额核对不一致",
+          "summary": "合同与关联中标金额核对：120000.00元，与依据金额110000元不一致，差额10000.00元 建议：请核对所引原文金额及适用口径。",
+          "level": "WARNING",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 130,
+              "end": 145,
+              "excerpt": "合同金额：120000.00元"
+            },
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 63,
+              "end": 75,
+              "excerpt": "中标金额：110000元"
+            }
+          ]
+        },
+        {
+          "title": "合同金额与中标金额不一致",
+          "summary": "合同明确约定合同金额为120000元，并要求甲方支付全部价款；中标通知书载明中标金额为110000元。两份文件对同一项目的金额口径存在差异，且未提供补充协议或变更说明以解释该差异，可能导致付款依据不明确。 建议：核实中标金额与合同金额差异原因，补充书面变更依据或修正合同金额。",
+          "level": "WARNING",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 130,
+              "end": 246,
+              "excerpt": "合同金额：120000.00元\n\n金额大写：壹拾贰万元整\n\n第一条 合同标的。采购档案扫描设备二台，每台价款60000元，合计120000元，价格包含运输、安装和培训。\n\n第二条 付款与验收。甲方在合同签订后五个工作日内支付全部价款"
+            },
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 43,
+              "end": 88,
+              "excerpt": "中标供应商：澄川星河办公设备有限公司\n\n中标金额：110000元\n\n请按招标文件签订合同。"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "要求中标供应商按招标文件签订合同。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "8f335643-21bb-41e9-8f60-4724f77ae980",
+              "fileSha256": "4d62ed146cce4a00087db996fb31a49a2b49f9d9c04edf2ec9984cb2835d535c",
+              "parseResultId": "04a5fce5-c5d8-4967-bac3-913aef6a7848",
+              "parseVersion": 1,
+              "textSha256": "ee3d8f3b90e7ed0316363ccd98259e8df6b4e1e099709ca47c09279a86dd61d3",
+              "start": 77,
+              "end": 88,
+              "excerpt": "请按招标文件签订合同。"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "甲方在合同签订后五个工作日内支付全部价款。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 226,
+              "end": 246,
+              "excerpt": "甲方在合同签订后五个工作日内支付全部价款"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "设备安装完成后按附件技术指标逐项验收，双方签署验收单。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 261,
+              "end": 287,
+              "excerpt": "设备安装完成后按附件技术指标逐项验收，双方签署验收单"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "设备质保三年，报修后二十四小时响应。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 594,
+              "end": 611,
+              "excerpt": "设备质保三年，报修后二十四小时响应"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "争议先协商，协商不成向甲方所在地人民法院提起诉讼。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 612,
+              "end": 636,
+              "excerpt": "争议先协商，协商不成向甲方所在地人民法院提起诉讼"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "约定扫描分辨率600DPI，连续扫描不少于100页，图像清晰且无缺页。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+              "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+              "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+              "parseVersion": 1,
+              "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+              "start": 49,
+              "end": 82,
+              "excerpt": "扫描分辨率600DPI，连续扫描不少于100页，图像清晰且无缺页。"
+            }
+          ]
+        },
+        {
+          "title": "附件未在本次上传范围内",
+          "summary": "合同提及附件一《设备技术参数与验收清单》及附件二《营业执照复印件》，但本次输入仅包含合同正文，未包含附件内容，无法核实具体技术指标及资质有效性。 建议：建议补充上传附件一和附件二以完成完整审查。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "91280f1f-85b4-4831-b8ef-e1064ae147b6",
+              "fileSha256": "e15d73c526b6cddc0582d44b9c7e164b6f715e4eebba7d335fa9f41c4866f073",
+              "parseResultId": "38f5fb79-bc72-4cda-be5e-3a6f5a662ddb",
+              "parseVersion": 1,
+              "textSha256": "edddc85e8dcc0a0474a75fbaaf09dbc6b19990b6b4a2121a9bafa22b8ae17c12",
+              "start": 475,
+              "end": 512,
+              "excerpt": "附件一《设备技术参数与验收清单》、附件二《营业执照复印件》为本合同组成部分"
+            }
+          ]
+        },
+        {
+          "title": "资质材料真实性待核实",
+          "summary": "附件明确营业执照复印件仅为应交材料清单，且声明不模拟真实工商证明，需核实实际提交的资质文件。 建议：核对实际提交的营业执照原件或有效复印件。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "f1ecb2e2-dc51-4387-b4ff-7a10749c70dc",
+              "fileSha256": "94eaa24f864cff26c9d8f4739b022c4ec26c67fab93611084a19246b3e4bf849",
+              "parseResultId": "8dd537ce-db94-4fbc-896c-ffa2dfab2c0a",
+              "parseVersion": 1,
+              "textSha256": "5b4a601bd0c13da1ad8d00519c162eb1b9227ec18392f5eb6332489f0035c8b5",
+              "start": 84,
+              "end": 114,
+              "excerpt": "营业执照复印件仅列为应交材料，本合成附件不模拟真实工商证明。"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

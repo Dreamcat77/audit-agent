@@ -1,0 +1,69 @@
+{
+  "version": "contract-batch-20261103-r2",
+  "baseCommit": "65464825339255980ad1402132c30bda02e2a71a",
+  "sourceFiles": [
+    {
+      "path": "frontend/src/features/contract/components/ContractAnalysisWorkspace.tsx",
+      "sha256": "df259545576e448fec836b01b76d3afe0872fe253af0257237e7361db2906d81"
+    },
+    {
+      "path": "frontend/src/features/contract/contractAnalysisPresentation.test.ts",
+      "sha256": "84b28b9fb1da4733a28284322b7f9488b5eef54460467913badce6bdfb4e5eb6"
+    },
+    {
+      "path": "frontend/src/features/contract/contractAnalysisPresentation.ts",
+      "sha256": "950b9602576eb49f7baa00d39536cce157509142688a66589802eae00bda06fd"
+    },
+    {
+      "path": "frontend/src/features/contract/contractMaterialIntakeOperation.test.ts",
+      "sha256": "a4cd5a8fdfa15c016a7bcb931557c3786abc13701bc60b5e084fc0e8d8e0050f"
+    },
+    {
+      "path": "frontend/src/features/contract/contractMaterialIntakeOperation.ts",
+      "sha256": "9eadaa262ae262a86eca4267490db2ed6dff2efdddf669dff3836eb8c9987977"
+    },
+    {
+      "path": "frontend/src/features/contract/retainedContractMaterialIntake.ts",
+      "sha256": "23ede30035231ee168a4fb9f822ca220899266b2f4a4f8c4b6d44dde067a7202"
+    }
+  ],
+  "files": [
+    {
+      "path": "assets/contract-batch-20261103-r2/audit-header-sc-500-xHT8bT1Z.woff2",
+      "sha256": "5db8f24ccca49acef927d35e83151e9b8383bd8eefb2c346be1d07c0e0de1296"
+    },
+    {
+      "path": "assets/contract-batch-20261103-r2/chrome109-colors-3b1a1974ca756852e47a.css",
+      "sha256": "3b1a1974ca756852e47a536f4409aa51632da0ea3221328b66b48d0970e06b0b"
+    },
+    {
+      "path": "assets/contract-batch-20261103-r2/chrome109-currentcolor-f550a3c84117a6742e43.js",
+      "sha256": "f550a3c84117a6742e43f16d90ccbb1af538dd57e67d2ab5a6d92a3762ca2f29"
+    },
+    {
+      "path": "assets/contract-batch-20261103-r2/index-B2DgOau8.css",
+      "sha256": "ab5977255068127c118213db50c6b2f9455ab897b61e1b00edcc72c7548d5659"
+    },
+    {
+      "path": "assets/contract-batch-20261103-r2/index-DYQqVVZJ.js",
+      "sha256": "86391aad99ec0d308f3d284199c5e03a0e9649fb59ef8e8214c5f4c883297be6"
+    },
+    {
+      "path": "assets/contract-batch-20261103-r2/ui-cjk-C8g_JgdG.woff2",
+      "sha256": "5bf611f708444e807adeb44dfa7f3e0d4c8a4493def9b39b1d76ab38c516fc81"
+    },
+    {
+      "path": "index.html",
+      "sha256": "5d8d11bf07dc996e6e14ff3e452f1685c51f17833d253a1ed10145880621e577"
+    }
+  ],
+  "status": "PASS",
+  "baseRelease": "/opt/audit-agent/releases/deploy26-20261103-r1",
+  "previousIndexSha256": "6f4eafe5754c0749073cd1a36a0b612b1720de7d481bcbea8665f5d9aaa61045",
+  "indexSha256": "5d8d11bf07dc996e6e14ff3e452f1685c51f17833d253a1ed10145880621e577",
+  "jarSha256": "0413795bf92c0976bcc295b7f8f1d344d9d79e3126e00c7de6ed9a46c2bd8ae9",
+  "schemaChanged": false,
+  "backendChanged": false,
+  "servicesRestarted": false,
+  "configsChanged": false
+}

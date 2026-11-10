@@ -18,19 +18,21 @@ public class BudgetUploadedMaterialAnalyzer {
     private static final Set<String> IDENTITY=Set.of("projectCode","projectName","budgetYear","departmentName");
     private static final Set<String> HEADING=Set.of("projectCode","projectName","budgetYear","departmentName","subjectCode","subjectName");
     private record Comparison(List<Grounded> candidates,boolean ambiguous,Amounts declared,Amounts approved,List<Evidence> evidence) {}
-    public Map<UUID,FileResult> analyze(List<Input> inputs) {
+    public Map<UUID,FileResult> analyze(List<Input> inputs) {return analyze(inputs,false);}
+    public Map<UUID,FileResult> analyzeBatch(List<Input> inputs) {return analyze(inputs,true);}
+    private Map<UUID,FileResult> analyze(List<Input> inputs,boolean batchScope) {
         var all=new ArrayList<Grounded>();
         for(var input:inputs) {
             if(!input.status().equals("PARSED")||input.snapshot()==null)continue;
             var scope=new HashMap<String,List<Fact>>();
             // A separate document heading can scope its own rows; a project on a detail row cannot.
             for(var row:input.snapshot().rows())if(row.facts().stream().noneMatch(f->Set.of("declaredAmount","approvalAmount").contains(f.field())))
-                for(var fact:row.facts())if(HEADING.contains(fact.field()))scope.computeIfAbsent(fact.field(),k->new ArrayList<>()).add(fact);
+                for(var fact:row.facts())if(HEADING.contains(fact.field())&&!Set.of("REFERENCE","GENERAL").contains(Objects.toString(fact.subjectScope(),"")))scope.computeIfAbsent(fact.field(),k->new ArrayList<>()).add(fact);
             // A list of subjects is not one document-wide subject heading.
             for(String field:List.of("subjectCode","subjectName"))if(scope.getOrDefault(field,List.of()).stream().map(f->identityKey(field,f.value())).distinct().count()>1)scope.remove(field);
             for(var row:input.snapshot().rows()) {
                 var fields=new LinkedHashMap<String,List<Fact>>();
-                for(var fact:row.facts())fields.computeIfAbsent(BudgetAmountEvidence.isOtherAmount(fact)?"otherAmount":fact.field(),k->new ArrayList<>()).add(fact);
+                for(var fact:row.facts())if(!Set.of("REFERENCE","GENERAL").contains(Objects.toString(fact.subjectScope(),"")))fields.computeIfAbsent(BudgetAmountEvidence.isOtherAmount(fact)?"otherAmount":fact.field(),k->new ArrayList<>()).add(fact);
                 if(fields.keySet().stream().noneMatch(Set.of("subjectCode","subjectName","declaredAmount","approvalAmount")::contains))continue;
                 boolean compatibleHeading=true;
                 for(var field:List.of("projectCode","projectName"))if(fields.containsKey(field)&&scope.containsKey(field)) {
@@ -43,7 +45,7 @@ public class BudgetUploadedMaterialAnalyzer {
             }
         }
         var index=new HashMap<List<String>,List<Grounded>>();
-        for(var grounded:all)for(var key:keys(grounded))index.computeIfAbsent(key,k->new ArrayList<>()).add(grounded);
+        for(var grounded:all)for(var key:keys(grounded,batchScope))index.computeIfAbsent(key,k->new ArrayList<>()).add(grounded);
         var results=new LinkedHashMap<UUID,FileResult>();
         var comparisons=new HashMap<List<String>,Comparison>();
         boolean incomplete=inputs.stream().anyMatch(f->!f.status().equals("PARSED")||f.snapshot()==null||!f.snapshot().issues().isEmpty());
@@ -62,12 +64,12 @@ public class BudgetUploadedMaterialAnalyzer {
                 if(redundantIdentityOnly)continue;
                 boolean conflictingIdentity=target.fields.entrySet().stream().filter(e->!e.getKey().endsWith("Amount"))
                         .anyMatch(e->e.getValue().stream().map(f->identityKey(e.getKey(),f.value())).distinct().count()>1);
-                boolean projectNameConflict=projectNameConflict(target,all);
+                boolean projectNameConflict=!batchScope&&projectNameConflict(target,all);
                 var context=new ArrayList<String>();
                 for(var field:List.of("projectCode","projectName","subjectCode","subjectName","budgetYear","departmentName"))context.add(Objects.toString(target.one(field),""));
                 if(target.one("projectCode")==null&&target.one("projectName")==null)context.add(target.file.taskId().toString());
                 // Ambiguous identities and ungrouped rows cannot share resolutions.
-                var comparison=conflictingIdentity||keys(target).isEmpty()?compare(target,index):comparisons.computeIfAbsent(context,k->compare(target,index));
+                var comparison=conflictingIdentity||keys(target,batchScope).isEmpty()?compare(target,index,batchScope):comparisons.computeIfAbsent(context,k->compare(target,index,batchScope));
                 boolean ambiguous=comparison.ambiguous;
                 var declared=comparison.declared;var approved=comparison.approved;
                 boolean invalid=declared.invalid||approved.invalid;
@@ -83,10 +85,10 @@ public class BudgetUploadedMaterialAnalyzer {
                 } else if(invalid) {status="INVALID_AMOUNT";opinion="材料中有金额的格式、单位、精度、数值范围或重复明细无法确认，暂不作金额比较。";}
                 else if(declared.repeatedRows||approved.repeatedRows) {status="INSUFFICIENT";opinion="同一供应商存在多条申报记录，尚不能确认是否重复。已保留单条识别金额，未自动相加，也未判定合计是否超过批复。";}
                 else if(target.one("subjectName")==null&&target.one("subjectCode")==null) {status="INSUFFICIENT";opinion="已保留材料中的金额，但未能确认对应预算科目，暂不作金额比较。";}
-                else if(d!=null&&a==null&&!incomplete&&hasCounterpartScope(target,all,"approvalAmount")) {
+                else if(d!=null&&a==null&&!incomplete&&hasCounterpartScope(target,all,"approvalAmount",batchScope)) {
                     status="UNAPPROVED_SUBJECT";opinion="疑似错支：本批同一项目的批复材料中未找到此申报科目，请核对是否超出批复范围，或尚有批复材料未上传。";
                 }
-                else if(d==null&&a!=null&&!incomplete&&hasCounterpartScope(target,all,"declaredAmount")) {
+                else if(d==null&&a!=null&&!incomplete&&hasCounterpartScope(target,all,"declaredAmount",batchScope)) {
                     status="MISSING_DECLARATION";opinion="疑似漏项：本批同一项目的申报材料中未找到此批复科目，请核对是否遗漏申报，或尚有申报材料未上传。";
                 }
                 else if(d==null&&a==null) {status="INSUFFICIENT";opinion="已识别到预算科目，但材料中没有可核实的申报金额或批复金额，因此未参与金额比较。请核对对应表格的金额列是否为空或未被识别。";}
@@ -125,13 +127,13 @@ public class BudgetUploadedMaterialAnalyzer {
         }
         return BudgetBatchChecks.enrich(inputs,results);
     }
-    private static Comparison compare(Grounded target,Map<List<String>,List<Grounded>> index) {
+    private static Comparison compare(Grounded target,Map<List<String>,List<Grounded>> index,boolean batchScope) {
         var nearby=new LinkedHashSet<Grounded>();nearby.add(target);
-        for(var key:keys(target))nearby.addAll(index.getOrDefault(key,List.of()));
-        var family=nearby.stream().filter(other->other==target||(identity(target,other,"projectCode","projectName")||sameDocumentContext(target,other))&&identity(target,other,"subjectCode","subjectName")).toList();
+        for(var key:keys(target,batchScope))nearby.addAll(index.getOrDefault(key,List.of()));
+        var family=nearby.stream().filter(other->other==target||(batchScope||identity(target,other,"projectCode","projectName")||sameDocumentContext(target,other))&&identity(target,other,"subjectCode","subjectName")).toList();
         var ambiguousFields=new HashSet<String>();
         for(var field:List.of("budgetYear","departmentName"))if(family.stream().map(r->r.one(field)).filter(Objects::nonNull).distinct().count()>1)ambiguousFields.add(field);
-        var candidates=family.stream().filter(other->other==target||related(target,other)
+        var candidates=family.stream().filter(other->other==target||related(target,other,batchScope)
             && ambiguousFields.stream().noneMatch(f->target.one(f)==null||other.one(f)==null)).toList();
         boolean ambiguous=ambiguousFields.stream().anyMatch(f->target.one(f)==null);
         var evidence=new LinkedHashSet<Evidence>();
@@ -158,10 +160,10 @@ public class BudgetUploadedMaterialAnalyzer {
         return "项目编号一致，但材料中的项目名称不一致（"+String.join(" / ",names.stream().limit(2).toList())
             +"）。为避免将不同项目金额误合并，当前未进行跨名称金额比较，请核对是否属于同一项目。";
     }
-    private static boolean hasCounterpartScope(Grounded target,List<Grounded> all,String amountField) {
+    private static boolean hasCounterpartScope(Grounded target,List<Grounded> all,String amountField,boolean batchScope) {
         // File proximity and a missing project are never proof of a common scope.
         // An unidentified/conflicting year or department cannot bridge known versions.
-        var family=all.stream().filter(other->identity(target,other,"projectCode","projectName")).toList();
+        var family=all.stream().filter(other->batchScope||identity(target,other,"projectCode","projectName")).toList();
         for(String field:List.of("budgetYear","departmentName")) {
             if(target.has(field)&&target.one(field)==null)return false;
             if(target.one(field)==null&&family.stream().map(r->r.one(field)).filter(Objects::nonNull).distinct().count()>1)return false;
@@ -176,10 +178,10 @@ public class BudgetUploadedMaterialAnalyzer {
             return !amounts.invalid&&amounts.values.size()==1;
         });
     }
-    private static boolean related(Grounded a,Grounded b) {
+    private static boolean related(Grounded a,Grounded b,boolean batchScope) {
         if(a==b)return true;
         // Same file is not proof that two unidentified rows are the same project/subject.
-        boolean project=identity(a,b,"projectCode","projectName")||sameDocumentContext(a,b),subject=identity(a,b,"subjectCode","subjectName");
+        boolean project=batchScope||identity(a,b,"projectCode","projectName")||sameDocumentContext(a,b),subject=identity(a,b,"subjectCode","subjectName");
         if(!project||!subject)return false;
         for(var f:List.of("budgetYear","departmentName")) {
             if(a.has(f)&&a.one(f)==null||b.has(f)&&b.one(f)==null)return false;
@@ -190,8 +192,9 @@ public class BudgetUploadedMaterialAnalyzer {
     private static boolean sameDocumentContext(Grounded a,Grounded b) {
         return a.file.taskId().equals(b.file.taskId())&&!a.has("projectCode")&&!a.has("projectName")&&!b.has("projectCode")&&!b.has("projectName");
     }
-    private static List<List<String>> keys(Grounded row) {
+    private static List<List<String>> keys(Grounded row,boolean batchScope) {
         var keys=new ArrayList<List<String>>();
+        if(batchScope)for(var subject:List.of("subjectCode","subjectName"))if(row.one(subject)!=null)keys.add(List.of("batch",subject,row.one(subject)));
         for(var project:List.of("projectCode","projectName"))for(var subject:List.of("subjectCode","subjectName"))
             if(row.one(project)!=null&&row.one(subject)!=null)keys.add(List.of(project,row.one(project),subject,row.one(subject)));
         if(!row.has("projectCode")&&!row.has("projectName"))for(var subject:List.of("subjectCode","subjectName"))

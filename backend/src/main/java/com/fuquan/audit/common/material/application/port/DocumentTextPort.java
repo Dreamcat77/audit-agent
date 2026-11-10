@@ -27,9 +27,13 @@ public interface DocumentTextPort {
     /** Acknowledged PDF pages only. Stored by the business owner, never by a log or cache. */
     record PdfCheckpoint(String sourceSha256, String policy, int pageCount, List<Integer> completedPages,
                          List<MaterialFieldAiPort.Segment> segments,
-                         List<MaterialParsePort.OcrProvenance> provenance) {
+                         List<MaterialParsePort.OcrProvenance> provenance,
+                         @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+                         List<com.fuquan.audit.common.material.visual.VisualIndex.Block> visualBlocks) {
+        public PdfCheckpoint(String sha,String policy,int count,List<Integer> pages,List<MaterialFieldAiPort.Segment> segments,List<MaterialParsePort.OcrProvenance> provenance){this(sha,policy,count,pages,segments,provenance,null);}
         public PdfCheckpoint {
             completedPages=List.copyOf(completedPages);segments=List.copyOf(segments);provenance=List.copyOf(provenance);
+            visualBlocks=visualBlocks==null?null:List.copyOf(visualBlocks);
         }
     }
     default Result read(InputStream input, String fileName, String resourceId, long maxBytes, int maxPages, int maxChars,

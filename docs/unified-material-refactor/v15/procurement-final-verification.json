@@ -1,0 +1,28 @@
+{
+  "id": "8dbdaee5-a8ed-366e-af06-8cf704e41c48",
+  "status": "PARTIAL",
+  "budget": "2200000.0",
+  "offers": 3,
+  "documents": [
+    [
+      "招标文件-摘要.pdf",
+      "EXTRACTED",
+      5
+    ],
+    [
+      "报价单-1.docx",
+      "EXTRACTED",
+      9
+    ],
+    [
+      "报价单-2.docx",
+      "EXTRACTED",
+      9
+    ],
+    [
+      "报价单-3.docx",
+      "EXTRACTED",
+      9
+    ]
+  ]
+}

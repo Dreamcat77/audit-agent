@@ -32,7 +32,8 @@ public class InMemoryUserAccountRepository implements UserAccountRepository, Use
     private static final Set<String> ACTIVE_ROLE_CODES = Set.of(
             "SYSTEM_ADMIN", "PROCUREMENT_MANAGER", "AUDITOR", "LEGAL",
             "PROCUREMENT_APPLICANT", "PROCUREMENT_REVIEWER", "FINANCE_REVIEWER",
-            "PROCUREMENT_LEADER", "PROCUREMENT_COMMITTEE");
+            "PROCUREMENT_LEADER", "PROCUREMENT_COMMITTEE",
+            "PROCUREMENT_USER", "BUDGET_USER", "CONTRACT_USER");
 
     private final ConcurrentMap<String, UserAccount> accountsById = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, String> idsByUsername = new ConcurrentHashMap<>();

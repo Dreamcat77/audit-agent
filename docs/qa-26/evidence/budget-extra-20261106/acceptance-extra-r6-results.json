@@ -1,0 +1,1863 @@
+[
+  {
+    "label": "01门槛下差一分",
+    "batchId": "086fcf6b-a21f-4c58-a1cd-f48aa6962564",
+    "members": [
+      {
+        "operationKey": "903ebe20-3ccc-4c61-90f9-3073720e55b2",
+        "fileName": "资金申请.txt",
+        "fileSize": 131
+      }
+    ],
+    "ids": [
+      "c8d33dfb-c4ab-479e-a14b-52def5a9b72a"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "青松阅览室设备更新项目",
+        "totals": [
+          {
+            "role": "projectBudgetAmount",
+            "scope": "TOTAL",
+            "year": null,
+            "amount": 999999.99,
+            "sources": [
+              {
+                "taskId": "c8d33dfb-c4ab-479e-a14b-52def5a9b72a",
+                "fileName": "资金申请.txt",
+                "field": "projectBudgetAmount",
+                "value": "999999.99元",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "项目预算：999999.99元",
+                "start": 17,
+                "end": 32,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [],
+    "sourceLengths": {
+      "c8d33dfb-c4ab-479e-a14b-52def5a9b72a": 51
+    }
+  },
+  {
+    "label": "02年度百万非整体",
+    "batchId": "60e1a2e1-5400-4c48-ba3a-fca0a3568b05",
+    "members": [
+      {
+        "operationKey": "4ee93e50-aac4-42d3-8ace-d46c1ed31411",
+        "fileName": "年度经费.txt",
+        "fileSize": 123
+      }
+    ],
+    "ids": [
+      "eef973dc-ca37-40d8-8434-ef2a32f01e63"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "云杉楼维保项目",
+        "totals": [
+          {
+            "role": "projectBudgetAmount",
+            "scope": "ANNUAL",
+            "year": "2026",
+            "amount": 1200000.0,
+            "sources": [
+              {
+                "taskId": "eef973dc-ca37-40d8-8434-ef2a32f01e63",
+                "fileName": "年度经费.txt",
+                "field": "projectBudgetAmount",
+                "value": "1200000元",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "本年度项目预算：1200000元，仅用于2026年度，并非全部三年金额。",
+                "start": 13,
+                "end": 49,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [],
+    "sourceLengths": {
+      "eef973dc-ca37-40d8-8434-ef2a32f01e63": 49
+    }
+  },
+  {
+    "label": "03历史显式标签排除",
+    "batchId": "aa17c1c1-ff61-4f7e-b056-9b2a885cf061",
+    "members": [
+      {
+        "operationKey": "bf0441d4-ca27-423f-b812-7fbc9d162b63",
+        "fileName": "综合说明.txt",
+        "fileSize": 215
+      }
+    ],
+    "ids": [
+      "50e4d389-4bf3-4feb-ab3d-573043196a52"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "松林服务站修缮项目",
+        "totals": [
+          {
+            "role": "projectBudgetAmount",
+            "scope": "TOTAL",
+            "year": null,
+            "amount": 800000.0,
+            "sources": [
+              {
+                "taskId": "50e4d389-4bf3-4feb-ab3d-573043196a52",
+                "fileName": "综合说明.txt",
+                "field": "projectBudgetAmount",
+                "value": "800000元",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "项目预算：800000元",
+                "start": 17,
+                "end": 29,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [],
+    "sourceLengths": {
+      "50e4d389-4bf3-4feb-ab3d-573043196a52": 83
+    }
+  },
+  {
+    "label": "04分包不得当整项",
+    "batchId": "d654eb08-b47f-46d0-ac28-592d84c393fc",
+    "members": [
+      {
+        "operationKey": "1691e917-7012-436d-af54-b96f9665ccfc",
+        "fileName": "采购包预算.txt",
+        "fileSize": 213
+      }
+    ],
+    "ids": [
+      "d14df041-6d80-465e-8391-1bd5ace36a64"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。材料中的项目总预算、单价或合计未作为科目申报或批复金额使用。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "枫桥终端更新项目",
+        "totals": [
+          {
+            "role": "projectBudgetAmount",
+            "scope": "PACKAGE:采购包一预算金额：600000元",
+            "year": null,
+            "amount": 600000.0,
+            "sources": [
+              {
+                "taskId": "d14df041-6d80-465e-8391-1bd5ace36a64",
+                "fileName": "采购包预算.txt",
+                "field": "projectBudgetAmount",
+                "value": "600000元",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "预算金额：600000元",
+                "start": 18,
+                "end": 30,
+                "pageNumber": null
+              }
+            ]
+          },
+          {
+            "role": "projectBudgetAmount",
+            "scope": "PACKAGE:采购包二预算金额：700000元",
+            "year": null,
+            "amount": 700000.0,
+            "sources": [
+              {
+                "taskId": "d14df041-6d80-465e-8391-1bd5ace36a64",
+                "fileName": "采购包预算.txt",
+                "field": "projectBudgetAmount",
+                "value": "700000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "预算金额：700000元",
+                "start": 36,
+                "end": 48,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [],
+    "sourceLengths": {
+      "d14df041-6d80-465e-8391-1bd5ace36a64": 81
+    }
+  },
+  {
+    "label": "05精确到分的差额",
+    "batchId": "1ada5a7e-d545-4b91-be40-f0c5ba4a2ff8",
+    "members": [
+      {
+        "operationKey": "a96c6857-0637-4da2-bf9c-36121854938c",
+        "fileName": "申报.txt",
+        "fileSize": 87
+      },
+      {
+        "operationKey": "0877759a-82eb-423e-8068-1347dcc7d7db",
+        "fileName": "批复.txt",
+        "fileSize": 87
+      }
+    ],
+    "ids": [
+      "8d6c62e9-0fd4-4964-b799-991c52ba14e5",
+      "51ce977a-d557-4e05-b3a4-9c5fee1cd907"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。材料中的项目总预算、单价或合计未作为科目申报或批复金额使用。",
+        "lines": [],
+        "assessments": [
+          {
+            "code": "TOTAL_VS_APPROVAL",
+            "level": "WARNING",
+            "title": "申报合计超过批复总额",
+            "explanation": "申报合计 100000.10 元，批复总额 100000.09 元，超出 0.01 元。",
+            "basis": "依据同一金额口径、年度的申报合计与批复总额精确核算。",
+            "sources": [
+              {
+                "taskId": "8d6c62e9-0fd4-4964-b799-991c52ba14e5",
+                "fileName": "申报.txt",
+                "field": "declaredTotalAmount",
+                "value": "100000.10元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "申报合计：100000.10元",
+                "start": 24,
+                "end": 39,
+                "pageNumber": null
+              },
+              {
+                "taskId": "51ce977a-d557-4e05-b3a4-9c5fee1cd907",
+                "fileName": "批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "100000.09元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：100000.09元",
+                "start": 24,
+                "end": 39,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "海棠档案设备项目",
+        "totals": [
+          {
+            "role": "approvedTotalAmount",
+            "scope": "TOTAL",
+            "year": "2026",
+            "amount": 100000.09,
+            "sources": [
+              {
+                "taskId": "51ce977a-d557-4e05-b3a4-9c5fee1cd907",
+                "fileName": "批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "100000.09元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：100000.09元",
+                "start": 24,
+                "end": 39,
+                "pageNumber": null
+              }
+            ]
+          },
+          {
+            "role": "declaredTotalAmount",
+            "scope": "TOTAL",
+            "year": "2026",
+            "amount": 100000.1,
+            "sources": [
+              {
+                "taskId": "8d6c62e9-0fd4-4964-b799-991c52ba14e5",
+                "fileName": "申报.txt",
+                "field": "declaredTotalAmount",
+                "value": "100000.10元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "申报合计：100000.10元",
+                "start": 24,
+                "end": 39,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "COMPLETE"
+      },
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。材料中的项目总预算、单价或合计未作为科目申报或批复金额使用。",
+        "lines": [],
+        "assessments": [
+          {
+            "code": "TOTAL_VS_APPROVAL",
+            "level": "WARNING",
+            "title": "申报合计超过批复总额",
+            "explanation": "申报合计 100000.10 元，批复总额 100000.09 元，超出 0.01 元。",
+            "basis": "依据同一金额口径、年度的申报合计与批复总额精确核算。",
+            "sources": [
+              {
+                "taskId": "8d6c62e9-0fd4-4964-b799-991c52ba14e5",
+                "fileName": "申报.txt",
+                "field": "declaredTotalAmount",
+                "value": "100000.10元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "申报合计：100000.10元",
+                "start": 24,
+                "end": 39,
+                "pageNumber": null
+              },
+              {
+                "taskId": "51ce977a-d557-4e05-b3a4-9c5fee1cd907",
+                "fileName": "批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "100000.09元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：100000.09元",
+                "start": 24,
+                "end": 39,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "海棠档案设备项目",
+        "totals": [
+          {
+            "role": "approvedTotalAmount",
+            "scope": "TOTAL",
+            "year": "2026",
+            "amount": 100000.09,
+            "sources": [
+              {
+                "taskId": "51ce977a-d557-4e05-b3a4-9c5fee1cd907",
+                "fileName": "批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "100000.09元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：100000.09元",
+                "start": 24,
+                "end": 39,
+                "pageNumber": null
+              }
+            ]
+          },
+          {
+            "role": "declaredTotalAmount",
+            "scope": "TOTAL",
+            "year": "2026",
+            "amount": 100000.1,
+            "sources": [
+              {
+                "taskId": "8d6c62e9-0fd4-4964-b799-991c52ba14e5",
+                "fileName": "申报.txt",
+                "field": "declaredTotalAmount",
+                "value": "100000.10元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "申报合计：100000.10元",
+                "start": 24,
+                "end": 39,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [
+      {
+        "code": "TOTAL_VS_APPROVAL",
+        "level": "WARNING",
+        "title": "申报合计超过批复总额",
+        "explanation": "申报合计 100000.10 元，批复总额 100000.09 元，超出 0.01 元。",
+        "basis": "依据同一金额口径、年度的申报合计与批复总额精确核算。",
+        "sources": [
+          {
+            "taskId": "8d6c62e9-0fd4-4964-b799-991c52ba14e5",
+            "fileName": "申报.txt",
+            "field": "declaredTotalAmount",
+            "value": "100000.10元",
+            "locator": "text/body/part:1/line:2",
+            "excerpt": "申报合计：100000.10元",
+            "start": 24,
+            "end": 39,
+            "pageNumber": null
+          },
+          {
+            "taskId": "51ce977a-d557-4e05-b3a4-9c5fee1cd907",
+            "fileName": "批复.txt",
+            "field": "approvedTotalAmount",
+            "value": "100000.09元",
+            "locator": "text/body/part:1/line:2",
+            "excerpt": "批复总额：100000.09元",
+            "start": 24,
+            "end": 39,
+            "pageNumber": null
+          }
+        ]
+      }
+    ],
+    "sourceLengths": {
+      "8d6c62e9-0fd4-4964-b799-991c52ba14e5": 39,
+      "51ce977a-d557-4e05-b3a4-9c5fee1cd907": 39
+    }
+  },
+  {
+    "label": "06跨文件用途冲突",
+    "batchId": "575e97ad-bfaf-4b73-b788-e4e400f0043b",
+    "members": [
+      {
+        "operationKey": "22c3b6be-231b-44be-a049-3db63254509c",
+        "fileName": "资金安排意见.txt",
+        "fileSize": 139
+      },
+      {
+        "operationKey": "b9c8bea5-d5f8-434d-8e33-0ac12237b97b",
+        "fileName": "实施请示.txt",
+        "fileSize": 184
+      }
+    ],
+    "ids": [
+      "0373e765-4cc7-4294-abc7-931d53f72bf1",
+      "6a891dd8-e657-4ee3-bb80-0bfee647d045"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [
+          {
+            "code": "SEMANTIC_PURPOSE_SCOPE",
+            "level": "WARNING",
+            "title": "申请用途与核定用途实质冲突",
+            "explanation": "资金安排意见明确核定经费仅限书架采购与阅览设施更新，且不得列支职工旅游；实施请示却将支出调整为组织全体职工外出旅游，不再采购书架，且未办理用途变更审批。申请用途与批准用途存在直接矛盾，且未履行变更程序，存在违规列支风险。",
+            "basis": "建议退回实施请示，要求按原核定用途执行或按规定程序办理用途变更审批后再行实施。",
+            "sources": [
+              {
+                "taskId": "0373e765-4cc7-4294-abc7-931d53f72bf1",
+                "fileName": "资金安排意见.txt",
+                "field": "semantic",
+                "value": "核定本项目经费仅限书架采购与阅览设施更新，不得列支职工旅游。",
+                "locator": "text/body/part:1/record:0:47",
+                "excerpt": "核定本项目经费仅限书架采购与阅览设施更新，不得列支职工旅游。",
+                "start": 17,
+                "end": 47,
+                "pageNumber": null
+              },
+              {
+                "taskId": "6a891dd8-e657-4ee3-bb80-0bfee647d045",
+                "fileName": "实施请示.txt",
+                "field": "semantic",
+                "value": "具体支出调整为组织全体职工外出旅游，不再采购书架，亦未办理用途变更审批。",
+                "locator": "text/body/part:1/record:0:62",
+                "excerpt": "具体支出调整为组织全体职工外出旅游，不再采购书架，亦未办理用途变更审批。",
+                "start": 26,
+                "end": 62,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "白桦图书室改造",
+        "totals": [],
+        "analysisCoverage": "COMPLETE"
+      },
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [
+          {
+            "code": "SEMANTIC_PURPOSE_SCOPE",
+            "level": "WARNING",
+            "title": "申请用途与核定用途实质冲突",
+            "explanation": "资金安排意见明确核定经费仅限书架采购与阅览设施更新，且不得列支职工旅游；实施请示却将支出调整为组织全体职工外出旅游，不再采购书架，且未办理用途变更审批。申请用途与批准用途存在直接矛盾，且未履行变更程序，存在违规列支风险。",
+            "basis": "建议退回实施请示，要求按原核定用途执行或按规定程序办理用途变更审批后再行实施。",
+            "sources": [
+              {
+                "taskId": "0373e765-4cc7-4294-abc7-931d53f72bf1",
+                "fileName": "资金安排意见.txt",
+                "field": "semantic",
+                "value": "核定本项目经费仅限书架采购与阅览设施更新，不得列支职工旅游。",
+                "locator": "text/body/part:1/record:0:47",
+                "excerpt": "核定本项目经费仅限书架采购与阅览设施更新，不得列支职工旅游。",
+                "start": 17,
+                "end": 47,
+                "pageNumber": null
+              },
+              {
+                "taskId": "6a891dd8-e657-4ee3-bb80-0bfee647d045",
+                "fileName": "实施请示.txt",
+                "field": "semantic",
+                "value": "具体支出调整为组织全体职工外出旅游，不再采购书架，亦未办理用途变更审批。",
+                "locator": "text/body/part:1/record:0:62",
+                "excerpt": "具体支出调整为组织全体职工外出旅游，不再采购书架，亦未办理用途变更审批。",
+                "start": 26,
+                "end": 62,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "白桦图书室改造",
+        "totals": [],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [
+      {
+        "code": "SEMANTIC_PURPOSE_SCOPE",
+        "level": "WARNING",
+        "title": "申请用途与核定用途实质冲突",
+        "explanation": "资金安排意见明确核定经费仅限书架采购与阅览设施更新，且不得列支职工旅游；实施请示却将支出调整为组织全体职工外出旅游，不再采购书架，且未办理用途变更审批。申请用途与批准用途存在直接矛盾，且未履行变更程序，存在违规列支风险。",
+        "basis": "建议退回实施请示，要求按原核定用途执行或按规定程序办理用途变更审批后再行实施。",
+        "sources": [
+          {
+            "taskId": "0373e765-4cc7-4294-abc7-931d53f72bf1",
+            "fileName": "资金安排意见.txt",
+            "field": "semantic",
+            "value": "核定本项目经费仅限书架采购与阅览设施更新，不得列支职工旅游。",
+            "locator": "text/body/part:1/record:0:47",
+            "excerpt": "核定本项目经费仅限书架采购与阅览设施更新，不得列支职工旅游。",
+            "start": 17,
+            "end": 47,
+            "pageNumber": null
+          },
+          {
+            "taskId": "6a891dd8-e657-4ee3-bb80-0bfee647d045",
+            "fileName": "实施请示.txt",
+            "field": "semantic",
+            "value": "具体支出调整为组织全体职工外出旅游，不再采购书架，亦未办理用途变更审批。",
+            "locator": "text/body/part:1/record:0:62",
+            "excerpt": "具体支出调整为组织全体职工外出旅游，不再采购书架，亦未办理用途变更审批。",
+            "start": 26,
+            "end": 62,
+            "pageNumber": null
+          }
+        ]
+      }
+    ],
+    "sourceLengths": {
+      "0373e765-4cc7-4294-abc7-931d53f72bf1": 47,
+      "6a891dd8-e657-4ee3-bb80-0bfee647d045": 62
+    }
+  },
+  {
+    "label": "07修订已批准不误报",
+    "batchId": "7bfa3fd9-b489-4914-a592-002c3d89037a",
+    "members": [
+      {
+        "operationKey": "e56d2c09-e094-4309-889f-20b5c7039c0f",
+        "fileName": "原批复.txt",
+        "fileSize": 112
+      },
+      {
+        "operationKey": "de2b45b5-b77f-4d11-9f4a-716cbc913060",
+        "fileName": "调整批复及实施说明.txt",
+        "fileSize": 285
+      }
+    ],
+    "ids": [
+      "ae77ea2a-27c8-4f37-9e9d-dc916390e66d",
+      "b02c8712-7a8c-4e23-b76d-8bf1d99c50b4"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "水杉照明改造项目",
+        "totals": [],
+        "analysisCoverage": "COMPLETE"
+      },
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "水杉照明改造项目",
+        "totals": [],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [],
+    "sourceLengths": {
+      "ae77ea2a-27c8-4f37-9e9d-dc916390e66d": 42,
+      "b02c8712-7a8c-4e23-b76d-8bf1d99c50b4": 103
+    }
+  },
+  {
+    "label": "08审批顺序正常",
+    "batchId": "267e606f-cee1-485c-beac-807dba7b5851",
+    "members": [
+      {
+        "operationKey": "8169947a-04ca-48eb-ab77-9ce82a1853f0",
+        "fileName": "审批执行记录.txt",
+        "fileSize": 236
+      }
+    ],
+    "ids": [
+      "40377c6a-009f-454e-ba05-ea4f9a2f734f"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [
+          {
+            "code": "APPROVAL_PROCEDURE",
+            "level": "INFO",
+            "title": "审批环节与上传制度相符",
+            "explanation": "紫荆值守设施更新项目：已找到“财务部门书面批准”的审批记录。",
+            "basis": "须经财务部门书面批准后方可付款。",
+            "sources": [
+              {
+                "taskId": "40377c6a-009f-454e-ba05-ea4f9a2f734f",
+                "fileName": "审批执行记录.txt",
+                "field": "policyClause",
+                "value": "须经财务部门书面批准后方可付款。",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "本项目规定：须经财务部门书面批准后方可付款。",
+                "start": 16,
+                "end": 38,
+                "pageNumber": null
+              },
+              {
+                "taskId": "40377c6a-009f-454e-ba05-ea4f9a2f734f",
+                "fileName": "审批执行记录.txt",
+                "field": "requiredApprovalStep",
+                "value": "财务部门书面批准",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "须经财务部门书面批准后方可付款。",
+                "start": 22,
+                "end": 38,
+                "pageNumber": null
+              },
+              {
+                "taskId": "40377c6a-009f-454e-ba05-ea4f9a2f734f",
+                "fileName": "审批执行记录.txt",
+                "field": "actualApprovalStep",
+                "value": "财务部门已书面批准",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "2026年3月1日财务部门已书面批准",
+                "start": 44,
+                "end": 62,
+                "pageNumber": null
+              },
+              {
+                "taskId": "40377c6a-009f-454e-ba05-ea4f9a2f734f",
+                "fileName": "审批执行记录.txt",
+                "field": "approvalDate",
+                "value": "2026年3月1日",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "2026年3月1日财务部门已书面批准",
+                "start": 44,
+                "end": 62,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "紫荆值守设施更新项目",
+        "totals": [],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [
+      {
+        "code": "APPROVAL_PROCEDURE",
+        "level": "INFO",
+        "title": "审批环节与上传制度相符",
+        "explanation": "紫荆值守设施更新项目：已找到“财务部门书面批准”的审批记录。",
+        "basis": "须经财务部门书面批准后方可付款。",
+        "sources": [
+          {
+            "taskId": "40377c6a-009f-454e-ba05-ea4f9a2f734f",
+            "fileName": "审批执行记录.txt",
+            "field": "policyClause",
+            "value": "须经财务部门书面批准后方可付款。",
+            "locator": "text/body/part:1/line:1",
+            "excerpt": "本项目规定：须经财务部门书面批准后方可付款。",
+            "start": 16,
+            "end": 38,
+            "pageNumber": null
+          },
+          {
+            "taskId": "40377c6a-009f-454e-ba05-ea4f9a2f734f",
+            "fileName": "审批执行记录.txt",
+            "field": "requiredApprovalStep",
+            "value": "财务部门书面批准",
+            "locator": "text/body/part:1/line:1",
+            "excerpt": "须经财务部门书面批准后方可付款。",
+            "start": 22,
+            "end": 38,
+            "pageNumber": null
+          },
+          {
+            "taskId": "40377c6a-009f-454e-ba05-ea4f9a2f734f",
+            "fileName": "审批执行记录.txt",
+            "field": "actualApprovalStep",
+            "value": "财务部门已书面批准",
+            "locator": "text/body/part:1/line:2",
+            "excerpt": "2026年3月1日财务部门已书面批准",
+            "start": 44,
+            "end": 62,
+            "pageNumber": null
+          },
+          {
+            "taskId": "40377c6a-009f-454e-ba05-ea4f9a2f734f",
+            "fileName": "审批执行记录.txt",
+            "field": "approvalDate",
+            "value": "2026年3月1日",
+            "locator": "text/body/part:1/line:2",
+            "excerpt": "2026年3月1日财务部门已书面批准",
+            "start": 44,
+            "end": 62,
+            "pageNumber": null
+          }
+        ]
+      }
+    ],
+    "sourceLengths": {
+      "40377c6a-009f-454e-ba05-ea4f9a2f734f": 88
+    }
+  },
+  {
+    "label": "09无金额仍应有意见",
+    "batchId": "59a324a9-2e99-43a6-92cd-3a4861eec22f",
+    "members": [
+      {
+        "operationKey": "2f9ac2cc-034c-484f-8c5b-011bead3e04f",
+        "fileName": "执行说明.txt",
+        "fileSize": 223
+      }
+    ],
+    "ids": [
+      "b56f8e5d-5e4a-4314-b6e4-d654a41925c8"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [
+          {
+            "code": "SEMANTIC_PURPOSE_SCOPE",
+            "level": "WARNING",
+            "title": "实际支出用途与批复限定用途实质冲突",
+            "explanation": "执行说明明确记载资金用途经批复限定为“实验室安全防护设施”，但经办人员将全部经费用于“购置员工生日礼品”，且未办理预算用途变更。该实际支出与批准用途存在根本性矛盾，属于超范围使用资金，可能导致财务核算违规及审计风险。",
+            "basis": "建议立即核实该笔支出的真实性与合规性，评估是否需启动预算用途变更程序或追究经办责任，并完善资金使用的审批与监控机制。",
+            "sources": [
+              {
+                "taskId": "b56f8e5d-5e4a-4314-b6e4-d654a41925c8",
+                "fileName": "执行说明.txt",
+                "field": "semantic",
+                "value": "资金用途经批复限定为实验室安全防护设施。经办人员在本次执行中将全部经费用于购置员工生日礼品，未办理预算用途变更。",
+                "locator": "text/body/part:1/record:0:75",
+                "excerpt": "资金用途经批复限定为实验室安全防护设施。经办人员在本次执行中将全部经费用于购置员工生日礼品，未办理预算用途变更。",
+                "start": 19,
+                "end": 75,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "预算材料分析",
+        "totals": [],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [
+      {
+        "code": "SEMANTIC_PURPOSE_SCOPE",
+        "level": "WARNING",
+        "title": "实际支出用途与批复限定用途实质冲突",
+        "explanation": "执行说明明确记载资金用途经批复限定为“实验室安全防护设施”，但经办人员将全部经费用于“购置员工生日礼品”，且未办理预算用途变更。该实际支出与批准用途存在根本性矛盾，属于超范围使用资金，可能导致财务核算违规及审计风险。",
+        "basis": "建议立即核实该笔支出的真实性与合规性，评估是否需启动预算用途变更程序或追究经办责任，并完善资金使用的审批与监控机制。",
+        "sources": [
+          {
+            "taskId": "b56f8e5d-5e4a-4314-b6e4-d654a41925c8",
+            "fileName": "执行说明.txt",
+            "field": "semantic",
+            "value": "资金用途经批复限定为实验室安全防护设施。经办人员在本次执行中将全部经费用于购置员工生日礼品，未办理预算用途变更。",
+            "locator": "text/body/part:1/record:0:75",
+            "excerpt": "资金用途经批复限定为实验室安全防护设施。经办人员在本次执行中将全部经费用于购置员工生日礼品，未办理预算用途变更。",
+            "start": 19,
+            "end": 75,
+            "pageNumber": null
+          }
+        ]
+      }
+    ],
+    "sourceLengths": {
+      "b56f8e5d-5e4a-4314-b6e4-d654a41925c8": 75
+    }
+  },
+  {
+    "label": "10同文件副本不重复预算",
+    "batchId": "a9cf0658-4647-40ad-9c3d-3eb9f2876278",
+    "members": [
+      {
+        "operationKey": "7751abfe-5597-458b-88f4-351088bd6da9",
+        "fileName": "资金计划.txt",
+        "fileSize": 101
+      },
+      {
+        "operationKey": "5b5b2783-8a85-4639-92b2-342de3093d62",
+        "fileName": "资金计划副本.txt",
+        "fileSize": 101
+      }
+    ],
+    "ids": [
+      "105a7361-5373-41fd-ad6f-5177c27d7551",
+      "dbce243d-e007-4b93-ba35-aa6f50a5a406"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "榆树大厅修缮项目",
+        "totals": [
+          {
+            "role": "projectBudgetAmount",
+            "scope": "TOTAL",
+            "year": null,
+            "amount": 600000.0,
+            "sources": [
+              {
+                "taskId": "105a7361-5373-41fd-ad6f-5177c27d7551",
+                "fileName": "资金计划.txt",
+                "field": "projectBudgetAmount",
+                "value": "600000元",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "项目预算：600000元",
+                "start": 14,
+                "end": 26,
+                "pageNumber": null
+              },
+              {
+                "taskId": "dbce243d-e007-4b93-ba35-aa6f50a5a406",
+                "fileName": "资金计划副本.txt",
+                "field": "projectBudgetAmount",
+                "value": "600000元",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "项目预算：600000元",
+                "start": 14,
+                "end": 26,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "COMPLETE"
+      },
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "榆树大厅修缮项目",
+        "totals": [
+          {
+            "role": "projectBudgetAmount",
+            "scope": "TOTAL",
+            "year": null,
+            "amount": 600000.0,
+            "sources": [
+              {
+                "taskId": "105a7361-5373-41fd-ad6f-5177c27d7551",
+                "fileName": "资金计划.txt",
+                "field": "projectBudgetAmount",
+                "value": "600000元",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "项目预算：600000元",
+                "start": 14,
+                "end": 26,
+                "pageNumber": null
+              },
+              {
+                "taskId": "dbce243d-e007-4b93-ba35-aa6f50a5a406",
+                "fileName": "资金计划副本.txt",
+                "field": "projectBudgetAmount",
+                "value": "600000元",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "项目预算：600000元",
+                "start": 14,
+                "end": 26,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [],
+    "sourceLengths": {
+      "105a7361-5373-41fd-ad6f-5177c27d7551": 39,
+      "dbce243d-e007-4b93-ba35-aa6f50a5a406": 39
+    }
+  },
+  {
+    "label": "11批复版本保留不武断",
+    "batchId": "d2e81b83-1b0e-4de6-bd88-89dec36ce079",
+    "members": [
+      {
+        "operationKey": "09542d0c-665b-4f88-b5a9-edaaf2253288",
+        "fileName": "原批复.txt",
+        "fileSize": 104
+      },
+      {
+        "operationKey": "84df3a97-d0d5-4614-83b2-48da2ed4f158",
+        "fileName": "调整批复.txt",
+        "fileSize": 142
+      }
+    ],
+    "ids": [
+      "8842f69b-5e08-4861-99bf-a48a9c4aed60",
+      "07e2163d-b818-4fa7-8c4c-f6ef690325d6"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。材料中的项目总预算、单价或合计未作为科目申报或批复金额使用。",
+        "lines": [],
+        "assessments": [
+          {
+            "code": "TOTAL_VERSION_REVIEW",
+            "level": "INFO",
+            "title": "批复总额存在不同记载",
+            "explanation": "材料中列有不同批复总额，已保留各自金额及原文；需结合调整或版本依据理解。",
+            "basis": "金额不同不直接认定超支或版本冲突。",
+            "sources": [
+              {
+                "taskId": "07e2163d-b818-4fa7-8c4c-f6ef690325d6",
+                "fileName": "调整批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "150000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：150000元",
+                "start": 35,
+                "end": 47,
+                "pageNumber": null
+              },
+              {
+                "taskId": "8842f69b-5e08-4861-99bf-a48a9c4aed60",
+                "fileName": "原批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "100000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：100000元",
+                "start": 34,
+                "end": 46,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "栾树配电设施更新项目",
+        "totals": [
+          {
+            "role": "approvedTotalAmount",
+            "scope": "TOTAL",
+            "year": "2026",
+            "amount": 150000.0,
+            "sources": [
+              {
+                "taskId": "07e2163d-b818-4fa7-8c4c-f6ef690325d6",
+                "fileName": "调整批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "150000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：150000元",
+                "start": 35,
+                "end": 47,
+                "pageNumber": null
+              }
+            ]
+          },
+          {
+            "role": "approvedTotalAmount",
+            "scope": "TOTAL",
+            "year": "2026",
+            "amount": 100000.0,
+            "sources": [
+              {
+                "taskId": "8842f69b-5e08-4861-99bf-a48a9c4aed60",
+                "fileName": "原批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "100000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：100000元",
+                "start": 34,
+                "end": 46,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "COMPLETE"
+      },
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。材料中的项目总预算、单价或合计未作为科目申报或批复金额使用。",
+        "lines": [],
+        "assessments": [
+          {
+            "code": "TOTAL_VERSION_REVIEW",
+            "level": "INFO",
+            "title": "批复总额存在不同记载",
+            "explanation": "材料中列有不同批复总额，已保留各自金额及原文；需结合调整或版本依据理解。",
+            "basis": "金额不同不直接认定超支或版本冲突。",
+            "sources": [
+              {
+                "taskId": "07e2163d-b818-4fa7-8c4c-f6ef690325d6",
+                "fileName": "调整批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "150000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：150000元",
+                "start": 35,
+                "end": 47,
+                "pageNumber": null
+              },
+              {
+                "taskId": "8842f69b-5e08-4861-99bf-a48a9c4aed60",
+                "fileName": "原批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "100000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：100000元",
+                "start": 34,
+                "end": 46,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "栾树配电设施更新项目",
+        "totals": [
+          {
+            "role": "approvedTotalAmount",
+            "scope": "TOTAL",
+            "year": "2026",
+            "amount": 150000.0,
+            "sources": [
+              {
+                "taskId": "07e2163d-b818-4fa7-8c4c-f6ef690325d6",
+                "fileName": "调整批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "150000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：150000元",
+                "start": 35,
+                "end": 47,
+                "pageNumber": null
+              }
+            ]
+          },
+          {
+            "role": "approvedTotalAmount",
+            "scope": "TOTAL",
+            "year": "2026",
+            "amount": 100000.0,
+            "sources": [
+              {
+                "taskId": "8842f69b-5e08-4861-99bf-a48a9c4aed60",
+                "fileName": "原批复.txt",
+                "field": "approvedTotalAmount",
+                "value": "100000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "批复总额：100000元",
+                "start": 34,
+                "end": 46,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [
+      {
+        "code": "TOTAL_VERSION_REVIEW",
+        "level": "INFO",
+        "title": "批复总额存在不同记载",
+        "explanation": "材料中列有不同批复总额，已保留各自金额及原文；需结合调整或版本依据理解。",
+        "basis": "金额不同不直接认定超支或版本冲突。",
+        "sources": [
+          {
+            "taskId": "07e2163d-b818-4fa7-8c4c-f6ef690325d6",
+            "fileName": "调整批复.txt",
+            "field": "approvedTotalAmount",
+            "value": "150000元",
+            "locator": "text/body/part:1/line:2",
+            "excerpt": "批复总额：150000元",
+            "start": 35,
+            "end": 47,
+            "pageNumber": null
+          },
+          {
+            "taskId": "8842f69b-5e08-4861-99bf-a48a9c4aed60",
+            "fileName": "原批复.txt",
+            "field": "approvedTotalAmount",
+            "value": "100000元",
+            "locator": "text/body/part:1/line:2",
+            "excerpt": "批复总额：100000元",
+            "start": 34,
+            "end": 46,
+            "pageNumber": null
+          }
+        ]
+      }
+    ],
+    "sourceLengths": {
+      "8842f69b-5e08-4861-99bf-a48a9c4aed60": 46,
+      "07e2163d-b818-4fa7-8c4c-f6ef690325d6": 60
+    }
+  },
+  {
+    "label": "12非预算材料仍收尾",
+    "batchId": "90e10390-0119-4d89-9209-8daf61a98581",
+    "members": [
+      {
+        "operationKey": "2cdbe2f6-6ef5-4e91-8d05-7a8da16c6f59",
+        "fileName": "会议通知.txt",
+        "fileSize": 133
+      }
+    ],
+    "ids": [
+      "729a39ac-b104-455e-a962-f10c18ef1859"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "预算材料分析",
+        "totals": [],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [],
+    "sourceLengths": {
+      "729a39ac-b104-455e-a962-f10c18ef1859": 45
+    }
+  },
+  {
+    "label": "13扫描图片旋转90",
+    "batchId": "2bb6b71d-fbea-4f83-a601-46afffc869dc",
+    "members": [
+      {
+        "operationKey": "cc93e5d3-a7fb-49fc-b8b6-e17cfefb2dbd",
+        "fileName": "预算扫描旋转90.png",
+        "fileSize": 36679
+      }
+    ],
+    "ids": [
+      "07c901c8-3f70-4d26-8e8a-09f90a95ac80"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "根据本批上传材料整理了以下预算信息与核对意见，供工作参考。本批仍有材料或部分信息未能核实，结果依据尚不完整；未列出的内容不代表没有问题。已保留能够核实的预算信息。扫描文字中的项目编号存在字母 O 与数字 0 不一致，尚不能确认相关明细是否属于同一项目，未自动合并，请核对原件。材料中的项目总预算、单价或合计未作为科目申报或批复金额使用。",
+        "lines": [
+          {
+            "project": "仿真办公设备更新项目",
+            "projectCode": null,
+            "subject": "办公设备",
+            "subjectCode": "SYN-OFFICE",
+            "year": null,
+            "department": "采购管理部",
+            "declaredAmount": 31200.0,
+            "approvalAmount": null,
+            "status": "INSUFFICIENT",
+            "opinion": "已读取申报信息，现有材料未能确认对应批复金额，暂不能判断是否超过批复。",
+            "sources": [
+              {
+                "taskId": "07c901c8-3f70-4d26-8e8a-09f90a95ac80",
+                "fileName": "预算扫描旋转90.png",
+                "field": "subjectName",
+                "value": "办公设备",
+                "locator": "image/frame:1/part:1/line:10",
+                "excerpt": "科目名称：办公设备",
+                "start": 138,
+                "end": 147,
+                "pageNumber": null
+              },
+              {
+                "taskId": "07c901c8-3f70-4d26-8e8a-09f90a95ac80",
+                "fileName": "预算扫描旋转90.png",
+                "field": "subjectName",
+                "value": "办公设备",
+                "locator": "image/frame:1/part:1/line:10",
+                "excerpt": "科目名称：办公设备；申报金额：31200元；供应商名称：仿真办公供应公司；项目编号：SYN-0FFICE-2026",
+                "start": 138,
+                "end": 195,
+                "pageNumber": null
+              },
+              {
+                "taskId": "07c901c8-3f70-4d26-8e8a-09f90a95ac80",
+                "fileName": "预算扫描旋转90.png",
+                "field": "subjectName",
+                "value": "办公设备",
+                "locator": "image/frame:1/part:1/line:10",
+                "excerpt": "科目名称：办公设备；申报金额：31200元",
+                "start": 138,
+                "end": 159,
+                "pageNumber": null
+              },
+              {
+                "taskId": "07c901c8-3f70-4d26-8e8a-09f90a95ac80",
+                "fileName": "预算扫描旋转90.png",
+                "field": "declaredAmount",
+                "value": "31200元",
+                "locator": "image/frame:1/part:1/line:10",
+                "excerpt": "申报金额：31200元",
+                "start": 148,
+                "end": 159,
+                "pageNumber": null
+              },
+              {
+                "taskId": "07c901c8-3f70-4d26-8e8a-09f90a95ac80",
+                "fileName": "预算扫描旋转90.png",
+                "field": "supplierName",
+                "value": "仿真办公供应公司",
+                "locator": "image/frame:1/part:1/line:10",
+                "excerpt": "供应商名称：仿真办公供应公司",
+                "start": 160,
+                "end": 174,
+                "pageNumber": null
+              },
+              {
+                "taskId": "07c901c8-3f70-4d26-8e8a-09f90a95ac80",
+                "fileName": "预算扫描旋转90.png",
+                "field": "projectName",
+                "value": "仿真办公设备更新项目",
+                "locator": "image/frame:1/part:1/line:0",
+                "excerpt": "项目名称：仿真办公设备更新项目",
+                "start": 0,
+                "end": 15,
+                "pageNumber": null
+              },
+              {
+                "taskId": "07c901c8-3f70-4d26-8e8a-09f90a95ac80",
+                "fileName": "预算扫描旋转90.png",
+                "field": "departmentName",
+                "value": "采购管理部",
+                "locator": "image/frame:1/part:1/line:2",
+                "excerpt": "申请部门：采购管理部",
+                "start": 37,
+                "end": 47,
+                "pageNumber": null
+              },
+              {
+                "taskId": "07c901c8-3f70-4d26-8e8a-09f90a95ac80",
+                "fileName": "预算扫描旋转90.png",
+                "field": "subjectCode",
+                "value": "SYN-OFFICE",
+                "locator": "image/frame:1/part:1/line:5",
+                "excerpt": "科目编码：SYN-OFFICE",
+                "start": 71,
+                "end": 86,
+                "pageNumber": null
+              },
+              {
+                "taskId": "07c901c8-3f70-4d26-8e8a-09f90a95ac80",
+                "fileName": "预算扫描旋转90.png",
+                "field": "subjectName",
+                "value": "办公设备",
+                "locator": "image/frame:1/part:1/line:6",
+                "excerpt": "科目名称：办公设备",
+                "start": 87,
+                "end": 96,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "assessments": [],
+        "projectName": "仿真办公设备更新项目",
+        "totals": [
+          {
+            "role": "projectBudgetAmount",
+            "scope": "TOTAL",
+            "year": null,
+            "amount": 200000.0,
+            "sources": [
+              {
+                "taskId": "07c901c8-3f70-4d26-8e8a-09f90a95ac80",
+                "fileName": "预算扫描旋转90.png",
+                "field": "projectBudgetAmount",
+                "value": "200000元",
+                "locator": "image/frame:1/part:1/line:4",
+                "excerpt": "预算金额：200000元",
+                "start": 56,
+                "end": 68,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "PARTIAL"
+      }
+    ],
+    "uniqueAssessments": [],
+    "sourceLengths": {
+      "07c901c8-3f70-4d26-8e8a-09f90a95ac80": 222
+    }
+  },
+  {
+    "label": "13扫描图片旋转180",
+    "batchId": "8b18221f-bbf8-47dc-b1de-e757209c06a0",
+    "members": [
+      {
+        "operationKey": "9ab15696-6874-4792-b318-17b5cc031a38",
+        "fileName": "预算扫描旋转180.png",
+        "fileSize": 32160
+      }
+    ],
+    "ids": [
+      "8f05b1f1-e764-4bef-be3d-7afbcbedc778"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "根据本批上传材料整理了以下预算信息与核对意见，供工作参考。本批仍有材料或部分信息未能核实，结果依据尚不完整；未列出的内容不代表没有问题。已保留能够核实的预算信息。扫描文字中的项目编号存在字母 O 与数字 0 不一致，尚不能确认相关明细是否属于同一项目，未自动合并，请核对原件。材料中的项目总预算、单价或合计未作为科目申报或批复金额使用。",
+        "lines": [
+          {
+            "project": "仿真办公设备更新项目",
+            "projectCode": null,
+            "subject": "办公设备",
+            "subjectCode": "SYN-OFFICE",
+            "year": null,
+            "department": "采购管理部",
+            "declaredAmount": 31200.0,
+            "approvalAmount": null,
+            "status": "INSUFFICIENT",
+            "opinion": "已读取申报信息，现有材料未能确认对应批复金额，暂不能判断是否超过批复。",
+            "sources": [
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "subjectName",
+                "value": "办公设备",
+                "locator": "image/frame:1/part:1/line:10",
+                "excerpt": "科目名称：办公设备",
+                "start": 138,
+                "end": 147,
+                "pageNumber": null
+              },
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "subjectName",
+                "value": "办公设备",
+                "locator": "image/frame:1/part:1/line:10",
+                "excerpt": "科目名称：办公设备；申报金额：31200元；供应商名称：仿真办公供应公司；项目编号：SYN-0FFICE-2026",
+                "start": 138,
+                "end": 195,
+                "pageNumber": null
+              },
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "subjectName",
+                "value": "办公设备",
+                "locator": "image/frame:1/part:1/line:10",
+                "excerpt": "科目名称：办公设备；申报金额：31200元",
+                "start": 138,
+                "end": 159,
+                "pageNumber": null
+              },
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "declaredAmount",
+                "value": "31200元",
+                "locator": "image/frame:1/part:1/line:10",
+                "excerpt": "申报金额：31200元",
+                "start": 148,
+                "end": 159,
+                "pageNumber": null
+              },
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "supplierName",
+                "value": "仿真办公供应公司",
+                "locator": "image/frame:1/part:1/line:10",
+                "excerpt": "供应商名称：仿真办公供应公司",
+                "start": 160,
+                "end": 174,
+                "pageNumber": null
+              },
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "projectName",
+                "value": "仿真办公设备更新项目",
+                "locator": "image/frame:1/part:1/line:0",
+                "excerpt": "项目名称：仿真办公设备更新项目",
+                "start": 0,
+                "end": 15,
+                "pageNumber": null
+              },
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "departmentName",
+                "value": "采购管理部",
+                "locator": "image/frame:1/part:1/line:2",
+                "excerpt": "申请部门：采购管理部",
+                "start": 37,
+                "end": 47,
+                "pageNumber": null
+              },
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "subjectCode",
+                "value": "SYN-OFFICE",
+                "locator": "image/frame:1/part:1/line:5",
+                "excerpt": "科目编码：SYN-OFFICE",
+                "start": 71,
+                "end": 86,
+                "pageNumber": null
+              },
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "subjectName",
+                "value": "办公设备",
+                "locator": "image/frame:1/part:1/line:6",
+                "excerpt": "科目名称：办公设备",
+                "start": 87,
+                "end": 96,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "assessments": [
+          {
+            "code": "SEMANTIC_IDENTITY_CONFLICT",
+            "level": "WARNING",
+            "title": "项目编号存在字符差异",
+            "explanation": "材料中项目名称对应的编号为“SYN-OFFICE-2026”，而下方申报明细中的项目编号为“SYN-0FFICE-2026”。两处编号在“O”与“0”字符上不一致，可能导致系统检索失败或归档错误，影响项目唯一性识别。",
+            "basis": "请核对项目编号标准格式，统一修正为正确编号，确保全文一致。",
+            "sources": [
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "semantic",
+                "value": "项目编号：SYN-OFFICE-2026",
+                "locator": "image/frame:1/part:1/record:0:222",
+                "excerpt": "项目编号：SYN-OFFICE-2026",
+                "start": 16,
+                "end": 36,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "仿真办公设备更新项目",
+        "totals": [
+          {
+            "role": "projectBudgetAmount",
+            "scope": "TOTAL",
+            "year": null,
+            "amount": 200000.0,
+            "sources": [
+              {
+                "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+                "fileName": "预算扫描旋转180.png",
+                "field": "projectBudgetAmount",
+                "value": "200000元",
+                "locator": "image/frame:1/part:1/line:4",
+                "excerpt": "预算金额：200000元",
+                "start": 56,
+                "end": 68,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "PARTIAL"
+      }
+    ],
+    "uniqueAssessments": [
+      {
+        "code": "SEMANTIC_IDENTITY_CONFLICT",
+        "level": "WARNING",
+        "title": "项目编号存在字符差异",
+        "explanation": "材料中项目名称对应的编号为“SYN-OFFICE-2026”，而下方申报明细中的项目编号为“SYN-0FFICE-2026”。两处编号在“O”与“0”字符上不一致，可能导致系统检索失败或归档错误，影响项目唯一性识别。",
+        "basis": "请核对项目编号标准格式，统一修正为正确编号，确保全文一致。",
+        "sources": [
+          {
+            "taskId": "8f05b1f1-e764-4bef-be3d-7afbcbedc778",
+            "fileName": "预算扫描旋转180.png",
+            "field": "semantic",
+            "value": "项目编号：SYN-OFFICE-2026",
+            "locator": "image/frame:1/part:1/record:0:222",
+            "excerpt": "项目编号：SYN-OFFICE-2026",
+            "start": 16,
+            "end": 36,
+            "pageNumber": null
+          }
+        ]
+      }
+    ],
+    "sourceLengths": {
+      "8f05b1f1-e764-4bef-be3d-7afbcbedc778": 222
+    }
+  },
+  {
+    "label": "14长文末尾用途问题",
+    "batchId": "f4fe633d-c8cb-4731-96ff-4907c26bc003",
+    "members": [
+      {
+        "operationKey": "f7109836-6379-40d3-889d-c278e4840fe8",
+        "fileName": "执行情况长文.txt",
+        "fileSize": 45371
+      }
+    ],
+    "ids": [
+      "39890b51-4778-4b01-97a6-438ffd8c2907"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [
+          {
+            "code": "SEMANTIC_PURPOSE_SCOPE",
+            "level": "WARNING",
+            "title": "实际执行用途与批复限定用途实质冲突",
+            "explanation": "批复明确本项目资金限用于业务终端更新，不包含员工福利。但执行情况记录显示，本次实际执行不购置业务终端，拟将全部经费用于向员工发放节日礼盒，且未作预算用途调整。该执行方案直接违反了批复对资金用途的限定，属于实质性用途冲突。",
+            "basis": "建议立即核实该笔经费的实际流向，若确已用于发放节日礼盒，需评估是否构成违规使用专项资金，并按规定程序补办用途变更审批或进行整改。",
+            "sources": [
+              {
+                "taskId": "39890b51-4778-4b01-97a6-438ffd8c2907",
+                "fileName": "执行情况长文.txt",
+                "field": "semantic",
+                "value": "批复明确本项目资金限用于业务终端更新，不包含员工福利。",
+                "locator": "text/body/part:2/record:2176:3996",
+                "excerpt": "批复明确本项目资金限用于业务终端更新，不包含员工福利。",
+                "start": 7697,
+                "end": 7724,
+                "pageNumber": null
+              },
+              {
+                "taskId": "39890b51-4778-4b01-97a6-438ffd8c2907",
+                "fileName": "执行情况长文.txt",
+                "field": "semantic",
+                "value": "本次实际执行不购置业务终端，拟将全部经费用于向员工发放节日礼盒，未作预算用途调整。",
+                "locator": "text/body/part:4/record:2176:3465",
+                "excerpt": "本次实际执行不购置业务终端，拟将全部经费用于向员工发放节日礼盒，未作预算用途调整。",
+                "start": 15407,
+                "end": 15448,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "棕榈业务终端更新项目",
+        "totals": [],
+        "analysisCoverage": "PARTIAL"
+      }
+    ],
+    "uniqueAssessments": [
+      {
+        "code": "SEMANTIC_PURPOSE_SCOPE",
+        "level": "WARNING",
+        "title": "实际执行用途与批复限定用途实质冲突",
+        "explanation": "批复明确本项目资金限用于业务终端更新，不包含员工福利。但执行情况记录显示，本次实际执行不购置业务终端，拟将全部经费用于向员工发放节日礼盒，且未作预算用途调整。该执行方案直接违反了批复对资金用途的限定，属于实质性用途冲突。",
+        "basis": "建议立即核实该笔经费的实际流向，若确已用于发放节日礼盒，需评估是否构成违规使用专项资金，并按规定程序补办用途变更审批或进行整改。",
+        "sources": [
+          {
+            "taskId": "39890b51-4778-4b01-97a6-438ffd8c2907",
+            "fileName": "执行情况长文.txt",
+            "field": "semantic",
+            "value": "批复明确本项目资金限用于业务终端更新，不包含员工福利。",
+            "locator": "text/body/part:2/record:2176:3996",
+            "excerpt": "批复明确本项目资金限用于业务终端更新，不包含员工福利。",
+            "start": 7697,
+            "end": 7724,
+            "pageNumber": null
+          },
+          {
+            "taskId": "39890b51-4778-4b01-97a6-438ffd8c2907",
+            "fileName": "执行情况长文.txt",
+            "field": "semantic",
+            "value": "本次实际执行不购置业务终端，拟将全部经费用于向员工发放节日礼盒，未作预算用途调整。",
+            "locator": "text/body/part:4/record:2176:3465",
+            "excerpt": "本次实际执行不购置业务终端，拟将全部经费用于向员工发放节日礼盒，未作预算用途调整。",
+            "start": 15407,
+            "end": 15448,
+            "pageNumber": null
+          }
+        ]
+      }
+    ],
+    "sourceLengths": {
+      "39890b51-4778-4b01-97a6-438ffd8c2907": 15448
+    }
+  },
+  {
+    "label": "15同义措辞用途一致",
+    "batchId": "ac525c6c-3f08-4ed2-990e-dfc451623aa6",
+    "members": [
+      {
+        "operationKey": "4d9c8dab-0f08-41f8-b799-c37dd1b8f4f5",
+        "fileName": "经费批复.txt",
+        "fileSize": 100
+      },
+      {
+        "operationKey": "92c83aa3-c556-4351-8857-779dc07e55c6",
+        "fileName": "执行方案.txt",
+        "fileSize": 145
+      }
+    ],
+    "ids": [
+      "6a7e7d47-c1fb-4e95-85de-fe131910983c",
+      "c7ab69ec-4061-4566-b2ab-2855f27877ce"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "香樟档案数字化项目",
+        "totals": [],
+        "analysisCoverage": "COMPLETE"
+      },
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [],
+        "projectName": "香樟档案数字化项目",
+        "totals": [],
+        "analysisCoverage": "COMPLETE"
+      }
+    ],
+    "uniqueAssessments": [],
+    "sourceLengths": {
+      "6a7e7d47-c1fb-4e95-85de-fe131910983c": 34,
+      "c7ab69ec-4061-4566-b2ab-2855f27877ce": 49
+    }
+  },
+  {
+    "label": "16重复词不应误判历史",
+    "batchId": "2bbd5aca-7558-41a8-a3e6-3fcd0bef8d59",
+    "members": [
+      {
+        "operationKey": "b6e18323-d103-48b6-a67d-9bb15f22d182",
+        "fileName": "改造计划.txt",
+        "fileSize": 213
+      }
+    ],
+    "ids": [
+      "2cae0502-ffd0-45a1-a5f0-6e596cf620f9"
+    ],
+    "status": "REVIEWED",
+    "references": [
+      {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "已读取这份材料，未找到可确认的预算科目或金额信息；不能据此认定预算没有问题。",
+        "lines": [],
+        "assessments": [
+          {
+            "code": "TOTAL_VERSION_REVIEW",
+            "level": "INFO",
+            "title": "项目预算存在不同记载",
+            "explanation": "材料中列有不同项目预算，已保留各自金额及原文；需结合调整或版本依据理解。",
+            "basis": "金额不同不直接认定超支或版本冲突。",
+            "sources": [
+              {
+                "taskId": "2cae0502-ffd0-45a1-a5f0-6e596cf620f9",
+                "fileName": "改造计划.txt",
+                "field": "projectBudgetAmount",
+                "value": "850000元",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "项目预算：850000元",
+                "start": 18,
+                "end": 30,
+                "pageNumber": null
+              },
+              {
+                "taskId": "2cae0502-ffd0-45a1-a5f0-6e596cf620f9",
+                "fileName": "改造计划.txt",
+                "field": "projectBudgetAmount",
+                "value": "900000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "项目预算：900000元",
+                "start": 41,
+                "end": 53,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "projectName": "旧设备更新项目",
+        "totals": [
+          {
+            "role": "projectBudgetAmount",
+            "scope": "TOTAL",
+            "year": null,
+            "amount": 850000.0,
+            "sources": [
+              {
+                "taskId": "2cae0502-ffd0-45a1-a5f0-6e596cf620f9",
+                "fileName": "改造计划.txt",
+                "field": "projectBudgetAmount",
+                "value": "850000元",
+                "locator": "text/body/part:1/line:1",
+                "excerpt": "项目预算：850000元",
+                "start": 18,
+                "end": 30,
+                "pageNumber": null
+              }
+            ]
+          },
+          {
+            "role": "projectBudgetAmount",
+            "scope": "TOTAL",
+            "year": null,
+            "amount": 900000.0,
+            "sources": [
+              {
+                "taskId": "2cae0502-ffd0-45a1-a5f0-6e596cf620f9",
+                "fileName": "改造计划.txt",
+                "field": "projectBudgetAmount",
+                "value": "900000元",
+                "locator": "text/body/part:1/line:2",
+                "excerpt": "项目预算：900000元",
+                "start": 41,
+                "end": 53,
+                "pageNumber": null
+              }
+            ]
+          }
+        ],
+        "analysisCoverage": "PARTIAL"
+      }
+    ],
+    "uniqueAssessments": [
+      {
+        "code": "TOTAL_VERSION_REVIEW",
+        "level": "INFO",
+        "title": "项目预算存在不同记载",
+        "explanation": "材料中列有不同项目预算，已保留各自金额及原文；需结合调整或版本依据理解。",
+        "basis": "金额不同不直接认定超支或版本冲突。",
+        "sources": [
+          {
+            "taskId": "2cae0502-ffd0-45a1-a5f0-6e596cf620f9",
+            "fileName": "改造计划.txt",
+            "field": "projectBudgetAmount",
+            "value": "850000元",
+            "locator": "text/body/part:1/line:1",
+            "excerpt": "项目预算：850000元",
+            "start": 18,
+            "end": 30,
+            "pageNumber": null
+          },
+          {
+            "taskId": "2cae0502-ffd0-45a1-a5f0-6e596cf620f9",
+            "fileName": "改造计划.txt",
+            "field": "projectBudgetAmount",
+            "value": "900000元",
+            "locator": "text/body/part:1/line:2",
+            "excerpt": "项目预算：900000元",
+            "start": 41,
+            "end": 53,
+            "pageNumber": null
+          }
+        ]
+      }
+    ],
+    "sourceLengths": {
+      "2cae0502-ffd0-45a1-a5f0-6e596cf620f9": 81
+    }
+  }
+]

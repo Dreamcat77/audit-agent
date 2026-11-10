@@ -43,6 +43,7 @@ public class ContractAnalysisRelations {
     }
     private boolean same(Fact a,Fact b){return ContractAnalysisEvidence.compact(a.value()).equals(ContractAnalysisEvidence.compact(b.value()));}
     public String role(Source source,List<Step> work){
+        if(com.fuquan.audit.contract.application.project.ProjectFileClassifier.isAuxiliary(source.name()))return "ANNEX";
         // Filename is a classification hint only, never contract facts or authority.
         var category=new com.fuquan.audit.contract.application.project.ProjectFileClassifier().classify(source.name());
         String named=switch(category){

@@ -146,14 +146,15 @@ export async function reviewBudgetMaterial(taskId: string): Promise<BudgetReview
   });
 }
 
-export async function getBudgetReview(taskId: string): Promise<BudgetReviewResponse> {
+export async function getBudgetReview(taskId: string,signal?:AbortSignal): Promise<BudgetReviewResponse> {
   return request<BudgetReviewResponse>(`/api/v1/budget/reviews/${taskId}`, {
     method: 'GET',
+    signal,
   });
 }
 
-export async function getBudgetMaterialBatch(batchId: string): Promise<BudgetMaterialBatchView> {
-  return request<BudgetMaterialBatchView>(`/api/v1/budget/material-uploads/batches/${encodeURIComponent(batchId)}`);
+export async function getBudgetMaterialBatch(batchId: string,signal?:AbortSignal): Promise<BudgetMaterialBatchView> {
+  return request<BudgetMaterialBatchView>(`/api/v1/budget/material-uploads/batches/${encodeURIComponent(batchId)}`,{signal});
 }
 
 export async function listBudgetMaterialBatches(params?: {

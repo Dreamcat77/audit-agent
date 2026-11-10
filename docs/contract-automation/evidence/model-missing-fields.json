@@ -1,0 +1,16 @@
+{
+  "scenario": "missing-fields",
+  "http": 502,
+  "seconds": 0.3,
+  "realModel": true,
+  "synthetic": true,
+  "failures": [
+    "HTTP_502"
+  ],
+  "result": {
+    "code": "CONTRACT_ANALYSIS_MODEL_FAILED",
+    "message": "contract model call failed",
+    "data": null,
+    "requestId": "15b592ca-810e-495f-bfd6-d20360d75815"
+  }
+}

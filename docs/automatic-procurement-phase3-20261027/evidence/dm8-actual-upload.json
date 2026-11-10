@@ -1,0 +1,109 @@
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "id": "89c032c1-9421-3fa3-8ca2-c3de83e1ff00",
+    "caseNumber": "AC-89c032c1-9421-3fa3-8ca2-c3de83e1ff00",
+    "status": "QUEUED",
+    "createdAt": "2026-10-27T08:23:53.187846700Z",
+    "documents": [
+      {
+        "id": "75763cdb-1a41-478a-9d84-25d6fc501ccb",
+        "name": "01_办公终端及打印设备采购需求申请书.docx",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "e56140fb-7d89-4514-8e94-24b8f3165d4b",
+        "name": "02_办公终端采购技术需求表.pdf",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "7bb99abb-2d64-4ae2-8394-f5594258c72e",
+        "name": "03_办公设备采购实施计划.docx",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "9b4399a4-3d3d-410c-90f7-d2b2b505dc1f",
+        "name": "04_办公设备更新项目预算批复.pdf",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "18c9677c-2ba0-4a0b-b231-f94fc1f845e6",
+        "name": "05_办公终端及打印设备采购招标文件.docx",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "c5f3120b-8816-48c4-8d67-3f6caa8632fe",
+        "name": "06_办公设备采购评审办法.pdf",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "f506087b-670c-423c-9857-2c71eb6a10e2",
+        "name": "07_澄川星河办公设备有限公司报价单.pdf",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "e8f2bdc4-5bdb-4267-ad25-4e70bc2733fb",
+        "name": "08_澄川明川数字设备有限公司报价单.pdf",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "aada1c47-e5c6-4e96-a2fa-db1da20b4459",
+        "name": "09_澄川启衡信息设备有限公司报价单.pdf",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "aab30f08-e09f-4d14-8b46-8ba37bed6eb5",
+        "name": "10_办公设备采购文件澄清答复.docx",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "4f322795-cf67-446e-aca2-7aed53b41d27",
+        "name": "11_办公设备采购中标通知书.docx",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "736803e4-1db8-441d-b717-b9bd763fa664",
+        "name": "12_办公设备采购履约验收方案.docx",
+        "status": "STORED",
+        "parseMethod": null,
+        "errorCode": null,
+        "factCount": 0
+      }
+    ],
+    "report": null
+  }
+}

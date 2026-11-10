@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.fuquan.audit.procurement.autocase.AuditCaseIntegrationTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 3.018 s -- in com.fuquan.audit.procurement.autocase.AuditCaseIntegrationTest

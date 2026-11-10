@@ -42,7 +42,13 @@ public record AuditCase(UUID id, String owner, UUID operationKey, String fingerp
         }
     }
     public record Fact(String row,String type,String value,String dataType,String locator,String excerpt,
-            String verification,String model,String extractionVersion) {}
+            String verification,String model,String extractionVersion,
+            @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) String subjectScope,
+            @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) String amountScope) {
+        public Fact(String row,String type,String value,String dataType,String locator,String excerpt,String verification,String model,String extractionVersion){
+            this(row,type,value,dataType,locator,excerpt,verification,model,extractionVersion,null,null);
+        }
+    }
     public record Line(String item,BigDecimal quantity,BigDecimal unitPrice,BigDecimal amount,String locator) {}
     public record Offer(String supplier,BigDecimal amount,UUID documentId,List<Line> lines,String lineValidation) {
         public Offer {lines=List.copyOf(lines);}

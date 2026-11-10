@@ -20,7 +20,7 @@ public final class PipelineDiagnostics {
             "pageCount", "itemCount", "rowCount", "factCount", "fileCount", "httpStatus", "byteLimit",
             "textLimit", "connectTimeoutMs", "readTimeoutMs", "responseBytes", "sqlErrorCode", "errorDepth", "stackLine",
             "nativeTextChars", "ocrTextChars", "emptyOcrPages", "emptyChunkCount", "evidenceRejectedCount",
-            "callCount", "findingCount", "ruleCount", "durationMs");
+            "callCount", "findingCount", "ruleCount", "durationMs", "pageNumber", "workerCount", "queueWaitMs", "candidateCount", "acceptedCount");
     private static final Set<String> TOKENS = Set.of("outcome", "parseMethod", "reason", "errorClass", "sqlState",
             "stackClass", "stackMethod", "rootCauseClass", "reasonCode", "aiStatus", "businessType",
             "parseEngine", "classification");

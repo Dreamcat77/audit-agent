@@ -1,0 +1,244 @@
+{
+  "id": "afa86474-4ead-3a9d-964a-f84e5b4c8588",
+  "caseNumber": "AC-afa86474-4ead-3a9d-964a-f84e5b4c8588",
+  "projectName": "澄川办公终端更新项目",
+  "status": "DATA_INSUFFICIENT",
+  "createdAt": "2026-10-29T16:10:03.356446080Z",
+  "documents": [
+    {
+      "id": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+      "name": "采购需求表-倒置.png",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT_OCR",
+      "errorCode": null,
+      "factCount": 5
+    }
+  ],
+  "report": {
+    "quoteStatus": "DATA_INSUFFICIENT",
+    "budget": 2200000,
+    "awardAmount": null,
+    "offers": [],
+    "calculation": null,
+    "notices": [
+      "可靠供应商报价少于三家，三方询比价数据不足"
+    ],
+    "modules": {
+      "TENDER_COMPLIANCE": "DATA_INSUFFICIENT",
+      "AGENT_PRECHECK": "PARTIAL",
+      "COLLUSION": "NOT_EXECUTED",
+      "SPLIT_PURCHASE": "NOT_EXECUTED",
+      "QUOTE": "DATA_INSUFFICIENT",
+      "BLACKLIST": "DATA_INSUFFICIENT"
+    },
+    "reviews": {
+      "TENDER_COMPLIANCE": {
+        "status": "DATA_INSUFFICIENT",
+        "inputDigest": "e34ea370b8472ff3d43f6e4e0e84301835c320a97bb25510d63071a6dfa8961f",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-29T16:11:43.600756605Z",
+        "completedAt": "2026-10-29T16:11:43.605740517Z",
+        "scope": [],
+        "coverageGaps": [
+          "UPLOADED_SCOPE_MISSING_TECHNICAL",
+          "UPLOADED_SCOPE_MISSING_TENDER",
+          "UPLOADED_SCOPE_MISSING_EVALUATION",
+          "UPLOADED_SCOPE_MISSING_CLARIFICATION"
+        ],
+        "checks": [
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 1 份材料，本项选取 0 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "NO_READABLE_SOURCE"
+      },
+      "AGENT_PRECHECK": {
+        "status": "PARTIAL",
+        "inputDigest": "07501ec4bf8471970bfbed80ab12972fed43ec3b10d9e1c484eb1b0104545a77",
+        "version": "case-cross-file-v2",
+        "model": "audit-qwen-27b-16k:latest",
+        "startedAt": "2026-10-29T16:11:28.042798770Z",
+        "completedAt": "2026-10-29T16:11:43.592009013Z",
+        "scope": [
+          {
+            "documentId": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+            "fileName": "采购需求表-倒置.png",
+            "role": "OTHER",
+            "sourceChars": 85,
+            "suppliedChars": 85
+          }
+        ],
+        "coverageGaps": [
+          "UPLOADED_SCOPE_MISSING_DEMAND",
+          "UPLOADED_SCOPE_MISSING_BUDGET",
+          "UPLOADED_SCOPE_MISSING_QUOTATION",
+          "UPLOADED_SCOPE_MISSING_AWARD"
+        ],
+        "checks": [
+          {
+            "code": "IDENTITY_projectName",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "projectName：澄川办公终端更新项目；缺少该字段的文件不作为冲突依据",
+            "evidence": [
+              {
+                "id": "E-f9726b7e453648501f12cebe",
+                "documentId": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+                "fileName": "采购需求表-倒置.png",
+                "sha256": "e45953b96893a665ad597dec3ebbb7360fb969c9600d787482cdf6f0e04d57eb",
+                "locator": "image/frame:1/part:1",
+                "excerpt": "采购需求表\n项目名称：澄川办公终端更新项目\n项目编号：SYN-V15-P001\n采购人：澄川档案服务中心\n本项目的预算为2200000人民币\n设备一百台，交货后逐台验收。"
+              }
+            ]
+          },
+          {
+            "code": "IDENTITY_projectNo",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "projectNo：SYN-V15-P001；缺少该字段的文件不作为冲突依据",
+            "evidence": [
+              {
+                "id": "E-f9726b7e453648501f12cebe",
+                "documentId": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+                "fileName": "采购需求表-倒置.png",
+                "sha256": "e45953b96893a665ad597dec3ebbb7360fb969c9600d787482cdf6f0e04d57eb",
+                "locator": "image/frame:1/part:1",
+                "excerpt": "采购需求表\n项目名称：澄川办公终端更新项目\n项目编号：SYN-V15-P001\n采购人：澄川档案服务中心\n本项目的预算为2200000人民币\n设备一百台，交货后逐台验收。"
+              }
+            ]
+          },
+          {
+            "code": "IDENTITY_purchaserName",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "purchaserName：澄川档案服务中心；缺少该字段的文件不作为冲突依据",
+            "evidence": [
+              {
+                "id": "E-f9726b7e453648501f12cebe",
+                "documentId": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+                "fileName": "采购需求表-倒置.png",
+                "sha256": "e45953b96893a665ad597dec3ebbb7360fb969c9600d787482cdf6f0e04d57eb",
+                "locator": "image/frame:1/part:1",
+                "excerpt": "采购需求表\n项目名称：澄川办公终端更新项目\n项目编号：SYN-V15-P001\n采购人：澄川档案服务中心\n本项目的预算为2200000人民币\n设备一百台，交货后逐台验收。"
+              }
+            ]
+          },
+          {
+            "code": "BUDGET_CONFLICT",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "仅比较预算角色金额，不将成交价或已付款作为预算：[2200000.00]",
+            "evidence": [
+              {
+                "id": "E-f9726b7e453648501f12cebe",
+                "documentId": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+                "fileName": "采购需求表-倒置.png",
+                "sha256": "e45953b96893a665ad597dec3ebbb7360fb969c9600d787482cdf6f0e04d57eb",
+                "locator": "image/frame:1/part:1",
+                "excerpt": "采购需求表\n项目名称：澄川办公终端更新项目\n项目编号：SYN-V15-P001\n采购人：澄川档案服务中心\n本项目的预算为2200000人民币\n设备一百台，交货后逐台验收。"
+              }
+            ]
+          },
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 1 份材料，本项选取 1 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "本模块仅选取1份文件，项目名称、编号、采购单位在可核实范围内一致，无法进行跨文件核对。",
+            "evidence": [
+              {
+                "id": "E-f9726b7e453648501f12cebe",
+                "documentId": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+                "fileName": "采购需求表-倒置.png",
+                "sha256": "e45953b96893a665ad597dec3ebbb7360fb969c9600d787482cdf6f0e04d57eb",
+                "locator": "image/frame:1/part:1",
+                "excerpt": "采购需求表\n项目名称：澄川办公终端更新项目\n项目编号：SYN-V15-P001\n采购人：澄川档案服务中心\n本项目的预算为2200000人民币\n设备一百台，交货后逐台验收。"
+              }
+            ]
+          },
+          {
+            "code": "BUDGET_VS_AWARD",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "本模块仅选取1份文件，预算为2200000人民币，未提供报价或成交金额，无法进行预算与成交对比。",
+            "evidence": [
+              {
+                "id": "E-f9726b7e453648501f12cebe",
+                "documentId": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+                "fileName": "采购需求表-倒置.png",
+                "sha256": "e45953b96893a665ad597dec3ebbb7360fb969c9600d787482cdf6f0e04d57eb",
+                "locator": "image/frame:1/part:1",
+                "excerpt": "采购需求表\n项目名称：澄川办公终端更新项目\n项目编号：SYN-V15-P001\n采购人：澄川档案服务中心\n本项目的预算为2200000人民币\n设备一百台，交货后逐台验收。"
+              }
+            ]
+          },
+          {
+            "code": "QUANTITY",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "本模块仅选取1份文件，设备数量为100台，未提供其他文件进行数量核对。",
+            "evidence": [
+              {
+                "id": "E-f9726b7e453648501f12cebe",
+                "documentId": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+                "fileName": "采购需求表-倒置.png",
+                "sha256": "e45953b96893a665ad597dec3ebbb7360fb969c9600d787482cdf6f0e04d57eb",
+                "locator": "image/frame:1/part:1",
+                "excerpt": "采购需求表\n项目名称：澄川办公终端更新项目\n项目编号：SYN-V15-P001\n采购人：澄川档案服务中心\n本项目的预算为2200000人民币\n设备一百台，交货后逐台验收。"
+              }
+            ]
+          },
+          {
+            "code": "DATE_AND_PLAN",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "本模块仅选取1份文件，未提供业务日期或计划信息，无法进行日期顺序核对。",
+            "evidence": [
+              {
+                "id": "E-f9726b7e453648501f12cebe",
+                "documentId": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+                "fileName": "采购需求表-倒置.png",
+                "sha256": "e45953b96893a665ad597dec3ebbb7360fb969c9600d787482cdf6f0e04d57eb",
+                "locator": "image/frame:1/part:1",
+                "excerpt": "采购需求表\n项目名称：澄川办公终端更新项目\n项目编号：SYN-V15-P001\n采购人：澄川档案服务中心\n本项目的预算为2200000人民币\n设备一百台，交货后逐台验收。"
+              }
+            ]
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "SEMANTIC_OR_SOURCE_COVERAGE_INCOMPLETE"
+      },
+      "BLACKLIST": {
+        "status": "DATA_INSUFFICIENT",
+        "inputDigest": "553956f4a3e5f24f201723900214f33d7f45225b5d0f8d6ce04871b1f8078e2b",
+        "version": "case-blacklist-v1",
+        "model": null,
+        "startedAt": "2026-10-29T16:11:28.013060085Z",
+        "completedAt": "2026-10-29T16:11:28.013060245Z",
+        "scope": [
+          {
+            "documentId": "4547d43d-5c43-4e84-b807-e3a2b75e03d2",
+            "fileName": "采购需求表-倒置.png",
+            "role": "OTHER",
+            "sourceChars": 85,
+            "suppliedChars": 85
+          }
+        ],
+        "coverageGaps": [],
+        "checks": [],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": null
+      }
+    },
+    "projectName": "澄川办公终端更新项目",
+    "ceilingAmount": null,
+    "quoteComparisons": [],
+    "ceilingComparisons": []
+  },
+  "findingIds": {}
+}

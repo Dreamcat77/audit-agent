@@ -1,0 +1,242 @@
+[
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/budget/application/BudgetUploadedMaterialReader.java",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "8a18d1d7008667a3ce2811c1abc1b2185f5d752a2ea680268dff939c5e598e46"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/common/domain/RmbAmountParser.java",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "da1183eee2871fdc0349ff88b2154535bb02f5ca294322e5f66e8ad8c92a7677"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/common/material/application/port/DocumentTextPort.java",
+    "preIntegrationState": "CONFLICT",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "e5af9a01e3376e55eb1c2c33339b2a32125580915b015df5114dfb6b083b8c49"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/common/material/application/port/MaterialParsePort.java",
+    "preIntegrationState": "MERGE_REQUIRED",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "e34b752447597ad6aa02bfef6e48c339ae29f525b59a3025099d4d2b825663d6"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/contract/application/analysis/ContractAnalysisCategories.java",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "23897f1bb46e10551c6c6b612b0f8de3a8dcf5e83d36a9a4d536699be565bb00"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/contract/application/analysis/ContractAnalysisEvidence.java",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "18d86bc4638740ddbad0316f8b75b66a928db07965bc0fd83cc43c0ebb9db471"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/contract/application/analysis/ContractAnalysisFactPublisher.java",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "30f5ed1563a956fe0019052daf7f2110864d1f4583479b642dd38ce028f799f6"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/contract/application/analysis/ContractAnalysisReport.java",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "3114b406244bda6e4cd2fa5f8a534075e1aa471c6bd1c9d8bb040c138a25b631"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/contract/application/project/ProjectFileIngestionService.java",
+    "preIntegrationState": "MERGED_CLEAN",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "46d1b5d111b950eaad1fb222b3ca5244baa6f74f988807a7af29f698be5bc3a9"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/contract/application/project/SharedProjectMaterialReader.java",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "fc2cfaa548e11c377c40ddd659ac6a4c7ab66f27f236b486865009348c5230e1"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/integration/material/OfficeDocumentTextReader.java",
+    "preIntegrationState": "CONFLICT",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "b17782bba63e5e1847275d46546a1cf208db4b5b2d627a079a267312a3c645fc"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/integration/material/OfficeMaterialParseAdapter.java",
+    "preIntegrationState": "MERGE_REQUIRED",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "ad4662c882cef12b7dc2aa7bf2a74edcf42aadc6a0360115a225c720f2d18092"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/integration/material/ParsedMaterialTextAdapter.java",
+    "preIntegrationState": "ALREADY_MATCHES",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "df22e86b1be035c800ff6b18deb5f5c9d17e7b4ae958bfb5bf612f36f417472e"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/integration/material/PdfImageCoverage.java",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "c15b8fcaab96302389b526cd89d6dc1d0ebfaa57c95e38eaeca64f58dece5a89"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/integration/material/PdfTextUsefulness.java",
+    "preIntegrationState": "ALREADY_MATCHES",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "1f719463cfc4f60b8ee73549c64c48f53ccb87cf29d2fb071592a7cc46ee0bff"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/integration/material/WordTableStructure.java",
+    "preIntegrationState": "ALREADY_MATCHES",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "91b9ca25aa6d29024b817e96ae44298f385a6a4d4c7e54c6b96f95f2de8c2ff2"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementBidQuotationExtractor.java",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "d77f09b5e01eb79657bca390a7bd01a58c63f3ee2d6578e91503492b9cd64c6c"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/AuditCaseService.java",
+    "preIntegrationState": "MERGED_CLEAN",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "422e180654df42dab4e1f0231c54901f5563b9511ea5c6fc24c1dcede6a15c75"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/CaseFactPolicy.java",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "feae7816a0da269c7386faaca03b21c54b53f03baa931afed760e86451b1711e"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/CaseReviewContext.java",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "d17a5c6c0938c36ea46a591590d2d3e722e30add704c8213570bdb66a769bc4d"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/budget/application/BudgetWrappedPdfTest.java",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "c6d1d6ca415024530fe1f1da6ec792d01921ea6212ddf7866c8ebfc8fbe7a333"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/common/domain/RmbCurrencySuffixTest.java",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "3191e53716e1f6c91276b254a0aa6fc33bc5629ed016a7e5908f62c8d9373c44"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/contract/api/project/ProjectApiIntegrationTest.java",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "918e93da810d5dc2cf26f646dcadf2b0e501b80715de79173ca7f87ce1de4017"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/contract/application/analysis/ContractAnalysisCategoryTest.java",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "9a93753e2cda00f16b3f9076806d760a5e9b94b630a3d692cada5593392d3790"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/integration/material/IndependentOfficeProducerTest.java",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "a72c1d246fab8e20e508c670a3789adec7ec1136befaf54c1a0bf90a6d9b9647"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/integration/material/OfficeMaterialParseAdapterTest.java",
+    "preIntegrationState": "ALREADY_MATCHES",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "97e504e1c1a0c263e9d317c230f7c9b7d59ec77c6d7ae77a647d5d6085280996"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/integration/material/ParsedMaterialTextAdapterTest.java",
+    "preIntegrationState": "ALREADY_MATCHES",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "2c0dc082126c80a2cbc576c898a5f886901dfbea08519b369cd15faeceb225fe"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/integration/material/SharedMaterialCoverageTest.java",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "dbefdfe916808a7865cf063a8fb48caa8c28ecce3616e8e587314f94f97bdd22"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/integration/material/WordTableStructureTest.java",
+    "preIntegrationState": "ALREADY_MATCHES",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "cdc4513056791be516d8d6790c17b7f0984f7d0ee3405b40b895af4466d52f58"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/procurement/application/ProcurementNaturalQuotationTest.java",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "3ba20f9cfea7ed28442e01a622ebfa7a1d7b290ad3a90659af3df95db1182502"
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/CaseNaturalBudgetTest.java",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "4c4b812e2d5111148e260cd2d68a2dcdf6a1dcb43cb91c55af33e3c6fa9e8166"
+  },
+  {
+    "path": "backend/src/test/resources/material-v15/预算申报.pdf",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "092ccd6719394949e20db79696e466551ac28b85368757b4b5f2b09ed6a794b4"
+  },
+  {
+    "path": "backend/src/test/resources/material-v15/预算表.xlsx",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "7162b3a543623088efa8e2495ebd6a653998ae883dd7dfefbf4807788af6efc1"
+  },
+  {
+    "path": "frontend/src/features/contract/contractAnalysisPresentation.ts",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "5c71aa866afe0c98abb9d8a7919c085917590d34a5dc22826a2bb7650f3961ad"
+  },
+  {
+    "path": "frontend/src/features/contract/components/ContractAnalysisCategories.tsx",
+    "preIntegrationState": "NEW",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "8c5906d014242046f8683bf9c2ea09ceac9876f22ec5f46ea27aea9f513af264"
+  },
+  {
+    "path": "frontend/src/features/contract/components/ContractAnalysisFormalReviews.tsx",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "37eca0e022b35fdac08bb6e7370a32910421daac56f20010ed3c1b8d191cd561"
+  },
+  {
+    "path": "frontend/src/features/contract/components/ContractAnalysisWorkspace.tsx",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "43b760d771bb45af7655da6ed4afb03d80b68af2ad1248c62f711899927edd1c"
+  },
+  {
+    "path": "frontend/src/features/procurement/AutomaticCasePanel.tsx",
+    "preIntegrationState": "CONFLICT",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "bace7bde253cf602354772be832626167a5315550538b42f04126efdb6579455"
+  },
+  {
+    "path": "services/audit-ai/src/audit_ai/model/contract_analysis.py",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "366dd705918c5aee2a5920e90e059d7b42d52bcf6b17d3e71a96d10ffacb78e2"
+  },
+  {
+    "path": "services/audit-ai/tests/test_contract_analysis.py",
+    "preIntegrationState": "MATCHES_BASE",
+    "state": "INTEGRATED_PRESERVING_EXISTING_WORK",
+    "integratedSha256": "3c2e6e8e430665dd9523e113a90a180f703ec44929f99a8309367337601a85dd"
+  }
+]

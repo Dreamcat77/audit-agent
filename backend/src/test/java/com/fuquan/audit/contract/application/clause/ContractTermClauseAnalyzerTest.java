@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import com.fuquan.audit.contract.domain.project.ProjectFileCategory;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,65 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class ContractTermClauseAnalyzerTest {
+    @Test void performanceCompletionIsAnEndNodeEvenInSameSentenceAsEffectiveness(){
+        for(String phrase:List.of("本协议经双方签字盖章后生效，有效期自生效之日起至本协议执行完毕止。","合同有效期至履行完毕之日止。","协议有效期至执行完毕止。")){
+            var r=new ContractTermClauseAnalyzer().analyze(List.of(new ContractClauseMaterial(FILE_ID,"合同书.docx",phrase)));
+            assertThat(r.conditions()).anyMatch(c->c.type().equals("TERMINATION")&&c.excerpt().contains("完毕"));
+            assertThat(r.deterministicChecks()).filteredOn(c->c.type().equals("TERMINATION_COMPLETENESS")).allMatch(c->c.status().equals("NORMAL"));
+        }
+        var negated=new ContractTermClauseAnalyzer().analyze(List.of(new ContractClauseMaterial(FILE_ID,"合同书.docx","未经对方同意不得终止协议。")));
+        assertThat(negated.conditions()).noneMatch(c->c.type().equals("TERMINATION"));
+    }
+    @Test void absenceOfTermIsNotProvenByCoverOrContractNumber(){
+        String text="合同编号：SYN-44\n甲方：青禾研究院\n乙方：明川设备公司\n第一条 采购设备。\n第二条 按要求交货。\n"+"双方按约定执行具体采购内容和交付要求。".repeat(20);
+        var r=new ContractTermClauseAnalyzer().analyze(List.of(new ContractClauseMaterial(FILE_ID,"合同书.docx",text)));
+        assertThat(r.deterministicChecks()).filteredOn(c->Set.of("SIGN_DATE_COMPLETENESS","TERMINATION_COMPLETENESS").contains(c.type()))
+                .allSatisfy(c->{assertThat(c.status()).isEqualTo("INSUFFICIENT");assertThat(c.sources()).isEmpty();});
+    }
+    @Test void commonPurchasersEachHoldCopiesOnlyWhenTheirDistinctIdentitiesAreProven(){
+        String parties="甲方一（共同采购人）：青禾大学\n甲方二（共同采购人）：明川研究院\n乙方：澄川技术有限公司\n";
+        for (String total:List.of("六", "八")) {
+            var result=new ContractTermClauseAnalyzer().analyze(List.of(new ContractClauseMaterial(FILE_ID,"合同书.docx",
+                    parties+"合同一式"+total+"份，共同采购人各执二份，乙方执二份。")));
+            assertThat(result.deterministicChecks()).filteredOn(c->c.type().equals("COPY_COUNT_REQUIREMENT_COMPARISON"))
+                    .singleElement().satisfies(c->{assertThat(c.status()).isEqualTo(total.equals("六")?"NORMAL":"REVIEW");
+                        assertThat(c.summary()).contains("各方留存合计6份");
+                        assertThat(c.sources()).anyMatch(s->s.excerpt().contains("甲方一"));
+                        assertThat(c.sources()).anyMatch(s->s.excerpt().contains("甲方二"));});
+        }
+        for(String uncertain:List.of("",parties.replace("明川研究院","青禾大学"))){
+            var result=new ContractTermClauseAnalyzer().analyze(List.of(new ContractClauseMaterial(FILE_ID,"合同书.docx",
+                    uncertain+"合同一式六份，共同采购人各执二份，乙方执二份。")));
+            assertThat(result.deterministicChecks()).noneMatch(c->c.type().equals("COPY_COUNT_REQUIREMENT_COMPARISON"));
+        }
+    }
+    @Test void numberedIndividualCopyAllocationsRemainDistinct(){
+        var result=new ContractTermClauseAnalyzer().analyze(List.of(new ContractClauseMaterial(FILE_ID,"合同书.docx",
+                "合同一式六份，甲方一执二份，甲方二执二份，乙方执二份。")));
+        assertThat(result.deterministicChecks()).filteredOn(c->c.type().equals("COPY_COUNT_REQUIREMENT_COMPARISON"))
+                .singleElement().satisfies(c->{assertThat(c.status()).isEqualTo("NORMAL");assertThat(c.summary()).contains("合计6份");});
+    }
+    @Test void serviceEndDateIsARealEndNodeAndInvalidOrTentativeDatesDoNotBecomeValid(){
+        for(String phrase:List.of("服务期限至2027年10月31日", "合同期限截至2027年10月31日", "履约期：截止至2027年10月31日")){
+            var result=new ContractTermClauseAnalyzer().analyze(List.of(new ContractClauseMaterial(FILE_ID,"合同书.docx",phrase)));
+            assertThat(result.dates()).filteredOn(d->d.type().equals("TERMINATION_DATE")).singleElement()
+                    .satisfies(d->{assertThat(d.normalizedDate()).isEqualTo("2027-10-31");assertThat(d.excerpt()).isEqualTo(phrase);});
+            assertThat(result.deterministicChecks()).noneMatch(c->c.type().equals("TERMINATION_COMPLETENESS"));
+        }
+        var invalid=new ContractTermClauseAnalyzer().analyze(List.of(new ContractClauseMaterial(FILE_ID,"合同书.docx","服务期限至2027年2月30日")));
+        assertThat(invalid.dates()).singleElement().satisfies(d->assertThat(d.normalizedDate()).isNull());
+        assertThat(invalid.deterministicChecks()).anyMatch(c->c.type().equals("DATE_FORMAT_COMPLETENESS")&&c.status().equals("REVIEW"));
+        var tentative=new ContractTermClauseAnalyzer().analyze(List.of(new ContractClauseMaterial(FILE_ID,"合同书.docx","预计服务期限至2027年10月31日")));
+        assertThat(tentative.dates()).isEmpty();
+    }
+    @Test void underscoresInSigningDateHaveTheirOwnEvidenceAndDoNotProduceDuplicateMissingDate(){
+        String text="维护服务合同\n签订日期：________年____月____日\n第一条 服务内容\n"+"乙方负责服务实施并提交验收成果。".repeat(10)+"\n第二条 期限\n验收完成后合同终止。";
+        var result=new ContractTermClauseAnalyzer().analyze(List.of(new ContractClauseMaterial(FILE_ID,"合同.docx",text)));
+        assertThat(result.dates()).singleElement().satisfies(d->{assertThat(d.type()).isEqualTo("SIGNING_DATE");assertThat(d.normalizedDate()).isNull();});
+        assertThat(result.deterministicChecks()).filteredOn(c->c.type().equals("DATE_FORMAT_COMPLETENESS"))
+                .singleElement().satisfies(c->assertThat(c.sources()).singleElement().satisfies(s->assertThat(s.excerpt()).contains("签订日期：________年____月____日")));
+        assertThat(result.deterministicChecks()).noneMatch(c->c.type().equals("SIGN_DATE_COMPLETENESS"));
+    }
 
     private static final UUID FILE_ID = UUID.fromString("10000000-0000-0000-0000-000000000002");
 

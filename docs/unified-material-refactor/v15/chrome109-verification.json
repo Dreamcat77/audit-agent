@@ -1,0 +1,19 @@
+{
+  "browser": "109.0.5412.0",
+  "productionArtifact": true,
+  "api": "REPLAY_OF_REAL_26_MODEL_DM8_RESPONSES",
+  "syntheticDocuments": true,
+  "eightTitles": [
+    "合同条款量化一致性审查",
+    "合同草本结构对标审查",
+    "违约责任条款量化审查",
+    "合同期限与终止条件格式审查",
+    "合同主体资格审查",
+    "附件清单完整性审查",
+    "合同生效条件与份数审查",
+    "合同条款风险提示"
+  ],
+  "pageErrors": [],
+  "unexpectedWrites": [],
+  "unknownRequests": []
+}

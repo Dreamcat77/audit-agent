@@ -1,0 +1,97 @@
+[
+  {
+    "file": "consistent-export-dependency.log",
+    "bytes": 67204,
+    "sha256": "990a5ffe36a4015c15f17f7a5240d4ef66696e848263c470c030c4a514207722"
+  },
+  {
+    "file": "restore-data-validation.json",
+    "bytes": 180,
+    "sha256": "df61a31458d61b280fcb13dc282c848baec45cf7e0b0ca0a22a714fbe9dede37"
+  },
+  {
+    "file": "schema-disabled-constraint-rejected.log",
+    "bytes": 242,
+    "sha256": "01dc5a6277e7b4da8bfae926462209e3a581517d13cacd4000e329b7a043b00c"
+  },
+  {
+    "file": "isolated-init.log",
+    "bytes": 573,
+    "sha256": "aafc733dcfdf8cf41f8eaf8190b1e99832ef4493266753bbfd6d4b94ccd42d1a"
+  },
+  {
+    "file": "independent-restore.console.log",
+    "bytes": 160042,
+    "sha256": "17f1fb74d442efe9dca35d7e2dead25f5ea34f5954edb2cf18757c63bdac5c9a"
+  },
+  {
+    "file": "consistent-export.console.log",
+    "bytes": 72588,
+    "sha256": "3bcddc9fb86aef29a79bc172461be6b1595ae3abbd0ba4f197bd9534f92503dc"
+  },
+  {
+    "file": "consistent-export-default.log",
+    "bytes": 63845,
+    "sha256": "0f206f423dcaf87398f3bda83e8dacfd1621fc8a53b1b7bbcadd91a266ef2f5b"
+  },
+  {
+    "file": "consistent-backup-status.json",
+    "bytes": 301,
+    "sha256": "8e57c4b68bc376caff5cc7e6550a03e4e960aa43b44dd80dae4b940a202a26f4"
+  },
+  {
+    "file": "isolated-server.log",
+    "bytes": 10558,
+    "sha256": "7bd2e6b4e76f3a6ecaac1b91417b9391712c48096cef37b238944594001052aa"
+  },
+  {
+    "file": "restore-manifest-94.tsv",
+    "bytes": 8759,
+    "sha256": "50747df54933df16854173c7a99121955b5e5e830692e7e37432fd7ee9861774"
+  },
+  {
+    "file": "schema-repeat.log",
+    "bytes": 39,
+    "sha256": "6730b0c5d09f6c853706b542e4db4a7e2f53747d8da923afd7aa125f32ac8c14"
+  },
+  {
+    "file": "schema-first-apply.log",
+    "bytes": 39,
+    "sha256": "5a8b0d28d16521a714d197626e9fa7a09defa3755e9307872cc1bf9f80f895a1"
+  },
+  {
+    "file": "consistent-export-default.console.log",
+    "bytes": 64400,
+    "sha256": "ca4b3fe64e09244c5f5e8a10c3d41c082250f3622264f7bc5e5ed18a99e25dce"
+  },
+  {
+    "file": "independent-restore.log",
+    "bytes": 157999,
+    "sha256": "0e61e5689c52667284363b5b3749ba3845e3926c998ee824eafce6ec817531c4"
+  },
+  {
+    "file": "dminit_AUTOCASE2_20261027141329.log",
+    "bytes": 1581,
+    "sha256": "786c347940495013734889d4c3122bb21c135d9dede4dd139481578816f5dcb7"
+  },
+  {
+    "file": "consistent-export.log",
+    "bytes": 71943,
+    "sha256": "1c8942bba7b4bf4d49f17bb6a799404912d6f2bbc3d22bf14324840a13a548d7"
+  },
+  {
+    "file": "source-manifest.tsv",
+    "bytes": 8853,
+    "sha256": "142b391b9f2e6971a2bd8f59663016c202662b5fe11bc5cae255d7ae34afbb3f"
+  },
+  {
+    "file": "schema-reenabled-and-reopened.log",
+    "bytes": 39,
+    "sha256": "6730b0c5d09f6c853706b542e4db4a7e2f53747d8da923afd7aa125f32ac8c14"
+  },
+  {
+    "file": "consistent-export-dependency.console.log",
+    "bytes": 64390,
+    "sha256": "96913e51d1c739102e9d3296ac0ec5b4ca34b70884fb5ce50ea73f5d5f068ba7"
+  }
+]

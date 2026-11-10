@@ -6,6 +6,7 @@ from collections.abc import Callable, Mapping, Sequence
 import importlib
 import inspect
 import logging
+import re
 from pathlib import Path
 import threading
 import time
@@ -14,6 +15,16 @@ from typing import Any
 from audit_ai.config import Settings
 from audit_ai.ocr.port import OcrExtraction, OcrPage, OcrPort
 from audit_ai.logging import log_event
+
+
+def money_transcription_suspect(text: str) -> bool:
+    """Trigger one accuracy pass for suspicious currency glyphs, without guessing replacements."""
+    for match in re.finditer(r"大写[）)]?\s*[:：]?\s*([^\r\n]{3,90})", text):
+        value = re.split(r"[元圆]", match.group(1), maxsplit=1)[0]
+        value = re.sub(r"人民币|[\s（()）￥¥：:]", "", value)
+        if len(re.findall(r"[零壹贰叁肆伍陆柒捌玖拾佰仟万亿]", value)) >= 3 and re.search(r"[^零壹贰叁肆伍陆柒捌玖拾佰仟万亿]", value):
+            return True
+    return False
 
 
 _EXPECTED_VERSION = "3.7.0"
@@ -72,7 +83,7 @@ class PaddleOcrAdapter(OcrPort):
                     for position, image in enumerate(page_images(path), 1):
                         page, page_scores = recognize_page(image, position, predict, self._map_predictions,
                                                           self._orientation_classifier)
-                        if self._fast_primary and (not page.text.strip() or page.confidence < .90):
+                        if self._fast_primary and (not page.text.strip() or page.confidence < .90 or money_transcription_suspect(page.text)):
                             log_event(_LOGGER,"OCR_ACCURACY_FALLBACK",stage="OCR",outcome="START",page_count=position)
                             if self._accuracy_pipeline is None:
                                 self._accuracy_pipeline=self._construct_pipeline(self._module_loader("paddleocr").PaddleOCR)
@@ -82,6 +93,18 @@ class PaddleOcrAdapter(OcrPort):
                                 self._map_predictions,self._orientation_classifier)
                             if quality(reviewed,reviewed_scores)>=quality(page,page_scores):
                                 page,page_scores=reviewed,reviewed_scores
+                        if page.regions and any(r.confidence<.92 for r in page.regions):
+                            from audit_ai.ocr.geometry import recheck_critical_regions
+                            def reread(crop):
+                                if self._fast_primary and self._accuracy_pipeline is None:
+                                    self._accuracy_pipeline=self._construct_pipeline(self._module_loader("paddleocr").PaddleOCR)
+                                target=self._accuracy_pipeline if self._fast_primary else pipeline
+                                return recognize_page(crop,1,self._bounded_image_predict(target),self._map_predictions,
+                                                      self._orientation_classifier)[0]
+                            page=recheck_critical_regions(page,image,reread)
+                        log_event(_LOGGER,"OCR_PAGE_GEOMETRY",stage="OCR",outcome="SUCCESS",page_count=position,
+                                  item_count=len(page.regions),
+                                  validation_error_count=sum(r.verification=="UNCERTAIN" for r in page.regions))
                         page_results.append(page)
                         scores.extend(page_scores)
                     pages = tuple(page_results)
@@ -220,12 +243,24 @@ class PaddleOcrAdapter(OcrPort):
                 raise OcrPredictionInvalid("invalid PaddleOCR text result")
             page_texts: list[str] = []
             page_scores: list[float] = []
-            for text, score in zip(texts, scores, strict=True):
+            from audit_ai.ocr.geometry import OcrRegion
+            polygons = result.get("rec_polys")
+            if not _is_sequence(polygons) or len(polygons) != len(texts):
+                polygons = None
+            regions = []
+            offset = 0
+            for index, (text, score) in enumerate(zip(texts, scores, strict=True)):
                 if not isinstance(text, str) or not _valid_score(score):
                     raise OcrPredictionInvalid("invalid PaddleOCR text result")
                 normalized = text.strip()
                 if normalized:
+                    if polygons is not None:
+                        try:
+                            regions.append(OcrRegion(offset, offset+len(normalized), polygons[index], float(score)))
+                        except (ValueError, TypeError, IndexError):
+                            pass
                     page_texts.append(normalized)
+                    offset += len(normalized)+1
                     page_scores.append(float(score))
                     document_scores.append(float(score))
             page_index = result.get("page_index")
@@ -243,6 +278,7 @@ class PaddleOcrAdapter(OcrPort):
                     page_num=page_num,
                     text="\n".join(page_texts),
                     confidence=page_confidence,
+                    regions=tuple(regions),
                 )
             )
         return tuple(pages), document_scores

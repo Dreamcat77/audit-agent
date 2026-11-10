@@ -49,3 +49,10 @@ test('priority summary agrees with exact quote risks and preserves unknown compa
   assert.match(automaticPrioritySummary(false, [{status:'NOT_EVALUATED'}], []), /材料不足的事项不作结论/);
   assert.match(automaticPrioritySummary(true, [], []), /正在整理/);
 });
+
+test('model references to system calculations use ordinary Chinese without changing business names', () => {
+  const explain=(text:string)=>automaticCheckExplanation({code:'BUDGET_VS_AWARD',status:'SOURCE_GROUNDED_OBSERVATION',explanation:text});
+  assert.equal(explain('金额核算以系统checks为准。'), '金额核算以系统核算结果为准。');
+  assert.equal(explain('金额按Java checks核对，报价2180000元。'), '金额按系统核算结果核对，报价2180000元。');
+  assert.equal(explain('Mychecks项目的原始名称及checks标识保持不变。'), 'Mychecks项目的原始名称及checks标识保持不变。');
+});

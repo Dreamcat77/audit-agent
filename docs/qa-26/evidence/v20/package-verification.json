@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "archive": "E:\\audit-agent-new\\deliverables\\Update_v20.tar.gz",
+  "sha256": "7eb033bdb7deeed8aef0b12a24204bc38cd41222cfca10dd9fdf44c90ac115b1",
+  "bytes": 84577306,
+  "inventory": true,
+  "tamperRejected": true,
+  "java17": true,
+  "lf": true,
+  "localAssets": true,
+  "permissions": true,
+  "installerUnchanged": true,
+  "ocrModelHashes": true
+}

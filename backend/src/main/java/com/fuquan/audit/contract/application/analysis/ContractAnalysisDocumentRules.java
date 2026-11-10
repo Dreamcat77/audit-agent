@@ -68,7 +68,7 @@ final class ContractAnalysisDocumentRules {
         case "TEMPLATE_STRUCTURE_COMPARISON" -> "合同与招标模板结构存在差异";
         case "COPY_COUNT_REQUIREMENT_COMPARISON" -> "合同份数需要关注";
         case "ATTACHMENT_REFERENCE_MATCH" -> "合同引用附件待补齐";
-        default -> "合同日期与终止条件需要关注";
+        default -> ContractFindingSupport.title(code);
     }; }
     private static Evidence evidence(List<Source> files, Map<UUID, String> texts, UUID id, String quote) {
         var source = files.stream().filter(f -> f.fileId().equals(id)).findFirst().orElse(null);

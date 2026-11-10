@@ -1,0 +1,1479 @@
+diff --git "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\backend\\src\\main\\java\\com\\fuquan\\audit\\integration\\dm8\\AutoCaseMapper.java" "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\backend\\src\\main\\java\\com\\fuquan\\audit\\integration\\dm8\\AutoCaseMapper.java"
+index d3671a2..e260370 100644
+--- "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\backend\\src\\main\\java\\com\\fuquan\\audit\\integration\\dm8\\AutoCaseMapper.java"
++++ "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\backend\\src\\main\\java\\com\\fuquan\\audit\\integration\\dm8\\AutoCaseMapper.java"
+@@ -13,20 +13,25 @@ public interface AutoCaseMapper {
+     String find(String id);
+     @Select("SELECT SNAPSHOT_JSON FROM AUDIT_CASE_FILE WHERE CASE_ID=#{id} ORDER BY FILE_ORDER")
+     List<String> files(String id);
++    record StoredFact(String fileId,int position,String payload) {}
++    @Select("SELECT FILE_ID,FACT_ORDER,FACT_JSON FROM AUDIT_FACT WHERE CASE_ID=#{id} ORDER BY FILE_ID,FACT_ORDER")
++    @ConstructorArgs({@Arg(column="FILE_ID",javaType=String.class),@Arg(column="FACT_ORDER",javaType=int.class),
++            @Arg(column="FACT_JSON",javaType=String.class,typeHandler=org.apache.ibatis.type.ClobTypeHandler.class)})
++    List<StoredFact> facts(String id);
+     @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY CREATED_AT DESC,ID) RN FROM AUDIT_CASE WHERE OWNER_ID=#{owner}) WHERE RN<=100")
+     List<String> recent(String owner);
+     @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY CREATED_AT,ID) RN FROM AUDIT_CASE WHERE STATUS='QUEUED' OR (STATUS IN ('RUNNING','UPLOADING') AND LEASE_UNTIL<=#{now})) WHERE RN<=8")
+     List<String> pending(LocalDateTime now);
+-    @Insert("INSERT INTO AUDIT_CASE(ID,OWNER_ID,OPERATION_KEY,FINGERPRINT,STATUS,ROW_VERSION,LEASE_TOKEN,LEASE_UNTIL,CREATED_AT,SNAPSHOT_JSON) VALUES(#{id},#{owner},#{operation},#{fingerprint},#{status},#{version},#{token},#{until},#{created},#{payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.StringTypeHandler})")
++    @Insert("INSERT INTO AUDIT_CASE(ID,OWNER_ID,OPERATION_KEY,FINGERPRINT,STATUS,ROW_VERSION,LEASE_TOKEN,LEASE_UNTIL,CREATED_AT,SNAPSHOT_JSON) VALUES(#{id},#{owner},#{operation},#{fingerprint},#{status},#{version},#{token},#{until},#{created},#{payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.ClobTypeHandler})")
+     int insert(Row row);
+-    @Update("UPDATE AUDIT_CASE SET STATUS=#{n.status},ROW_VERSION=#{n.version},LEASE_TOKEN=#{n.token},LEASE_UNTIL=#{n.until},SNAPSHOT_JSON=#{n.payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.StringTypeHandler} WHERE ID=#{n.id} AND ROW_VERSION=#{version} AND LEASE_TOKEN=#{token}")
++    @Update("UPDATE AUDIT_CASE SET STATUS=#{n.status},ROW_VERSION=#{n.version},LEASE_TOKEN=#{n.token},LEASE_UNTIL=#{n.until},SNAPSHOT_JSON=#{n.payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.ClobTypeHandler} WHERE ID=#{n.id} AND ROW_VERSION=#{version} AND LEASE_TOKEN=#{token}")
+     int replace(@Param("n") Row row,@Param("version") long version,@Param("token") String token);
+     @Delete("DELETE FROM AUDIT_CASE_FILE WHERE CASE_ID=#{id}") int deleteFiles(String id);
+-    @Insert("INSERT INTO AUDIT_CASE_FILE(ID,CASE_ID,FILE_ORDER,SHA256,STORAGE_KEY,STATUS,SNAPSHOT_JSON) VALUES(#{id},#{caseId},#{order},#{sha},#{key},#{status},#{payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.StringTypeHandler})")
++    @Insert("INSERT INTO AUDIT_CASE_FILE(ID,CASE_ID,FILE_ORDER,SHA256,STORAGE_KEY,STATUS,SNAPSHOT_JSON) VALUES(#{id},#{caseId},#{order},#{sha},#{key},#{status},#{payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.ClobTypeHandler})")
+     int insertFile(@Param("id") String id,@Param("caseId") String caseId,@Param("order") int order,@Param("sha") String sha,@Param("key") String key,@Param("status") String status,@Param("payload") String payload);
+     @Delete("DELETE FROM AUDIT_FACT WHERE CASE_ID=#{id}") int deleteFacts(String id);
+-    @Insert("INSERT INTO AUDIT_FACT(ID,CASE_ID,FILE_ID,FACT_TYPE,DATA_TYPE,VERIFICATION,FACT_JSON) VALUES(#{id},#{caseId},#{fileId},#{type},#{dataType},#{verification},#{payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.StringTypeHandler})")
+-    int insertFact(@Param("id") String id,@Param("caseId") String caseId,@Param("fileId") String fileId,@Param("type") String type,@Param("dataType") String dataType,@Param("verification") String verification,@Param("payload") String payload);
++    @Insert("INSERT INTO AUDIT_FACT(ID,CASE_ID,FILE_ID,FACT_ORDER,FACT_TYPE,DATA_TYPE,VERIFICATION,FACT_JSON) VALUES(#{id},#{caseId},#{fileId},#{position},#{type},#{dataType},#{verification},#{payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.ClobTypeHandler})")
++    int insertFact(@Param("id") String id,@Param("caseId") String caseId,@Param("fileId") String fileId,@Param("position") int position,@Param("type") String type,@Param("dataType") String dataType,@Param("verification") String verification,@Param("payload") String payload);
+     @Delete("DELETE FROM AUDIT_QUOTE_LINE WHERE CASE_ID=#{id}") int deleteLines(String id);
+     @Insert("INSERT INTO AUDIT_QUOTE_LINE(ID,CASE_ID,FILE_ID,ITEM_NAME,QUANTITY,UNIT_PRICE,LINE_AMOUNT,LOCATOR) VALUES(#{id},#{caseId},#{fileId},#{item},#{qty},#{price},#{amount},#{locator})")
+     int insertLine(@Param("id") String id,@Param("caseId") String caseId,@Param("fileId") String fileId,@Param("item") String item,@Param("qty") java.math.BigDecimal qty,@Param("price") java.math.BigDecimal price,@Param("amount") java.math.BigDecimal amount,@Param("locator") String locator);
+diff --git "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\backend\\src\\main\\java\\com\\fuquan\\audit\\integration\\dm8\\Dm8AuditCaseRepository.java" "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\backend\\src\\main\\java\\com\\fuquan\\audit\\integration\\dm8\\Dm8AuditCaseRepository.java"
+index 6fb331c..a0e3291 100644
+--- "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\backend\\src\\main\\java\\com\\fuquan\\audit\\integration\\dm8\\Dm8AuditCaseRepository.java"
++++ "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\backend\\src\\main\\java\\com\\fuquan\\audit\\integration\\dm8\\Dm8AuditCaseRepository.java"
+@@ -11,34 +11,61 @@ import org.springframework.stereotype.Repository;
+ public class Dm8AuditCaseRepository implements AuditCaseRepository {
+     private final AutoCaseMapper mapper;private final ObjectMapper json;
+     public Dm8AuditCaseRepository(AutoCaseMapper mapper,ObjectMapper json){this.mapper=mapper;this.json=json;}
+-    public Optional<AuditCase> find(UUID id){return Optional.ofNullable(mapper.find(id.toString())).map(value->{
++    public record StoredDocument(AuditCase.Document document,int factCount,String factDigest) {}
++    public Optional<AuditCase> find(UUID id){
++        for(int attempt=0;;attempt++) {
++            try{return readSnapshot(id);}
++            catch(org.springframework.dao.ConcurrencyFailureException changed){if(attempt>=3)throw changed;}
++        }
++    }
++    private Optional<AuditCase> readSnapshot(UUID id){return Optional.ofNullable(mapper.find(id.toString())).map(value->{
+         var c=decode(value,AuditCase.class);
+-        var docs=mapper.files(id.toString()).stream().map(f->decode(f,AuditCase.Document.class)).toList();
++        var records=mapper.files(id.toString()).stream().map(f->decode(f,StoredDocument.class)).toList();
++        var facts=mapper.facts(id.toString());
++        // A worker may commit between the independent reads. Retry a changed version before
++        // diagnosing missing/mismatched children; stable corruption still fails closed.
+         if(!value.equals(mapper.find(id.toString())))throw new org.springframework.dao.ConcurrencyFailureException("case changed while reading snapshot");
++        var docs=new ArrayList<AuditCase.Document>();
++        var consumed=new HashSet<String>();
++        for(var record:records) {
++            var d=record.document();
++            if(!d.facts().isEmpty())throw new IllegalStateException("duplicated file facts are forbidden");
++            var rows=facts.stream().filter(f->f.fileId().equals(d.id().toString())).toList();
++            for(int i=0;i<rows.size();i++)if(rows.get(i).position()!=i)throw new IllegalStateException("fact order corrupt");
++            var values=rows.stream().map(f->decode(f.payload(),AuditCase.Fact.class)).toList();
++            if(values.size()!=record.factCount()||!digest(values).equals(record.factDigest()))throw new IllegalStateException("case fact manifest corrupt");
++            consumed.add(d.id().toString());
++            docs.add(new AuditCase.Document(d.id(),d.name(),d.size(),d.sha256(),d.storageKey(),d.status(),d.segments(),values,d.parseMethod(),d.errorCode(),d.calls()));
++        }
++        if(facts.stream().anyMatch(f->!consumed.contains(f.fileId())))throw new IllegalStateException("orphan fact corrupt");
+         if(!c.documents().stream().map(AuditCase.Document::id).toList().equals(docs.stream().map(AuditCase.Document::id).toList()))throw new IllegalStateException("case file manifest corrupt");
+         return new AuditCase(c.id(),c.owner(),c.operationKey(),c.fingerprint(),c.status(),c.version(),c.leaseToken(),c.leaseUntil(),c.attempts(),c.createdAt(),docs,c.report());
+     });}
+     public List<AuditCase> recent(String owner){return mapper.recent(owner).stream().map(UUID::fromString).map(id->find(id).orElseThrow()).toList();}
+     public List<AuditCase> pending(Instant now){return mapper.pending(LocalDateTime.ofInstant(now,ZoneOffset.UTC)).stream().map(UUID::fromString).map(id->find(id).orElseThrow()).toList();}
+     @org.springframework.transaction.annotation.Transactional(propagation=org.springframework.transaction.annotation.Propagation.MANDATORY)
+-    public void insert(AuditCase c){mapper.insert(row(c));files(c);}
++    public void insert(AuditCase c){mapper.insert(row(c));files(c);facts(c);}
+     @org.springframework.transaction.annotation.Transactional(propagation=org.springframework.transaction.annotation.Propagation.MANDATORY)
+     public boolean replace(AuditCase previous,AuditCase next){
+         if(mapper.replace(row(next),previous.version(),previous.leaseToken())!=1)return false;
+-        mapper.deleteFiles(next.id().toString());files(next);
+         mapper.deleteFacts(next.id().toString());
+-        for(var doc:next.documents())for(int i=0;i<doc.facts().size();i++) {
+-            var f=doc.facts().get(i);String id=UUID.nameUUIDFromBytes((doc.id()+"/fact/"+i).getBytes(java.nio.charset.StandardCharsets.UTF_8)).toString();
+-            mapper.insertFact(id,next.id().toString(),doc.id().toString(),f.type(),f.dataType(),f.verification(),encode(f));
+-        }
+         mapper.deleteLines(next.id().toString());
++        mapper.deleteFiles(next.id().toString());files(next);facts(next);
+         if(next.report()!=null)for(var offer:next.report().offers())for(int i=0;i<offer.lines().size();i++) {
+             var line=offer.lines().get(i);String id=UUID.nameUUIDFromBytes((offer.documentId()+"/line/"+i).getBytes(java.nio.charset.StandardCharsets.UTF_8)).toString();
+             mapper.insertLine(id,next.id().toString(),offer.documentId().toString(),line.item(),line.quantity(),line.unitPrice(),line.amount(),line.locator());
+         }
+         return true;
+     }
+-    private void files(AuditCase c){int i=0;for(var d:c.documents())mapper.insertFile(d.id().toString(),c.id().toString(),i++,d.sha256(),d.storageKey(),d.status(),encode(d));}
++    private void files(AuditCase c){int i=0;for(var d:c.documents()) {
++        var withoutFacts=new AuditCase.Document(d.id(),d.name(),d.size(),d.sha256(),d.storageKey(),d.status(),d.segments(),List.of(),d.parseMethod(),d.errorCode(),d.calls());
++        mapper.insertFile(d.id().toString(),c.id().toString(),i++,d.sha256(),d.storageKey(),d.status(),encode(new StoredDocument(withoutFacts,d.facts().size(),digest(d.facts()))));
++    }}
++    private void facts(AuditCase c){for(var doc:c.documents())for(int i=0;i<doc.facts().size();i++) {
++        var f=doc.facts().get(i);String id=UUID.nameUUIDFromBytes((doc.id()+"/fact/"+i).getBytes(java.nio.charset.StandardCharsets.UTF_8)).toString();
++        mapper.insertFact(id,c.id().toString(),doc.id().toString(),i,f.type(),f.dataType(),f.verification(),encode(f));
++    }}
++    private String digest(Object v){try{return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(encode(v).getBytes(java.nio.charset.StandardCharsets.UTF_8)));}catch(java.security.NoSuchAlgorithmException e){throw new IllegalStateException(e);}}
+     private AutoCaseMapper.Row row(AuditCase c){
+         var manifest=c.documents().stream().map(d->new AuditCase.Document(d.id(),d.name(),d.size(),d.sha256(),d.storageKey(),d.status(),List.of(),List.of(),d.parseMethod(),d.errorCode(),d.calls())).toList();
+         var metadata=new AuditCase(c.id(),c.owner(),c.operationKey(),c.fingerprint(),c.status(),c.version(),c.leaseToken(),c.leaseUntil(),c.attempts(),c.createdAt(),manifest,c.report());
+diff --git "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\backend\\src\\main\\java\\com\\fuquan\\audit\\procurement\\autocase\\AuditCaseController.java" "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\backend\\src\\main\\java\\com\\fuquan\\audit\\procurement\\autocase\\AuditCaseController.java"
+index a78e97a..0294698 100644
+--- "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\backend\\src\\main\\java\\com\\fuquan\\audit\\procurement\\autocase\\AuditCaseController.java"
++++ "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\backend\\src\\main\\java\\com\\fuquan\\audit\\procurement\\autocase\\AuditCaseController.java"
+@@ -20,6 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
+ public class AuditCaseController {
+     private final AuditCaseService service;private final AuthContext auth;
+     public AuditCaseController(AuditCaseService service,AuthContext auth){this.service=service;this.auth=auth;}
++    @ExceptionHandler(org.springframework.dao.ConcurrencyFailureException.class)
++    public ResponseEntity<ApiResponse<Void>> changingSnapshot() {
++        return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.failure(409,"案件状态正在更新，请重试读取；原案件和上传操作已保留"));
++    }
+     @PostMapping(consumes="multipart/form-data")
+     public ApiResponse<View> upload(@RequestHeader("Idempotency-Key") UUID key,@RequestPart("files") List<MultipartFile> files) throws IOException {
+         return ApiResponse.success(view(service.upload(key,files.stream().map(f->new AuditCaseService.Upload(f.getOriginalFilename(),f::getInputStream)).toList(),user())));
+diff --git "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\backend\\src\\test\\java\\com\\fuquan\\audit\\procurement\\autocase\\AutomaticCaseHttpTest.java" "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\backend\\src\\test\\java\\com\\fuquan\\audit\\procurement\\autocase\\AutomaticCaseHttpTest.java"
+index edb5e2a..de5df05 100644
+--- "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\backend\\src\\test\\java\\com\\fuquan\\audit\\procurement\\autocase\\AutomaticCaseHttpTest.java"
++++ "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\backend\\src\\test\\java\\com\\fuquan\\audit\\procurement\\autocase\\AutomaticCaseHttpTest.java"
+@@ -33,6 +33,7 @@ class AutomaticCaseHttpTest {
+     @LocalServerPort int port;
+     @Autowired ObjectMapper json;
+     @MockitoBean MaterialFieldAiPort ai;
++    @org.springframework.test.context.bean.override.mockito.MockitoSpyBean AuditCaseService cases;
+     private Path cookies;
+     private String csrf;
+ 
+@@ -78,6 +79,11 @@ class AutomaticCaseHttpTest {
+             }
+             assertThat(call("/api/v1/procurement/cases/operations/"+operation,null).path("data").path("id").asText()).isEqualTo(id);
+             assertThat(call("/api/v1/procurement/cases",null).path("data").toString()).contains(id);
++            UUID changing=UUID.randomUUID();
++            doThrow(new org.springframework.dao.ConcurrencyFailureException("adversarial continuous writer"))
++                    .when(cases).owned(eq(changing),any());
++            assertThat(call("/api/v1/procurement/cases/"+changing,null).path("code").asInt()).isEqualTo(409);
++            assertThat(call("/api/v1/procurement/cases/"+id,null).path("data").path("status").asText()).isEqualTo("COMPLETED");
+             var evidence=json.createObjectNode().put("environment","local / real curl / real scheduler / simulated semantic extraction / in-memory repository")
+                     .put("command","curl.exe -sS --max-time 30 -b <ephemeral-cookie-file> -c <ephemeral-cookie-file> -H X-CSRF-TOKEN:<redacted> -H Idempotency-Key:<operation> -F files=@<file> ... http://127.0.0.1:<random-port>/api/v1/procurement/cases");
+             evidence.set("health",health);evidence.set("upload",uploaded);evidence.set("result",completed);
+diff --git "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\backend\\src\\test\\java\\com\\fuquan\\audit\\procurement\\autocase\\Dm8AuditCaseRepositoryTest.java" "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\backend\\src\\test\\java\\com\\fuquan\\audit\\procurement\\autocase\\Dm8AuditCaseRepositoryTest.java"
+index 7f32730..1980251 100644
+--- "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\backend\\src\\test\\java\\com\\fuquan\\audit\\procurement\\autocase\\Dm8AuditCaseRepositoryTest.java"
++++ "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\backend\\src\\test\\java\\com\\fuquan\\audit\\procurement\\autocase\\Dm8AuditCaseRepositoryTest.java"
+@@ -18,10 +18,19 @@ class Dm8AuditCaseRepositoryTest {
+     }
+     @Test void concurrentSnapshotReadFailsClosedInsteadOfMixingTwoVersions()throws Exception{
+         var mapper=mock(AutoCaseMapper.class);var json=JsonMapper.builder().findAndAddModules().build();var repo=new Dm8AuditCaseRepository(mapper,json);
+-        var old=value();when(mapper.find(old.id().toString())).thenReturn(json.writeValueAsString(old),json.writeValueAsString(old.update("RUNNING",List.of(),null)));
++        var old=value();var counter=new java.util.concurrent.atomic.AtomicInteger();
++        when(mapper.find(old.id().toString())).thenAnswer(call->json.writeValueAsString(new AuditCase(old.id(),old.owner(),old.operationKey(),old.fingerprint(),old.status(),counter.incrementAndGet(),old.leaseToken(),old.leaseUntil(),old.attempts(),old.createdAt(),List.of(),null)));
+         when(mapper.files(anyString())).thenReturn(List.of());
+         assertThatThrownBy(()->repo.find(old.id())).isInstanceOf(org.springframework.dao.ConcurrencyFailureException.class);
+     }
++    @Test void versionChangeRetriesBeforeDiagnosingMixedFileManifest()throws Exception {
++        var mapper=mock(AutoCaseMapper.class);var json=JsonMapper.builder().findAndAddModules().build();var repo=new Dm8AuditCaseRepository(mapper,json);
++        var old=value();var next=old.update("RUNNING",List.of(),null);
++        when(mapper.find(old.id().toString())).thenReturn(json.writeValueAsString(old),json.writeValueAsString(next),json.writeValueAsString(next));
++        when(mapper.files(anyString())).thenReturn(List.of());when(mapper.facts(anyString())).thenReturn(List.of());
++        assertThat(repo.find(old.id())).contains(next);
++        verify(mapper,times(4)).find(old.id().toString());
++    }
+     @Test void missingDurableFileManifestIsCorruptionNotSuccessfulEmptyCase()throws Exception{
+         var mapper=mock(AutoCaseMapper.class);var json=JsonMapper.builder().findAndAddModules().build();var repo=new Dm8AuditCaseRepository(mapper,json);
+         var old=value();var doc=new AuditCase.Document(UUID.randomUUID(),"x.pdf",1,"a".repeat(64),"b".repeat(64),"STORED",List.of(),List.of(),null,null,0);
+diff --git "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\db\\dm8\\PROCUREMENT__automatic_case_v1.sql" "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\db\\dm8\\PROCUREMENT__automatic_case_v1.sql"
+index 7fe8881..2ecc13b 100644
+--- "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\db\\dm8\\PROCUREMENT__automatic_case_v1.sql"
++++ "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\db\\dm8\\PROCUREMENT__automatic_case_v1.sql"
+@@ -1,4 +1,4 @@
+--- Independent upload cases. Additive only. NOT EXECUTED; verify on backed-up DM8 first.
++-- Independent upload cases. Additive only. Apply through AutoCaseSchemaCheck.
+ -- Apply once using the approved migration process; existing objects must be catalog-checked,
+ -- never dropped/recreated to make this script run. Code rollback leaves these tables intact.
+ CREATE TABLE AUDIT_CASE (
+@@ -27,17 +27,24 @@ CREATE TABLE AUDIT_CASE_FILE (
+  STATUS VARCHAR(32) NOT NULL,
+  SNAPSHOT_JSON CLOB NOT NULL,
+  CONSTRAINT FK_AUTO_FILE_CASE FOREIGN KEY (CASE_ID) REFERENCES AUDIT_CASE(ID),
+- CONSTRAINT UK_AUTO_FILE_ORDER UNIQUE (CASE_ID,FILE_ORDER)
++ CONSTRAINT UK_AUTO_FILE_ORDER UNIQUE (CASE_ID,FILE_ORDER),
++ CONSTRAINT UK_AUTO_FILE_CASE_ID UNIQUE (CASE_ID,ID),
++ CONSTRAINT CK_AUTO_FILE_ORDER CHECK (FILE_ORDER>=0),
++ CONSTRAINT CK_AUTO_FILE_STATUS CHECK (STATUS IN ('STAGING','STORED','PARSING','PARSED','CALLING','EXTRACTED','FAILED','UNKNOWN'))
+ );
+ CREATE TABLE AUDIT_FACT (
+  ID VARCHAR(36) NOT NULL PRIMARY KEY,
+  CASE_ID VARCHAR(36) NOT NULL,
+  FILE_ID VARCHAR(36) NOT NULL,
++ FACT_ORDER INT NOT NULL,
+  FACT_TYPE VARCHAR(40) NOT NULL,
+  DATA_TYPE VARCHAR(16) NOT NULL,
+  VERIFICATION VARCHAR(24) NOT NULL,
+  FACT_JSON CLOB NOT NULL,
+- CONSTRAINT FK_AUTO_FACT_CASE FOREIGN KEY (CASE_ID) REFERENCES AUDIT_CASE(ID)
++ CONSTRAINT FK_AUTO_FACT_FILE FOREIGN KEY (CASE_ID,FILE_ID) REFERENCES AUDIT_CASE_FILE(CASE_ID,ID),
++ CONSTRAINT UK_AUTO_FACT_ORDER UNIQUE (CASE_ID,FILE_ID,FACT_ORDER),
++ CONSTRAINT CK_AUTO_FACT_ORDER CHECK (FACT_ORDER>=0),
++ CONSTRAINT CK_AUTO_FACT_VERIFY CHECK (VERIFICATION IN ('SOURCE_VERIFIED','UNVERIFIED'))
+ );
+ CREATE INDEX IX_AUDIT_FACT_CASE ON AUDIT_FACT(CASE_ID,FACT_TYPE);
+ CREATE TABLE AUDIT_QUOTE_LINE (
+@@ -49,7 +56,8 @@ CREATE TABLE AUDIT_QUOTE_LINE (
+  UNIT_PRICE DECIMAL(18,2) NOT NULL,
+  LINE_AMOUNT DECIMAL(18,2) NOT NULL,
+  LOCATOR VARCHAR(300) NOT NULL,
+- CONSTRAINT FK_AUTO_LINE_CASE FOREIGN KEY (CASE_ID) REFERENCES AUDIT_CASE(ID)
++ CONSTRAINT FK_AUTO_LINE_FILE FOREIGN KEY (CASE_ID,FILE_ID) REFERENCES AUDIT_CASE_FILE(CASE_ID,ID),
++ CONSTRAINT CK_AUTO_LINE_VALUES CHECK (QUANTITY>0 AND UNIT_PRICE>=0 AND LINE_AMOUNT>=0)
+ );
+ CREATE INDEX IX_AUTO_LINE_CASE ON AUDIT_QUOTE_LINE(CASE_ID,FILE_ID);
+ -- No DELETE/DROP/DML against legacy procurement/project/approval/report tables.
+diff --git "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\frontend\\src\\features\\procurement\\AutomaticCasePanel.tsx" "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\frontend\\src\\features\\procurement\\AutomaticCasePanel.tsx"
+index 0d2553c..d0f5202 100644
+--- "a/E:\\audit-agent-backups\\automatic-case-phase2-20261027-020846\\source-before-phase2\\frontend\\src\\features\\procurement\\AutomaticCasePanel.tsx"
++++ "b/E:\\audit-agent-new\\.runtime\\budget-home-e17-20261014\\frontend\\src\\features\\procurement\\AutomaticCasePanel.tsx"
+@@ -34,8 +34,15 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
+       if (!active) return;
+       setEnabled(true); setCases(values);
+       let selected: Case | undefined;
++      let saved: { key?: string; caseId?: string } = {};
++      try { saved = JSON.parse(localStorage.getItem(store) || '{}'); }
++      catch { /* Malformed UI state supplies no usable operation identity. */ }
++      selected = values.find(c => c.id === saved.caseId);
+       try {
+-        const saved = JSON.parse(localStorage.getItem(store) || '{}'); selected = values.find(c => c.id === saved.caseId);
++        if (saved.caseId && !selected) {
++          selected = await request<Case>(`${path}/${saved.caseId}`);
++          if (!active) return;
++        }
+         if (saved.key && !saved.caseId) {
+           const recovered = await request<Case | null>(`${path}/operations/${saved.key}`);
+           if (!active) return;
+@@ -43,8 +50,12 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
+           else setUncertain(true);
+         }
+       }
+-      catch { /* Corrupt UI persistence never changes a server operation. */ }
+-      setCurrent(selected || values[0] || null);
++      catch (e) {
++        if (!active) return;
++        setUncertain(true);
++        setError(userFacingError(e, '原上传结果尚未确认，案件与原操作已保留'));
++      }
++      setCurrent(selected || (saved.key && !saved.caseId ? null : values[0]) || null);
+     }).catch(e => { if (active && !(e instanceof ApiError && e.status === 404)) { setEnabled(true); setError(userFacingError(e, '自动审查服务暂不可用')); } });
+     return () => { active = false; };
+   }, [ownerId, store]);
+@@ -59,7 +70,7 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
+   }, [current?.id, current?.status]);
+   async function upload(selected: File[]) {
+     if (!selected.length || busy) return;
+-    setBusy(true); setError(''); setFiles(selected);
++    setBusy(true); setError(''); setFiles(selected); setCurrent(null); setEvidence(null);
+     try {
+       let saved: { key?: string; manifest?: string; caseId?: string } = {};
+       try { saved = JSON.parse(localStorage.getItem(store) || '{}'); } catch { /* Validate below. */ }
+@@ -95,7 +106,7 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
+     {cases.length > 0 && <label className="text-xs">历史案件 <select value={current?.id || ''} onChange={async e => {
+       try { setCurrent(await request<Case>(`${path}/${e.target.value}`)); setEvidence(null); }
+       catch (error) { setError(userFacingError(error, '案件读取失败')); }
+-    }}>{cases.map(c => <option key={c.id} value={c.id}>{c.caseNumber}</option>)}</select></label>}
++    }}><option value="">选择历史案件</option>{cases.map(c => <option key={c.id} value={c.id}>{c.caseNumber}</option>)}</select></label>}
+     {current && <><p className="text-sm" role="status">{labels[current.status] || current.status} · 已提取 {current.documents.filter(d => d.status === 'EXTRACTED').length}/{current.documents.length} 份文件</p>
+       <ul className="text-xs space-y-1">{current.documents.map(d => <li key={d.id}>{d.name} · {labels[d.status] || d.status}
+         {d.errorCode && ' · 该文件尚未完成可靠提取'} <button type="button" className="text-blue-700" onClick={() => void showEvidence(d.id)}>查看证据</button>
+--- /dev/null
++++ after-phase2/backend/src/test/java/com/fuquan/audit/procurement/autocase/AutomaticCaseDm8Harness.java
+@@ -0,0 +1,82 @@
++package com.fuquan.audit.procurement.autocase;
++
++import com.fasterxml.jackson.databind.ObjectMapper;
++import com.fuquan.audit.AuditApplication;
++import com.fuquan.audit.common.application.port.OperationAuditPort;
++import com.fuquan.audit.common.material.application.port.MaterialFieldAiPort;
++import com.fuquan.audit.integration.ai.fastapi.FastApiMaterialFieldAdapter;
++import com.fuquan.audit.integration.dm8.*;
++import java.nio.file.*;
++import java.util.*;
++import javax.sql.DataSource;
++import org.apache.ibatis.session.SqlSessionFactory;
++import org.mybatis.spring.*;
++import org.springframework.boot.builder.SpringApplicationBuilder;
++import org.springframework.boot.test.context.TestConfiguration;
++import org.springframework.context.annotation.*;
++import org.springframework.jdbc.core.JdbcTemplate;
++import org.springframework.jdbc.datasource.*;
++import org.springframework.transaction.PlatformTransactionManager;
++import org.springframework.transaction.annotation.EnableTransactionManagement;
++import org.springframework.web.client.RestClient;
++
++/** Test-only executable: real HTTP/worker/DM8 with local account seam and a durable test audit journal. */
++public class AutomaticCaseDm8Harness {
++    public static void main(String[] args) {
++        if(!"ISOLATED_AUTOCASE2".equals(System.getenv("AUDIT_CASE_TEST_DB_CONFIRM")))throw new IllegalStateException("isolated database required");
++        new SpringApplicationBuilder(AuditApplication.class,AcceptanceConfiguration.class).profiles("local")
++                .properties(Map.of("server.address","127.0.0.1","server.port","19131",
++                        "audit.procurement.auto-case.enabled","true","audit.procurement.auto-case.scan-delay-ms","500",
++                        "logging.level.com.fuquan.audit.common.observability.FlowDebugLogger","INFO"))
++                .run(args);
++    }
++    @TestConfiguration @EnableTransactionManagement
++    public static class AcceptanceConfiguration {
++        @Bean @Primary java.time.Clock acceptanceClock() {
++            long offset=Long.parseLong(System.getenv().getOrDefault("AUDIT_CASE_TEST_CLOCK_OFFSET_SECONDS","0"));
++            return java.time.Clock.offset(java.time.Clock.systemUTC(),java.time.Duration.ofSeconds(offset));
++        }
++        @Bean DataSource acceptanceDataSource() {
++            String url=System.getenv("AUDIT_CASE_TEST_DB_URL");
++            if(url==null||!url.matches("jdbc:dm://127\\.0\\.0\\.1:15288"))throw new IllegalArgumentException("dedicated test proxy required");
++            return new DriverManagerDataSource(url,System.getenv("AUDIT_CASE_TEST_DB_USERNAME"),System.getenv("AUDIT_CASE_TEST_DB_PASSWORD"));
++        }
++        @Bean @Primary PlatformTransactionManager transactionManager(DataSource ds){return new DataSourceTransactionManager(ds);}
++        @Bean SqlSessionFactory sqlSessionFactory(DataSource ds)throws Exception {
++            var factory=new SqlSessionFactoryBean();factory.setDataSource(ds);
++            var config=new org.apache.ibatis.session.Configuration();config.addMapper(AutoCaseMapper.class);factory.setConfiguration(config);
++            return factory.getObject();
++        }
++        @Bean @Primary AutoCaseMapper acceptanceAutoCaseMapper(SqlSessionFactory factory){return new SqlSessionTemplate(factory).getMapper(AutoCaseMapper.class);}
++        @Bean @Primary AuditCaseRepository acceptanceRepository(AutoCaseMapper mapper,ObjectMapper json){return new Dm8AuditCaseRepository(mapper,json);}
++        @Bean @Primary OperationAuditPort acceptanceAudit(DataSource ds,ObjectMapper json) {
++            var jdbc=new JdbcTemplate(ds);
++            // This journal belongs only to the acceptance harness, never to a production profile.
++            if(jdbc.queryForObject("SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME='AUTO_CASE_TEST_AUDIT'",Integer.class)==0)
++                jdbc.execute("CREATE TABLE AUTO_CASE_TEST_AUDIT(ID VARCHAR(36) PRIMARY KEY,EVENT_JSON CLOB NOT NULL)");
++            return event->{
++                try {
++                    String payload=json.writeValueAsString(event);
++                    jdbc.update(c->{var p=c.prepareStatement("INSERT INTO AUTO_CASE_TEST_AUDIT(ID,EVENT_JSON) VALUES(?,?)");
++                        p.setString(1,UUID.randomUUID().toString());p.setCharacterStream(2,new java.io.StringReader(payload),payload.length());return p;});
++                }catch(java.io.IOException e){throw new IllegalStateException(e);}
++            };
++        }
++        @Bean @Primary MaterialFieldAiPort acceptanceAi() {
++            String mode=System.getenv().getOrDefault("AUDIT_CASE_TEST_MODEL_MODE","simulated");
++            if(mode.equals("actual"))return new FastApiMaterialFieldAdapter(RestClient.builder().baseUrl(System.getenv("AUDIT_CASE_REAL_AI_URL")).build());
++            if(!mode.equals("simulated"))throw new IllegalArgumentException("unknown model mode");
++            return (kind,id,sha,segments)->{
++                String gate=System.getenv("AUDIT_CASE_TEST_MODEL_GATE");
++                if(gate!=null) {
++                    long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.MINUTES.toNanos(2);
++                    while(!Files.exists(Path.of(gate))) {
++                        if(System.nanoTime()>deadline)throw new IllegalStateException("test gate timeout");
++                        try{Thread.sleep(100);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new IllegalStateException(e);}
++                    }
++                }
++                return AuditCaseIntegrationTest.sourceFixture(segments);
++            };
++        }
++    }
++}
+--- /dev/null
++++ after-phase2/backend/src/test/java/com/fuquan/audit/procurement/autocase/Dm8AutoCaseRealIntegrationTest.java
+@@ -0,0 +1,99 @@
++package com.fuquan.audit.procurement.autocase;
++
++import static org.assertj.core.api.Assertions.*;
++import com.fasterxml.jackson.databind.json.JsonMapper;
++import com.fuquan.audit.common.material.application.port.MaterialFieldAiPort;
++import com.fuquan.audit.integration.dm8.*;
++import java.time.Instant;
++import java.util.*;
++import java.util.concurrent.*;
++import org.apache.ibatis.session.SqlSessionFactory;
++import org.junit.jupiter.api.*;
++import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
++import org.mybatis.spring.*;
++import org.springframework.jdbc.core.JdbcTemplate;
++import org.springframework.jdbc.datasource.*;
++import org.springframework.transaction.support.TransactionTemplate;
++
++@EnabledIfEnvironmentVariable(named="AUDIT_CASE_TEST_DB_CONFIRM",matches="ISOLATED_AUTOCASE2")
++class Dm8AutoCaseRealIntegrationTest {
++    Dm8AuditCaseRepository repository;JdbcTemplate jdbc;TransactionTemplate tx;
++    final JsonMapper json=JsonMapper.builder().findAndAddModules().build();
++    @BeforeEach void setup()throws Exception {
++        String url=System.getenv("AUDIT_CASE_TEST_DB_URL");
++        assertThat(url).isEqualTo("jdbc:dm://127.0.0.1:15288");
++        var ds=new DriverManagerDataSource(url,System.getenv("AUDIT_CASE_TEST_DB_USERNAME"),System.getenv("AUDIT_CASE_TEST_DB_PASSWORD"));
++        jdbc=new JdbcTemplate(ds);assertThat(jdbc.queryForObject("SELECT USER FROM DUAL",String.class)).isEqualTo("AUTOCASE_APP");
++        var factory=new SqlSessionFactoryBean();factory.setDataSource(ds);
++        var config=new org.apache.ibatis.session.Configuration();config.addMapper(AutoCaseMapper.class);factory.setConfiguration(config);
++        SqlSessionFactory sessions=factory.getObject();
++        repository=new Dm8AuditCaseRepository(new SqlSessionTemplate(sessions).getMapper(AutoCaseMapper.class),json);
++        tx=new TransactionTemplate(new DataSourceTransactionManager(ds));
++    }
++    AuditCase value(String text) {
++        var fact=new AuditCase.Fact("row","supplierName","真实数据库测试供应商","TEXT","page:1","真实数据库测试供应商","SOURCE_VERIFIED","TEST","v2");
++        var doc=new AuditCase.Document(UUID.randomUUID(),"测试.docx",10,"a".repeat(64),"b".repeat(64),"EXTRACTED",
++                List.of(new MaterialFieldAiPort.Segment("page:1",text)),List.of(fact),"TEXT",null,1);
++        return new AuditCase(UUID.randomUUID(),"dm8-regression-owner",UUID.randomUUID(),"c".repeat(64),"COMPLETED",0,"token",Instant.now().plusSeconds(1800),0,Instant.now(),List.of(doc),null);
++    }
++    @Test void largeChineseClobAndFactsHaveOneAuthoritativeCopyAndReopen() {
++        var original=value("中文全文与证据".repeat(15000));
++        tx.executeWithoutResult(s->repository.insert(original));
++        var reopened=repository.find(original.id()).orElseThrow();
++        assertThat(reopened.documents()).isEqualTo(original.documents());
++        String stored=jdbc.queryForObject("SELECT SNAPSHOT_JSON FROM AUDIT_CASE_FILE WHERE CASE_ID=?",String.class,original.id().toString());
++        assertThatCode(()->assertThat(json.readTree(stored).path("document").path("facts")).isEmpty()).doesNotThrowAnyException();
++        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM AUDIT_FACT WHERE CASE_ID=?",Integer.class,original.id().toString())).isEqualTo(1);
++        assertThat(reopened.documents().get(0).segments().get(0).text().length()).isGreaterThan(32767);
++    }
++    @Test void transactionRollbackRestoresCaseFilesFactsAndAuditBoundary() {
++        var original=value("原文");tx.executeWithoutResult(s->repository.insert(original));
++        assertThatThrownBy(()->tx.executeWithoutResult(s->{
++            assertThat(repository.replace(original,original.update("UNKNOWN",List.of(),null))).isTrue();
++            throw new IllegalStateException("adversarial failure after multi-table write");
++        })).isInstanceOf(IllegalStateException.class);
++        assertThat(repository.find(original.id()).orElseThrow().version()).isZero();
++        assertThat(repository.find(original.id()).orElseThrow().documents()).isEqualTo(original.documents());
++        var rolledBack=value("未提交");tx.executeWithoutResult(s->{repository.insert(rolledBack);s.setRollbackOnly();});
++        assertThat(repository.find(rolledBack.id())).isEmpty();
++    }
++    @Test void conflictingAndUnknownFactsRemainDistinctAfterReopen() {
++        var original=value("预算上限：100元；另一版本预算上限：200元");var d=original.documents().get(0);
++        var facts=List.of(
++                new AuditCase.Fact("a","budgetAmount","100元","MONEY","page:1","预算上限：100元","SOURCE_VERIFIED","TEST","v2"),
++                new AuditCase.Fact("b","budgetAmount","200元","MONEY","page:1","预算上限：200元","SOURCE_VERIFIED","TEST","v2"),
++                new AuditCase.Fact("c","supplierName","待确认","TEXT","page:1","待确认","UNVERIFIED","TEST","v2"));
++        var doc=new AuditCase.Document(d.id(),d.name(),d.size(),d.sha256(),d.storageKey(),"UNKNOWN",d.segments(),facts,d.parseMethod(),"EXTERNAL_OUTCOME_UNKNOWN",1);
++        var unknown=original.update("DATA_INSUFFICIENT",List.of(doc),null);
++        tx.executeWithoutResult(s->repository.insert(unknown));
++        var reopened=repository.find(unknown.id()).orElseThrow();
++        assertThat(reopened.status()).isEqualTo("DATA_INSUFFICIENT");
++        assertThat(reopened.documents().get(0)).isEqualTo(doc);
++        assertThat(CaseFactPolicy.amount(reopened.documents().get(0),"budgetAmount")).isNull();
++        assertThat(CaseFactPolicy.scalar(reopened.documents().get(0),"supplierName")).isNull();
++        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM AUDIT_FACT WHERE CASE_ID=?",Integer.class,unknown.id().toString())).isEqualTo(3);
++    }
++    @Test void concurrentCasHasExactlyOneWinnerAndStaleWriterCannotDeleteFacts()throws Exception {
++        var original=value("并发原文");tx.executeWithoutResult(s->repository.insert(original));
++        var start=new CountDownLatch(1);var pool=Executors.newFixedThreadPool(2);
++        try {
++            var results=new ArrayList<Future<Boolean>>();
++            for(int i=0;i<2;i++)results.add(pool.submit(()->{start.await();return tx.execute(s->repository.replace(original,original.update("UNKNOWN",original.documents(),null)));}));
++            start.countDown();int wins=0;for(var result:results)if(result.get(15,TimeUnit.SECONDS))wins++;
++            assertThat(wins).isEqualTo(1);var current=repository.find(original.id()).orElseThrow();
++            assertThat(current.version()).isEqualTo(1);assertThat(current.documents().get(0).facts()).hasSize(1);
++        }finally{pool.shutdownNow();}
++    }
++    @Test void foreignCaseFileCannotReceiveFactsOrQuoteLinesAndCorruptionFailsClosed() {
++        var first=value("一");var second=value("二");tx.executeWithoutResult(s->{repository.insert(first);repository.insert(second);});
++        assertThatThrownBy(()->jdbc.update("INSERT INTO AUDIT_FACT(ID,CASE_ID,FILE_ID,FACT_ORDER,FACT_TYPE,DATA_TYPE,VERIFICATION,FACT_JSON) VALUES(?,?,?,0,'x','TEXT','UNVERIFIED','{}')",
++                UUID.randomUUID().toString(),first.id().toString(),second.documents().get(0).id().toString())).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
++        assertThatThrownBy(()->jdbc.update("INSERT INTO AUDIT_QUOTE_LINE(ID,CASE_ID,FILE_ID,ITEM_NAME,QUANTITY,UNIT_PRICE,LINE_AMOUNT,LOCATOR) VALUES(?,?,?,'x',1,1,1,'p1')",
++                UUID.randomUUID().toString(),first.id().toString(),second.documents().get(0).id().toString())).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
++        tx.executeWithoutResult(s->{
++            jdbc.update("DELETE FROM AUDIT_FACT WHERE CASE_ID=?",first.id().toString());
++            assertThatThrownBy(()->repository.find(first.id())).isInstanceOf(IllegalStateException.class).hasMessageContaining("fact manifest corrupt");s.setRollbackOnly();
++        });
++        assertThat(repository.find(first.id()).orElseThrow().documents().get(0).facts()).hasSize(1);
++    }
++}
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/acceptance_runner.py
+@@ -0,0 +1,212 @@
++"""Interactive local acceptance coordinator. Initial SSH secrets arrive over stdin, never files.
++
++The only DB write target is the separately initialized instance through a local TCP proxy.
++Existing test26 application services/configuration are never modified.
++"""
++import contextlib
++import http.cookiejar
++import json
++import os
++from pathlib import Path
++import select
++import secrets
++import shlex
++import socketserver
++import socket
++import subprocess
++import sys
++import threading
++import time
++import traceback
++import paramiko
++import requests
++
++ROOT=Path(__file__).resolve().parents[2]
++BACKEND=ROOT/"backend"
++JAVA=Path(os.environ["JAVA_HOME"])/"bin/java.exe"
++CONFIG=json.loads(os.environ.pop("AUDIT_PHASE2_COORDINATOR_CONFIG"))
++BACKUP=Path((ROOT/"tools/automatic-case-phase2/local-backup-location.txt").read_text())
++EVIDENCE=ROOT/"docs/automatic-procurement-phase2-20261027/evidence"
++EVIDENCE.mkdir(parents=True,exist_ok=True)
++SSH=paramiko.SSHClient();SSH.load_system_host_keys();SSH.set_missing_host_key_policy(paramiko.AutoAddPolicy())
++SSH.connect(CONFIG["host"],username=CONFIG["username"],password=CONFIG["password"],timeout=15)
++SSH.get_transport().set_keepalive(15)
++CONFIG.pop("password")
++SFTP=SSH.open_sftp()
++REMOTE=(ROOT/"tools/automatic-case-phase2/remote-job-location.txt").read_text()
++STATE=json.loads(SFTP.open(REMOTE+"/isolated-instance.json").read().decode())
++class Tunnel(socketserver.BaseRequestHandler):
++    def handle(self):
++        channel=socket.create_connection((CONFIG["host"],STATE["port"]),timeout=10)
++        try:
++            while True:
++                ready,_,_=select.select([self.request,channel],[],[],5)
++                if self.request in ready:
++                    data=self.request.recv(65536)
++                    if not data:break
++                    channel.sendall(data)
++                if channel in ready:
++                    data=channel.recv(65536)
++                    if not data:break
++                    self.request.sendall(data)
++        finally:channel.close()
++class Server(socketserver.ThreadingTCPServer):allow_reuse_address=True;daemon_threads=True
++TUNNEL=Server(("127.0.0.1",15288),Tunnel)
++threading.Thread(target=TUNNEL.serve_forever,daemon=True).start()
++CP=os.pathsep.join([str(BACKEND/"target/test-classes"),str(BACKEND/"target/classes"),(BACKEND/"target/phase2-classpath.txt").read_text().strip()])
++PASSWORD="Ac9_"+secrets.token_hex(16)
++hashed=subprocess.run([str(JAVA),"-cp",CP,"com.fuquan.audit.security.tools.PasswordHashTool","--stdin"],input=PASSWORD+"\n",capture_output=True,text=True,check=True).stdout.strip()
++BASE_ENV=dict(os.environ,AUDIT_CASE_TEST_DB_CONFIRM="ISOLATED_AUTOCASE2",AUDIT_CASE_TEST_DB_URL="jdbc:dm://127.0.0.1:15288",
++    AUDIT_CASE_TEST_DB_USERNAME=STATE["application_user"],AUDIT_CASE_TEST_DB_PASSWORD=STATE["application_password"],
++    AUDIT_LOCAL_ACCOUNT_USERNAME="phase2-auditor",AUDIT_LOCAL_ACCOUNT_PASSWORD_HASH=hashed,AUDIT_LOCAL_ACCOUNT_ROLES="AUDITOR",
++    AUDIT_FILE_STORAGE_ROOT=str(BACKUP/"file-storage"),AUDIT_CORS_ALLOWED_ORIGINS="http://127.0.0.1:19132",
++    AUDIT_CASE_FIXTURES=CONFIG["fixtures"])
++CHILDREN={};MODE=None;SESSION=None
++
++def wait_health(url,process):
++    deadline=time.monotonic()+60
++    while time.monotonic()<deadline:
++        if process.poll() is not None:raise RuntimeError("child exited; inspect protected log")
++        try:
++            if requests.get(url,timeout=2).status_code==200:return
++        except requests.RequestException:pass
++        time.sleep(.5)
++    raise RuntimeError("health timeout")
++
++def stop(name):
++    process=CHILDREN.pop(name,None)
++    if process and process.poll() is None:
++        process.terminate()
++        try:process.wait(timeout=15)
++        except subprocess.TimeoutExpired:process.kill();process.wait(timeout=5)
++
++def start_backend(mode="simulated",gate=None,scan_delay=None):
++    global MODE,SESSION
++    stop("backend");MODE=mode
++    env=dict(BASE_ENV,AUDIT_CASE_TEST_MODEL_MODE=mode,AUDIT_CASE_REAL_AI_URL="http://127.0.0.1:19121")
++    if gate:env["AUDIT_CASE_TEST_MODEL_GATE"]=str(gate)
++    args=[str(JAVA),"-cp",CP,"com.fuquan.audit.procurement.autocase.AutomaticCaseDm8Harness"]
++    if scan_delay:args.append("--audit.procurement.auto-case.scan-delay-ms="+str(scan_delay))
++    log=(BACKUP/("harness-"+mode+"-"+str(int(time.time()))+".log")).open("wb")
++    process=subprocess.Popen(args,cwd=BACKEND,env=env,stdout=log,stderr=subprocess.STDOUT)
++    CHILDREN["backend"]=process;wait_health("http://127.0.0.1:19131/api/v1/health",process)
++    SESSION=requests.Session()
++    csrf=SESSION.get("http://127.0.0.1:19131/api/v1/auth/csrf",timeout=5).json()["data"]["token"]
++    response=SESSION.post("http://127.0.0.1:19131/api/v1/auth/login",json={"username":"phase2-auditor","password":PASSWORD},headers={"X-CSRF-TOKEN":csrf},timeout=10)
++    response.raise_for_status()
++    print("BACKEND_READY mode="+mode+" pid="+str(process.pid),flush=True)
++
++def start_ai():
++    env=dict(os.environ,PYTHONPATH=str(ROOT/"services/audit-ai/src"),PYTHONIOENCODING="utf-8")
++    for path in ["/home/admin/audit_ai_runtime/audit-ai.env","/opt/audit-agent/current/deploy/update-v10/ai.env"]:
++        for line in SFTP.open(path).read().decode().splitlines():
++            line=line.strip()
++            if not line or line.startswith("#") or "=" not in line:continue
++            if line.startswith("export "):line=line[7:]
++            key,value=line.split("=",1);env[key]=" ".join(shlex.split(value,comments=False))
++    # Isolate checkpoints/storage rather than using any server paths from env.
++    for key in list(env):
++        if key.startswith("AUDIT_AI_") and any(x in key for x in ["ROOT","DIRECTORY","PATH"]):env.pop(key)
++    env["AUDIT_MATERIAL_CHECKPOINT_ROOT"]=str(BACKUP/"actual-model-checkpoints")
++    python=Path(r"E:\audit-agent-new\services\audit-ai\.venv-local\Scripts\python.exe")
++    log=(BACKUP/"actual-ai.log").open("wb")
++    process=subprocess.Popen([str(python),"-m","uvicorn","audit_ai.main:app","--host","127.0.0.1","--port","19121"],cwd=ROOT/"services/audit-ai",env=env,stdout=log,stderr=subprocess.STDOUT)
++    CHILDREN["ai"]=process;wait_health("http://127.0.0.1:19121/health",process)
++    print("ACTUAL_AI_READY pid="+str(process.pid),flush=True)
++
++def scenario(label):
++    csrf=SESSION.get("http://127.0.0.1:19131/api/v1/auth/csrf",timeout=5).json()["data"]["token"]
++    cookiefile=BACKUP/"curl-session.cookies"
++    jar=http.cookiejar.MozillaCookieJar(str(cookiefile))
++    for cookie in SESSION.cookies:
++        value=__import__("copy").copy(cookie)
++        # Netscape curl requires numeric expiry; Python writes an empty field for session cookies.
++        if value.expires is None:value.expires=0
++        jar.set_cookie(value)
++    jar.save(ignore_discard=True,ignore_expires=True)
++    operation=secrets.token_hex(16);operation=str(__import__("uuid").UUID(operation))
++    args=["curl.exe","-sS","--max-time","90","-b",str(cookiefile),"-H","X-CSRF-TOKEN: "+csrf,"-H","Idempotency-Key: "+operation]
++    paths=sorted(Path(CONFIG["fixtures"]).iterdir());assert len(paths)==12
++    for p in paths:args.extend(["-F","files=@"+str(p)])
++    args.append("http://127.0.0.1:19131/api/v1/procurement/cases")
++    process=subprocess.run(args,capture_output=True,timeout=100,check=True)
++    uploaded=json.loads(process.stdout.decode("utf-8"));assert uploaded["code"]==200,uploaded
++    case_id=uploaded["data"]["id"]
++    (EVIDENCE/(label+"-upload.json")).write_text(json.dumps(uploaded,ensure_ascii=False,indent=2),encoding="utf-8")
++    print("UPLOADED mode="+MODE+" case="+case_id,flush=True)
++    start=time.monotonic();last=None;deadline=start+1200
++    while time.monotonic()<deadline:
++        response=SESSION.get("http://127.0.0.1:19131/api/v1/procurement/cases/"+case_id,timeout=20)
++        if response.status_code!=200:time.sleep(1);continue
++        result=response.json();case=result["data"]
++        progress=(case["status"],tuple((d["status"],d["factCount"]) for d in case["documents"]))
++        if progress!=last:
++            print("PROGRESS "+json.dumps({"case":case_id,"state":case["status"],"extracted":sum(d["status"]=="EXTRACTED" for d in case["documents"]),"seconds":round(time.monotonic()-start)}),flush=True);last=progress
++        if case["status"] not in ["UPLOADING","QUEUED","RUNNING"]:break
++        time.sleep(1)
++    else:raise RuntimeError("case timeout; preserve state and do not resubmit")
++    (EVIDENCE/(label+"-result.json")).write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8")
++    report=case["report"]
++    assert case["status"]=="COMPLETED",case["status"]
++    assert report["budget"]==222600 and report["awardAmount"]==212000
++    assert sorted(o["amount"] for o in report["offers"])==[212000,216400,219800]
++    assert {o["supplier"] for o in report["offers"]}=={"澄川星河办公设备有限公司","澄川明川数字设备有限公司","澄川启衡信息设备有限公司"}
++    assert all(len(o["lines"])==3 and o["lineValidation"]=="VERIFIED" for o in report["offers"])
++    assert report["calculation"]["averageQuote"]==216066.67
++    assert not any(q["overBudget"] for q in report["calculation"]["quotes"])
++    evidence=[]
++    for offer in report["offers"]:
++        response=SESSION.get("http://127.0.0.1:19131/api/v1/procurement/cases/"+case_id+"/files/"+offer["documentId"]+"/evidence",timeout=10)
++        response.raise_for_status();evidence.append(response.json())
++    (EVIDENCE/(label+"-evidence.json")).write_text(json.dumps(evidence,ensure_ascii=False,indent=2),encoding="utf-8")
++    recovered=SESSION.get("http://127.0.0.1:19131/api/v1/procurement/cases/operations/"+operation,timeout=10).json()
++    assert recovered["data"]["id"]==case_id
++    print("SCENARIO_PASS "+json.dumps({"label":label,"mode":MODE,"case":case_id,"seconds":round(time.monotonic()-start),"repository":"real DM8"}),flush=True)
++    return case_id
++
++def command(request):
++    action=request["action"]
++    if action=="extended":
++        __import__("runpy").run_path(str(ROOT/"tools/automatic-case-phase2/phase2_scenarios.py"))["run"](request,globals())
++    elif action=="start":start_backend(request.get("mode","simulated"),request.get("gate"),request.get("scanDelay"))
++    elif action=="ai":start_ai()
++    elif action=="scenario":scenario(request.get("label",MODE))
++    elif action=="jdbc":
++        env=dict(BASE_ENV,JAVA_HOME=os.environ["JAVA_HOME"])
++        log=EVIDENCE/"real-dm8-junit.log"
++        with log.open("wb") as output:
++            p=subprocess.run([str(BACKEND/"mvnw.cmd"),"-Dtest=Dm8AutoCaseRealIntegrationTest","test"],cwd=BACKEND,env=env,stdout=output,stderr=subprocess.STDOUT)
++        print("JDBC_TEST_EXIT="+str(p.returncode),flush=True)
++    elif action=="frontend":
++        env=dict(os.environ,AUDIT_VITE_API_PROXY_TARGET="http://127.0.0.1:19131")
++        log=(BACKUP/"vite.log").open("wb")
++        p=subprocess.Popen(["node",str(ROOT/"frontend/node_modules/vite/bin/vite.js"),"--host","127.0.0.1","--port","19132","--strictPort"],cwd=ROOT/"frontend",env=env,stdout=log,stderr=subprocess.STDOUT)
++        CHILDREN["frontend"]=p;wait_health("http://127.0.0.1:19132",p);print("FRONTEND_READY",flush=True)
++    elif action=="browser":
++        data={"username":"phase2-auditor","password":PASSWORD,"fixtures":CONFIG["fixtures"],"evidence":str(EVIDENCE),"action":request.get("test","inspect")}
++        p=subprocess.run(["node",str(ROOT/"tools/automatic-case-phase2/browser-acceptance.mjs")],input=json.dumps(data),capture_output=True,text=True,encoding="utf-8",timeout=1300)
++        print(p.stdout,flush=True);print(p.stderr[-1500:],flush=True);print("BROWSER_EXIT="+str(p.returncode),flush=True)
++    elif action=="status":print(json.dumps({"mode":MODE,"children":{k:{"pid":v.pid,"exit":v.poll()} for k,v in CHILDREN.items()}}),flush=True)
++    elif action=="stop":return False
++    else:raise ValueError("unknown action")
++    return True
++
++print("COORDINATOR_READY",flush=True)
++try:
++    inbox=BACKUP/"coordinator-commands.jsonl"
++    inbox.touch(exist_ok=True)
++    running=True
++    with inbox.open("r",encoding="utf-8") as commands:
++      commands.seek(0,2)
++      while running:
++        line=commands.readline()
++        if not line:
++            time.sleep(.5);continue
++        try:
++            if not command(json.loads(line)):running=False
++        except Exception as error:
++            print("ACTION_FAILED type="+type(error).__name__+" message="+str(error)[:600],flush=True)
++finally:
++    for name in list(CHILDREN):stop(name)
++    TUNNEL.shutdown();TUNNEL.server_close();SSH.close()
++    print("COORDINATOR_STOPPED",flush=True)
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/AutoCaseSchemaCheck.java
+@@ -0,0 +1,109 @@
++import java.sql.*;
++import java.nio.file.*;
++import java.util.*;
++import java.util.regex.*;
++
++/** Isolated acceptance migrator: complete absence -> apply, complete match -> no-op, all unknown/partial states stop. */
++public class AutoCaseSchemaCheck {
++ static final Set<String> TABLES=Set.of("AUDIT_CASE","AUDIT_CASE_FILE","AUDIT_FACT","AUDIT_QUOTE_LINE");
++ public static void main(String[] args)throws Exception {
++  if(!"ISOLATED_AUTOCASE2".equals(System.getenv("AUDIT_CASE_TEST_DB_CONFIRM")))throw new IllegalArgumentException("isolated database confirmation required");
++  Class.forName("dm.jdbc.driver.DmDriver");
++  try(var c=DriverManager.getConnection(System.getenv("AUDIT_DB_URL"),System.getenv("AUDIT_DB_USERNAME"),System.getenv("AUDIT_DB_PASSWORD"))) {
++   check(c,Path.of(args[0]),args.length>1&&args[1].equals("apply"));
++  }
++ }
++ public static void check(Connection c,Path script,boolean apply)throws Exception {
++  if(!"ISOLATED_AUTOCASE2".equals(System.getenv("AUDIT_CASE_TEST_DB_CONFIRM")))throw new IllegalArgumentException("isolated database confirmation required");
++  String schema=c.getSchema();if(schema==null)schema=System.getenv("AUDIT_DB_USERNAME");
++  if(!schema.equals("AUTOCASE_APP"))throw new IllegalArgumentException("dedicated test schema required");
++  String source=Files.readString(script).replaceAll("(?m)^--.*$","");
++  List<String> statements=Arrays.stream(source.split(";")).map(String::strip).filter(s->!s.isEmpty()).toList();
++  var existing=new HashSet<String>();
++  try(var s=c.createStatement();var r=s.executeQuery("SELECT TABLE_NAME FROM USER_TABLES")){while(r.next())if(TABLES.contains(r.getString(1)))existing.add(r.getString(1));}
++  if(!existing.isEmpty()&&!existing.equals(TABLES))throw new IllegalStateException("PARTIAL_SCHEMA: do not replay or recreate");
++  if(existing.isEmpty()) {
++   if(!apply)throw new IllegalStateException("SCHEMA_ABSENT");
++   for(String sql:statements)try(var s=c.createStatement()){s.execute(sql);}
++   System.out.println("DDL_APPLIED="+statements.size());
++  } else System.out.println("DDL_APPLIED=0");
++  var expectedColumns=new HashMap<String,Map<String,String>>();
++  for(String sql:statements) {
++   var table=Pattern.compile("CREATE TABLE (\\w+) \\((.*)\\)",Pattern.DOTALL).matcher(sql);
++   if(!table.matches())continue;
++   String name=table.group(1);var columns=new LinkedHashMap<String,String>();
++   for(String line:table.group(2).split("\n")) {
++    var col=Pattern.compile("^\\s*(\\w+) (VARCHAR\\(\\d+\\)|DECIMAL\\(\\d+,\\d+\\)|BIGINT|INT|TIMESTAMP|CLOB) NOT NULL.*$").matcher(line);
++    if(col.matches())columns.put(col.group(1),col.group(2));
++   }
++   expectedColumns.put(name,columns);
++   try(var p=c.prepareStatement("SELECT COLUMN_NAME,DATA_TYPE,DATA_LENGTH,DATA_PRECISION,DATA_SCALE,NULLABLE FROM USER_TAB_COLUMNS WHERE TABLE_NAME=?")) {
++    p.setString(1,name);var seen=new HashSet<String>();
++    try(var r=p.executeQuery()){while(r.next()) {
++     String column=r.getString(1),expected=columns.get(column);if(expected==null)continue;
++     String type=r.getString(2).toUpperCase(Locale.ROOT);boolean match;
++     if(expected.startsWith("VARCHAR"))match=(type.equals("VARCHAR")||type.equals("VARCHAR2"))&&r.getInt(3)==Integer.parseInt(expected.replaceAll("\\D",""));
++     else if(expected.startsWith("DECIMAL")) {var nums=expected.substring(8,expected.length()-1).split(",");match=(type.equals("DECIMAL")||type.equals("DEC"))&&r.getInt(4)==Integer.parseInt(nums[0])&&r.getInt(5)==Integer.parseInt(nums[1]);}
++     else match=type.equals(expected)||expected.equals("INT")&&type.equals("INTEGER");
++     if(!match||!r.getString(6).equals("N"))throw new IllegalStateException("COLUMN_DRIFT "+name+"."+column+" actual="+type+" expected="+expected);
++     seen.add(column);
++    }}
++    if(!seen.equals(columns.keySet()))throw new IllegalStateException("MISSING_COLUMN "+name);
++   }
++  }
++  // Named constraints must be present and enabled; FK/unique column order is verified via catalog.
++  for(String sql:statements) {
++   var table=Pattern.compile("CREATE TABLE (\\w+) \\((.*)\\)",Pattern.DOTALL).matcher(sql);
++   if(!table.matches())continue;
++   String name=table.group(1);
++   var constraints=Pattern.compile("CONSTRAINT (\\w+) (UNIQUE|FOREIGN KEY|CHECK) \\(([^\\n]+)").matcher(table.group(2));
++   while(constraints.find()) {
++    String constraint=constraints.group(1),kind=constraints.group(2);
++    try(var p=c.prepareStatement("SELECT CONSTRAINT_TYPE,STATUS,SEARCH_CONDITION FROM USER_CONSTRAINTS WHERE TABLE_NAME=? AND CONSTRAINT_NAME=?")) {
++     p.setString(1,name);p.setString(2,constraint);try(var r=p.executeQuery()) {
++      if(!r.next()||!Set.of("ENABLED","ENABLE").contains(r.getString(2)))throw new IllegalStateException("CONSTRAINT_MISSING_OR_DISABLED "+constraint);
++      String expectedType=kind.equals("UNIQUE")?"U":kind.equals("CHECK")?"C":"R";
++      if(!expectedType.equals(r.getString(1)))throw new IllegalStateException("CONSTRAINT_TYPE_DRIFT "+constraint);
++      if(kind.equals("CHECK")) {
++       String expected=constraints.group(3).replaceAll(",?$","");
++       if(!canonical(expected).equals(canonical(r.getString(3))))throw new IllegalStateException("CHECK_UNKNOWN_OR_DRIFT "+constraint);
++      }
++     }
++    }
++    if(!kind.equals("CHECK")) {
++     String expected=constraints.group(3).split("\\)")[0].replace(" ","");
++     var columns=new ArrayList<String>();
++     try(var p=c.prepareStatement("SELECT COLUMN_NAME FROM USER_CONS_COLUMNS WHERE CONSTRAINT_NAME=? ORDER BY POSITION")){p.setString(1,constraint);try(var r=p.executeQuery()){while(r.next())columns.add(r.getString(1));}}
++     if(!String.join(",",columns).equals(expected))throw new IllegalStateException("CONSTRAINT_COLUMN_DRIFT "+constraint);
++     if(kind.equals("FOREIGN KEY")) {
++      var reference=Pattern.compile("REFERENCES (\\w+)\\(([^)]+)\\)").matcher(constraints.group(3));
++      if(!reference.find())throw new IllegalStateException("UNKNOWN_FK "+constraint);
++      try(var p=c.prepareStatement("SELECT C.TABLE_NAME,CC.COLUMN_NAME FROM USER_CONSTRAINTS F JOIN USER_CONSTRAINTS C ON F.R_CONSTRAINT_NAME=C.CONSTRAINT_NAME JOIN USER_CONS_COLUMNS CC ON C.CONSTRAINT_NAME=CC.CONSTRAINT_NAME WHERE F.CONSTRAINT_NAME=? ORDER BY CC.POSITION")) {
++       p.setString(1,constraint);var referenced=new ArrayList<String>();try(var r=p.executeQuery()){while(r.next()){if(!r.getString(1).equals(reference.group(1)))throw new IllegalStateException("FK_TARGET_DRIFT");referenced.add(r.getString(2));}}
++       if(!String.join(",",referenced).equals(reference.group(2)))throw new IllegalStateException("FK_COLUMN_DRIFT");
++      }
++     }
++    }
++   }
++   try(var p=c.prepareStatement("SELECT CC.COLUMN_NAME FROM USER_CONSTRAINTS C JOIN USER_CONS_COLUMNS CC ON C.CONSTRAINT_NAME=CC.CONSTRAINT_NAME WHERE C.TABLE_NAME=? AND C.CONSTRAINT_TYPE='P' AND C.STATUS='ENABLED' ORDER BY CC.POSITION")) {
++    p.setString(1,name);var primary=new ArrayList<String>();try(var r=p.executeQuery()){while(r.next())primary.add(r.getString(1));}
++    if(!primary.equals(List.of("ID")))throw new IllegalStateException("PRIMARY_KEY_DRIFT "+name);
++   }
++  }
++  for(String sql:statements) {
++   var index=Pattern.compile("CREATE INDEX (\\w+) ON (\\w+)\\(([^)]+)\\)").matcher(sql);
++   if(!index.matches())continue;var actual=new ArrayList<String>();
++   try(var p=c.prepareStatement("SELECT COLUMN_NAME FROM USER_IND_COLUMNS WHERE INDEX_NAME=? AND TABLE_NAME=? ORDER BY COLUMN_POSITION")){p.setString(1,index.group(1));p.setString(2,index.group(2));try(var r=p.executeQuery()){while(r.next())actual.add(r.getString(1));}}
++   if(!String.join(",",actual).equals(index.group(3)))throw new IllegalStateException("INDEX_DRIFT "+index.group(1));
++  }
++  System.out.println("SCHEMA_VERIFIED tables="+expectedColumns.size());
++ }
++ static String canonical(String x) {
++  // Only the script's simple atoms joined by AND, and single-column IN lists: parentheses are not used for OR/grouping.
++  if(x==null)return "";
++  String value=x.replace("\"","").replaceAll("\\s+","").toUpperCase(Locale.ROOT);
++  String grammar=x.replaceAll("'[^']*'","''");
++  if(Pattern.compile("(?i)\\b(?:OR|SELECT)\\b|[+*/]").matcher(grammar).find())throw new IllegalStateException("UNKNOWN_CHECK_GRAMMAR");
++  return value.replace("(","").replace(")","").replace("!=","<>");
++ }
++}
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/browser-acceptance.mjs
+@@ -0,0 +1,114 @@
++import { createRequire } from 'node:module';
++import fs from 'node:fs';
++import path from 'node:path';
++const require=createRequire(new URL('../../frontend/package.json',import.meta.url));
++const {chromium}=require('playwright-core');
++let input='';for await(const chunk of process.stdin)input+=chunk;
++const config=JSON.parse(input);
++const browser=await chromium.launch({headless:true});
++const context=await browser.newContext({viewport:{width:1440,height:1000}});
++const page=await context.newPage();
++const errors=[];page.on('pageerror',error=>errors.push(error.message));
++const assert=(condition,message)=>{if(!condition)throw new Error(message)};
++try {
++  await page.goto('http://127.0.0.1:19132',{waitUntil:'networkidle'});
++  if(config.action==='inspect') {
++    console.log((await page.locator('body').innerText()).slice(0,7000));
++    console.log('INPUTS',JSON.stringify(await page.locator('input').evaluateAll(elements=>elements.map(e=>({type:e.type,placeholder:e.placeholder,name:e.name})))));
++    await page.screenshot({path:path.join(config.evidence,'browser-initial.png'),fullPage:true});
++  } else {
++    await page.getByPlaceholder('请输入用户名').fill(config.username);
++    await page.locator('input[type="password"]').fill(config.password);
++    await page.getByRole('button',{name:'登录',exact:true}).click();
++    await page.getByRole('button',{name:'采购审查',exact:true}).waitFor({timeout:30000});
++    if(config.action==='login-inspect') {
++      console.log((await page.locator('body').innerText()).slice(0,8000));
++      await page.screenshot({path:path.join(config.evidence,'browser-after-login.png'),fullPage:true});
++    } else if(config.action==='evidence-review') {
++      const c=JSON.parse(fs.readFileSync(path.join(config.evidence,'browser-dm8-actual-result.json'),'utf8')).data;
++      await page.getByRole('button',{name:'采购审查',exact:true}).click();
++      const panel=page.locator('section[aria-label="上传材料自动询比价"]');await panel.waitFor();
++      await panel.locator('select').selectOption(c.id);
++      await panel.getByRole('status').filter({hasText:'询比价完成'}).waitFor();
++      await panel.getByRole('button',{name:'查看证据',exact:true}).first().click();
++      const excerpt=panel.locator('details[open] blockquote').first();await excerpt.waitFor();await excerpt.scrollIntoViewIfNeeded();
++      assert((await excerpt.innerText()).length>0,'empty source excerpt');
++      await page.screenshot({path:path.join(config.evidence,'browser-original-evidence.png'),fullPage:true});
++      console.log('BROWSER_PERSISTED_EVIDENCE_REVIEW_PASS');
++    } else if(config.action==='acceptance') {
++      await page.getByRole('button',{name:'采购审查',exact:true}).click();
++      const panel=page.locator('section[aria-label="上传材料自动询比价"]');
++      await panel.waitFor({timeout:30000});
++      assert(await panel.locator('input:not([type="file"])').count()===0,'automatic panel must not request business fields');
++      const files=fs.readdirSync(config.fixtures).sort().map(name=>path.join(config.fixtures,name));assert(files.length===12,'expected 12 files');
++      const progress=[];
++      let id;
++      page.on('response',async response=>{
++        if(id && response.url().endsWith('/api/v1/procurement/cases/'+id) && response.status()===200) {
++          const c=(await response.json()).data;
++          progress.push({state:c.status,extracted:c.documents.filter(d=>d.status==='EXTRACTED').length,total:c.documents.length});
++        }
++      });
++      const uploadResponse=page.waitForResponse(r=>r.url().endsWith('/api/v1/procurement/cases')&&r.request().method()==='POST');
++      await panel.getByLabel('选择采购材料并开始分析').setInputFiles(files);
++      const response=await uploadResponse;const uploaded=await response.json();
++      assert(response.status()===200 && uploaded.code===200,'browser upload failed');id=uploaded.data.id;
++      await panel.getByRole('status').filter({hasText:/已提取/}).waitFor();
++      await page.screenshot({path:path.join(config.evidence,'browser-processing.png'),fullPage:true});
++      // Reload while processing: keep the original operation/case and resume polling automatically.
++      await page.reload({waitUntil:'networkidle'});
++      if(!await panel.isVisible())await page.getByRole('button',{name:'采购审查',exact:true}).click();
++      await panel.waitFor();
++      assert(await panel.locator('select').inputValue()===id,'refresh lost the active case');
++      await panel.getByRole('status').filter({hasText:'询比价完成'}).waitFor({timeout:1200000});
++      const text=await panel.innerText();
++      for(const expected of ['222600','212000','216400','219800','216066.67','澄川星河办公设备有限公司','澄川明川数字设备有限公司','澄川启衡信息设备有限公司'])assert(text.includes(expected),'missing browser result '+expected);
++      assert((text.match(/明细核算：一致/g)||[]).length===3,'expected 3 verified line groups');
++      const result=await page.request.get('http://127.0.0.1:19132/api/v1/procurement/cases/'+id);
++      const completed=await result.json();assert(completed.data.status==='COMPLETED','durable result is not completed');
++      const allEvidence=[];
++      for(const doc of completed.data.documents) {
++        const r=await page.request.get('http://127.0.0.1:19132/api/v1/procurement/cases/'+id+'/files/'+doc.id+'/evidence');
++        assert(r.status()===200,'evidence HTTP failure');allEvidence.push(await r.json());
++      }
++      fs.writeFileSync(path.join(config.evidence,'browser-dm8-actual-result.json'),JSON.stringify(completed,null,2));
++      fs.writeFileSync(path.join(config.evidence,'browser-dm8-actual-evidence.json'),JSON.stringify(allEvidence,null,2));
++      await panel.getByRole('button',{name:'查看证据',exact:true}).first().click();
++      await panel.locator('details[open] blockquote').first().waitFor();
++      await page.screenshot({path:path.join(config.evidence,'browser-completed-evidence.png'),fullPage:true});
++      const downloadEvent=page.waitForEvent('download');
++      await panel.getByRole('link',{name:'原始文件',exact:true}).first().click();
++      const download=await downloadEvent;assert(await download.failure()===null,'original file download failed');
++      await page.reload({waitUntil:'networkidle'});
++      if(!await panel.isVisible())await page.getByRole('button',{name:'采购审查',exact:true}).click();
++      await panel.getByRole('status').filter({hasText:'询比价完成'}).waitFor();
++      assert(await panel.locator('select').inputValue()===id,'completed case lost after refresh');
++      // Real HTTP rejects a disguised PDF. The UI must retain the original key without creating a success case.
++      const failedResponse=page.waitForResponse(r=>r.url().endsWith('/api/v1/procurement/cases')&&r.request().method()==='POST');
++      await panel.getByLabel('选择采购材料并开始分析').setInputFiles({name:'invalid-signature.pdf',mimeType:'application/pdf',buffer:Buffer.from('plain text, invalid PDF signature')});
++      const rejected=await failedResponse;assert(rejected.status()===400,'invalid signature was not rejected');
++      await panel.getByRole('alert').waitFor();
++      assert(!(await panel.innerText()).includes('询比价完成'),'failed upload displayed an old success as its result');
++      const saved=await page.evaluate(()=>Object.entries(localStorage).filter(([k])=>k.startsWith('procurement-auto-case-v1:')).map(([k,v])=>[k,JSON.parse(v)]));
++      const pending=saved.find(([,v])=>v.key&&!v.caseId);assert(pending,'uncertain upload identity was lost');
++      const key=pending[1].key;
++      // Simulate an operation-query network failure during refresh; never silently abandon its identity.
++      await page.route('**/api/v1/procurement/cases/operations/'+key,route=>route.abort('connectionfailed'));
++      await page.reload({waitUntil:'networkidle'});
++      if(!await panel.isVisible())await page.getByRole('button',{name:'采购审查',exact:true}).click();
++      await panel.getByRole('alert').waitFor();
++      assert(!(await panel.innerText()).includes('询比价完成'),'uncertain refresh displayed a success result');
++      const preserved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),pending[0]);
++      assert(preserved.key===key && !preserved.caseId,'refresh changed an uncertain operation');
++      await page.screenshot({path:path.join(config.evidence,'browser-failed-upload.png'),fullPage:true});
++      assert(progress.some(p=>p.state==='RUNNING'),'no real running progress observed');
++      assert(progress.some(p=>p.extracted>0 && p.extracted<12),'no partial extraction progress observed');
++      assert(errors.length===0,'uncaught browser errors');
++      fs.writeFileSync(path.join(config.evidence,'browser-acceptance.json'),JSON.stringify({browser:'Playwright Chromium, real DOM and HTTP',caseId:id,files:12,progress,uploaded,completedVisible:true,processingRefreshRecovered:true,completedRefreshRecovered:true,evidenceVisible:true,originalDownload:true,invalidSignatureHttpStatus:rejected.status(),failedUploadPreservedOperation:true,networkFailurePreservedOperation:true,pageErrors:errors},null,2));
++      console.log('BROWSER_ACCEPTANCE_PASS case='+id);
++    } else {
++      throw new Error('Acceptance interactions must be selected from the observed page, run login-inspect first');
++    }
++  }
++  console.log('PAGE_ERRORS',JSON.stringify(errors));
++}finally{await browser.close();}
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/Dm8BackupManifest.java
+@@ -0,0 +1,63 @@
++import java.sql.*;
++import java.io.*;
++import java.nio.file.*;
++import java.nio.charset.StandardCharsets;
++import java.security.*;
++import java.util.*;
++
++/** Exact data digests under explicit SHARE locks; no DDL or DML on the source. */
++class Dm8BackupManifest {
++ static String hex(byte[] b){return HexFormat.of().formatHex(b);}
++ static String q(String s){return "\""+s.replace("\"","\"\"")+"\"";}
++ static void add(MessageDigest d,byte[] b){d.update(java.nio.ByteBuffer.allocate(8).putLong(b.length).array());d.update(b);}
++ public static void main(String[] args)throws Exception {
++  Class.forName("dm.jdbc.driver.DmDriver");
++  try(var c=DriverManager.getConnection(System.getenv("AUDIT_DB_URL"),System.getenv("AUDIT_DB_USERNAME"),System.getenv("AUDIT_DB_PASSWORD"))) {
++   c.setAutoCommit(false);
++   String schema=System.getenv("AUDIT_MANIFEST_SCHEMA");
++   if(schema==null)schema=c.getSchema()==null?System.getenv("AUDIT_DB_USERNAME"):c.getSchema();
++   var tables=new ArrayList<String>();
++   try(var p=c.prepareStatement("SELECT TABLE_NAME FROM ALL_TABLES WHERE OWNER=? ORDER BY TABLE_NAME")) {
++    p.setString(1,schema);try(var r=p.executeQuery()){while(r.next())tables.add(r.getString(1));}
++   }
++   if(tables.isEmpty())throw new IllegalStateException("empty backup source");
++   String extra=System.getenv("AUDIT_EXTRA_TABLE");
++   if(extra!=null){if(!extra.matches("[A-Z0-9_]+\\.[A-Z0-9_]+"))throw new IllegalArgumentException();tables.add(extra);Collections.sort(tables);}
++   if(args[0].equals("lock")) {
++    for(String t:tables)try(var s=c.createStatement()){s.setQueryTimeout(5);s.execute("LOCK TABLE "+qualified(schema,t)+" IN SHARE MODE NOWAIT");}
++    System.out.println("LOCKS_ACQUIRED tables="+tables.size());System.out.flush();
++   }
++   var manifest=new StringBuilder();
++   for(String t:tables) {
++    var rowHashes=new ArrayList<String>();var columns=new StringBuilder();
++    try(var s=c.createStatement()) {
++     s.setQueryTimeout(60);
++     try(var r=s.executeQuery("SELECT * FROM "+qualified(schema,t))) {
++      var m=r.getMetaData();
++      for(int i=1;i<=m.getColumnCount();i++)columns.append(m.getColumnName(i)).append(':').append(m.getColumnTypeName(i)).append(':').append(m.getPrecision(i)).append(':').append(m.getScale(i)).append(';');
++      while(r.next()) {
++       var digest=MessageDigest.getInstance("SHA-256");
++       for(int i=1;i<=m.getColumnCount();i++) {
++        Object v=r.getObject(i);
++        if(v==null){digest.update((byte)0);continue;}digest.update((byte)1);
++        if(v instanceof Clob lob)add(digest,lob.getSubString(1,Math.toIntExact(lob.length())).getBytes(StandardCharsets.UTF_8));
++        else if(v instanceof Blob lob)add(digest,lob.getBytes(1,Math.toIntExact(lob.length())));
++        else if(v instanceof byte[] b)add(digest,b);
++        else add(digest,r.getString(i).getBytes(StandardCharsets.UTF_8));
++       }
++       rowHashes.add(hex(digest.digest()));
++      }
++     }
++    }
++    Collections.sort(rowHashes);var d=MessageDigest.getInstance("SHA-256");
++    add(d,columns.toString().getBytes(StandardCharsets.UTF_8));for(String h:rowHashes)add(d,h.getBytes(StandardCharsets.UTF_8));
++    manifest.append(t).append('\t').append(rowHashes.size()).append('\t').append(hex(d.digest())).append('\n');
++   }
++   Files.writeString(Path.of(args[1]),manifest);
++   System.out.println("MANIFEST_READY tables="+tables.size());System.out.flush();
++   if(args[0].equals("lock"))new BufferedReader(new InputStreamReader(System.in)).readLine();
++   c.rollback();
++  }
++ }
++ static String qualified(String schema,String table){String[] parts=table.split("\\.");return parts.length==2?q(parts[0])+"."+q(parts[1]):q(schema)+"."+q(table);}
++}
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/Dm8EnvironmentProbe.java
+@@ -0,0 +1,34 @@
++import java.sql.*;
++import java.util.*;
++
++/** Read-only environment/privilege inspection. Connection secrets come only from environment. */
++class Dm8EnvironmentProbe {
++    public static void main(String[] args) throws Exception {
++        Class.forName("dm.jdbc.driver.DmDriver");
++        try (Connection c=DriverManager.getConnection(System.getenv("AUDIT_DB_URL"),System.getenv("AUDIT_DB_USERNAME"),System.getenv("AUDIT_DB_PASSWORD"))) {
++            c.setReadOnly(true);c.setAutoCommit(false);
++            var m=c.getMetaData();
++            System.out.println("DB_PRODUCT="+m.getDatabaseProductName());
++            System.out.println("DB_VERSION="+m.getDatabaseProductVersion());
++            System.out.println("DRIVER_VERSION="+m.getDriverVersion());
++            for (String sql:List.of("SELECT * FROM SESSION_PRIVS","SELECT GRANTED_ROLE FROM USER_ROLE_PRIVS",
++                    "SELECT PRIVILEGE FROM USER_SYS_PRIVS","SELECT COUNT(*) FROM USER_TABLES",
++                    "SELECT * FROM V$VERSION","SELECT STATUS$ FROM V$DATABASE",
++                    "SELECT COUNT(*) FROM USER_TRIGGERS","SELECT COUNT(*) FROM USER_VIEWS",
++                    "SELECT COUNT(*) FROM USER_PROCEDURES")) {
++                try (Statement s=c.createStatement()) {
++                    s.setQueryTimeout(10);
++                    try (ResultSet r=s.executeQuery(sql)) {
++                        System.out.println("QUERY="+sql);
++                        while(r.next()) {
++                            var row=new ArrayList<String>();
++                            for(int i=1;i<=r.getMetaData().getColumnCount();i++)row.add(r.getString(i));
++                            System.out.println(String.join(" | ",row));
++                        }
++                    }
++                } catch(SQLException e){System.out.println("QUERY_CODE="+e.getErrorCode()+" QUERY="+sql);}
++            }
++            c.rollback();
++        }
++    }
++}
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/Dm8LockSemantics.java
+@@ -0,0 +1,29 @@
++import java.sql.*;
++import java.util.concurrent.*;
++
++/** Establish SHARE/NOWAIT behavior on the isolated instance before using backup locks. */
++class Dm8LockSemantics {
++ static Connection open()throws SQLException{return DriverManager.getConnection(System.getenv("AUDIT_DB_URL"),System.getenv("AUDIT_DB_USERNAME"),System.getenv("AUDIT_DB_PASSWORD"));}
++ public static void main(String[] a)throws Exception {
++  if(!System.getenv("AUDIT_DB_URL").equals("jdbc:dm://127.0.0.1:15287"))throw new IllegalArgumentException();
++  Class.forName("dm.jdbc.driver.DmDriver");
++  try(var first=open();var second=open()) {
++   first.setAutoCommit(false);second.setAutoCommit(false);
++   first.createStatement().execute("LOCK TABLE LOCK_PROBE IN SHARE MODE NOWAIT");
++   var future=CompletableFuture.supplyAsync(()->{
++    try{second.createStatement().executeUpdate("UPDATE LOCK_PROBE SET ID=2 WHERE ID=1");return true;}
++    catch(SQLException e){throw new CompletionException(e);}
++   });
++   try{future.get(750,TimeUnit.MILLISECONDS);throw new AssertionError("SHARE lock did not block update");}
++   catch(TimeoutException expected){System.out.println("SHARE_BLOCKS_WRITER=PASS");}
++   first.rollback();
++   if(!future.get(5,TimeUnit.SECONDS))throw new AssertionError();second.rollback();
++   second.createStatement().executeUpdate("UPDATE LOCK_PROBE SET ID=2 WHERE ID=1");
++   long start=System.nanoTime();
++   try{first.createStatement().execute("LOCK TABLE LOCK_PROBE IN SHARE MODE NOWAIT");throw new AssertionError("NOWAIT did not reject conflicting writer");}
++   catch(SQLException e){System.out.println("NOWAIT_CONFLICT_CODE="+e.getErrorCode());}
++   if(System.nanoTime()-start>TimeUnit.SECONDS.toNanos(2))throw new AssertionError("NOWAIT blocked");
++   second.rollback();first.rollback();System.out.println("LOCK_SEMANTICS=PASS");
++  }
++ }
++}
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/IsolatedSql.java
+@@ -0,0 +1,24 @@
++import java.sql.*;
++import java.io.*;
++import java.nio.charset.StandardCharsets;
++
++/** Administrative SQL restricted to the dedicated newly created loopback instance. */
++class IsolatedSql {
++ public static void main(String[] args)throws Exception {
++  String url=System.getenv("AUDIT_DB_URL");
++  if(url==null||!url.matches("jdbc:dm://127\\.0\\.0\\.1:15287(?:[/?;].*)?"))throw new IllegalArgumentException("isolated instance required");
++  Class.forName("dm.jdbc.driver.DmDriver");
++  try(var c=DriverManager.getConnection(url,System.getenv("AUDIT_DB_USERNAME"),System.getenv("AUDIT_DB_PASSWORD"));
++      var lines=new BufferedReader(new InputStreamReader(System.in,StandardCharsets.UTF_8))) {
++   for(String line;(line=lines.readLine())!=null;) {
++    if(line.isBlank())continue;
++    try(var s=c.createStatement()) {
++     s.setQueryTimeout(30);
++     if(s.execute(line))try(var r=s.getResultSet()) {
++      while(r.next()){for(int i=1;i<=r.getMetaData().getColumnCount();i++)System.out.print((i==1?"":" | ")+r.getString(i));System.out.println();}
++     } else System.out.println("SQL_OK rows="+s.getUpdateCount());
++    }catch(SQLException e){System.out.println("SQL_ERROR code="+e.getErrorCode());System.exit(2);}
++   }
++  }
++ }
++}
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/phase2_scenarios.py
+@@ -0,0 +1,151 @@
++"""Additional isolated acceptance scenarios; loaded on demand by the coordinator."""
++import hashlib
++import json
++import time
++import uuid
++from pathlib import Path
++
++BASE="http://127.0.0.1:19131/api/v1/procurement/cases"
++
++def run(request, ctx):
++    ctx["SSH"].get_transport().set_keepalive(15)
++    evidence=ctx["EVIDENCE"]
++    def get(case_id):
++        for attempt in range(12):
++            r=ctx["SESSION"].get(BASE+"/"+case_id,timeout=20)
++            if r.status_code!=409:r.raise_for_status();return r.json()["data"]
++            time.sleep(.2)
++        raise RuntimeError("case remained busy after bounded HTTP retry")
++    def upload(paths):
++        session=ctx["SESSION"]
++        token=session.get("http://127.0.0.1:19131/api/v1/auth/csrf",timeout=10).json()["data"]["token"]
++        from contextlib import ExitStack
++        with ExitStack() as stack:
++            files=[("files",(p.name,stack.enter_context(p.open("rb")))) for p in paths]
++            r=session.post(BASE,files=files,headers={"X-CSRF-TOKEN":token,"Idempotency-Key":str(uuid.uuid4())},timeout=90)
++        r.raise_for_status();value=r.json();assert value["code"]==200,value
++        return value["data"]
++    def await_case(case_id,condition,seconds=180):
++        deadline=time.monotonic()+seconds
++        while time.monotonic()<deadline:
++            value=get(case_id)
++            if condition(value):return value
++            time.sleep(.5)
++        raise RuntimeError("isolated restart scenario timed out: "+case_id)
++    test=request["test"]
++    if test=="restart":
++        completed=json.loads((evidence/"dm8-simulated-result.json").read_text(encoding="utf-8"))["data"]
++        ctx["start_backend"]("simulated",scan_delay=600000)
++        assert get(completed["id"])==completed
++        # A real process restart with no schema/data edits. A long scan delay leaves the new case queued.
++        paths=sorted(Path(ctx["CONFIG"]["fixtures"]).iterdir())
++        queued=upload(paths);assert queued["status"]=="QUEUED"
++        ctx["stop"]("backend")
++        ctx["start_backend"]("simulated")
++        recovered=await_case(queued["id"],lambda c:c["status"] not in ["QUEUED","RUNNING","UPLOADING"])
++        assert recovered["status"]=="COMPLETED"
++        assert len(recovered["report"]["offers"])==3
++        # Terminate during a persisted CALLING checkpoint. Advance only the test-injected clock,
++        # rather than waiting 30 minutes or editing a lease in DM8.
++        gate=ctx["BACKUP"]/"never-open-model-gate"
++        assert not gate.exists()
++        ctx["start_backend"]("simulated",gate=gate)
++        interrupted=upload([paths[0]])
++        calling=await_case(interrupted["id"],lambda c:any(d["status"]=="CALLING" for d in c["documents"]))
++        ctx["stop"]("backend")
++        ctx["BASE_ENV"]["AUDIT_CASE_TEST_CLOCK_OFFSET_SECONDS"]="1860"
++        try:
++            ctx["start_backend"]("simulated")
++            unknown=await_case(interrupted["id"],lambda c:c["status"] not in ["QUEUED","RUNNING","UPLOADING"])
++            assert unknown["documents"][0]["status"]=="UNKNOWN"
++            assert unknown["documents"][0]["errorCode"]=="EXECUTOR_LOST_EXTERNAL_OUTCOME_UNKNOWN"
++            assert unknown["status"]!="COMPLETED"
++        finally:ctx["BASE_ENV"].pop("AUDIT_CASE_TEST_CLOCK_OFFSET_SECONDS",None)
++        result={"environment":"isolated real DM8, real HTTP, real Java process restarts, simulated semantic model",
++                "completedReopenIdentical":True,"queuedBeforeRestart":queued,"queuedAfterRestart":recovered,
++                "callingBeforeTermination":calling,"afterLeaseExpiryRestart":unknown,
++                "leaseExpiryMethod":"test-only injected Clock offset +1860 seconds; no database edits",
++                "externalCallReplayed":False}
++        (evidence/"restart-recovery.json").write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8")
++        print("RESTART_PASS completed-reopen queued-auto-resume CALLING-UNKNOWN-no-replay",flush=True)
++    elif test=="reopen":
++        label=request["label"]
++        original=json.loads((evidence/(label+"-result.json")).read_text(encoding="utf-8"))["data"]
++        ctx["start_backend"](ctx["MODE"])
++        reopened=get(original["id"]);assert reopened==original
++        originals=[]
++        paths={p.name:p for p in Path(ctx["CONFIG"]["fixtures"]).iterdir()}
++        for doc in reopened["documents"]:
++            response=ctx["SESSION"].get(BASE+"/"+reopened["id"]+"/files/"+doc["id"]+"/original",timeout=15)
++            response.raise_for_status()
++            expected=hashlib.sha256(paths[doc["name"]].read_bytes()).hexdigest()
++            actual=hashlib.sha256(response.content).hexdigest();assert expected==actual
++            originals.append({"file":doc["name"],"sha256":actual,"bytes":len(response.content)})
++        (evidence/(label+"-reopen-originals.json")).write_text(json.dumps({"reopenIdentical":True,"case":reopened["id"],"originals":originals},ensure_ascii=False,indent=2),encoding="utf-8")
++        print("REOPEN_ORIGINALS_PASS "+label,flush=True)
++    elif test=="frontend":
++        import subprocess
++        ctx["stop"]("frontend")
++        env=dict(ctx["os"].environ,AUDIT_VITE_API_PROXY_TARGET="http://127.0.0.1:19131",VITE_AUTH_MODE="real",VITE_API_BASE_URL="")
++        log=(ctx["BACKUP"]/"vite.log").open("wb")
++        p=subprocess.Popen(["node",str(ctx["ROOT"]/"frontend/node_modules/vite/bin/vite.js"),"--host","127.0.0.1","--port","19132","--strictPort"],cwd=ctx["ROOT"]/"frontend",env=env,stdout=log,stderr=subprocess.STDOUT)
++        ctx["CHILDREN"]["frontend"]=p;ctx["wait_health"]("http://127.0.0.1:19132",p)
++        print("FRONTEND_REAL_AUTH_READY",flush=True)
++    elif test in ["schema","database"]:
++        import subprocess
++        env=dict(ctx["BASE_ENV"],AUDIT_DB_URL=ctx["BASE_ENV"]["AUDIT_CASE_TEST_DB_URL"],AUDIT_DB_USERNAME=ctx["STATE"]["application_user"],AUDIT_DB_PASSWORD=ctx["STATE"]["application_password"])
++        java=str(ctx["JAVA"]);javac=str(ctx["JAVA"].with_name("javac.exe"))
++        out=ctx["BACKUP"]/"schema-check-classes";out.mkdir(exist_ok=True)
++        sources=[ctx["ROOT"]/"tools/automatic-case-phase2/AutoCaseSchemaCheck.java",ctx["ROOT"]/"tools/automatic-case-phase2/Phase2DatabaseEvidence.java"]
++        subprocess.run([javac,"--release","17","-encoding","UTF-8","-cp",ctx["CP"],"-d",str(out)]+list(map(str,sources)),check=True,capture_output=True)
++        cp=str(out)+ctx["os"].pathsep+ctx["CP"]
++        def snapshot():
++            p=subprocess.run([java,"-cp",cp,"Phase2DatabaseEvidence"],env=env,capture_output=True,text=True,encoding="utf-8")
++            assert p.returncode==0,p.stderr
++            return json.loads(p.stdout)
++        before=snapshot()
++        if test=="database":
++            (evidence/"database-catalog-and-data.json").write_text(json.dumps(before,ensure_ascii=False,indent=2),encoding="utf-8")
++            print("DATABASE_EVIDENCE_SAVED",flush=True);return
++        p=subprocess.run([java,"-cp",cp,"AutoCaseSchemaCheck",str(ctx["ROOT"]/"db/dm8/PROCUREMENT__automatic_case_v1.sql"),"apply"],env=env,capture_output=True,text=True)
++        (evidence/"schema-repeat-with-data.log").write_text(p.stdout+p.stderr,encoding="utf-8")
++        assert p.returncode==0,p.stdout+p.stderr
++        after=snapshot();assert before["tables"]==after["tables"]
++        (evidence/"schema-repeat-data-integrity.json").write_text(json.dumps({"before":before["tables"],"after":after["tables"],"identical":True},indent=2),encoding="utf-8")
++        print("SCHEMA_REPEAT_WITH_DATA_PASS",flush=True)
++    elif test=="feature-off":
++        original=json.loads((evidence/"dm8-actual-result.json").read_text(encoding="utf-8"))["data"]
++        ctx["BASE_ENV"]["SPRING_APPLICATION_JSON"]=json.dumps({"audit":{"procurement":{"auto-case":{"enabled":False}}}})
++        try:
++            ctx["start_backend"]("actual")
++            response=ctx["SESSION"].get(BASE,timeout=15);assert response.status_code==404
++        finally:ctx["BASE_ENV"].pop("SPRING_APPLICATION_JSON",None)
++        ctx["start_backend"]("actual")
++        assert get(original["id"])==original
++        (evidence/"feature-off-reopen.json").write_text(json.dumps({"disabledHttpStatus":404,"reenabledOriginalCaseIdentical":True,"scope":"isolated harness only; no existing service or production switch changed"},indent=2),encoding="utf-8")
++        print("FEATURE_OFF_404_REOPEN_PASS",flush=True)
++    elif test=="finalize":
++        import shlex
++        # Stop local writers first; the remote script checks the exact PID and ini path before SIGTERM.
++        for name in list(ctx["CHILDREN"]):ctx["stop"](name)
++        remote=ctx["REMOTE"]+"/remote_finalize.py"
++        ctx["SFTP"].put(str(ctx["ROOT"]/"tools/automatic-case-phase2/remote_finalize.py"),remote)
++        _,stdout,stderr=ctx["SSH"].exec_command("python3 "+shlex.quote(remote)+" "+shlex.quote(ctx["REMOTE"]))
++        text=stdout.read().decode();code=stdout.channel.recv_exit_status()
++        assert code==0,"isolated finalization failed: "+stderr.read().decode()[:300]
++        result=json.loads(text)
++        (evidence/"finalization.json").write_text(json.dumps(result,indent=2),encoding="utf-8")
++        cookie=ctx["BACKUP"]/"curl-session.cookies"
++        if cookie.exists():cookie.unlink()
++        print("FINALIZATION_PASS "+json.dumps(result),flush=True)
++    elif test=="collect":
++        destination=ctx["BACKUP"]/"remote-evidence";destination.mkdir(exist_ok=True)
++        names=ctx["SFTP"].listdir(ctx["REMOTE"])
++        hashes=[]
++        for name in names:
++            if name.endswith((".log",".tsv")) or name in ["restore-data-validation.json","consistent-backup-status.json"]:
++                target=destination/name;ctx["SFTP"].get(ctx["REMOTE"]+"/"+name,str(target))
++                hashes.append({"file":name,"bytes":target.stat().st_size,"sha256":hashlib.sha256(target.read_bytes()).hexdigest()})
++        (evidence/"protected-remote-evidence-manifest.json").write_text(json.dumps(hashes,indent=2),encoding="utf-8")
++        print("PROTECTED_REMOTE_EVIDENCE_COLLECTED "+str(len(hashes)),flush=True)
++    else:raise ValueError("unknown extended scenario")
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/Phase2DatabaseEvidence.java
+@@ -0,0 +1,54 @@
++import java.sql.*;
++import java.security.MessageDigest;
++import java.nio.charset.StandardCharsets;
++import java.util.*;
++import com.fasterxml.jackson.databind.json.JsonMapper;
++
++/** Read-only catalog/data evidence, restricted to the separate acceptance database. */
++public class Phase2DatabaseEvidence {
++ public static void main(String[] args)throws Exception {
++  if(!"ISOLATED_AUTOCASE2".equals(System.getenv("AUDIT_CASE_TEST_DB_CONFIRM")))throw new IllegalStateException("isolated database required");
++  var json=JsonMapper.builder().findAndAddModules().build();var output=new LinkedHashMap<String,Object>();
++  try(var c=DriverManager.getConnection(System.getenv("AUDIT_CASE_TEST_DB_URL"),System.getenv("AUDIT_CASE_TEST_DB_USERNAME"),System.getenv("AUDIT_CASE_TEST_DB_PASSWORD"))) {
++   if(!"AUTOCASE_APP".equals(c.getSchema()))throw new IllegalStateException("wrong schema");
++   output.put("environment","separate AUTOCASE2 instance / AUTOCASE_APP schema / real DM8");
++   var tables=new LinkedHashMap<String,Object>();
++   for(String table:List.of("AUDIT_CASE","AUDIT_CASE_FILE","AUDIT_FACT","AUDIT_QUOTE_LINE")) {
++    var digest=MessageDigest.getInstance("SHA-256");long count=0;
++    try(var s=c.createStatement();var r=s.executeQuery("SELECT * FROM "+table+" ORDER BY ID")) {
++     while(r.next()){count++;for(int i=1;i<=r.getMetaData().getColumnCount();i++) {
++      String value=r.getString(i);byte[] bytes=value==null?new byte[0]:value.getBytes(StandardCharsets.UTF_8);
++      digest.update((value==null?"null:":bytes.length+":").getBytes(StandardCharsets.UTF_8));digest.update(bytes);
++     }}
++    }
++    tables.put(table,Map.of("rows",count,"sha256",HexFormat.of().formatHex(digest.digest())));
++   }
++   output.put("tables",tables);
++   for(String catalog:List.of("USER_TAB_COLUMNS","USER_CONSTRAINTS","USER_CONS_COLUMNS","USER_INDEXES","USER_IND_COLUMNS")) {
++    var rows=new ArrayList<Map<String,Object>>();
++    String fields=switch(catalog) {
++     case "USER_TAB_COLUMNS"->"TABLE_NAME,COLUMN_NAME,DATA_TYPE,DATA_LENGTH,DATA_PRECISION,DATA_SCALE,NULLABLE";
++     case "USER_CONSTRAINTS"->"TABLE_NAME,CONSTRAINT_NAME,CONSTRAINT_TYPE,STATUS,SEARCH_CONDITION,R_CONSTRAINT_NAME";
++     case "USER_CONS_COLUMNS"->"TABLE_NAME,CONSTRAINT_NAME,COLUMN_NAME,POSITION";
++     case "USER_INDEXES"->"TABLE_NAME,INDEX_NAME,UNIQUENESS";
++     default->"TABLE_NAME,INDEX_NAME,COLUMN_NAME,COLUMN_POSITION";
++    };
++    try(var s=c.createStatement();var r=s.executeQuery("SELECT "+fields+" FROM "+catalog+" WHERE TABLE_NAME IN ('AUDIT_CASE','AUDIT_CASE_FILE','AUDIT_FACT','AUDIT_QUOTE_LINE') ORDER BY TABLE_NAME")) {
++     while(r.next()){var row=new LinkedHashMap<String,Object>();for(int i=1;i<=r.getMetaData().getColumnCount();i++)row.put(r.getMetaData().getColumnLabel(i),r.getString(i));rows.add(row);}
++    }
++    output.put(catalog,rows);
++   }
++   var cases=new ArrayList<Map<String,Object>>();
++   try(var s=c.createStatement();var r=s.executeQuery("SELECT ID,STATUS,ROW_VERSION,SNAPSHOT_JSON FROM AUDIT_CASE ORDER BY CREATED_AT")) {
++    while(r.next()) {
++     var row=new LinkedHashMap<String,Object>();row.put("id",r.getString(1));row.put("status",r.getString(2));row.put("version",r.getLong(3));row.put("attempts",json.readTree(r.getString(4)).path("attempts").asInt());
++     for(String table:List.of("AUDIT_CASE_FILE","AUDIT_FACT","AUDIT_QUOTE_LINE"))try(var p=c.prepareStatement("SELECT COUNT(*) FROM "+table+" WHERE CASE_ID=?")){p.setString(1,r.getString(1));try(var n=p.executeQuery()){n.next();row.put(table,n.getLong(1));}}
++     cases.add(row);
++    }
++   }
++   output.put("cases",cases);
++   try(var s=c.createStatement();var r=s.executeQuery("SELECT COUNT(*) FROM AUTO_CASE_TEST_AUDIT")){r.next();output.put("testDurableOperationAuditRows",r.getLong(1));}
++  }
++  System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(output));
++ }
++}
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/remote_backup.py
+@@ -0,0 +1,63 @@
++"""Consistent native backup: verified SHARE locks + ordinary dexp, no flashback changes."""
++import hashlib
++import json
++import os
++from pathlib import Path
++import re
++import selectors
++import shlex
++import subprocess
++import sys
++import time
++
++os.umask(0o077)
++job=Path(sys.argv[1]).resolve()
++assert str(job).startswith(str(Path.home()/"audit-agent-backups"/"auto-case-phase2-"))
++env=dict(os.environ)
++for path in ["/etc/audit-agent/backend.env","/opt/audit-agent/current/deploy/update-v10/backend.env"]:
++    for line in Path(path).read_text().splitlines():
++        line=line.strip()
++        if not line or line.startswith("#") or "=" not in line:continue
++        if line.startswith("export "):line=line[7:]
++        key,value=line.split("=",1);env[key]=" ".join(shlex.split(value,comments=False))
++assert re.match(r"jdbc:dm://(?:127\.0\.0\.1|localhost):",env["AUDIT_DB_URL"])
++assert env["AUDIT_DB_USERNAME"].upper() not in ["SYSDBA","SYSAUDITOR"]
++env["AUDIT_EXTRA_TABLE"]="SYSDBA.PROCUREMENT_DEMAND"
++driver="/home/admin/audit-agent-backups/auto-case-before-20261027/dm-driver.jar"
++holder=subprocess.Popen(["/opt/java/current/bin/java","--class-path",driver,str(job/"Dm8BackupManifest.java"),"lock",str(job/"source-manifest.tsv")],
++    env=env,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,universal_newlines=True)
++status={"source":"user-confirmed test26 existing application schema","writes_to_source":False,"native_export":"NOT_EXECUTED","restore":"NOT_VERIFIED"}
++try:
++    deadline=time.monotonic()+100
++    while True:
++        selector=selectors.DefaultSelector();selector.register(holder.stdout,selectors.EVENT_READ)
++        if not selector.select(max(0,deadline-time.monotonic())):raise RuntimeError("backup lock/manifest deadline")
++        line=holder.stdout.readline()
++        print(line.strip(),flush=True)
++        if line.startswith("MANIFEST_READY"):break
++        if not line:raise RuntimeError("source lock failed; no export")
++    match=re.match(r"jdbc:dm://([^/?;]+)",env["AUDIT_DB_URL"])
++    host=match.group(1)
++    user=env["AUDIT_DB_USERNAME"]
++    names=[line.split("\t")[0] for line in (job/"source-manifest.tsv").read_text().splitlines()]
++    tables=",".join(name if "." in name else user+"."+name for name in names)
++    args=["/opt/dmdbms/bin/dexp","USERID="+user+"@"+host,"TABLES=("+tables+")","DIRECTORY="+str(job),
++          "FILE=consistent-with-dependency.dmp","LOG="+str(job/"consistent-export-dependency.log"),
++          "WITH_UR=N","ROWS=Y","CONSTRAINTS=Y","INDEXES=Y","GRANTS=Y","TRIGGERS=Y",
++          "PARALLEL=1","TABLE_PARALLEL=1","DUMMY=N"]
++    exported=subprocess.run(args,input=(env["AUDIT_DB_PASSWORD"]+"\n").encode(),env=env,
++        stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=90)
++    console=exported.stdout.replace(env["AUDIT_DB_PASSWORD"].encode(),b"<redacted>")
++    (job/"consistent-export-dependency.console.log").write_bytes(console)
++    status["native_exit"]=exported.returncode
++    status["native_export"]="COMPLETED_PENDING_RESTORE" if exported.returncode==0 else "FAILED"
++    dump=job/"consistent-with-dependency.dmp"
++    if dump.exists():
++        status["bytes"]=dump.stat().st_size;status["sha256"]=hashlib.sha256(dump.read_bytes()).hexdigest()
++    (job/"source-schema.txt").write_text(user)
++finally:
++    try:holder.communicate("release\n",timeout=10)
++    except Exception:holder.kill();holder.communicate()
++    status["locks_released"]=True
++    (job/"consistent-backup-status.json").write_text(json.dumps(status,indent=2))
++    print(json.dumps(status),flush=True)
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/remote_finalize.py
+@@ -0,0 +1,33 @@
++"""Stop only the instance created for this acceptance run; preserve its data and all original services."""
++import json
++import os
++from pathlib import Path
++import signal
++import subprocess
++import sys
++import time
++
++job=Path(sys.argv[1]).resolve()
++if not str(job).startswith(str(Path.home()/"audit-agent-backups"/"auto-case-phase2-")):
++    raise SystemExit("Unexpected experiment directory")
++state=json.loads((job/"isolated-instance.json").read_text())
++pid=state["pid"]
++cmdline=Path("/proc")/str(pid)/"cmdline"
++if cmdline.exists():
++    args=cmdline.read_bytes().split(b"\0")
++    if str(job/"instance/AUTOCASE2/dm.ini").encode() not in args or b"/opt/dmdbms/bin/dmserver" not in args:
++        raise SystemExit("PID identity does not match this run; refusing to signal")
++    os.kill(pid,signal.SIGTERM)
++    deadline=time.monotonic()+45
++    while time.monotonic()<deadline and cmdline.exists():
++        if not cmdline.read_bytes():break
++        time.sleep(.5)
++stopped=not cmdline.exists() or not cmdline.read_bytes()
++services=subprocess.run(["systemctl","list-units","--type=service","--state=running","--no-legend","--no-pager"],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
++active=[]
++for line in services.stdout.decode("utf-8",errors="replace").splitlines():
++    if "audit" in line.lower():active.append(line.split()[0])
++result={"isolatedInstanceStopped":stopped,"dataDirectoryPreserved":(job/"instance/AUTOCASE2/dm.ini").exists(),"originalAuditServicesRunning":active,"originalServicesSignalled":False}
++(job/"finalization.json").write_text(json.dumps(result,indent=2))
++print(json.dumps(result))
++if not stopped:raise SystemExit(2)
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/remote_isolated_dm.py
+@@ -0,0 +1,49 @@
++"""Run on the user-confirmed test host; creates only a new isolated DM instance.
++
++No installation, existing service changes, existing-account grants or destructive cleanup.
++Credentials live in a mode-0600 file inside the mode-0700 experiment directory.
++"""
++import json
++import os
++from pathlib import Path
++import re
++import secrets
++import socket
++import subprocess
++import sys
++
++job=Path(sys.argv[1]).resolve()
++assert str(job).startswith(str(Path.home()/"audit-agent-backups"/"auto-case-phase2-"))
++os.umask(0o077)
++state=job/"isolated-instance.json"
++if state.exists():
++    raise SystemExit("Instance already initialized; inspect and reopen, do not overwrite")
++port=15287
++with socket.socket() as probe:
++    probe.bind(("127.0.0.1",port))
++password="Aa9_"+secrets.token_hex(18)
++auditor="Aa9_"+secrets.token_hex(18)
++args=["/opt/dmdbms/bin/dminit","PATH="+str(job/"instance"),"DB_NAME=AUTOCASE2",
++      "INSTANCE_NAME=AUTOCASE2","PORT_NUM="+str(port),"CHARSET=1","PAGE_SIZE=32",
++      "LOG_SIZE=256","BUFFER=256","AUTO_ADJ_PARA=0","AUTO_OVERWRITE=0",
++      "SYSDBA_PWD="+password,"SYSAUDITOR_PWD="+auditor,"ELOG_PATH="+str(job)]
++p=subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
++log=p.stdout.replace(password.encode(),b"<redacted>").replace(auditor.encode(),b"<redacted>")
++(job/"isolated-init.log").write_bytes(log)
++print("INIT_EXIT="+str(p.returncode))
++if p.returncode:raise SystemExit("Initialization failed; keep evidence and do not recreate")
++ini=job/"instance/AUTOCASE2/dm.ini"
++text=ini.read_text()
++# Change only this new instance; never touch the existing database configuration.
++for key,value in {"LISTEN_IP":"127.0.0.1","MAX_OS_MEMORY":"20","MEMORY_POOL":"128",
++                  "MEMORY_TARGET":"1024","BUFFER":"256","SORT_BUF_SIZE":"8",
++                  "HJ_BUF_GLOBAL_SIZE":"128","HJ_BUF_SIZE":"8"}.items():
++    text,n=re.subn(r"(?m)^(\s*"+key+r"\s*=\s*)[^#\n]*",lambda m:m.group(1)+value+" ",text)
++    if not n and key=="LISTEN_IP":text+="\nLISTEN_IP = 127.0.0.1\n"
++ini.write_text(text)
++with (job/"isolated-server.log").open("ab") as output:
++    server=subprocess.Popen(["/opt/dmdbms/bin/dmserver",str(ini)],stdout=output,stderr=subprocess.STDOUT,start_new_session=True)
++state.write_text(json.dumps({"port":port,"pid":server.pid,"sysdba_password":password,"ini":str(ini),
++    "application_user":"AUTOCASE_APP","application_password":"Aa9_"+secrets.token_hex(18),
++    "restore_user":"AUTOCASE_RESTORE","restore_password":"Aa9_"+secrets.token_hex(18)},indent=2))
++print("ISOLATED_INSTANCE_CREATED port="+str(port)+" pid="+str(server.pid))
+--- /dev/null
++++ after-phase2/tools/automatic-case-phase2/remote_restore.py
+@@ -0,0 +1,43 @@
++"""Restore only to a new named user in the dedicated isolated instance; fail on every conflict."""
++import hashlib,json,os,subprocess,sys
++from pathlib import Path
++os.umask(0o077)
++job=Path(sys.argv[1]).resolve()
++assert str(job).startswith(str(Path.home()/"audit-agent-backups"/"auto-case-phase2-"))
++state=json.loads((job/"isolated-instance.json").read_text())
++status=json.loads((job/"consistent-backup-status.json").read_text())
++assert status["native_exit"]==0
++dump=job/"consistent-source-default.dmp"
++assert hashlib.sha256(dump.read_bytes()).hexdigest()==status["sha256"]
++source=(job/"source-schema.txt").read_text().strip()
++env=dict(os.environ)
++args=["/opt/dmdbms/bin/dimp","USERID=SYSDBA@127.0.0.1:"+str(state["port"]),
++      "DIRECTORY="+str(job),"FILE="+dump.name,"LOG="+str(job/"independent-restore.log"),
++      "SCHEMAS="+source,"REMAP_SCHEMA="+source+":"+state["restore_user"],
++      "GRANTS=N","PARALLEL=1","TABLE_PARALLEL=1","IGNORE=N","DUMMY=N","CTRL_INFO=34"]
++p=subprocess.run(args,input=(state["sysdba_password"]+"\n").encode(),env=env,
++    stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=180)
++(job/"independent-restore.console.log").write_bytes(p.stdout.replace(state["sysdba_password"].encode(),b"<redacted>"))
++print("DIMP_EXIT="+str(p.returncode),flush=True)
++status["restore_native_exit"]=p.returncode
++if p.returncode==0:
++    env.update(AUDIT_DB_URL="jdbc:dm://127.0.0.1:"+str(state["port"]),
++               AUDIT_DB_USERNAME=state["restore_user"],AUDIT_DB_PASSWORD=state["restore_password"],
++               AUDIT_MANIFEST_SCHEMA=state["restore_user"])
++    verify=subprocess.run(["/opt/java/current/bin/java","--class-path",
++        "/home/admin/audit-agent-backups/auto-case-before-20261027/dm-driver.jar",
++        str(job/"Dm8BackupManifest.java"),"read",str(job/"restore-manifest.tsv")],env=env,
++        stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=100)
++    print(verify.stdout.decode("utf-8","replace"),flush=True)
++    status["restore_manifest_exit"]=verify.returncode
++    if verify.returncode==0:
++        before=(job/"source-manifest.tsv").read_bytes();after=(job/"restore-manifest.tsv").read_bytes()
++        status["manifest_equal"]=before==after
++        status["tables_verified"]=len(before.splitlines())
++        status["restore"]="VERIFIED" if before==after else "MISMATCH"
++        status["source_manifest_sha256"]=hashlib.sha256(before).hexdigest()
++        status["restore_manifest_sha256"]=hashlib.sha256(after).hexdigest()
++    else:print(verify.stderr.decode("utf-8","replace")[-600:])
++else:status["restore"]="FAILED"
++(job/"consistent-backup-status.json").write_text(json.dumps(status,indent=2))
++print(json.dumps(status),flush=True)

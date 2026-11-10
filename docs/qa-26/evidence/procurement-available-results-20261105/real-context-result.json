@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "version": "case-cross-file-v6",
+  "calls": 2,
+  "findings": {
+    "AGENT_PRECHECK": 0,
+    "TENDER_COMPLIANCE": 2
+  },
+  "observations": {
+    "AGENT_PRECHECK": 4,
+    "TENDER_COMPLIANCE": 4
+  },
+  "deliveryRetained": true,
+  "paymentRetained": true
+}

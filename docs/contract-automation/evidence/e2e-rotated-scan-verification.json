@@ -1,0 +1,16 @@
+{
+  "scenario": "rotated-scan",
+  "caseId": "c22feabd-9460-33d5-8731-6a0b6a6e0abf",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 10,
+  "clauses": 8,
+  "risks": 0,
+  "followUps": 1,
+  "evidenceChecks": 23,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "freshVerifier": true
+}

@@ -37,7 +37,7 @@ public class BudgetMaterialWorker {
                 ScheduledFuture<?>[] beat={null};var prior=MDC.getCopyOfContextMap();MDC.put("requestId","budget-material-"+job.id());
                 try {
                     var user=users.findActiveById(job.actorId());
-                    if(user.isEmpty()||Collections.disjoint(user.get().roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","FINANCE_REVIEWER"))) {service.rejectOwner(job.id());return;}
+                    if(user.isEmpty()||Collections.disjoint(user.get().roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","FINANCE_REVIEWER","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER"))) {service.rejectOwner(job.id());return;}
                     service.process(job.id(),user.get().toCurrentUser(),token->{
                         beat[0]=heartbeat.scheduleWithFixedDelay(()->{
                             try {jobs.renew(job.id(),token,Instant.now().plusSeconds(1200));}

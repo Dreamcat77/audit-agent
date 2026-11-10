@@ -7,7 +7,8 @@ final class CaseReviewText {
         return switch(type) {case "projectName"->"项目名称";case "projectNo"->"项目编号";case "purchaserName"->"采购单位";default->"材料信息";};
     }
     static String explanation(AuditCase.ReviewCheck check) {
-        if(!check.code().startsWith("IDENTITY_"))return check.explanation();
+        if(!check.code().startsWith("IDENTITY_"))return check.explanation()
+                .replaceAll("(?<![A-Za-z0-9_])Java[ \\t]+checks(?![A-Za-z0-9_])|系统\\s*checks(?![A-Za-z0-9_])","系统核算结果");
         String type=check.code().substring("IDENTITY_".length());
         if(check.status().equals("UNKNOWN"))return "本批材料尚不足以核对"+identityLabel(type)+"，不据此认定材料之间存在冲突。";
         String prefix=type+"：";

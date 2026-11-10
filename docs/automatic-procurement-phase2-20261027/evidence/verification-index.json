@@ -1,0 +1,22 @@
+{
+  "report": "E:\\audit-agent-new\\AUTOMATIC_PROCUREMENT_PHASE2_ACCEPTANCE_REPORT.md",
+  "sourceHashesMatchTestedFiles": true,
+  "reportLinksExist": true,
+  "credentialScanPassed": true,
+  "gitDiffCheck": "PASS for the seven modified paths",
+  "dm8IntegrationTests": {
+    "executed": 5,
+    "failures": 0,
+    "errors": 0
+  },
+  "twoActualModelEndToEndCases": "PASS",
+  "mockModelRealDm8Http": "PASS",
+  "browserAcceptance": "PASS",
+  "appRestartRecovery": "PASS (test Clock for lease expiry)",
+  "completeDatabaseBackup": "NOT VERIFIED",
+  "completeDatabaseRestore": "NOT PASSED; 94-table data restoration verified",
+  "fullCleanVerify": "FAIL: same 14 historical failures",
+  "otherFiveModules": "NOT EXECUTED",
+  "productionDeployment": "NOT EXECUTED",
+  "temporaryServicesStopped": true
+}

@@ -1,0 +1,106 @@
+{
+  "browser": "109.0.5412.0",
+  "results": [
+    {
+      "scenario": "quote-and-restrictions",
+      "status": "COMPLETED",
+      "files": 4,
+      "extracted": 4,
+      "budgetPresent": true,
+      "offers": 3,
+      "codes": [
+        "QUOTE_BUDGET",
+        "RESTRICTIVE_CONDITION",
+        "SCORE_INCONSISTENCY"
+      ],
+      "modules": {
+        "AGENT_PRECHECK": {
+          "status": "COMPLETED",
+          "checks": 14,
+          "findings": 1,
+          "rejected": 0
+        },
+        "BLACKLIST": {
+          "status": "COMPLETED",
+          "checks": 3,
+          "findings": 0,
+          "rejected": 0
+        },
+        "TENDER_COMPLIANCE": {
+          "status": "COMPLETED",
+          "checks": 4,
+          "findings": 2,
+          "rejected": 0
+        }
+      }
+    },
+    {
+      "scenario": "vague-scoring-and-unequal-scope",
+      "status": "DATA_INSUFFICIENT",
+      "files": 2,
+      "extracted": 2,
+      "budgetPresent": true,
+      "offers": 1,
+      "codes": [
+        "EVALUATION_BASIS",
+        "QUOTE_SCOPE"
+      ],
+      "modules": {
+        "AGENT_PRECHECK": {
+          "status": "PARTIAL",
+          "checks": 9,
+          "findings": 0,
+          "rejected": 0
+        },
+        "BLACKLIST": {
+          "status": "COMPLETED",
+          "checks": 1,
+          "findings": 0,
+          "rejected": 0
+        },
+        "TENDER_COMPLIANCE": {
+          "status": "COMPLETED",
+          "checks": 4,
+          "findings": 2,
+          "rejected": 0
+        }
+      }
+    },
+    {
+      "scenario": "policy-eligibility-and-voluntary-brand",
+      "status": "DATA_INSUFFICIENT",
+      "files": 2,
+      "extracted": 2,
+      "budgetPresent": true,
+      "offers": 1,
+      "codes": [],
+      "modules": {
+        "AGENT_PRECHECK": {
+          "status": "COMPLETED",
+          "checks": 11,
+          "findings": 0,
+          "rejected": 0
+        },
+        "BLACKLIST": {
+          "status": "COMPLETED",
+          "checks": 1,
+          "findings": 0,
+          "rejected": 0
+        },
+        "TENDER_COMPLIANCE": {
+          "status": "COMPLETED",
+          "checks": 4,
+          "findings": 0,
+          "rejected": 0
+        }
+      }
+    }
+  ],
+  "pageErrors": [],
+  "seriousRiskAcknowledgment": {
+    "postStatus": 200,
+    "reopenedAndPersisted": true,
+    "originalReportUnchanged": true
+  },
+  "clipboardVerification": "execCommand integration seam; not operating-system clipboard E2E"
+}

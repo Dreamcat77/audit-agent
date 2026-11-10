@@ -1,0 +1,68 @@
+{
+  "batchId": "a5cbcf16-2ffd-43cf-8aa7-3f003d27ea5e",
+  "states": [
+    "PARSED",
+    "PARSED",
+    "PARSED",
+    "PARSED",
+    "PARSED",
+    "PARSED",
+    "PARSED"
+  ],
+  "lines": [
+    [
+      "设备购置",
+      "OVER_APPROVAL",
+      120000.0,
+      100000.0
+    ],
+    [
+      "培训服务",
+      "UNAPPROVED_SUBJECT",
+      20000.0,
+      null
+    ],
+    [
+      "室内装修",
+      "WITHIN_APPROVAL",
+      30000.0,
+      30000.0
+    ],
+    [
+      "设备购置",
+      "OVER_APPROVAL",
+      120000.0,
+      100000.0
+    ],
+    [
+      "室内装修",
+      "WITHIN_APPROVAL",
+      30000.0,
+      30000.0
+    ],
+    [
+      "软件服务",
+      "MISSING_DECLARATION",
+      null,
+      10000.0
+    ],
+    [
+      "设备采购1",
+      "INSUFFICIENT",
+      6000.0,
+      null
+    ],
+    [
+      "设备采购2",
+      "INSUFFICIENT",
+      7000.0,
+      null
+    ]
+  ],
+  "assessmentCodes": [
+    "APPROVAL_PROCEDURE",
+    "APPROVAL_SEQUENCE",
+    "AUTO_SPLIT_APPLICATION",
+    "SPENDING_PURPOSE_DIFFERENCE"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "scope": "SCAN_READER_REPAIR",
+  "environment": "26 test server and Windows local regression",
+  "sourceIncludesUncommittedWorktree": true,
+  "local": {
+    "java": {
+      "command": "backend/.\\mvnw.cmd clean verify",
+      "tests": 3435,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 24,
+      "result": "BUILD SUCCESS",
+      "logSha256": "38f9c7768eac0379c44039d491d617df7c89529a20342da6fa38d6e3aecf3167"
+    },
+    "python": {
+      "command": "python -m pytest services/audit-ai/tests -q -o addopts=--basetemp=.test-runtime/scan-python-final",
+      "passed": 2049,
+      "skipped": 14,
+      "subtestsPassed": 43,
+      "logSha256": "6a1c8e09127f8179236b20be4550cc65fe721c51bf4b8086afce1497ea1ee965"
+    }
+  },
+  "native162": {
+    "fixture": "long-162page.pdf",
+    "pages": 162,
+    "chars": 9449,
+    "seconds": 1074.625,
+    "budgetPresent": true,
+    "sha256": "32a24db57f9528dc217257251acb4714fcc956ea8876ee37107956f42933df69",
+    "completePageNumbers": true,
+    "lastPageBudgetPresent": true,
+    "allPagesHaveText": true
+  },
+  "realDm8": {
+    "result": "DM8_CHECKPOINT=PASS largeChineseClob=true reopen=true staleWriterRejected=true rollbackPreserved=true schemaChanged=false syntheticCase=f602879e-e169-487d-ab1f-8b2f2cc9258e",
+    "schemaChanged": false
+  },
+  "defaultDeployment": {
+    "status": "PASS",
+    "release": "/opt/audit-agent/releases/scan-20261030-r1",
+    "runningJavaAndAiReleaseVerified": true,
+    "jarSha256": "1a0d7d64137ca84170d15ab4fa5ad4afeac988c59bf6f5d97a1aa593cea2be43",
+    "aiSourceHashesVerified": true,
+    "httpOcrRecovery": "JAVA_HTTP_OCR_RECOVERY=PASS pages=4 calls=4 repeatedAcknowledgedPages=0 budget=true quotation=true award=true contract=true uppercaseAmounts=true dates=true",
+    "httpOcrTestSeconds": 48.14,
+    "healthyRequestsDuringOcr": 48,
+    "maxHealthResponseMs": 7.53,
+    "realModel": "NOT_VERIFIED_CONNECT_TIMEOUT",
+    "frontendChanged": false,
+    "schemaChanged": false,
+    "configPreserved": true
+  },
+  "modelAnalysis": {
+    "status": "NOT_VERIFIED",
+    "reason": "CONNECT_TIMEOUT",
+    "observedHttp": 502,
+    "diagnosticRequestId": "6b5df039-d13a-49dc-97b1-4eb419f2ba3b",
+    "externalProviderChanged": false
+  },
+  "limits": {
+    "procurementMaxPages": 512,
+    "procurementMaxChars": 768000,
+    "maxBytes": 524288000,
+    "budgetLimitsUnchanged": true
+  },
+  "customerArm64": "NOT_VERIFIED",
+  "customerRealScans": "NOT_VERIFIED",
+  "customerPackageCreated": false,
+  "gitCommitted": false,
+  "offlineFastModels": {
+    "localRuntimeArchive": ".runtime/scan-offline-models.tar.gz",
+    "sha256": "4b03622857e01ca10ab84460e1f17036c45d2e924035e024428fd76f00291a92",
+    "files": 6
+  }
+}

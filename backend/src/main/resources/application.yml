@@ -46,6 +46,7 @@ audit:
       worker-enabled: ${AUDIT_BUDGET_MATERIAL_WORKER_ENABLED:false}
       scan-delay-ms: ${AUDIT_BUDGET_MATERIAL_SCAN_DELAY_MS:1500}
   ocr:
+    page-concurrency: ${AUDIT_OCR_PAGE_CONCURRENCY:1}
     connect-timeout-ms: ${AUDIT_OCR_CONNECT_TIMEOUT_MS:5000}
     read-timeout-ms: ${AUDIT_OCR_READ_TIMEOUT_MS:1900000}
   file-storage:

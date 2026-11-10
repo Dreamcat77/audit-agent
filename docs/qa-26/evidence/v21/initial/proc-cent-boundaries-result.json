@@ -1,0 +1,228 @@
+{
+  "id": "3611cb01-628c-39c2-932a-fd8b1538c30c",
+  "caseNumber": "AC-3611cb01-628c-39c2-932a-fd8b1538c30c",
+  "projectName": "昭宁窗口终端更新项目9D4325",
+  "status": "DATA_INSUFFICIENT",
+  "createdAt": "2026-10-29T17:08:38.525227034Z",
+  "documents": [
+    {
+      "id": "0820a51d-5668-4f42-b538-39b8fedf3c29",
+      "name": "招标文件.pdf",
+      "status": "UNKNOWN",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": "EXTRACTION_OUTCOME_UNPROVEN",
+      "factCount": 0
+    },
+    {
+      "id": "20821d27-c74e-4aa8-80be-88748052fa22",
+      "name": "供应商1响应函.docx",
+      "status": "UNKNOWN",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": "EXTRACTION_OUTCOME_UNPROVEN",
+      "factCount": 0
+    },
+    {
+      "id": "fb10351c-1041-4030-8326-c3fb150cf0c2",
+      "name": "供应商2响应函.docx",
+      "status": "UNKNOWN",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": "EXTRACTION_OUTCOME_UNPROVEN",
+      "factCount": 0
+    },
+    {
+      "id": "d8d3a2f0-b598-46e5-89cc-056145f97acd",
+      "name": "供应商3响应函.docx",
+      "status": "UNKNOWN",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": "EXTRACTION_OUTCOME_UNPROVEN",
+      "factCount": 0
+    }
+  ],
+  "report": {
+    "quoteStatus": "DATA_INSUFFICIENT",
+    "budget": null,
+    "awardAmount": null,
+    "offers": [],
+    "calculation": null,
+    "notices": [
+      "材料中的预算金额不足或冲突，超预算检查未执行；已识别报价仍保留",
+      "可靠供应商报价少于三家，三方询比价数据不足",
+      "部分文件未完成读取/提取，报告覆盖不完整，不能声称全部审查通过"
+    ],
+    "modules": {
+      "TENDER_COMPLIANCE": "UNKNOWN",
+      "AGENT_PRECHECK": "UNKNOWN",
+      "COLLUSION": "NOT_EXECUTED",
+      "SPLIT_PURCHASE": "NOT_EXECUTED",
+      "QUOTE": "DATA_INSUFFICIENT",
+      "BLACKLIST": "DATA_INSUFFICIENT"
+    },
+    "reviews": {
+      "TENDER_COMPLIANCE": {
+        "status": "UNKNOWN",
+        "inputDigest": "f9ec13dbbf295fd11e14d239c957daa5a1b1b377647d42c44a5239c5231c7b35",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-29T17:09:04.466291756Z",
+        "completedAt": "2026-10-29T17:09:09.487114210Z",
+        "scope": [
+          {
+            "documentId": "0820a51d-5668-4f42-b538-39b8fedf3c29",
+            "fileName": "招标文件.pdf",
+            "role": "TENDER",
+            "sourceChars": 149,
+            "suppliedChars": 149
+          }
+        ],
+        "coverageGaps": [
+          "0820a51d-5668-4f42-b538-39b8fedf3c29:FILE_UNKNOWN",
+          "UPLOADED_SCOPE_MISSING_TECHNICAL",
+          "UPLOADED_SCOPE_MISSING_EVALUATION",
+          "UPLOADED_SCOPE_MISSING_CLARIFICATION"
+        ],
+        "checks": [
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 4 份材料，本项选取 1 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "MODEL_CALL_FAILED"
+      },
+      "AGENT_PRECHECK": {
+        "status": "UNKNOWN",
+        "inputDigest": "db441843dd7267daf5602c25a9b5bfebf2e3f8cc2308978d7b8142c867bfa807",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-29T17:08:59.433763233Z",
+        "completedAt": "2026-10-29T17:09:04.458041645Z",
+        "scope": [
+          {
+            "documentId": "0820a51d-5668-4f42-b538-39b8fedf3c29",
+            "fileName": "招标文件.pdf",
+            "role": "TENDER",
+            "sourceChars": 149,
+            "suppliedChars": 149
+          },
+          {
+            "documentId": "20821d27-c74e-4aa8-80be-88748052fa22",
+            "fileName": "供应商1响应函.docx",
+            "role": "OTHER",
+            "sourceChars": 137,
+            "suppliedChars": 137
+          },
+          {
+            "documentId": "fb10351c-1041-4030-8326-c3fb150cf0c2",
+            "fileName": "供应商2响应函.docx",
+            "role": "OTHER",
+            "sourceChars": 138,
+            "suppliedChars": 138
+          },
+          {
+            "documentId": "d8d3a2f0-b598-46e5-89cc-056145f97acd",
+            "fileName": "供应商3响应函.docx",
+            "role": "OTHER",
+            "sourceChars": 138,
+            "suppliedChars": 138
+          }
+        ],
+        "coverageGaps": [
+          "0820a51d-5668-4f42-b538-39b8fedf3c29:FILE_UNKNOWN",
+          "20821d27-c74e-4aa8-80be-88748052fa22:FILE_UNKNOWN",
+          "fb10351c-1041-4030-8326-c3fb150cf0c2:FILE_UNKNOWN",
+          "d8d3a2f0-b598-46e5-89cc-056145f97acd:FILE_UNKNOWN",
+          "UPLOADED_SCOPE_MISSING_DEMAND",
+          "UPLOADED_SCOPE_MISSING_BUDGET",
+          "UPLOADED_SCOPE_MISSING_QUOTATION",
+          "UPLOADED_SCOPE_MISSING_AWARD"
+        ],
+        "checks": [
+          {
+            "code": "IDENTITY_projectName",
+            "status": "UNKNOWN",
+            "explanation": "projectName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_projectNo",
+            "status": "UNKNOWN",
+            "explanation": "projectNo：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_purchaserName",
+            "status": "UNKNOWN",
+            "explanation": "purchaserName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "BUDGET_CONFLICT",
+            "status": "UNKNOWN",
+            "explanation": "仅比较预算角色金额，不将成交价或已付款作为预算：[]",
+            "evidence": []
+          },
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 4 份材料，本项选取 4 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "MODEL_CALL_FAILED"
+      },
+      "BLACKLIST": {
+        "status": "DATA_INSUFFICIENT",
+        "inputDigest": "03d2ba7ac0619cf36301ab884c0ee86870304da9b684ee71dc7f8e85d76a8e45",
+        "version": "case-blacklist-v1",
+        "model": null,
+        "startedAt": "2026-10-29T17:08:59.417763442Z",
+        "completedAt": "2026-10-29T17:08:59.417763572Z",
+        "scope": [
+          {
+            "documentId": "0820a51d-5668-4f42-b538-39b8fedf3c29",
+            "fileName": "招标文件.pdf",
+            "role": "TENDER",
+            "sourceChars": 149,
+            "suppliedChars": 149
+          },
+          {
+            "documentId": "20821d27-c74e-4aa8-80be-88748052fa22",
+            "fileName": "供应商1响应函.docx",
+            "role": "OTHER",
+            "sourceChars": 137,
+            "suppliedChars": 137
+          },
+          {
+            "documentId": "fb10351c-1041-4030-8326-c3fb150cf0c2",
+            "fileName": "供应商2响应函.docx",
+            "role": "OTHER",
+            "sourceChars": 138,
+            "suppliedChars": 138
+          },
+          {
+            "documentId": "d8d3a2f0-b598-46e5-89cc-056145f97acd",
+            "fileName": "供应商3响应函.docx",
+            "role": "OTHER",
+            "sourceChars": 138,
+            "suppliedChars": 138
+          }
+        ],
+        "coverageGaps": [],
+        "checks": [],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": null
+      }
+    },
+    "projectName": "昭宁窗口终端更新项目9D4325",
+    "ceilingAmount": null,
+    "quoteComparisons": [],
+    "ceilingComparisons": []
+  },
+  "findingIds": {}
+}

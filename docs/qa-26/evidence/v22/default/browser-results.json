@@ -1,0 +1,372 @@
+{
+  "status": "PASS",
+  "base": "http://192.168.0.26",
+  "browser": "109.0.5412.0",
+  "results": [
+    {
+      "module": "procurement",
+      "id": "3611cb01-628c-39c2-932a-fd8b1538c30c",
+      "states": [
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        }
+      ],
+      "exportStatus": 200
+    },
+    {
+      "module": "procurement",
+      "id": "7b1675fe-5890-3770-8e8e-230a44afac0d",
+      "states": [
+        {
+          "tone": "result-section result-section-attention",
+          "button": "true",
+          "hidden": false
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-attention",
+          "button": "true",
+          "hidden": false
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        }
+      ],
+      "exportStatus": 200
+    },
+    {
+      "module": "procurement",
+      "id": "efdace50-64ad-3317-874d-9ff567f75f6f",
+      "states": [
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        }
+      ],
+      "exportStatus": 200
+    },
+    {
+      "module": "budget",
+      "id": "db138232-9272-48d1-b884-c46928987e21",
+      "states": [
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-attention",
+          "button": "true",
+          "hidden": false
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        }
+      ]
+    },
+    {
+      "module": "budget",
+      "id": "b11c2e9a-f1d1-4f1c-99a6-c6c1de99840b",
+      "states": [
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        }
+      ]
+    },
+    {
+      "module": "budget",
+      "id": "353456d6-07a8-42a6-a3c2-aa11cedc8905",
+      "states": [
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        }
+      ]
+    },
+    {
+      "module": "budget",
+      "id": "8e4c2662-3097-4533-868d-4de8ab247b31",
+      "states": [
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        }
+      ]
+    },
+    {
+      "module": "contract",
+      "id": "4a365fb3-9025-34b3-86d8-f0f16217b3f1",
+      "states": [
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "hidden": false
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        }
+      ],
+      "modules": [
+        {
+          "id": "QUANTITATIVE",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "DRAFT_STRUCTURE",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "BREACH",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "TERM",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "PARTY_QUALIFICATION",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "ATTACHMENT_COMPLETENESS",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "EFFECTIVENESS_COPIES",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "CLAUSE_RISK",
+          "open": false,
+          "attention": false
+        }
+      ]
+    },
+    {
+      "module": "contract",
+      "id": "cf4bcf40-e935-32da-a607-e714ec9b62b5",
+      "states": [
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "hidden": false
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        },
+        {
+          "tone": "result-section result-section-default",
+          "button": "false",
+          "hidden": true
+        }
+      ],
+      "modules": [
+        {
+          "id": "QUANTITATIVE",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "DRAFT_STRUCTURE",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "BREACH",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "TERM",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "PARTY_QUALIFICATION",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "ATTACHMENT_COMPLETENESS",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "EFFECTIVENESS_COPIES",
+          "open": false,
+          "attention": false
+        },
+        {
+          "id": "CLAUSE_RISK",
+          "open": false,
+          "attention": false
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "query": "",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E7%AA%97%E5%8F%A3%E7%BB%88%E7%AB%AF%E6%9B%B4%E6%96%B0%E9%A1%B9%E7%9B%AE9D4325",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E7%AA%97%E5%8F%A3%E7%BB%88%E7%AB%AF%E6%9B%B4%E6%96%B0%E9%A1%B9%E7%9B%AE9D4325&from=2026-10-29T04%3A00%3A00.000Z&to=2026-10-30T04%3A00%3A00.000Z",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E7%AA%97%E5%8F%A3%E7%BB%88%E7%AB%AF%E6%9B%B4%E6%96%B0%E9%A1%B9%E7%9B%AE9D4325",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E7%AA%97%E5%8F%A3%E7%BB%88%E7%AB%AF%E6%9B%B4%E6%96%B0%E9%A1%B9%E7%9B%AE9D4325",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E5%85%AC%E5%BC%80%E9%87%87%E8%B4%AD%E6%9C%8D%E5%8A%A1%E9%A1%B9%E7%9B%AE9D4325",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E5%85%AC%E5%BC%80%E9%87%87%E8%B4%AD%E6%9C%8D%E5%8A%A1%E9%A1%B9%E7%9B%AE9D4325&from=2026-10-29T04%3A00%3A00.000Z&to=2026-10-30T04%3A00%3A00.000Z",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E5%85%AC%E5%BC%80%E9%87%87%E8%B4%AD%E6%9C%8D%E5%8A%A1%E9%A1%B9%E7%9B%AE9D4325",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E5%85%AC%E5%BC%80%E9%87%87%E8%B4%AD%E6%9C%8D%E5%8A%A1%E9%A1%B9%E7%9B%AE9D4325",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E7%94%B2%E5%8C%BA%E7%B3%BB%E7%BB%9F%E6%9B%B4%E6%96%B0%E9%A1%B9%E7%9B%AE9D4325",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E7%94%B2%E5%8C%BA%E7%B3%BB%E7%BB%9F%E6%9B%B4%E6%96%B0%E9%A1%B9%E7%9B%AE9D4325&from=2026-10-29T04%3A00%3A00.000Z&to=2026-10-30T04%3A00%3A00.000Z",
+      "status": 200
+    },
+    {
+      "query": "?keyword=%E6%98%AD%E5%AE%81%E7%94%B2%E5%8C%BA%E7%B3%BB%E7%BB%9F%E6%9B%B4%E6%96%B0%E9%A1%B9%E7%9B%AE9D4325",
+      "status": 200
+    }
+  ],
+  "errors": []
+}

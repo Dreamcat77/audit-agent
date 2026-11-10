@@ -1,0 +1,195 @@
+{
+  "id": "7b1675fe-5890-3770-8e8e-230a44afac0d",
+  "caseNumber": "AC-7b1675fe-5890-3770-8e8e-230a44afac0d",
+  "projectName": "昭宁公开采购服务项目9D4325",
+  "status": "DATA_INSUFFICIENT",
+  "createdAt": "2026-10-29T17:08:38.794783503Z",
+  "documents": [
+    {
+      "id": "9f2234da-9860-477e-8c14-f133849baaff",
+      "name": "招标文件.docx",
+      "status": "UNKNOWN",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": "EXTRACTION_OUTCOME_UNPROVEN",
+      "factCount": 0
+    }
+  ],
+  "report": {
+    "quoteStatus": "DATA_INSUFFICIENT",
+    "budget": null,
+    "awardAmount": null,
+    "offers": [],
+    "calculation": null,
+    "notices": [
+      "材料中的预算金额不足或冲突，超预算检查未执行；已识别报价仍保留",
+      "可靠供应商报价少于三家，三方询比价数据不足",
+      "部分文件未完成读取/提取，报告覆盖不完整，不能声称全部审查通过"
+    ],
+    "modules": {
+      "BLACKLIST": "DATA_INSUFFICIENT",
+      "QUOTE": "DATA_INSUFFICIENT",
+      "SPLIT_PURCHASE": "NOT_EXECUTED",
+      "COLLUSION": "NOT_EXECUTED",
+      "AGENT_PRECHECK": "UNKNOWN",
+      "TENDER_COMPLIANCE": "UNKNOWN"
+    },
+    "reviews": {
+      "BLACKLIST": {
+        "status": "DATA_INSUFFICIENT",
+        "inputDigest": "a4792ce714c1980c105ad5cdd98ea1a9f01164ddc8694fd43208252fe52d3612",
+        "version": "case-blacklist-v1",
+        "model": null,
+        "startedAt": "2026-10-29T17:09:17.145783213Z",
+        "completedAt": "2026-10-29T17:09:17.145783343Z",
+        "scope": [
+          {
+            "documentId": "9f2234da-9860-477e-8c14-f133849baaff",
+            "fileName": "招标文件.docx",
+            "role": "TENDER",
+            "sourceChars": 263,
+            "suppliedChars": 263
+          }
+        ],
+        "coverageGaps": [],
+        "checks": [],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": null
+      },
+      "AGENT_PRECHECK": {
+        "status": "UNKNOWN",
+        "inputDigest": "b2184f9b2acc7c5e4b75e1c5245955830749db61879fd5fd5d24e4c045f10c64",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-29T17:09:17.158831999Z",
+        "completedAt": "2026-10-29T17:09:22.176142664Z",
+        "scope": [
+          {
+            "documentId": "9f2234da-9860-477e-8c14-f133849baaff",
+            "fileName": "招标文件.docx",
+            "role": "TENDER",
+            "sourceChars": 263,
+            "suppliedChars": 263
+          }
+        ],
+        "coverageGaps": [
+          "9f2234da-9860-477e-8c14-f133849baaff:FILE_UNKNOWN",
+          "UPLOADED_SCOPE_MISSING_DEMAND",
+          "UPLOADED_SCOPE_MISSING_BUDGET",
+          "UPLOADED_SCOPE_MISSING_QUOTATION",
+          "UPLOADED_SCOPE_MISSING_AWARD"
+        ],
+        "checks": [
+          {
+            "code": "IDENTITY_projectName",
+            "status": "UNKNOWN",
+            "explanation": "projectName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_projectNo",
+            "status": "UNKNOWN",
+            "explanation": "projectNo：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_purchaserName",
+            "status": "UNKNOWN",
+            "explanation": "purchaserName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "BUDGET_CONFLICT",
+            "status": "UNKNOWN",
+            "explanation": "仅比较预算角色金额，不将成交价或已付款作为预算：[]",
+            "evidence": []
+          },
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 1 份材料，本项选取 1 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "MODEL_CALL_FAILED"
+      },
+      "TENDER_COMPLIANCE": {
+        "status": "UNKNOWN",
+        "inputDigest": "62765e8048b70af365e83aea722e87624b80daa454ddba1d618dcee7eeee103b",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-29T17:09:22.214440495Z",
+        "completedAt": "2026-10-29T17:09:27.236683420Z",
+        "scope": [
+          {
+            "documentId": "9f2234da-9860-477e-8c14-f133849baaff",
+            "fileName": "招标文件.docx",
+            "role": "TENDER",
+            "sourceChars": 263,
+            "suppliedChars": 263
+          }
+        ],
+        "coverageGaps": [
+          "9f2234da-9860-477e-8c14-f133849baaff:FILE_UNKNOWN",
+          "UPLOADED_SCOPE_MISSING_TECHNICAL",
+          "UPLOADED_SCOPE_MISSING_EVALUATION",
+          "UPLOADED_SCOPE_MISSING_CLARIFICATION"
+        ],
+        "checks": [
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 1 份材料，本项选取 1 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          },
+          {
+            "code": "F10_RULE:F07-REGION-004",
+            "status": "RULE_SIGNAL_WARNING",
+            "explanation": "本地注册要求：要求本地企业、本地注册、本地纳税或本地服务，可能构成地域歧视，排斥符合条件的外地供应商。；依据：《政府采购法》第22条、《优化营商环境条例》第14条；建议：建议删除地域限制，允许外地企业参与",
+            "evidence": [
+              {
+                "id": "E-94f3463908006c995bdac9f0",
+                "documentId": "9f2234da-9860-477e-8c14-f133849baaff",
+                "fileName": "招标文件.docx",
+                "sha256": "2939b3a623258d3ff91b08105f6282372003bb8710718709068b4ca34a8b446e",
+                "locator": "docx/body/node:7/part:7",
+                "excerpt": "编制说明：以下引号内容是禁止采用的反面示例：“仅限本地注册企业参与投标”。该示例不是本项目的资格条件，本项目不得采用此限制。\n"
+              }
+            ]
+          }
+        ],
+        "findings": [
+          {
+            "code": "F10_RULE:F07-REGION-004",
+            "level": "WARNING",
+            "title": "招标条款命中审查规则",
+            "explanation": "本地注册要求：要求本地企业、本地注册、本地纳税或本地服务，可能构成地域歧视，排斥符合条件的外地供应商。；依据：《政府采购法》第22条、《优化营商环境条例》第14条；建议：建议删除地域限制，允许外地企业参与",
+            "suggestion": "结合所列原文与上下文核对；规则线索不直接认定违规。",
+            "evidence": [
+              {
+                "id": "E-94f3463908006c995bdac9f0",
+                "documentId": "9f2234da-9860-477e-8c14-f133849baaff",
+                "fileName": "招标文件.docx",
+                "sha256": "2939b3a623258d3ff91b08105f6282372003bb8710718709068b4ca34a8b446e",
+                "locator": "docx/body/node:7/part:7",
+                "excerpt": "编制说明：以下引号内容是禁止采用的反面示例：“仅限本地注册企业参与投标”。该示例不是本项目的资格条件，本项目不得采用此限制。\n"
+              }
+            ],
+            "origin": "DETERMINISTIC"
+          }
+        ],
+        "rejectedCitations": 0,
+        "errorCode": "MODEL_CALL_FAILED"
+      }
+    },
+    "projectName": "昭宁公开采购服务项目9D4325",
+    "ceilingAmount": null,
+    "quoteComparisons": [],
+    "ceilingComparisons": []
+  },
+  "findingIds": {
+    "招标条款命中审查规则\n本地注册要求：要求本地企业、本地注册、本地纳税或本地服务，可能构成地域歧视，排斥符合条件的外地供应商。；依据：《政府采购法》第22条、《优化营商环境条例》第14条；建议：建议删除地域限制，允许外地企业参与": "22f2dfeda1019913306d61c5aa7bb834bd1d4cfedad096b7c2e0ad4754812811"
+  }
+}

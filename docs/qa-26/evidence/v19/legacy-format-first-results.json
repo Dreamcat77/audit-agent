@@ -1,0 +1,632 @@
+[
+  {
+    "module": "budget",
+    "label": "sample.doc",
+    "failures": [],
+    "details": {
+      "batchId": "28b31261-0c44-448d-9adc-b074c4c369a5",
+      "jobStates": [
+        "PARSED"
+      ],
+      "lines": [
+        {
+          "project": "仿真办公设备更新项目",
+          "projectCode": "SYN-OFFICE-2026",
+          "subject": "办公设备",
+          "subjectCode": "SYN-OFFICE",
+          "year": null,
+          "department": "采购管理部",
+          "declaredAmount": 31200.0,
+          "approvalAmount": null,
+          "status": "INSUFFICIENT",
+          "opinion": "已读取申报信息，现有材料未能确认对应批复金额，暂不能判断是否超过批复。",
+          "sources": [
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "doc/body/part:1/line:10",
+              "excerpt": "科目名称：办公设备"
+            },
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "doc/body/part:1/line:10",
+              "excerpt": "科目名称：办公设备；申报金额：31200元；供应商名称：仿真办公供应公司；项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "declaredAmount",
+              "value": "31200元",
+              "locator": "doc/body/part:1/line:10",
+              "excerpt": "申报金额：31200元"
+            },
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "supplierName",
+              "value": "仿真办公供应公司",
+              "locator": "doc/body/part:1/line:10",
+              "excerpt": "供应商名称：仿真办公供应公司"
+            },
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "doc/body/part:1/line:10",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "doc/body/part:1/line:10",
+              "excerpt": "科目名称：办公设备；申报金额：31200元；供应商名称：仿真办公供应公司；项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "subjectCode",
+              "value": "SYN-OFFICE",
+              "locator": "doc/body/part:1/line:5",
+              "excerpt": "科目编码：SYN-OFFICE"
+            },
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "departmentName",
+              "value": "采购管理部",
+              "locator": "doc/body/part:1/line:2",
+              "excerpt": "申请部门：采购管理部"
+            },
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "projectName",
+              "value": "仿真办公设备更新项目",
+              "locator": "doc/body/part:1/line:0",
+              "excerpt": "项目名称：仿真办公设备更新项目"
+            },
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "doc/body/part:1/line:1",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "6197d898-1ccc-4ee9-b0da-78bb1d7b173f",
+              "fileName": "sample.doc",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "doc/body/part:1/line:6",
+              "excerpt": "科目名称：办公设备"
+            }
+          ]
+        }
+      ],
+      "historyName": "仿真办公设备更新项目"
+    }
+  },
+  {
+    "module": "budget",
+    "label": "sample.xls",
+    "failures": [
+      "DECLARED_AMOUNT_MISSING"
+    ],
+    "details": {
+      "batchId": "402d9f83-d471-464d-8938-1290291807a6",
+      "jobStates": [
+        "PARSED"
+      ],
+      "lines": [
+        {
+          "project": "仿真办公设备更新项目",
+          "projectCode": "SYN-OFFICE-2026",
+          "subject": "办公设备",
+          "subjectCode": "SYN-OFFICE",
+          "year": null,
+          "department": null,
+          "declaredAmount": null,
+          "approvalAmount": null,
+          "status": "CONFLICT",
+          "opinion": "材料中的项目、年度、部门或金额存在不一致，暂不能确认适用的申报与批复，请核对材料版本。",
+          "sources": [
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "excel/sheet:1/row:12/part:12/col:1",
+              "excerpt": "科目名称：办公设备"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "declaredAmount",
+              "value": "31200",
+              "locator": "excel/sheet:1/row:12/part:12/col:2",
+              "excerpt": "申报金额：31200"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "approvalAmount",
+              "value": "32760",
+              "locator": "excel/sheet:1/row:12/part:12/col:3",
+              "excerpt": "批复参考金额：32760"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "supplierName",
+              "value": "仿真办公供应公司",
+              "locator": "excel/sheet:1/row:12/part:12/col:4",
+              "excerpt": "供应商名称：仿真办公供应公司"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "excel/sheet:1/row:12/part:12/col:5",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "subjectCode",
+              "value": "SYN-OFFICE",
+              "locator": "excel/sheet:1/row:6/part:6/line:0",
+              "excerpt": "科目编码：SYN-OFFICE"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "subjectCode",
+              "value": "SYN-OFFICE",
+              "locator": "excel/sheet:2/row:6/part:18/line:0",
+              "excerpt": "科目编码：SYN-OFFICE"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "departmentName",
+              "value": "采购管理部",
+              "locator": "excel/sheet:1/row:3/part:3/line:0",
+              "excerpt": "申请部门：采购管理部"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "departmentName",
+              "value": "采购管理部",
+              "locator": "excel/sheet:2/row:3/part:15/line:0",
+              "excerpt": "申请部门：采购管理部"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "departmentName",
+              "value": "仿真经办人",
+              "locator": "excel/sheet:1/row:9/part:9",
+              "excerpt": "申请人：仿真经办人"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "projectName",
+              "value": "仿真办公设备更新项目",
+              "locator": "excel/sheet:1/row:1/part:1/line:0",
+              "excerpt": "项目名称：仿真办公设备更新项目"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "projectName",
+              "value": "仿真办公设备更新项目",
+              "locator": "excel/sheet:2/row:1/part:13/line:0",
+              "excerpt": "项目名称：仿真办公设备更新项目"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "excel/sheet:2/row:12/part:24/col:1",
+              "excerpt": "科目名称：办公设备"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "declaredAmount",
+              "value": "31200",
+              "locator": "excel/sheet:2/row:12/part:24/col:2",
+              "excerpt": "申报金额：31200"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "approvalAmount",
+              "value": "32760",
+              "locator": "excel/sheet:2/row:12/part:24/col:3",
+              "excerpt": "批复参考金额：32760"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "supplierName",
+              "value": "仿真办公供应公司",
+              "locator": "excel/sheet:2/row:12/part:24/col:4",
+              "excerpt": "供应商名称：仿真办公供应公司"
+            },
+            {
+              "taskId": "fbe10e68-78ce-47a8-801e-1357ee34c769",
+              "fileName": "sample.xls",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "excel/sheet:2/row:12/part:24/col:5",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            }
+          ]
+        }
+      ],
+      "historyName": "仿真办公设备更新项目"
+    }
+  },
+  {
+    "module": "budget",
+    "label": "sample.rtf",
+    "failures": [],
+    "details": {
+      "batchId": "0f380375-3cb5-4c0c-bc10-6f53f15dc519",
+      "jobStates": [
+        "PARSED"
+      ],
+      "lines": [
+        {
+          "project": "仿真办公设备更新项目",
+          "projectCode": "SYN-OFFICE-2026",
+          "subject": "办公设备",
+          "subjectCode": "SYN-OFFICE",
+          "year": null,
+          "department": "采购管理部",
+          "declaredAmount": 31200.0,
+          "approvalAmount": null,
+          "status": "INSUFFICIENT",
+          "opinion": "已读取申报信息，现有材料未能确认对应批复金额，暂不能判断是否超过批复。",
+          "sources": [
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "rtf/body/part:1/line:10",
+              "excerpt": "科目名称：办公设备"
+            },
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "rtf/body/part:1/line:10",
+              "excerpt": "科目名称：办公设备；申报金额：31200元；供应商名称：仿真办公供应公司；项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "declaredAmount",
+              "value": "31200元",
+              "locator": "rtf/body/part:1/line:10",
+              "excerpt": "申报金额：31200元"
+            },
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "supplierName",
+              "value": "仿真办公供应公司",
+              "locator": "rtf/body/part:1/line:10",
+              "excerpt": "供应商名称：仿真办公供应公司"
+            },
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "rtf/body/part:1/line:10",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "rtf/body/part:1/line:10",
+              "excerpt": "科目名称：办公设备；申报金额：31200元；供应商名称：仿真办公供应公司；项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "subjectCode",
+              "value": "SYN-OFFICE",
+              "locator": "rtf/body/part:1/line:5",
+              "excerpt": "科目编码：SYN-OFFICE"
+            },
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "departmentName",
+              "value": "采购管理部",
+              "locator": "rtf/body/part:1/line:2",
+              "excerpt": "申请部门：采购管理部"
+            },
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "projectName",
+              "value": "仿真办公设备更新项目",
+              "locator": "rtf/body/part:1/line:0",
+              "excerpt": "项目名称：仿真办公设备更新项目"
+            },
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "rtf/body/part:1/line:1",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "01c549d2-5ee0-42a5-ba89-7da27746ef66",
+              "fileName": "sample.rtf",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "rtf/body/part:1/line:6",
+              "excerpt": "科目名称：办公设备"
+            }
+          ]
+        }
+      ],
+      "historyName": "仿真办公设备更新项目"
+    }
+  },
+  {
+    "module": "budget",
+    "label": "sample.csv",
+    "failures": [],
+    "details": {
+      "batchId": "6620d4f9-9192-40d5-9aff-fc3ff93c93a7",
+      "jobStates": [
+        "PARSED"
+      ],
+      "lines": [
+        {
+          "project": "仿真办公设备更新项目",
+          "projectCode": "SYN-OFFICE-2026",
+          "subject": "办公设备",
+          "subjectCode": "SYN-OFFICE",
+          "year": null,
+          "department": "采购管理部",
+          "declaredAmount": 31200.0,
+          "approvalAmount": null,
+          "status": "INSUFFICIENT",
+          "opinion": "已读取申报信息，现有材料未能确认对应批复金额，暂不能判断是否超过批复。",
+          "sources": [
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "text/body/part:1/line:10",
+              "excerpt": "科目名称：办公设备"
+            },
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "text/body/part:1/line:10",
+              "excerpt": "科目名称：办公设备；申报金额：31200元；供应商名称：仿真办公供应公司；项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "declaredAmount",
+              "value": "31200元",
+              "locator": "text/body/part:1/line:10",
+              "excerpt": "申报金额：31200元"
+            },
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "supplierName",
+              "value": "仿真办公供应公司",
+              "locator": "text/body/part:1/line:10",
+              "excerpt": "供应商名称：仿真办公供应公司"
+            },
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "text/body/part:1/line:10",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "text/body/part:1/line:10",
+              "excerpt": "科目名称：办公设备；申报金额：31200元；供应商名称：仿真办公供应公司；项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "subjectCode",
+              "value": "SYN-OFFICE",
+              "locator": "text/body/part:1/line:5",
+              "excerpt": "科目编码：SYN-OFFICE"
+            },
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "departmentName",
+              "value": "采购管理部",
+              "locator": "text/body/part:1/line:2",
+              "excerpt": "申请部门：采购管理部"
+            },
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "projectName",
+              "value": "仿真办公设备更新项目",
+              "locator": "text/body/part:1/line:0",
+              "excerpt": "项目名称：仿真办公设备更新项目"
+            },
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "text/body/part:1/line:1",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "9d2ae3d9-c5b8-45bf-b83d-da7ecf560cdc",
+              "fileName": "sample.csv",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "text/body/part:1/line:6",
+              "excerpt": "科目名称：办公设备"
+            }
+          ]
+        }
+      ],
+      "historyName": "仿真办公设备更新项目"
+    }
+  },
+  {
+    "module": "budget",
+    "label": "sample.pptx",
+    "failures": [],
+    "details": {
+      "batchId": "b73eecb5-79e0-4f52-a7fb-8c0b85098962",
+      "jobStates": [
+        "PARSED"
+      ],
+      "lines": [
+        {
+          "project": "仿真办公设备更新项目",
+          "projectCode": "SYN-OFFICE-2026",
+          "subject": "办公设备",
+          "subjectCode": "SYN-OFFICE",
+          "year": null,
+          "department": "采购管理部",
+          "declaredAmount": 31200.0,
+          "approvalAmount": null,
+          "status": "INSUFFICIENT",
+          "opinion": "已读取申报信息，现有材料未能确认对应批复金额，暂不能判断是否超过批复。",
+          "sources": [
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "pptx/slide:1/shape:1/part:1/line:10",
+              "excerpt": "科目名称：办公设备"
+            },
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "pptx/slide:1/shape:1/part:1/line:10",
+              "excerpt": "科目名称：办公设备；申报金额：31200元"
+            },
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "declaredAmount",
+              "value": "31200元",
+              "locator": "pptx/slide:1/shape:1/part:1/line:10",
+              "excerpt": "申报金额：31200元"
+            },
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "supplierName",
+              "value": "仿真办公供应公司",
+              "locator": "pptx/slide:1/shape:1/part:1/line:10",
+              "excerpt": "供应商名称：仿真办公供应公司"
+            },
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "pptx/slide:1/shape:1/part:1/line:10",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "pptx/slide:1/shape:1/part:1/line:10",
+              "excerpt": "科目名称：办公设备；申报金额：31200元；供应商名称：仿真办公供应公司；项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "subjectCode",
+              "value": "SYN-OFFICE",
+              "locator": "pptx/slide:1/shape:1/part:1/line:5",
+              "excerpt": "科目编码：SYN-OFFICE"
+            },
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "departmentName",
+              "value": "采购管理部",
+              "locator": "pptx/slide:1/shape:1/part:1/line:2",
+              "excerpt": "申请部门：采购管理部"
+            },
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "projectName",
+              "value": "仿真办公设备更新项目",
+              "locator": "pptx/slide:1/shape:1/part:1/line:0",
+              "excerpt": "项目名称：仿真办公设备更新项目"
+            },
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "projectCode",
+              "value": "SYN-OFFICE-2026",
+              "locator": "pptx/slide:1/shape:1/part:1/line:1",
+              "excerpt": "项目编号：SYN-OFFICE-2026"
+            },
+            {
+              "taskId": "1ddf4288-2f69-42e4-adc4-86bdd1571ca4",
+              "fileName": "sample.pptx",
+              "field": "subjectName",
+              "value": "办公设备",
+              "locator": "pptx/slide:1/shape:1/part:1/line:6",
+              "excerpt": "科目名称：办公设备"
+            }
+          ]
+        }
+      ],
+      "historyName": "仿真办公设备更新项目"
+    }
+  }
+]

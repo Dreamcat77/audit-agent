@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController @RequestMapping("/api/v1/procurement/cases")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 @ConditionalOnProperty(name="audit.procurement.auto-case.enabled",havingValue="true")
 public class AuditCaseController {
     private final AuditCaseService service;private final AuthContext auth;
@@ -58,11 +58,11 @@ public class AuditCaseController {
     }
     private CurrentUser user(){return auth.currentUser().orElseThrow(()->new BusinessException(BusinessErrorCode.UNAUTHENTICATED));}
     record DocumentView(UUID id,String name,String status,String parseMethod,String errorCode,int factCount) {}
-    record View(UUID id,String caseNumber,String projectName,String status,Instant createdAt,List<DocumentView> documents,AuditCase.Report report,Map<String,String> findingIds) {}
+    record View(UUID id,String caseNumber,String projectName,String status,Instant createdAt,List<DocumentView> documents,AuditCase.Report report,Map<String,String> findingIds,List<CaseAvailableResults.Detail> materialDetails) {}
     record EvidenceView(String fileName,String sha256,List<com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Segment> segments,List<AuditCase.Fact> facts) {}
     static View view(AuditCase c){
         var ids=new LinkedHashMap<String,String>();
         if(c.report()!=null)c.report().reviews().values().stream().flatMap(r->r.findings().stream()).forEach(f->ids.put(f.title()+"\n"+f.explanation(),CaseFindingAcknowledgments.identity(f)));
-        return new View(c.id(),"AC-"+c.id(),CaseFactPolicy.projectName(c),c.status(),c.createdAt(),c.documents().stream().map(d->new DocumentView(d.id(),d.name(),d.status(),d.parseMethod(),d.errorCode(),d.facts().size())).toList(),c.report(),ids);
+        return new View(c.id(),"AC-"+c.id(),CaseFactPolicy.projectName(c),c.status(),c.createdAt(),c.documents().stream().map(d->new DocumentView(d.id(),d.name(),d.status(),d.parseMethod(),d.errorCode(),d.facts().size())).toList(),CaseReviewAssurance.project(c.report()),ids,CaseAvailableResults.details(c));
     }
 }

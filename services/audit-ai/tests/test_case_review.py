@@ -19,6 +19,16 @@ class MockGateway:
         assert system_prompt == SYSTEM
         return ModelCompletion(payload={"complete": False, "findings": [], "observations": []}, model="MOCK", duration_ms=1)
 
+def test_scope_basis_is_preserved_and_bad_basis_cannot_erase_other_results():
+    from audit_ai.model.case_review import validated_projection
+    finding={'basis':'MATERIAL_SCOPE','code':'PROCEDURAL_EVIDENCE','level':'WARNING','title':'未上传后续材料',
+             'explanation':'仅有投标文件','suggestion':'补充中标通知书','evidenceIds':['E-synthetic']}
+    observation={'code':'DATE_AND_PLAN','explanation':'投标承诺180天交付','evidenceIds':['E-synthetic']}
+    parsed=validated_projection({'complete':True,'findings':[finding,{**finding,'basis':'INVENTED'}],'observations':[observation]},'qa')
+    assert len(parsed.findings)==1 and parsed.findings[0].basis=='MATERIAL_SCOPE'
+    assert parsed.observations[0].explanation=='投标承诺180天交付'
+    assert parsed.complete is False
+
 def test_invalid_item_does_not_discard_valid_sibling_or_claim_complete(caplog):
     from audit_ai.model.case_review import validated_projection
     raw={'complete':True,'findings':[
@@ -78,12 +88,22 @@ def test_model_context_does_not_repeat_raw_evidence_in_checks():
     import json
     from audit_ai.model.case_review import CaseRequest, model_context
     body=request_body()
-    body['checks']=[{'code':'TEST','status':'UNKNOWN','explanation':'Mock check','evidence':[body['evidence'][0]]}]*4
+    body['checks']=[{'code':'TEST','status':'CONSISTENT_IN_OBSERVED','explanation':'Mock check','evidence':[body['evidence'][0]]}]*4
     compact=model_context(CaseRequest.model_validate(body))
     assert compact.count(body['evidence'][0]['excerpt'])==1
     parsed=json.loads(compact)
     assert parsed['checks'][0]['evidenceIds']==[body['evidence'][0]['id']]
     assert parsed['evidence'][0]['document']=='D1'
+
+def test_unknown_system_checks_do_not_seed_empty_or_null_business_conclusions():
+    import json
+    from audit_ai.model.case_review import CaseRequest, model_context
+    body=request_body()
+    body['checks']=[{'code':'QUOTE_BUDGET','status':'UNKNOWN','explanation':'预算上限 null','evidence':[]},
+                    {'code':'CONFIRMED','status':'PASS','explanation':'已核实的采购内容','evidence':[body['evidence'][0]]}]
+    parsed=json.loads(model_context(CaseRequest.model_validate(body)))
+    assert [c['code'] for c in parsed['checks']]==['CONFIRMED']
+    assert 'null' not in json.dumps(parsed['checks'])
 
 def test_full_upload_inventory_does_not_expand_selected_raw_context():
     import json

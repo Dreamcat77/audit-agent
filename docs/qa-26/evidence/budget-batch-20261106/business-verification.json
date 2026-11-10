@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "verifiedScenarioVariants": 10,
+  "latestDeployment": "budget-batch-20261106-r5",
+  "nonFixedProseTotal": 1200000,
+  "historyAmountExcluded": 3000000,
+  "inclusiveMillionThreshold": true,
+  "sourceExactness": "verified by remote acceptance script",
+  "allBatchesFinished": true
+}

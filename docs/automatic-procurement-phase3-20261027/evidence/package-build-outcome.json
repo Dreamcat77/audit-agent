@@ -1,0 +1,10 @@
+{
+  "command": ".\\mvnw.cmd -q \"-Daudit.build.directory=target-phase3-final\" -DskipTests package",
+  "exitCode": 0,
+  "testsExecuted": false,
+  "environment": "Windows / JDK 17.0.18",
+  "artifact": "backend/target-phase3-final/audit-backend-0.1.0-SNAPSHOT.jar",
+  "artifactBytes": 81623263,
+  "artifactSha256": "7735b2c6780e76e5cb5a476dc37141c79e4943f5b7f8860ce2a70616ecd78ad5",
+  "priorShellArgumentFailureRetained": "package-shell-argument-failure.log"
+}

@@ -1,0 +1,110 @@
+{
+  "environment": "26 default service",
+  "caseStatus": "PARTIAL",
+  "caseReason": "ANALYSIS_COVERAGE_LIMITED",
+  "createdAt": "2026-11-04T06:54:25.977785540Z",
+  "lastStepCompletedAt": "2026-11-04T07:47:20.089561+00:00",
+  "elapsedSecondsThroughLastStep": 3174.112,
+  "modelFragmentPhaseSeconds": 2208.327,
+  "parse": {
+    "durationMs": 956262,
+    "status": "PARSED",
+    "chars": 187695,
+    "pages": 274,
+    "method": "OCR"
+  },
+  "ocr": {
+    "completed": 87,
+    "active": 0,
+    "peakConcurrency": 4,
+    "errors": 0
+  },
+  "observedPeakOcrRssBytes": 8500789248,
+  "health": {
+    "samples": 95,
+    "requests": 285,
+    "statusCounts": {
+      "200": 285
+    },
+    "maxResponseMs": 4.73,
+    "observedFrom": "2026-11-04T06:59:27Z",
+    "observedTo": "2026-11-04T07:47:17Z"
+  },
+  "fragmentCount": 84,
+  "fragmentStates": {
+    "COMPLETED": 27,
+    "PARTIAL": 32,
+    "DATA_INSUFFICIENT": 25
+  },
+  "attemptedSourceEnd": 187695,
+  "attemptedSourceGaps": 0,
+  "rejectedDescriptions": 127,
+  "report": {
+    "projectNamePresent": true,
+    "documents": [
+      {
+        "role": "BID",
+        "sourceChars": 187695,
+        "reviewedChars": 94720,
+        "fullyReviewed": false,
+        "facts": 32,
+        "clauses": 158
+      }
+    ],
+    "findings": 3,
+    "checks": 5,
+    "categories": [
+      {
+        "title": "合同条款量化一致性审查",
+        "status": "AVAILABLE",
+        "items": 4
+      },
+      {
+        "title": "合同草本结构对标审查",
+        "status": "AVAILABLE",
+        "items": 9
+      },
+      {
+        "title": "违约责任条款量化审查",
+        "status": "DATA_INSUFFICIENT",
+        "items": 0
+      },
+      {
+        "title": "合同期限与终止条件格式审查",
+        "status": "AVAILABLE",
+        "items": 18
+      },
+      {
+        "title": "合同主体资格审查",
+        "status": "AVAILABLE",
+        "items": 22
+      },
+      {
+        "title": "附件清单完整性审查",
+        "status": "AVAILABLE",
+        "items": 5
+      },
+      {
+        "title": "合同生效条件与份数审查",
+        "status": "DATA_INSUFFICIENT",
+        "items": 0
+      },
+      {
+        "title": "合同条款风险提示",
+        "status": "ATTENTION",
+        "items": 120
+      }
+    ]
+  },
+  "observedQualityIssues": [
+    "BID_AND_AWARD_ROLES_CONFUSED",
+    "BID_PRICE_LABELED_CONTRACT_AMOUNT",
+    "HISTORICAL_REFERENCE_FACTS_MIXED",
+    "OCR_CHARACTER_ERROR_TREATED_AS_BUSINESS_RISK",
+    "GENERIC_TECHNICAL_SUMMARIES_DOMINATE_RISK_VIEW"
+  ],
+  "productionCodeChanged": false,
+  "userTaskRestarted": false,
+  "qualityAcceptance": "NOT_PASSED",
+  "privacy": "Metadata and counts only; no source text, business names, monetary values, or credentials."
+}

@@ -176,6 +176,7 @@ def recognize_page(image: Any, page_num: int, predict: Callable,
                 best_page, best_scores, best_angle = full_page, full_scores, full_angle
     best_quality = quality(best_page, best_scores)
     with image.rotate(best_angle, expand=True) as upright:
+        rotations = [(best_angle, image.size, upright.size)]
         tilt = deskew_angle(upright)
         if tilt:
             with upright.rotate(tilt, resample=Image.Resampling.BICUBIC,
@@ -186,6 +187,7 @@ def recognize_page(image: Any, page_num: int, predict: Callable,
                     score = quality(page, scores)
                     if score > best_quality * 1.02 + .01:
                         best_page, best_scores, best_quality = page, scores, score
+                        rotations.append((tilt, upright.size, candidate.size))
                     else:
                         tilt = 0.
                 else:
@@ -196,4 +198,6 @@ def recognize_page(image: Any, page_num: int, predict: Callable,
               duration_ms=max(0, (time.perf_counter_ns() - started) // 1_000_000),
               orientation_quality_milli=round(max(0., best_quality) * 1000),
               classifier_confidence_milli=round(classifier_confidence * 1000), ocr_page_count=page_num)
-    return OcrPage(page_num, best_page.text, best_page.confidence), best_scores
+    from dataclasses import replace
+    from audit_ai.ocr.geometry import restore_regions
+    return replace(restore_regions(best_page, image.size, rotations), page_num=page_num), best_scores

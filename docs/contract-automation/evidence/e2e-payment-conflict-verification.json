@@ -1,0 +1,16 @@
+{
+  "scenario": "payment-conflict",
+  "caseId": "529e402c-24ff-3dde-852d-95ff696df958",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 16,
+  "clauses": 8,
+  "risks": 1,
+  "followUps": 0,
+  "evidenceChecks": 31,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "freshVerifier": true
+}

@@ -1,0 +1,854 @@
+{
+  "value": {
+    "id": "cf4bcf40-e935-32da-a607-e714ec9b62b5",
+    "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+    "owner": "20000000-0000-0000-0000-000000000001",
+    "inputDigest": "bb72b5abbf7903761498284e019d828df50806515dbd79696023a94778e9f26e",
+    "status": "PARTIAL",
+    "version": 42,
+    "leaseToken": null,
+    "leaseUntil": null,
+    "attempts": 11,
+    "createdAt": "2026-10-29T17:10:32.390324942Z",
+    "deadline": "2026-10-29T17:46:32.390324942Z",
+    "sources": [
+      {
+        "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "name": "服务安排材料.docx",
+        "sha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+        "size": 37038,
+        "status": "READY",
+        "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+        "parseVersion": 1,
+        "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+        "reasonCode": null
+      },
+      {
+        "fileId": "63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "name": "服务人员清单.docx",
+        "sha256": "d0ab4d2fb4d24f24f8d86dc41f1496f54545dd8871a87104798d117877c559e9",
+        "size": 36813,
+        "status": "READY",
+        "parseResultId": "790b4a2b-97fa-4e36-97cf-a518164a4811",
+        "parseVersion": 1,
+        "textSha256": "fe795c7787f6ec9a566e4b60272aae3da1fddcbb7f1a62274a554f45bf8226e5",
+        "reasonCode": null
+      }
+    ],
+    "steps": [
+      {
+        "id": "recall/52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "kind": "RECALL",
+        "start": 0,
+        "end": 210,
+        "inputDigest": "cea9b13ced593fa96168a3d75bdfbf93b7ac39699ff592fef4b0701b987ad423",
+        "status": "COMPLETED",
+        "startedAt": "2026-10-29T17:10:34.961610377Z",
+        "completedAt": "2026-10-29T17:10:34.964522360Z",
+        "output": {
+          "role": "CONTRACT",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [
+            {
+              "type": "PARTY_A",
+              "value": "昭宁合成服务中心",
+              "method": "RULE_RECALL_SOURCE_VERIFIED",
+              "evidence": [
+                {
+                  "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+                  "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+                  "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+                  "parseVersion": 1,
+                  "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+                  "start": 28,
+                  "end": 39,
+                  "excerpt": "甲方：昭宁合成服务中心"
+                }
+              ]
+            },
+            {
+              "type": "PARTY_B",
+              "value": "昭宁合成咨询有限公司",
+              "method": "RULE_RECALL_SOURCE_VERIFIED",
+              "evidence": [
+                {
+                  "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+                  "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+                  "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+                  "parseVersion": 1,
+                  "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+                  "start": 41,
+                  "end": 54,
+                  "excerpt": "乙方：昭宁合成咨询有限公司"
+                }
+              ]
+            }
+          ],
+          "clauses": [],
+          "checks": [],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "contract-rule-recall-v1"
+        },
+        "reasonCode": null
+      },
+      {
+        "id": "analyze-v2/52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a/0",
+        "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "kind": "FILE",
+        "start": 0,
+        "end": 210,
+        "inputDigest": "a9671eed4893557d140ce8a54ea4e025b95718ff530e0913984a3c452291036d",
+        "status": "FAILED",
+        "startedAt": "2026-10-29T17:10:36.961853874Z",
+        "completedAt": "2026-10-29T17:10:41.980106829Z",
+        "output": null,
+        "reasonCode": "MODEL_HTTP_502"
+      },
+      {
+        "id": "recall/63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "fileId": "63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "kind": "RECALL",
+        "start": 0,
+        "end": 83,
+        "inputDigest": "963d51da534b2f8eebd53b50fa6c3292776c45dfb7cf924302188c0dfa67a684",
+        "status": "DATA_INSUFFICIENT",
+        "startedAt": "2026-10-29T17:10:42.964268018Z",
+        "completedAt": "2026-10-29T17:10:42.967066747Z",
+        "output": {
+          "role": "OTHER",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [],
+          "clauses": [],
+          "checks": [],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "contract-rule-recall-v1"
+        },
+        "reasonCode": "NO_SUPPORTED_ANALYSIS_IN_SCOPE"
+      },
+      {
+        "id": "analyze-v2/63cb5522-bf2b-4130-88e3-61a8043f9fd3/0",
+        "fileId": "63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "kind": "FILE",
+        "start": 0,
+        "end": 83,
+        "inputDigest": "885e585961cb61e2da583281b694cf6d59dac0ff2a4026b7d997002495e4e4b9",
+        "status": "FAILED",
+        "startedAt": "2026-10-29T17:10:44.965441985Z",
+        "completedAt": "2026-10-29T17:10:49.985637633Z",
+        "output": null,
+        "reasonCode": "MODEL_HTTP_502"
+      },
+      {
+        "id": "rules/52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "kind": "RULES",
+        "start": 0,
+        "end": 210,
+        "inputDigest": "d083d25abda98109c711c271c99d6bd2b544338b42b4e13778873c3413303e38",
+        "status": "DATA_INSUFFICIENT",
+        "startedAt": "2026-10-29T17:10:50.968899073Z",
+        "completedAt": "2026-10-29T17:10:50.971213002Z",
+        "output": {
+          "role": "OTHER",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [],
+          "clauses": [],
+          "checks": [
+            {
+              "code": "F02_AMOUNT_WORDS_MATCH",
+              "status": "NOT_EVALUATED",
+              "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+              "evidence": []
+            },
+            {
+              "code": "F02_LINE_ITEM_ARITHMETIC",
+              "status": "NOT_EVALUATED",
+              "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+              "evidence": []
+            },
+            {
+              "code": "F02_LINE_SUM_MATCH",
+              "status": "NOT_EVALUATED",
+              "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+              "evidence": []
+            }
+          ],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "f02-independent-v1"
+        },
+        "reasonCode": "NO_SUPPORTED_ANALYSIS_IN_SCOPE"
+      },
+      {
+        "id": "rules/63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "fileId": "63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "kind": "RULES",
+        "start": 0,
+        "end": 83,
+        "inputDigest": "5b9d39ab67ffc21ff587166793a54d054f68d5bd242c5d914756b47d21ec0173",
+        "status": "DATA_INSUFFICIENT",
+        "startedAt": "2026-10-29T17:10:52.970514479Z",
+        "completedAt": "2026-10-29T17:10:52.972607778Z",
+        "output": {
+          "role": "OTHER",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [],
+          "clauses": [],
+          "checks": [
+            {
+              "code": "F02_AMOUNT_WORDS_MATCH",
+              "status": "NOT_EVALUATED",
+              "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+              "evidence": []
+            },
+            {
+              "code": "F02_LINE_ITEM_ARITHMETIC",
+              "status": "NOT_EVALUATED",
+              "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+              "evidence": []
+            },
+            {
+              "code": "F02_LINE_SUM_MATCH",
+              "status": "NOT_EVALUATED",
+              "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+              "evidence": []
+            }
+          ],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "f02-independent-v1"
+        },
+        "reasonCode": "NO_SUPPORTED_ANALYSIS_IN_SCOPE"
+      },
+      {
+        "id": "formal/52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "kind": "FORMAL_LINK",
+        "start": 0,
+        "end": 0,
+        "inputDigest": "4b719e3f9ffe9c53ecfa89eeeb50ae30edde0234034964d086cded6aa701e19f",
+        "status": "COMPLETED",
+        "startedAt": "2026-10-29T17:10:54.970758837Z",
+        "completedAt": "2026-10-29T17:10:55.024057776Z",
+        "output": {
+          "role": "OTHER",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [],
+          "clauses": [],
+          "checks": [],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "formal-link-v1"
+        },
+        "reasonCode": null
+      },
+      {
+        "id": "formal/63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "fileId": "63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "kind": "FORMAL_LINK",
+        "start": 0,
+        "end": 0,
+        "inputDigest": "d3a45840a00922e82886eb6188e58e76c899ac04b398a71e47f92d5f3f288378",
+        "status": "COMPLETED",
+        "startedAt": "2026-10-29T17:10:56.972878814Z",
+        "completedAt": "2026-10-29T17:10:56.996274190Z",
+        "output": {
+          "role": "OTHER",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [],
+          "clauses": [],
+          "checks": [],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "formal-link-v1"
+        },
+        "reasonCode": null
+      },
+      {
+        "id": "document-rules/52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "kind": "DOCUMENT_RULES",
+        "start": 0,
+        "end": 0,
+        "inputDigest": "ac4bbb4cd49fff15b242332a13bdbb333eb5dbcdfcddbeab7817c06d64ed8bbc",
+        "status": "DATA_INSUFFICIENT",
+        "startedAt": "2026-10-29T17:10:58.975871668Z",
+        "completedAt": "2026-10-29T17:10:58.978684988Z",
+        "output": {
+          "role": "OTHER",
+          "profile": "GENERAL",
+          "complete": true,
+          "facts": [],
+          "clauses": [],
+          "checks": [],
+          "findings": [],
+          "rejectedCitations": 0,
+          "model": null,
+          "version": "document-rules-v1"
+        },
+        "reasonCode": "NO_SUPPORTED_ANALYSIS_IN_SCOPE"
+      }
+    ],
+    "reasonCode": "ANALYSIS_COVERAGE_LIMITED",
+    "expectedUploads": 2
+  },
+  "report": {
+    "id": "cf4bcf40-e935-32da-a607-e714ec9b62b5",
+    "status": "PARTIAL",
+    "statusLabel": "已生成部分结果",
+    "headline": "昭宁资料咨询服务项目9D4325",
+    "explanation": "已形成可参考的阶段结果，请优先查看有原文依据的关注事项；尚未完成的范围单独列出。",
+    "createdAt": "2026-10-29T17:10:32.390324942Z",
+    "documents": [
+      {
+        "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "name": "服务安排材料.docx",
+        "status": "READY",
+        "role": "CONTRACT",
+        "profile": "GENERAL",
+        "facts": [
+          {
+            "type": "PARTY_A",
+            "value": "昭宁合成服务中心",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+                "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+                "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+                "parseVersion": 1,
+                "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+                "start": 28,
+                "end": 39,
+                "excerpt": "甲方：昭宁合成服务中心"
+              }
+            ]
+          },
+          {
+            "type": "PARTY_B",
+            "value": "昭宁合成咨询有限公司",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+                "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+                "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+                "parseVersion": 1,
+                "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+                "start": 41,
+                "end": 54,
+                "excerpt": "乙方：昭宁合成咨询有限公司"
+              }
+            ]
+          }
+        ],
+        "clauses": [],
+        "checks": [
+          {
+            "code": "F02_AMOUNT_WORDS_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+            "evidence": []
+          },
+          {
+            "code": "F02_LINE_ITEM_ARITHMETIC",
+            "status": "NOT_EVALUATED",
+            "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+            "evidence": []
+          },
+          {
+            "code": "F02_LINE_SUM_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "sourceChars": 210,
+        "reviewedChars": 0,
+        "fullyReviewed": false
+      },
+      {
+        "fileId": "63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "name": "服务人员清单.docx",
+        "status": "READY",
+        "role": "OTHER",
+        "profile": "GENERAL",
+        "facts": [],
+        "clauses": [],
+        "checks": [
+          {
+            "code": "F02_AMOUNT_WORDS_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+            "evidence": []
+          },
+          {
+            "code": "F02_LINE_ITEM_ARITHMETIC",
+            "status": "NOT_EVALUATED",
+            "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+            "evidence": []
+          },
+          {
+            "code": "F02_LINE_SUM_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "sourceChars": 83,
+        "reviewedChars": 0,
+        "fullyReviewed": false
+      }
+    ],
+    "findings": [],
+    "checks": [
+      {
+        "code": "F02_AMOUNT_WORDS_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+        "evidence": []
+      },
+      {
+        "code": "F02_LINE_ITEM_ARITHMETIC",
+        "status": "NOT_EVALUATED",
+        "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+        "evidence": []
+      },
+      {
+        "code": "F02_LINE_SUM_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+        "evidence": []
+      },
+      {
+        "code": "F02_AWARD_AMOUNT_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+        "evidence": []
+      },
+      {
+        "code": "F02_AWARD_SUPPLIER_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+        "evidence": []
+      }
+    ],
+    "limitations": [
+      "“服务安排材料.docx”：仅展示已取得依据的内容，部分原文未完成模型审查，不能据此认定整份合同无风险。",
+      "“服务人员清单.docx”：仅展示已取得依据的内容，部分原文未完成模型审查，不能据此认定整份合同无风险。",
+      "部分处理步骤未成功，当前报告保留其他已完成的独立检查。",
+      "材料之间尚无足够明确的合同关联依据，分别展示结果，未将不同文件的主体或金额强行合并。"
+    ],
+    "comparisons": [],
+    "categories": [
+      {
+        "id": "QUANTITATIVE",
+        "order": 1,
+        "title": "合同条款量化一致性审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "DRAFT_STRUCTURE",
+        "order": 2,
+        "title": "合同草本结构对标审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "BREACH",
+        "order": 3,
+        "title": "违约责任条款量化审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "TERM",
+        "order": 4,
+        "title": "合同期限与终止条件格式审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "PARTY_QUALIFICATION",
+        "order": 5,
+        "title": "合同主体资格审查",
+        "status": "AVAILABLE",
+        "summary": "已整理合同主体信息；资质结论以材料中的证明为依据",
+        "items": [
+          {
+            "title": "甲方",
+            "summary": "甲方：昭宁合成服务中心",
+            "level": "INFO",
+            "evidence": [
+              {
+                "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+                "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+                "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+                "parseVersion": 1,
+                "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+                "start": 28,
+                "end": 39,
+                "excerpt": "甲方：昭宁合成服务中心"
+              }
+            ]
+          },
+          {
+            "title": "乙方",
+            "summary": "乙方：昭宁合成咨询有限公司",
+            "level": "INFO",
+            "evidence": [
+              {
+                "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+                "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+                "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+                "parseVersion": 1,
+                "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+                "start": 41,
+                "end": 54,
+                "excerpt": "乙方：昭宁合成咨询有限公司"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ATTACHMENT_COMPLETENESS",
+        "order": 6,
+        "title": "附件清单完整性审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "EFFECTIVENESS_COPIES",
+        "order": 7,
+        "title": "合同生效条件与份数审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "CLAUSE_RISK",
+        "order": 8,
+        "title": "合同条款风险提示",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      }
+    ],
+    "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+    "projectName": "昭宁资料咨询服务项目9D4325"
+  },
+  "project": {
+    "project": {
+      "id": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+      "name": "昭宁资料咨询服务项目9D4325",
+      "projectNo": null,
+      "category": null,
+      "metadataConfirmed": true,
+      "versionNo": 1,
+      "createdAt": "2026-10-29T17:10:32.389089Z",
+      "updatedAt": "2026-10-29T17:10:54.990866Z"
+    },
+    "intakeStatus": "CANDIDATES_AVAILABLE",
+    "files": [
+      {
+        "id": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+        "parentArchiveFileId": null,
+        "normalizedRelativePath": null,
+        "originalFilename": "服务安排材料.docx",
+        "mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "category": "UNKNOWN",
+        "ingestionStatus": "AVAILABLE",
+        "parseStatus": "PARSED",
+        "sizeBytes": 37038,
+        "parsedText": "合同书\n\n项目名称：昭宁资料咨询服务项目9D4325\n\n甲方：昭宁合成服务中心\n\n乙方：昭宁合成咨询有限公司\n\n第一条 服务内容：提供资料咨询服务，具体价款和编号待双方商定。\n\n第二条 合同自双方签字盖章之日起生效，履行期限一年，期满终止。\n\n第三条 附件：附件一《服务人员清单》、附件二《保密承诺书》均为本合同组成部分。\n\n第四条 保密：服务中接触资料不得向第三方披露。\n\n（本材料为合成测试文件，不代表真实业务。）\n",
+        "parseMethod": "DOCX_TEXT",
+        "parseEngine": "SHARED_MATERIAL",
+        "parseConfidence": null,
+        "pageCount": null,
+        "parseDurationMs": 22,
+        "safeReasonCode": null,
+        "createdAt": "2026-10-29T17:10:32.702393Z",
+        "updatedAt": "2026-10-29T17:10:33.517276Z",
+        "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+        "canonicalTextSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+        "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+        "parseVersion": 1,
+        "parseOrigin": "CURRENT_PIPELINE",
+        "roleAssessmentId": "76640155-56c3-429b-8e18-03be0430a920",
+        "suggestedRole": "CONTRACT_BODY",
+        "roleConfidence": 1,
+        "roleExecutionStatus": "COMPLETED",
+        "roleAssessmentSource": "MACHINE_DETERMINISTIC",
+        "roleSafeReasonCode": null,
+        "roleModelProvider": null,
+        "roleModelName": null,
+        "roleModelRevision": null,
+        "rolePromptVersion": null,
+        "roleSchemaVersion": null,
+        "aiRoleAssessmentId": null,
+        "aiRoleExecutionStatus": null,
+        "aiRoleSafeReasonCode": null,
+        "roleDecisionStatus": "CONFIRMED",
+        "effectiveRole": "CONTRACT_BODY",
+        "effectiveRoleSource": "SYSTEM_AUTO_DECISION",
+        "roleDecisionId": "6d374699-95cc-4656-b77c-ca5d9b879648",
+        "roleDecisionVersion": 1,
+        "identityAssessmentId": "631c1133-b45a-4649-b2d5-30b57b4df2e2",
+        "identityAssessmentStatus": "LIKELY_SAME_PROJECT",
+        "identityDecisionStatus": "CONFIRMED",
+        "effectiveIdentityStatus": "SAME_PROJECT",
+        "identityDecisionId": "883dfb56-ec60-42d3-9201-8dd9863c70ee",
+        "identityDecisionVersion": 1,
+        "identityCurrent": true,
+        "excludedFromProjectUse": false,
+        "progression": {
+          "stage": "IDENTITY_CONFIRMED",
+          "blocker": "FACT_EXTRACTION_PENDING",
+          "availableActions": [
+            "RESUME_FACT_EXTRACTION"
+          ],
+          "candidateId": null,
+          "contractId": null,
+          "recoveryInputFingerprint": "9070fbcc4e66580c56e13d46e89d6b319afa5d956ffc0c6a06bc10b076468264"
+        }
+      },
+      {
+        "id": "63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+        "parentArchiveFileId": null,
+        "normalizedRelativePath": null,
+        "originalFilename": "服务人员清单.docx",
+        "mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "category": "UNKNOWN",
+        "ingestionStatus": "AVAILABLE",
+        "parseStatus": "PARSED",
+        "sizeBytes": 36813,
+        "parsedText": "服务人员清单\n\n项目名称：昭宁资料咨询服务项目9D4325\n\n服务团队岗位包括项目负责人、资料咨询人员和质量复核人员。\n\n（本材料为合成测试文件，不代表真实业务。）\n",
+        "parseMethod": "DOCX_TEXT",
+        "parseEngine": "SHARED_MATERIAL",
+        "parseConfidence": null,
+        "pageCount": null,
+        "parseDurationMs": 21,
+        "safeReasonCode": null,
+        "createdAt": "2026-10-29T17:10:32.945934Z",
+        "updatedAt": "2026-10-29T17:10:36.518058Z",
+        "fileSha256": "d0ab4d2fb4d24f24f8d86dc41f1496f54545dd8871a87104798d117877c559e9",
+        "canonicalTextSha256": "fe795c7787f6ec9a566e4b60272aae3da1fddcbb7f1a62274a554f45bf8226e5",
+        "parseResultId": "790b4a2b-97fa-4e36-97cf-a518164a4811",
+        "parseVersion": 1,
+        "parseOrigin": "CURRENT_PIPELINE",
+        "roleAssessmentId": "bdb807da-23a1-46a7-8679-117fd0bee95e",
+        "suggestedRole": "UNKNOWN",
+        "roleConfidence": 0,
+        "roleExecutionStatus": "COMPLETED",
+        "roleAssessmentSource": "MACHINE_DETERMINISTIC",
+        "roleSafeReasonCode": null,
+        "roleModelProvider": null,
+        "roleModelName": null,
+        "roleModelRevision": null,
+        "rolePromptVersion": null,
+        "roleSchemaVersion": null,
+        "aiRoleAssessmentId": null,
+        "aiRoleExecutionStatus": null,
+        "aiRoleSafeReasonCode": null,
+        "roleDecisionStatus": "CONFIRMED",
+        "effectiveRole": "OTHER",
+        "effectiveRoleSource": "SYSTEM_AUTO_DECISION",
+        "roleDecisionId": "3022504d-9a16-4108-a1ac-e291823c6a14",
+        "roleDecisionVersion": 1,
+        "identityAssessmentId": "0dadd30d-af0f-4358-b492-951dda0de8b8",
+        "identityAssessmentStatus": "LIKELY_SAME_PROJECT",
+        "identityDecisionStatus": "NEEDS_CONFIRMATION",
+        "effectiveIdentityStatus": "LIKELY_SAME_PROJECT",
+        "identityDecisionId": null,
+        "identityDecisionVersion": null,
+        "identityCurrent": false,
+        "excludedFromProjectUse": false,
+        "progression": {
+          "stage": "OTHER_MATERIAL",
+          "blocker": "NOT_INCLUDED_IN_CONTRACT_ANALYSIS",
+          "availableActions": [],
+          "candidateId": null,
+          "contractId": null,
+          "recoveryInputFingerprint": null
+        }
+      }
+    ],
+    "candidates": [
+      {
+        "id": "7476483a-8b49-4380-b11f-31f601aa82c5",
+        "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+        "sourceContractFileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "sourceParseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+        "sourceRoleDecisionId": "6d374699-95cc-4656-b77c-ca5d9b879648",
+        "sourceIdentityDecisionId": "883dfb56-ec60-42d3-9201-8dd9863c70ee",
+        "sourceAuthoritySource": "SYSTEM_AUTO",
+        "sourceFactFingerprint": "a410d857c350aaec3471dbf34fe9daa9204db52b346a35d76ef7997b328adbef",
+        "contractNo": null,
+        "contractName": null,
+        "contractType": null,
+        "partyA": "昭宁合成服务中心",
+        "partyB": "昭宁合成咨询有限公司",
+        "partyBCreditCode": null,
+        "contractAmount": null,
+        "amountInWords": null,
+        "awardAmount": null,
+        "awardSupplier": null,
+        "awardSupplierCreditCode": null,
+        "lineItems": [],
+        "promotionState": "DRAFT",
+        "versionNo": 0,
+        "promotedContractId": null,
+        "promotedConfirmationId": null,
+        "promotedBy": null,
+        "promotedAt": null,
+        "createdAt": "2026-10-29T17:10:55.018639Z",
+        "updatedAt": "2026-10-29T17:10:55.018639Z"
+      }
+    ],
+    "extractionResults": [
+      {
+        "id": "4591c291-0045-47cb-b1d1-4804211c9edc",
+        "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+        "sourceFileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+        "candidateId": "7476483a-8b49-4380-b11f-31f601aa82c5",
+        "extractionKey": "919c853f2ee38f71c02387c63e00acbf6d75b83f4437d4804911287ed15d07a5",
+        "extractionVersion": "project-extraction-v2",
+        "factType": "PARTY_A",
+        "groupKey": null,
+        "valueText": "昭宁合成服务中心",
+        "normalizedValue": "昭宁合成服务中心",
+        "valueAmount": null,
+        "sourceText": "甲方：昭宁合成服务中心",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "analysis/offset:28/fact:PARTY_A/occurrence:1",
+        "createdAt": "2026-10-29T17:10:54.973593Z"
+      },
+      {
+        "id": "9808c826-f478-3f3e-be57-8a40878241b1",
+        "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+        "sourceFileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+        "candidateId": "7476483a-8b49-4380-b11f-31f601aa82c5",
+        "extractionKey": "0423cb96087b6b99982674e954d84cc1399b42538f032a1f4af67694a07d548a",
+        "extractionVersion": "contract-analysis-v2",
+        "factType": "PARTY_A",
+        "groupKey": null,
+        "valueText": "昭宁合成服务中心",
+        "normalizedValue": "昭宁合成服务中心",
+        "valueAmount": null,
+        "sourceText": "甲方：昭宁合成服务中心",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "parse-result:e11b9be2-6de8-43a0-92b8-d21c94228104:canonical-codepoint:28-39",
+        "createdAt": "2026-10-29T17:10:54.975807Z"
+      },
+      {
+        "id": "af6513aa-c92a-49ae-9c0d-facadaeaeb49",
+        "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+        "sourceFileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+        "candidateId": "7476483a-8b49-4380-b11f-31f601aa82c5",
+        "extractionKey": "6a906b5e254dc120e399d186b20f374796d2fa18d87c4f97bb30551bf3142970",
+        "extractionVersion": "project-extraction-v2",
+        "factType": "PARTY_B",
+        "groupKey": null,
+        "valueText": "昭宁合成咨询有限公司",
+        "normalizedValue": "昭宁合成咨询有限公司",
+        "valueAmount": null,
+        "sourceText": "乙方：昭宁合成咨询有限公司",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "analysis/offset:41/fact:PARTY_B/occurrence:1",
+        "createdAt": "2026-10-29T17:10:54.973674Z"
+      },
+      {
+        "id": "6e874df3-59fd-38b7-910c-6720be913a58",
+        "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+        "sourceFileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+        "candidateId": "7476483a-8b49-4380-b11f-31f601aa82c5",
+        "extractionKey": "bedb7b06ab692b039516e60b8062026581c16e81c0d6392c5558e967858efd74",
+        "extractionVersion": "contract-analysis-v2",
+        "factType": "PARTY_B",
+        "groupKey": null,
+        "valueText": "昭宁合成咨询有限公司",
+        "normalizedValue": "昭宁合成咨询有限公司",
+        "valueAmount": null,
+        "sourceText": "乙方：昭宁合成咨询有限公司",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "parse-result:e11b9be2-6de8-43a0-92b8-d21c94228104:canonical-codepoint:41-54",
+        "createdAt": "2026-10-29T17:10:54.976193Z"
+      },
+      {
+        "id": "c374e73c-0440-4c66-876f-e46ea20590a4",
+        "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+        "sourceFileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+        "candidateId": "7476483a-8b49-4380-b11f-31f601aa82c5",
+        "extractionKey": "5ca00cd55b90a426226687a5bdac6aa78ddc2e842b139f787cf6474f1cf9fcbc",
+        "extractionVersion": "project-extraction-v2",
+        "factType": "PROJECT_NAME",
+        "groupKey": null,
+        "valueText": "昭宁资料咨询服务项目9D4325",
+        "normalizedValue": "昭宁资料咨询服务项目9D4325",
+        "valueAmount": null,
+        "sourceText": "项目名称：昭宁资料咨询服务项目9D4325",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "analysis/offset:5/fact:PROJECT_NAME/occurrence:1",
+        "createdAt": "2026-10-29T17:10:54.973483Z"
+      },
+      {
+        "id": "d3607f3e-3c09-403d-8390-56d67a2a135e",
+        "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+        "sourceFileId": "63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "parseResultId": "790b4a2b-97fa-4e36-97cf-a518164a4811",
+        "candidateId": null,
+        "extractionKey": "c5b78697543b6033ce88960543ce296c0ab5e55ed6add9c7d4dbc14b32f844e6",
+        "extractionVersion": "project-extraction-v2",
+        "factType": "PROJECT_NAME",
+        "groupKey": null,
+        "valueText": "昭宁资料咨询服务项目9D4325",
+        "normalizedValue": "昭宁资料咨询服务项目9D4325",
+        "valueAmount": null,
+        "sourceText": "项目名称：昭宁资料咨询服务项目9D4325",
+        "pageNumber": null,
+        "paragraphIndex": null,
+        "sourceLocator": "analysis/offset:8/fact:PROJECT_NAME/occurrence:1",
+        "createdAt": "2026-10-29T17:10:56.975353Z"
+      }
+    ],
+    "associatedContracts": [],
+    "failedFileCount": 0,
+    "unsupportedFileCount": 0
+  }
+}

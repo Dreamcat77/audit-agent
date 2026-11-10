@@ -103,6 +103,40 @@ public class ContractAuditTaskListService {
         return new ContractAuditTaskSummary(all.size(), pending, completed, needsReview);
     }
 
+    /** Personal labels change the durable read scope, never the available tools. */
+    @Transactional(readOnly = true)
+    public ContractAuditTaskPage list(ContractAuditTaskListQuery query, boolean includeHistory,
+            com.fuquan.audit.security.domain.CurrentUser actor) {
+        Objects.requireNonNull(actor, "actor must not be null");
+        if (!com.fuquan.audit.security.domain.PersonalUploadRoles.applies(actor)) return list(query, includeHistory);
+        var filtered = ownedTasks(includeHistory, actor.userId()).stream().map(this::view)
+                .filter(matches(query)).toList();
+        int offset = (int)Math.min((long)(query.page() - 1) * query.size(), filtered.size());
+        int end = (int)Math.min((long)offset + query.size(), filtered.size());
+        return new ContractAuditTaskPage(filtered.subList(offset, end), query.page(), query.size(),
+                filtered.size(), filtered.isEmpty() ? 0 : (filtered.size() + query.size() - 1L) / query.size());
+    }
+
+    @Transactional(readOnly = true)
+    public ContractAuditTaskSummary summary(boolean includeHistory,
+            com.fuquan.audit.security.domain.CurrentUser actor) {
+        Objects.requireNonNull(actor, "actor must not be null");
+        if (!com.fuquan.audit.security.domain.PersonalUploadRoles.applies(actor)) return summary(includeHistory);
+        var all = ownedTasks(includeHistory, actor.userId()).stream().map(this::view).toList();
+        return new ContractAuditTaskSummary(all.size(), all.stream().filter(v ->
+                v.task().status() == AuditTaskStatus.PENDING || v.task().status() == AuditTaskStatus.PROCESSING).count(),
+                all.stream().filter(v -> v.task().status() == AuditTaskStatus.DONE).count(),
+                all.stream().filter(v -> v.reviewProgress().riskCount() > 0
+                    || v.reviewProgress().pendingAcknowledgement() || v.reviewProgress().materialInsufficient()).count());
+    }
+
+    private List<AuditTask> ownedTasks(boolean includeHistory, String actor) {
+        return (includeHistory ? tasks.findAll(CONTRACT_SOURCE_TYPE, ContractReviewService.REVIEW_TYPE)
+                : tasks.findAllLatest(CONTRACT_SOURCE_TYPE, ContractReviewService.REVIEW_TYPE)).stream()
+                .filter(t -> associations.findByContractId(t.sourceId()).flatMap(a -> projects.findById(a.projectId()))
+                        .map(p -> actor.equals(p.createdBy())).orElse(false)).toList();
+    }
+
     private Predicate<ContractAuditTaskView> matches(ContractAuditTaskListQuery query) {
         return view -> matchesKeyword(view, query.keyword())
                 && (query.createdFrom() == null || !view.task().createdAt().isBefore(query.createdFrom()))

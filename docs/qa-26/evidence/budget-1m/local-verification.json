@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "javaTests": 3445,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 24,
+  "frontendTests": 846,
+  "customerBuild": "PASS",
+  "boundary": "total >= 1000000.00",
+  "schemaChanged": false
+}

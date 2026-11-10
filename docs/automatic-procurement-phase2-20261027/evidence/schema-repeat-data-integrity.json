@@ -1,0 +1,39 @@
+{
+  "before": {
+    "AUDIT_CASE": {
+      "sha256": "30de66f0338d47976636ae1646f5b466fcf305a44684686cd8ab8fc7c4bf006c",
+      "rows": 18
+    },
+    "AUDIT_CASE_FILE": {
+      "sha256": "8347bf8b7baf4d0b270a943fd1348c0a1c720b79867e471e94aba521a23e74eb",
+      "rows": 84
+    },
+    "AUDIT_FACT": {
+      "sha256": "f04573e935c988a0dd1cd20280fdff07e066d45f4304be3b5b937e3bf5c352c0",
+      "rows": 468
+    },
+    "AUDIT_QUOTE_LINE": {
+      "sha256": "cde09ba4ea7a26e07262a6dcfb54c5e4e4ed2dcc75e9f0d9db74a3aac9dd785a",
+      "rows": 54
+    }
+  },
+  "after": {
+    "AUDIT_CASE": {
+      "sha256": "30de66f0338d47976636ae1646f5b466fcf305a44684686cd8ab8fc7c4bf006c",
+      "rows": 18
+    },
+    "AUDIT_CASE_FILE": {
+      "sha256": "8347bf8b7baf4d0b270a943fd1348c0a1c720b79867e471e94aba521a23e74eb",
+      "rows": 84
+    },
+    "AUDIT_FACT": {
+      "sha256": "f04573e935c988a0dd1cd20280fdff07e066d45f4304be3b5b937e3bf5c352c0",
+      "rows": 468
+    },
+    "AUDIT_QUOTE_LINE": {
+      "sha256": "cde09ba4ea7a26e07262a6dcfb54c5e4e4ed2dcc75e9f0d9db74a3aac9dd785a",
+      "rows": 54
+    }
+  },
+  "identical": true
+}

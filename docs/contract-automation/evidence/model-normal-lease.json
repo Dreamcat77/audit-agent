@@ -1,0 +1,16 @@
+{
+  "scenario": "normal-lease",
+  "http": 502,
+  "seconds": 0.3,
+  "realModel": true,
+  "synthetic": true,
+  "failures": [
+    "HTTP_502"
+  ],
+  "result": {
+    "code": "CONTRACT_ANALYSIS_MODEL_FAILED",
+    "message": "contract model call failed",
+    "data": null,
+    "requestId": "1149524b-9734-43f4-b08a-2ac65000a0b1"
+  }
+}

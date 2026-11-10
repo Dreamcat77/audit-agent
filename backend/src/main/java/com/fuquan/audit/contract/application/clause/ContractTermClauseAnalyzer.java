@@ -26,6 +26,8 @@ public final class ContractTermClauseAnalyzer {
     private static final Pattern TERM_RANGE = Pattern.compile(
             "(?:服务期(?:限)?|履约期(?:限)?|合同期(?:限)?)\\s*(?:[:：]|为)?\\s*(?:自|从)?\\s*"
             + DATE_VALUE + "\\s*(?:起)?\\s*(?:至|到)\\s*" + DATE_VALUE + "\\s*(?:止)?");
+    private static final Pattern TERM_END = Pattern.compile(
+            "(?:服务期(?:限)?|履约期(?:限)?|合同期(?:限)?)\\s*(?:[:：]|为)?\\s*(?:截至|截止至?|至|到)\\s*" + DATE_VALUE);
     private static final Pattern NATURAL_DELIVERY = Pattern.compile("(?:(?:全部)?成果于|于|在)\\s*" + DATE_VALUE
             + "\\s*(?:之前|前)?\\s*(?:(?:完成)?交付|完成(?:系统)?部署[^。！？；;\\r\\n]{0,48}交付)"
             + "[^。！？；;\\r\\n]{0,64}[。；;]");
@@ -35,7 +37,7 @@ public final class ContractTermClauseAnalyzer {
     private static final Pattern RESULT_DEPLOYMENT = Pattern.compile("(?:全部)?成果于\\s*" + DATE_VALUE
             + "\\s*(?:之前|前)?\\s*完成部署[^。！？；;\\r\\n]{0,48}[。；;]");
     private static final Pattern BLANK_DATE = Pattern.compile(LABEL
-            + DATE_CONNECTOR + "年\\s*月\\s*日");
+            + DATE_CONNECTOR + "[_＿—\\-\\s]*年[_＿—\\-\\s]*月[_＿—\\-\\s]*日");
     private static final Pattern COPY_COUNT = Pattern.compile(
             "本合同[^。！？；\\n]{0,12}?一式\\s*([0-9零〇一二两三四五六七八九十百壹贰叁肆伍陆柒捌玖拾佰]+)\\s*份");
     private static final Pattern TEMPLATE_SECTION_START = Pattern.compile(
@@ -97,6 +99,16 @@ public final class ContractTermClauseAnalyzer {
                     dateEvidence.add(new DateEvidence(item, material));
                 }
             }
+            Matcher termEnd = TERM_END.matcher(material.text());
+            while (termEnd.find()) {
+                String prefix = material.text().substring(Math.max(0, termEnd.start() - 12), termEnd.start());
+                if (prefix.matches("(?s).*(?:预计|暂定|例如|示例|不适用|并非|不是|不按)\\s*$")) continue;
+                String normalized = normalize(termEnd.group(2), termEnd.group(3), termEnd.group(4));
+                var item = new ContractTermClauseReview.DateItem("TERMINATION_DATE", termEnd.group(1),
+                        normalized, normalized == null ? "INSUFFICIENT" : "NORMAL", material.fileId(), termEnd.group(), true);
+                dates.add(item);
+                dateEvidence.add(new DateEvidence(item, material));
+            }
             var naturalLocations = new HashSet<String>();
             for (Pattern syntax : List.of(NATURAL_DELIVERY, NATURAL_COMPLETION, RESULT_DEPLOYMENT)) {
                 Matcher delivery = syntax.matcher(material.text());
@@ -142,7 +154,8 @@ public final class ContractTermClauseAnalyzer {
                     conditions.add(item);
                     conditionEvidence.add(new ConditionEvidence(item, material,
                             "KNOWN", "SIGNATURE_AND_SEAL"));
-                } else if (isTerminationCondition(clause)) {
+                }
+                if (isTerminationCondition(clause)) {
                     var item = new ContractTermClauseReview.ConditionItem(
                             "TERMINATION", clause, "NORMAL", material.fileId(), clause, true);
                     conditions.add(item);
@@ -630,10 +643,12 @@ public final class ContractTermClauseAnalyzer {
 
     private static boolean isTerminationCondition(String clause) {
         if (CHAPTER_HEADING.matcher(clause).matches() || NEGATED_TERMINATION.matcher(clause).find()) return false;
-        return (clause.contains("解除") || clause.contains("终止"))
+        String compact=clause.replaceAll("[\\s\\p{Z}]+", "");
+        if(compact.matches(".*(?:有效期|合同期|协议期).{0,24}(?:至|到)(?:本(?:合同|协议))?(?:执行|履行|履约)完毕(?:时|之日|止|为止).*"))return true;
+        return (clause.contains("解除") || clause.contains("终止") || clause.contains("自动废除"))
                 && (clause.contains("可") || clause.contains("有权") || clause.contains("协商")
                 || clause.contains("延期") || clause.contains("逾期") || clause.contains("不符合")
-                || clause.contains("不可抗力") || clause.contains("严重违约"));
+                || clause.contains("不可抗力") || clause.contains("严重违约") || clause.contains("仍未交货"));
     }
 
     private static Integer parseCopyCount(String value) {

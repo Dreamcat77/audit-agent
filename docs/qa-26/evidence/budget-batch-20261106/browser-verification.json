@@ -1,0 +1,17 @@
+{
+  "nonFixedProseThresholdShown": true,
+  "status": "PASS",
+  "browser": "109.0.5412.0",
+  "modules": 5,
+  "issues": 3,
+  "copy": true,
+  "sourceHighlights": true,
+  "exportSheets": [
+    "预算参考结果",
+    "差异清单",
+    "风险及审批核对",
+    "总体预算"
+  ],
+  "foreignSourceReads": 2,
+  "pageErrors": []
+}

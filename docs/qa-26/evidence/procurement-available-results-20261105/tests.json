@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "backend": {
+    "command": "./mvnw.cmd clean verify",
+    "tests": 3562,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 24
+  },
+  "frontend": {
+    "tests": 859,
+    "failures": 0,
+    "customerBuild": "PASS",
+    "chrome109Colors": 221
+  },
+  "python": {
+    "environment": "26 Python3.11",
+    "relatedFiles": 18,
+    "passed": 372
+  },
+  "qaAccountDisabled": true,
+  "exportedDocumentContent": false,
+  "gitPush": false,
+  "customerPackage": false,
+  "logSha256": {
+    "backend-clean-verify-final.log": "8af74eac9916e2ff50bb41ec320d8718a74125dec78b06c33638730534b80369",
+    "frontend-all-tests-final.log": "34c61940fa62ece0a4b96d8e9f17efdd46897db17975bd7f087f407d4fbd44a3",
+    "frontend-build-final.log": "5686d6f25893bc7d166077add7a8da5fe6b78edba90a582c546fddf4f25eca47",
+    "python-tests.log": "1fd16c0f6db2d2b7890248b9487b9ee1455fb6aada2404dcd6dcb1d1a21ae3e0",
+    "wording-focused.log": "fb497eb11e80b4ab9d3fa9dced138c5bf21b2cfdc577a5708c465732203993b8"
+  }
+}

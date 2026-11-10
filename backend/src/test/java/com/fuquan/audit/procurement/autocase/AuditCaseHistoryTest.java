@@ -41,4 +41,20 @@ class AuditCaseHistoryTest {
         for(int size:List.of(0,-1,51,Integer.MAX_VALUE))
             assertThatThrownBy(()->service.history(null,size,owner)).isInstanceOf(BusinessException.class);
     }
+    @Test void systemAdminCanReadAllProcurementCasesWhileModuleUsersStayOwnerScoped(){
+        var first=value(21,"owner-a",Instant.parse("2026-10-28T10:00:00Z"));
+        var second=value(22,"owner-b",Instant.parse("2026-10-28T11:00:00Z"));
+        repo.insert(first);repo.insert(second);
+        var admin=new CurrentUser("root","root","管理员",Set.of("SYSTEM_ADMIN"));
+        var procurementUser=new CurrentUser("owner-a","owner-a","采购",Set.of("PROCUREMENT_USER"));
+
+        assertThat(service.recent(admin)).extracting(AuditCase::id).containsExactly(second.id(),first.id());
+        assertThat(service.owned(second.id(),admin)).isEqualTo(second);
+        assertThat(service.history(null,1,admin).items()).extracting(AuditCaseHistoryEntry::id).containsExactly(second.id());
+        assertThat(service.history(second.id(),1,admin).items()).extracting(AuditCaseHistoryEntry::id).containsExactly(first.id());
+
+        assertThat(service.recent(procurementUser)).extracting(AuditCase::id).containsExactly(first.id());
+        assertThatThrownBy(()->service.owned(second.id(),procurementUser)).isInstanceOf(BusinessException.class);
+        assertThatThrownBy(()->service.history(second.id(),1,procurementUser)).isInstanceOf(BusinessException.class);
+    }
 }

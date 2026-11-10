@@ -1,0 +1,97 @@
+{
+  "browser": "109.0.5412.0",
+  "base": "http://192.168.0.26",
+  "results": [
+    {
+      "module": "budget",
+      "label": "budget-mixed-table",
+      "failures": [
+        "Error: MISSING_BUDGET_PAIR_42500.25_40000"
+      ],
+      "lineCount": 2,
+      "jobStates": [
+        "UNKNOWN",
+        "REVIEWED"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "module": "budget",
+      "label": "budget-csv-units",
+      "failures": [
+        "Error: MISSING_BUDGET_PAIR_12800_12000"
+      ],
+      "lineCount": 0,
+      "jobStates": [
+        "UNKNOWN"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "module": "budget",
+      "label": "budget-sideways",
+      "failures": [
+        "Error: MISSING_BUDGET_PAIR_230000_225000"
+      ],
+      "lineCount": 0,
+      "jobStates": [
+        "UNKNOWN"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "module": "budget",
+      "label": "budget-unrelated-projects",
+      "failures": [
+        "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: '预算历史结果', exact: true }).locator('tbody tr').filter({ hasText: '预算材料-2026-10-30' }).first() to be visible\u001b[22m\n"
+      ],
+      "lineCount": 0,
+      "jobStates": [
+        "UNKNOWN",
+        "UNKNOWN"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "module": "procurement",
+      "label": "proc-cent-boundaries",
+      "failures": [
+        "Error: BUDGET_AMOUNT"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "module": "procurement",
+      "label": "proc-policy-counterexample",
+      "failures": [
+        "Error: BUDGET_AMOUNT"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "module": "procurement",
+      "label": "proc-project-conflict",
+      "failures": [
+        "Error: QUOTE_AMOUNTS"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "module": "contract",
+      "label": "contract-amount-mismatch",
+      "failures": [
+        "Error: FORMAL_CONTRACT_MISSING"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "module": "contract",
+      "label": "contract-relative-attachments",
+      "failures": [
+        "Error: MISSING_ATTACHMENT_NOT_REPORTED"
+      ],
+      "status": "FAIL"
+    }
+  ],
+  "errors": []
+}

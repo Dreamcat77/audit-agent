@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "browser": "109.0.5412.0",
+  "production": true,
+  "routeMocks": false,
+  "realHttp": true,
+  "realModel": true,
+  "realDm8": true,
+  "caseId": "b39610fc-6205-390c-8bd9-1ce074f0e46e",
+  "fileCount": 12,
+  "sourceVerifiedFacts": 123,
+  "noBusinessFields": true,
+  "automaticUpload": true,
+  "refreshPreserved": true,
+  "evidenceReadable": true,
+  "modules": {
+    "COLLUSION": "NOT_EXECUTED",
+    "SPLIT_PURCHASE": "NOT_EXECUTED",
+    "QUOTE": "COMPLETED",
+    "BLACKLIST": "NOT_EXECUTED",
+    "TENDER_COMPLIANCE": "COMPLETED",
+    "AGENT_PRECHECK": "COMPLETED"
+  },
+  "pageErrors": []
+}

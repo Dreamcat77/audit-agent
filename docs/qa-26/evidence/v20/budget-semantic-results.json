@@ -1,0 +1,383 @@
+{
+  "batch": {
+    "batchId": "a22958cb-f27f-4880-abb9-32198ca2f8cd",
+    "status": "REVIEWED",
+    "budgetYear": "",
+    "departmentCode": "",
+    "createdAt": "2026-10-29T15:40:22.643843Z",
+    "files": [
+      {
+        "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+        "fileName": "经费安排说明.docx",
+        "status": "REVIEWED"
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "task": {
+        "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+        "fileName": "经费安排说明.docx",
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "fileSize": 36869,
+        "status": "REVIEWED",
+        "parsedLineCount": 1,
+        "errorDetail": null,
+        "budgetYear": "",
+        "departmentCode": "",
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T15:40:22.901411Z",
+        "updatedTime": "2026-10-29T15:40:53.677370Z"
+      },
+      "allPassed": false,
+      "totalItems": 1,
+      "passedItems": 0,
+      "exceptionItems": 1,
+      "items": [
+        {
+          "id": "e915422e-756b-451e-a1d8-e3ab303df73e",
+          "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+          "rowNumber": 1,
+          "subjectCode": null,
+          "subjectName": "设备购置",
+          "declaredAmount": 120000,
+          "supplierName": null,
+          "projectCode": "SYN-V20-B01",
+          "approvalSubjectCode": null,
+          "approvalSubjectName": "设备购置",
+          "approvalAmount": 100000,
+          "approvalSupplierName": null,
+          "matchStatus": "MATCHED",
+          "matchMethod": "UPLOADED_MATERIAL",
+          "matchDistance": null,
+          "amountStatus": "OVER_BUDGET",
+          "differenceAmount": 20000,
+          "exceptionType": "OVER_APPROVAL",
+          "errorDetail": "材料所列申报金额超过对应批复金额 20000.00 元，建议核对申报依据与批复版本。",
+          "createdTime": "2026-10-29T15:40:53.674558Z",
+          "riskLevel": "CRITICAL",
+          "missingFields": null,
+          "amountFormatErrors": null,
+          "codeFormatError": null,
+          "requiredFieldsStatus": "NOT_CHECKED",
+          "amountFormatStatus": "NOT_CHECKED",
+          "categoryAttributionStatus": "NOT_CHECKED",
+          "categorySuggestion": null,
+          "projectCodeStatus": "NOT_CHECKED",
+          "projectDepartmentStatus": "NOT_CHECKED",
+          "budgetYearValidityStatus": "NOT_CHECKED",
+          "abnormalReasons": [
+            "材料所列申报金额超过对应批复金额 20000.00 元，建议核对申报依据与批复版本。"
+          ],
+          "checks": [
+            {
+              "checkType": "REQUIRED_FIELDS",
+              "expectedValue": "科目编码、科目名称、申报金额、供应商名称、项目编号",
+              "actualValue": "3/5",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "必填信息完整"
+            },
+            {
+              "checkType": "AMOUNT_FORMAT",
+              "expectedValue": "正数，≤2位小数",
+              "actualValue": "120000.00",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "金额格式合法"
+            },
+            {
+              "checkType": "SUBJECT_CODE",
+              "expectedValue": null,
+              "actualValue": null,
+              "passed": false,
+              "status": "FAILED",
+              "errorDetail": "科目编码为空或不一致"
+            },
+            {
+              "checkType": "SUBJECT_NAME",
+              "expectedValue": "设备购置",
+              "actualValue": "设备购置",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "科目名称匹配成功"
+            },
+            {
+              "checkType": "CATEGORY_ATTRIBUTION",
+              "expectedValue": "科目编码所属分类",
+              "actualValue": "设备购置",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "分类规则未配置，跳过校验"
+            },
+            {
+              "checkType": "BUDGET_AMOUNT",
+              "expectedValue": "100000.00",
+              "actualValue": "120000.00",
+              "passed": false,
+              "status": "OVER_BUDGET",
+              "errorDetail": "申报金额超过预算批复金额（20000.00）"
+            },
+            {
+              "checkType": "SUPPLIER_NAME",
+              "expectedValue": null,
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "供应商名称一致"
+            },
+            {
+              "checkType": "PROJECT_CODE",
+              "expectedValue": "同批次唯一",
+              "actualValue": "SYN-V20-B01",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "项目编号唯一"
+            },
+            {
+              "checkType": "PROJECT_DEPARTMENT",
+              "expectedValue": "项目属于当前部门",
+              "actualValue": "SYN-V20-B01",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "项目与部门匹配"
+            },
+            {
+              "checkType": "BUDGET_YEAR_VALIDITY",
+              "expectedValue": "所选年度在有效期内",
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "预算年度有效"
+            }
+          ],
+          "currentStep": 10,
+          "moduleGroups": [
+            {
+              "moduleKey": "DATA_VALIDATION",
+              "moduleName": "数据规范性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "REQUIRED_FIELDS",
+                  "expectedValue": "科目编码、科目名称、申报金额、供应商名称、项目编号",
+                  "actualValue": "3/5",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "必填信息完整"
+                },
+                {
+                  "checkType": "AMOUNT_FORMAT",
+                  "expectedValue": "正数，≤2位小数",
+                  "actualValue": "120000.00",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "金额格式合法"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "SUBJECT_CONSISTENCY",
+              "moduleName": "科目一致性校验",
+              "moduleStatus": "ERROR",
+              "children": [
+                {
+                  "checkType": "SUBJECT_CODE",
+                  "expectedValue": null,
+                  "actualValue": null,
+                  "passed": false,
+                  "status": "FAILED",
+                  "errorDetail": "科目编码为空或不一致"
+                },
+                {
+                  "checkType": "SUBJECT_NAME",
+                  "expectedValue": "设备购置",
+                  "actualValue": "设备购置",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "科目名称匹配成功"
+                },
+                {
+                  "checkType": "CATEGORY_ATTRIBUTION",
+                  "expectedValue": "科目编码所属分类",
+                  "actualValue": "设备购置",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "分类规则未配置，跳过校验"
+                }
+              ],
+              "exceptionSummary": "科目编码为空或不一致"
+            },
+            {
+              "moduleKey": "AMOUNT_COMPLIANCE",
+              "moduleName": "金额合规性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "BUDGET_AMOUNT",
+                  "expectedValue": "100000.00",
+                  "actualValue": "120000.00",
+                  "passed": false,
+                  "status": "OVER_BUDGET",
+                  "errorDetail": "申报金额超过预算批复金额（20000.00）"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "SUPPLIER_CHECK",
+              "moduleName": "关联方校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "SUPPLIER_NAME",
+                  "expectedValue": null,
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "供应商名称一致"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "PROJECT_COMPLIANCE",
+              "moduleName": "项目合规性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "PROJECT_CODE",
+                  "expectedValue": "同批次唯一",
+                  "actualValue": "SYN-V20-B01",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "项目编号唯一"
+                },
+                {
+                  "checkType": "PROJECT_DEPARTMENT",
+                  "expectedValue": "项目属于当前部门",
+                  "actualValue": "SYN-V20-B01",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "项目与部门匹配"
+                },
+                {
+                  "checkType": "BUDGET_YEAR_VALIDITY",
+                  "expectedValue": "所选年度在有效期内",
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "预算年度有效"
+                }
+              ],
+              "exceptionSummary": ""
+            }
+          ],
+          "aiSemanticAnalysis": {
+            "operation": "BUDGET_SEMANTIC_ANALYSIS",
+            "available": false,
+            "suggestedCategory": null,
+            "hint": null,
+            "model": null,
+            "durationMs": null,
+            "confidence": null,
+            "judgment": null,
+            "similarityScore": null,
+            "enhancedDescription": null,
+            "suggestion": null
+          }
+        }
+      ],
+      "materialReference": {
+        "status": "COMPLETED",
+        "coverage": "COMPLETE",
+        "summary": "根据本批上传材料整理了以下预算信息与核对意见，供工作参考。",
+        "lines": [
+          {
+            "project": "澄湾档案数字化更新项目",
+            "projectCode": "SYN-V20-B01",
+            "subject": "设备购置",
+            "subjectCode": null,
+            "year": null,
+            "department": null,
+            "declaredAmount": 120000,
+            "approvalAmount": 100000,
+            "status": "OVER_APPROVAL",
+            "opinion": "材料所列申报金额超过对应批复金额 20000.00 元，建议核对申报依据与批复版本。",
+            "sources": [
+              {
+                "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+                "fileName": "经费安排说明.docx",
+                "field": "declaredAmount",
+                "value": "壹拾贰万元整",
+                "locator": "docx/body/node:4/part:4/line:0",
+                "excerpt": "本次申请设备购置经费壹拾贰万元整"
+              },
+              {
+                "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+                "fileName": "经费安排说明.docx",
+                "field": "subjectName",
+                "value": "设备购置",
+                "locator": "docx/body/node:4/part:4/line:0",
+                "excerpt": "预算科目为设备购置"
+              },
+              {
+                "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+                "fileName": "经费安排说明.docx",
+                "field": "spendingPurpose",
+                "value": "购置扫描设备",
+                "locator": "docx/body/node:4/part:4/line:0",
+                "excerpt": "用于购置扫描设备"
+              },
+              {
+                "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+                "fileName": "经费安排说明.docx",
+                "field": "projectName",
+                "value": "澄湾档案数字化更新项目",
+                "locator": "docx/body/node:2/part:2/line:0",
+                "excerpt": "项目名称：澄湾档案数字化更新项目"
+              },
+              {
+                "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+                "fileName": "经费安排说明.docx",
+                "field": "projectCode",
+                "value": "SYN-V20-B01",
+                "locator": "docx/body/node:3/part:3/line:0",
+                "excerpt": "项目编号：SYN-V20-B01"
+              },
+              {
+                "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+                "fileName": "经费安排说明.docx",
+                "field": "subjectName",
+                "value": "设备购置",
+                "locator": "docx/body/node:5/part:5/record:0:35",
+                "excerpt": "设备购置科目的批复参考金额"
+              },
+              {
+                "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+                "fileName": "经费安排说明.docx",
+                "field": "approvalAmount",
+                "value": "人民币壹拾万元整",
+                "locator": "docx/body/node:5/part:5/record:0:35",
+                "excerpt": "批复参考金额为人民币壹拾万元整"
+              },
+              {
+                "taskId": "395f1ee5-1069-42bf-9c56-11bc365a3013",
+                "fileName": "经费安排说明.docx",
+                "field": "approvedPurpose",
+                "value": "购置扫描设备",
+                "locator": "docx/body/node:5/part:5/record:0:35",
+                "excerpt": "批准用途为购置扫描设备"
+              }
+            ]
+          }
+        ],
+        "assessments": []
+      }
+    }
+  ]
+}

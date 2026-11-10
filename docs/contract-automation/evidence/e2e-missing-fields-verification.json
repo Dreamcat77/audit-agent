@@ -1,0 +1,16 @@
+{
+  "scenario": "missing-fields",
+  "caseId": "267b81f2-f0df-3a1e-a9aa-aa53940cb5b1",
+  "status": "PARTIAL",
+  "documents": 1,
+  "facts": 9,
+  "clauses": 8,
+  "risks": 0,
+  "followUps": 0,
+  "evidenceChecks": 17,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "freshVerifier": true
+}

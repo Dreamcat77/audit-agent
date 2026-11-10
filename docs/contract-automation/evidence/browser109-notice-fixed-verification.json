@@ -1,0 +1,14 @@
+{
+  "caseId": "c43467d7-4b28-3d88-8972-6d937e4d97d3",
+  "status": "COMPLETED",
+  "uploadThroughBrowser": true,
+  "manualBusinessInputs": 0,
+  "originalEvidenceVisible": true,
+  "refreshPreservedReport": true,
+  "pageErrors": [],
+  "browserVersion": "109.0.5412.0",
+  "productionBundle": true,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true
+}

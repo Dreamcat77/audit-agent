@@ -1,0 +1,122 @@
+{
+  "phase1FilesVerified": 22,
+  "changes": [
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/integration/dm8/AutoCaseMapper.java",
+      "change": "MODIFIED_IN_PHASE2",
+      "beforeSha256": "09b16d3cc05bfecd8ef7183ef8f6fba3f2b9314442ecc73c62c238a49e0beabb",
+      "sha256": "206bc64b52475524c269a60d15e13f3193b387eb291182c688d926f206dd9a53"
+    },
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/integration/dm8/Dm8AuditCaseRepository.java",
+      "change": "MODIFIED_IN_PHASE2",
+      "beforeSha256": "9159c17f10324d6d1b81fcc818d9d121773223fc74398486e93c6997cc9ab42f",
+      "sha256": "d2639326391cacc5de2669f678e4b8bbe9a432261bc4bf76e817551f7d1fcf4e"
+    },
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/AuditCaseController.java",
+      "change": "MODIFIED_IN_PHASE2",
+      "beforeSha256": "b8763d803e2bb85c2e1595add5e31e5c747095bba86ad6b538d585a2146dd340",
+      "sha256": "e96abdeb457ff739f27673247f8198bb9f3c22088a84e5038863488302862f61"
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/AutomaticCaseHttpTest.java",
+      "change": "MODIFIED_IN_PHASE2",
+      "beforeSha256": "7c2471937aa8f073a829626b4fc9d9de92c70be85530aa4cb3f665ffe075cc99",
+      "sha256": "1638790ef803d1dd89a2c78339c1d23421ff54aaa28902ab2f444d33797a8b74"
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/Dm8AuditCaseRepositoryTest.java",
+      "change": "MODIFIED_IN_PHASE2",
+      "beforeSha256": "08d9179041115f536bf458ec879e8f93aa0504d5b7de36a56a0cbea9b4571490",
+      "sha256": "2481496306c4e077e20d19a6fd731feb29767636dd86b99a0a14fa3cee586059"
+    },
+    {
+      "path": "db/dm8/PROCUREMENT__automatic_case_v1.sql",
+      "change": "MODIFIED_IN_PHASE2",
+      "beforeSha256": "36196ccf91a6115b709564bfa53d0439ea24ce64d574442f2dcadb14fc060a3e",
+      "sha256": "b9f761d90c5bd803c399bbf785bb23e0513f2118c2197a09cb4cc3a89eb67672"
+    },
+    {
+      "path": "frontend/src/features/procurement/AutomaticCasePanel.tsx",
+      "change": "MODIFIED_IN_PHASE2",
+      "beforeSha256": "4caac2005f1559bffc65ee79b1f8ffaa248b699f5d110c64de5b7389dc9579dc",
+      "sha256": "712545237a3ee5595cd74b919e11ce9e3bab00117028a2b2e56e79fb878baad0"
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/AutomaticCaseDm8Harness.java",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "c7b730c31b9f95149dfb65d15505927bc70a18997de3903ffeb98647db6772e0"
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/Dm8AutoCaseRealIntegrationTest.java",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "99bae53445ca487764c4718b9a2477007271c5c2062be756396e35d2cc2ce92e"
+    },
+    {
+      "path": "tools/automatic-case-phase2/acceptance_runner.py",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "8789b055f911d67743908b09d191ff52f3db155b64e6bf2ffefe164bc8619bfe"
+    },
+    {
+      "path": "tools/automatic-case-phase2/AutoCaseSchemaCheck.java",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "cd0d7e20178f602016613c2eb5651014e67d99f1eeab81be1226f2ae1f055365"
+    },
+    {
+      "path": "tools/automatic-case-phase2/browser-acceptance.mjs",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "6fd4eefb824d545da43a4d678434589e2388a518b2563fa83da3aa6313dee5ae"
+    },
+    {
+      "path": "tools/automatic-case-phase2/Dm8BackupManifest.java",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "6e1b4a6a7e9edad38ca7c3b1687a6e56c53a9df1066284db0b867d2d8ad3a1a8"
+    },
+    {
+      "path": "tools/automatic-case-phase2/Dm8EnvironmentProbe.java",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "01a130b7f8d2eda6edb14c6b20970db50bed04a4b600afd83be3c8d57ea52f8a"
+    },
+    {
+      "path": "tools/automatic-case-phase2/Dm8LockSemantics.java",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "43b83096b4cac995cea4abaa2070577e0d06babaaeeac62d6a1a9678e43ae5a9"
+    },
+    {
+      "path": "tools/automatic-case-phase2/IsolatedSql.java",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "9bad80e0c7d54a1a31ae8b457e16304c17cf95d95b61feb8ccad83df57188f6e"
+    },
+    {
+      "path": "tools/automatic-case-phase2/phase2_scenarios.py",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "88db6e48776bc633b7c952b502ba77ae7efc1ed7d78d59c944b9d755e1af83bc"
+    },
+    {
+      "path": "tools/automatic-case-phase2/Phase2DatabaseEvidence.java",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "0e9ec8da74a0c4fcb8fcf86263b37ed36bf3410254ca08cba683937a065977d8"
+    },
+    {
+      "path": "tools/automatic-case-phase2/remote_backup.py",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "a9bbccc38e8e4a0e801c6c8bb508bbfcd63b74b27689622d91d62c7da8fc1cdf"
+    },
+    {
+      "path": "tools/automatic-case-phase2/remote_finalize.py",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "9f331aaecae62c6cea453641b6819f765007f4f017faaf7c2163674d174e5afc"
+    },
+    {
+      "path": "tools/automatic-case-phase2/remote_isolated_dm.py",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "b6a9295a259605afafb3fb8763a4ba5b1ce81ab0a75e4866efd385d9743f92e7"
+    },
+    {
+      "path": "tools/automatic-case-phase2/remote_restore.py",
+      "change": "ADDED_IN_PHASE2",
+      "sha256": "9fec5bd6a50bf5f50c19ecd26eb4dcd04b6def5fbc66acbd75082932c552f75f"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "scenario": "partial-file",
+  "caseId": "9e242e9f-db7e-3e1a-b0f2-9cc1266b9487",
+  "status": "PARTIAL",
+  "documents": 2,
+  "facts": 10,
+  "clauses": 8,
+  "risks": 0,
+  "followUps": 0,
+  "evidenceChecks": 22,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "freshVerifier": true
+}

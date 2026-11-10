@@ -1,0 +1,44 @@
+{
+  "kind": "verification summary derived from a passing executable test, not a raw model response",
+  "command": ".\\mvnw.cmd -Dtest=AuditCaseIntegrationTest#twelveRealDocumentsWithActualModelAndLocalRepository test",
+  "environment": "Java 17.0.18; Spring local in-memory repository; actual local FastAPI forwarding to existing configured real model; no simulated extraction results",
+  "observed": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "build": "SUCCESS",
+    "elapsed": "6 min 28 s"
+  },
+  "assertionsThatPassed": {
+    "documents": 12,
+    "budget": "222600.00",
+    "award": "212000.00",
+    "offers": [
+      {
+        "supplier": "澄川星河办公设备有限公司",
+        "amount": "212000.00"
+      },
+      {
+        "supplier": "澄川明川数字设备有限公司",
+        "amount": "216400.00"
+      },
+      {
+        "supplier": "澄川启衡信息设备有限公司",
+        "amount": "219800.00"
+      }
+    ],
+    "linesPerOffer": 3,
+    "allLineArithmetic": "VERIFIED",
+    "allQuotesOverBudget": false,
+    "average": "216066.67",
+    "caseStatus": "COMPLETED"
+  },
+  "notVerified": [
+    "real DM8 persistence",
+    "real OCR execution",
+    "real model and scheduled worker in a single combined run",
+    "browser UI acceptance"
+  ],
+  "log": "auto-case-real-model.log"
+}

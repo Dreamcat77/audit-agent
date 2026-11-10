@@ -161,6 +161,9 @@ test("delivery workbench loads direct F02 facts and renders their business ident
   assert.match(markup, /采购审查/);
   assert.match(markup, /合同审核/);
   assert.match(markup, /合同审核数据概览/);
+  assert.match(markup, /辅助工具/);
+  assert.match(markup, /黑名单/);
+  assert.match(markup, /风险预估/);
   assert.match(markup, />7</);
   assert.doesNotMatch(markup, /办公设备采购合同|办公设备更新项目|设备维护服务合同|设备维护项目/);
 });
@@ -204,5 +207,8 @@ test("workbench scopes selections and empty claims when global pending and revie
   });
   assert.deepEqual(view.stats.map((item) => item.value), [30, 8, 22, 4]);
   assert.match(markup, /合同审核数据概览/);
+  assert.match(markup, /辅助工具/);
+  assert.match(markup, /黑名单/);
+  assert.match(markup, /风险预估/);
   assert.doesNotMatch(markup, /已完成的无风险合同|待处理任务|最近动态/);
 });

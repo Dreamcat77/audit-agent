@@ -1,0 +1,195 @@
+{
+  "id": "1fcb0a66-f998-3d42-81d5-1f1c31afad33",
+  "caseNumber": "AC-1fcb0a66-f998-3d42-81d5-1f1c31afad33",
+  "projectName": "合成地域规则核对项目599CE9operative",
+  "status": "DATA_INSUFFICIENT",
+  "createdAt": "2026-10-30T02:12:31.976861440Z",
+  "documents": [
+    {
+      "id": "8ff10f87-1f5f-4cac-82f3-9075e836865a",
+      "name": "招标文件.txt",
+      "status": "UNKNOWN",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": "EXTRACTION_OUTCOME_UNPROVEN",
+      "factCount": 0
+    }
+  ],
+  "report": {
+    "quoteStatus": "DATA_INSUFFICIENT",
+    "budget": null,
+    "awardAmount": null,
+    "offers": [],
+    "calculation": null,
+    "notices": [
+      "材料中的预算金额不足或冲突，超预算检查未执行；已识别报价仍保留",
+      "可靠供应商报价少于三家，三方询比价数据不足",
+      "部分文件未完成读取/提取，报告覆盖不完整，不能声称全部审查通过"
+    ],
+    "modules": {
+      "TENDER_COMPLIANCE": "UNKNOWN",
+      "AGENT_PRECHECK": "UNKNOWN",
+      "COLLUSION": "NOT_EXECUTED",
+      "SPLIT_PURCHASE": "NOT_EXECUTED",
+      "QUOTE": "DATA_INSUFFICIENT",
+      "BLACKLIST": "DATA_INSUFFICIENT"
+    },
+    "reviews": {
+      "TENDER_COMPLIANCE": {
+        "status": "UNKNOWN",
+        "inputDigest": "a6203d89836e7693523742990df5bf3c4955ffa3cfeae3e75e892e8fc08b6fdb",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-30T02:12:43.511511219Z",
+        "completedAt": "2026-10-30T02:12:48.533538874Z",
+        "scope": [
+          {
+            "documentId": "8ff10f87-1f5f-4cac-82f3-9075e836865a",
+            "fileName": "招标文件.txt",
+            "role": "TENDER",
+            "sourceChars": 143,
+            "suppliedChars": 143
+          }
+        ],
+        "coverageGaps": [
+          "8ff10f87-1f5f-4cac-82f3-9075e836865a:FILE_UNKNOWN",
+          "UPLOADED_SCOPE_MISSING_TECHNICAL",
+          "UPLOADED_SCOPE_MISSING_EVALUATION",
+          "UPLOADED_SCOPE_MISSING_CLARIFICATION"
+        ],
+        "checks": [
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 1 份材料，本项选取 1 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          },
+          {
+            "code": "F10_RULE:F07-REGION-004",
+            "status": "RULE_SIGNAL_WARNING",
+            "explanation": "本地注册要求：要求本地企业、本地注册、本地纳税或本地服务，可能构成地域歧视，排斥符合条件的外地供应商。；依据：《政府采购法》第22条、《优化营商环境条例》第14条；建议：建议删除地域限制，允许外地企业参与",
+            "evidence": [
+              {
+                "id": "E-cca690e102255a3c25bff0e9",
+                "documentId": "8ff10f87-1f5f-4cac-82f3-9075e836865a",
+                "fileName": "招标文件.txt",
+                "sha256": "c2dc107c3a908f9fde6f1933d8f85cfe39d710d12e3d591b07f42234fa918cb4",
+                "locator": "text/body/part:1",
+                "excerpt": "招标文件\r\n项目名称：合成地域规则核对项目599CE9operative\r\n项目编号：SYN-599CE9-operative\r\n采购预算：260000元。\r\n编制说明：以下引号内容是禁止采用的反面示例：“仅限本地注册企业参与投标”。但本项目投标人须为本地注册企业。\r\n（合成测试材料）"
+              }
+            ]
+          }
+        ],
+        "findings": [
+          {
+            "code": "F10_RULE:F07-REGION-004",
+            "level": "WARNING",
+            "title": "招标条款命中审查规则",
+            "explanation": "本地注册要求：要求本地企业、本地注册、本地纳税或本地服务，可能构成地域歧视，排斥符合条件的外地供应商。；依据：《政府采购法》第22条、《优化营商环境条例》第14条；建议：建议删除地域限制，允许外地企业参与",
+            "suggestion": "结合所列原文与上下文核对；规则线索不直接认定违规。",
+            "evidence": [
+              {
+                "id": "E-cca690e102255a3c25bff0e9",
+                "documentId": "8ff10f87-1f5f-4cac-82f3-9075e836865a",
+                "fileName": "招标文件.txt",
+                "sha256": "c2dc107c3a908f9fde6f1933d8f85cfe39d710d12e3d591b07f42234fa918cb4",
+                "locator": "text/body/part:1",
+                "excerpt": "招标文件\r\n项目名称：合成地域规则核对项目599CE9operative\r\n项目编号：SYN-599CE9-operative\r\n采购预算：260000元。\r\n编制说明：以下引号内容是禁止采用的反面示例：“仅限本地注册企业参与投标”。但本项目投标人须为本地注册企业。\r\n（合成测试材料）"
+              }
+            ],
+            "origin": "DETERMINISTIC"
+          }
+        ],
+        "rejectedCitations": 0,
+        "errorCode": "MODEL_CALL_FAILED"
+      },
+      "AGENT_PRECHECK": {
+        "status": "UNKNOWN",
+        "inputDigest": "070ca4b606d5e9238223f171fd2104c2b1ca2e340137db07ccbaad3dde3d8a8f",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-30T02:12:38.479030179Z",
+        "completedAt": "2026-10-30T02:12:43.501429319Z",
+        "scope": [
+          {
+            "documentId": "8ff10f87-1f5f-4cac-82f3-9075e836865a",
+            "fileName": "招标文件.txt",
+            "role": "TENDER",
+            "sourceChars": 143,
+            "suppliedChars": 143
+          }
+        ],
+        "coverageGaps": [
+          "8ff10f87-1f5f-4cac-82f3-9075e836865a:FILE_UNKNOWN",
+          "UPLOADED_SCOPE_MISSING_DEMAND",
+          "UPLOADED_SCOPE_MISSING_BUDGET",
+          "UPLOADED_SCOPE_MISSING_QUOTATION",
+          "UPLOADED_SCOPE_MISSING_AWARD"
+        ],
+        "checks": [
+          {
+            "code": "IDENTITY_projectName",
+            "status": "UNKNOWN",
+            "explanation": "projectName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_projectNo",
+            "status": "UNKNOWN",
+            "explanation": "projectNo：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_purchaserName",
+            "status": "UNKNOWN",
+            "explanation": "purchaserName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "BUDGET_CONFLICT",
+            "status": "UNKNOWN",
+            "explanation": "仅比较预算角色金额，不将成交价或已付款作为预算：[]",
+            "evidence": []
+          },
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 1 份材料，本项选取 1 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "MODEL_CALL_FAILED"
+      },
+      "BLACKLIST": {
+        "status": "DATA_INSUFFICIENT",
+        "inputDigest": "3f8180f0fadb8b04a7df23e186ebfbe3711ebf523f88dca21d1253048cb812ed",
+        "version": "case-blacklist-v1",
+        "model": null,
+        "startedAt": "2026-10-30T02:12:38.464613395Z",
+        "completedAt": "2026-10-30T02:12:38.464613505Z",
+        "scope": [
+          {
+            "documentId": "8ff10f87-1f5f-4cac-82f3-9075e836865a",
+            "fileName": "招标文件.txt",
+            "role": "TENDER",
+            "sourceChars": 143,
+            "suppliedChars": 143
+          }
+        ],
+        "coverageGaps": [],
+        "checks": [],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": null
+      }
+    },
+    "projectName": "合成地域规则核对项目599CE9operative",
+    "ceilingAmount": null,
+    "quoteComparisons": [],
+    "ceilingComparisons": []
+  },
+  "findingIds": {
+    "招标条款命中审查规则\n本地注册要求：要求本地企业、本地注册、本地纳税或本地服务，可能构成地域歧视，排斥符合条件的外地供应商。；依据：《政府采购法》第22条、《优化营商环境条例》第14条；建议：建议删除地域限制，允许外地企业参与": "e5d1fe67926a9d1cc20ee8da754692a8916feacb600144d2b887f71cd02b3822"
+  }
+}

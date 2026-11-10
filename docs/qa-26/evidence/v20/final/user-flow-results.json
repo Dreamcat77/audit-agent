@@ -1,0 +1,24 @@
+{
+  "browser": "109.0.5412.0",
+  "results": [
+    {
+      "label": "proc-semantic",
+      "module": "procurement",
+      "failures": [],
+      "caseId": "6908ad87-3ba3-3767-b4a1-d25d007f4252",
+      "uploadFromPage": true,
+      "fixedModuleLayout": true,
+      "status": "PASS"
+    },
+    {
+      "label": "proc-inverted-scan",
+      "module": "procurement",
+      "failures": [],
+      "caseId": "13b49a4e-3a5a-383a-821d-e1b951ce5557",
+      "uploadFromPage": true,
+      "fixedModuleLayout": true,
+      "status": "PASS"
+    }
+  ],
+  "errors": []
+}

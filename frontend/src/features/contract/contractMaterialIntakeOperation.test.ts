@@ -248,6 +248,52 @@ function storage() {
     removeItem:(key:string)=>{values.delete(key);},values};
 }
 
+test("one explicit batch is one project, regardless of filenames or an older uncertain batch",async()=>{
+  const saved=storage(),created:Array<{id:string;key:string;count:number}>=[],uploads:Array<{projectId:string;name:string}>=[];
+  const dataSource=source({async createBlank(options:any){
+    const id=`batch-${created.length+1}`;created.push({id,key:options.idempotencyKey,count:options.automaticAnalysisFileCount});
+    return {...project,id};
+  },async getProject(id:string){return {project:{...project,id}};},async uploadAsync(projectId:string,selected:File){
+    uploads.push({projectId,name:selected.name});
+    if(projectId==="batch-1")throw new Error("response lost");
+    return {projectId,fileId:selected.name,jobId:`job-${selected.name}`,file:{id:selected.name,projectId},job:{status:"QUEUED"}};
+  }});
+  let key=0;const options={dataSource,automaticAnalysis:true,newProjectPerBatch:true,retained:{actorId:"actor",storage:saved}};
+  const first=createContractMaterialIntakeOperation(options,()=>`command-${++key}`);
+  assert.equal((await first.start([file("合同书.pdf")])).kind,"OUTCOME_UNCERTAIN");
+  const old=[...saved.values.entries()];
+  // Reloading and using the same filename still means a new user-selected batch, not a guessed association.
+  const next=createContractMaterialIntakeOperation(options,()=>`command-${++key}`);
+  const result=await next.start([file("合同书.pdf"),file("中标通知书.docx"),file("招标文件.pdf")]);
+  assert.equal(result.kind,"COMPLETED");assert.equal(result.projectId,"batch-2");
+  assert.deepEqual(created.map(row=>row.count),[1,3]);assert.notEqual(created[0].key,created[1].key);
+  assert.deepEqual(uploads.slice(1).map(row=>row.projectId),["batch-2","batch-2","batch-2"]);
+  assert.deepEqual([...saved.values.entries()],old,"unknown original command must remain unchanged");
+  assert.equal((await next.start([file("下一批.doc")])).projectId,"batch-3");
+});
+
+test("an unreadable legacy journal cannot block a new batch and is preserved",async()=>{
+  const saved=storage();const key="audit:contract-material-intake:v1:actor";
+  saved.setItem(key,"corrupt original record");
+  const operation=createContractMaterialIntakeOperation({dataSource:source(),newProjectPerBatch:true,
+    retained:{actorId:"actor",storage:saved}});
+  assert.equal((await operation.start([file("合同.docx")])).kind,"COMPLETED");
+  assert.equal(saved.getItem(key),"corrupt original record");
+  assert.equal((await operation.start([])).kind,"CANCELLED");
+  await assert.rejects(operation.start([file("材料.exe")]),/格式|请选择/);
+  assert.equal(saved.values.size,1);
+});
+
+test("double selection while sending one batch cannot create a second project",async()=>{
+  let release!:(value:any)=>void,creates=0;
+  const operation=createContractMaterialIntakeOperation({newProjectPerBatch:true,retained:{actorId:"actor",storage:storage()},
+    dataSource:source({async createBlank(){creates++;return new Promise(resolve=>{release=resolve;});}})});
+  const first=operation.start([file("合同书.pdf"),file("附件.doc")]);
+  const duplicate=operation.start([file("合同书.pdf"),file("附件.doc")]);
+  assert.equal(first,duplicate);assert.equal(creates,1);
+  release(project);assert.equal((await first).kind,"COMPLETED");assert.equal(creates,1);
+});
+
 test("refresh preserves uncertain project and legacy DOC operation keys and reselects original bytes without a second Project",async()=>{
   const saved=storage();const createKeys:string[]=[];const uploadKeys:string[]=[];
   let first=true;

@@ -1,0 +1,53 @@
+{
+  "browser": "109.0.5412.0",
+  "results": [
+    {
+      "label": "budget-semantic",
+      "module": "budget",
+      "failures": [],
+      "lines": 1,
+      "batchId": "a22958cb-f27f-4880-abb9-32198ca2f8cd",
+      "uploadFromPage": true,
+      "fixedModuleLayout": true,
+      "status": "PASS"
+    },
+    {
+      "label": "budget-empty",
+      "module": "budget",
+      "failures": [],
+      "lines": 0,
+      "batchId": "c17ded51-6728-4e77-9b3b-a40c9898a7bf",
+      "uploadFromPage": true,
+      "fixedModuleLayout": true,
+      "status": "PASS"
+    },
+    {
+      "label": "proc-semantic",
+      "module": "procurement",
+      "failures": [
+        "Error: BUDGET_MISSING"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "label": "proc-empty",
+      "module": "procurement",
+      "failures": [],
+      "caseId": "1a40717d-0e34-32f2-94f8-671de115842d",
+      "uploadFromPage": true,
+      "fixedModuleLayout": true,
+      "status": "PASS"
+    },
+    {
+      "label": "contract-incomplete",
+      "module": "contract",
+      "failures": [],
+      "caseId": "398a1ba6-8431-36de-9ba2-abd7ab193ae2",
+      "formalContracts": 0,
+      "uploadFromPage": true,
+      "fixedModuleLayout": true,
+      "status": "PASS"
+    }
+  ],
+  "errors": []
+}

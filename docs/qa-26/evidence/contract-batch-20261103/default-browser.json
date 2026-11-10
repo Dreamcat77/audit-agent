@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "browser": "109.0.5412.0",
+  "origin": "http://192.168.0.26",
+  "candidateStaticInterception": false,
+  "batches": [
+    {
+      "status": 200,
+      "projectId": "b0add872-63f2-4de8-a971-98d8ebd2bea7",
+      "caseId": "ec5438a8-ff84-3790-93bd-12608ca0d2f7",
+      "fileCount": 2
+    },
+    {
+      "status": 200,
+      "projectId": "c254ddbe-3e7f-44b4-8acc-a2de2bf76852",
+      "caseId": "b83ad4c9-35e6-39b0-8628-abec52380dba",
+      "fileCount": 1
+    }
+  ],
+  "uploads": [
+    {
+      "status": 202,
+      "projectId": "b0add872-63f2-4de8-a971-98d8ebd2bea7",
+      "fileId": "5baf584d-da82-4d4b-92aa-53e78e63070c",
+      "jobId": "210cea7a-19fa-4c17-9853-0118244f1944"
+    },
+    {
+      "status": 202,
+      "projectId": "b0add872-63f2-4de8-a971-98d8ebd2bea7",
+      "fileId": "be45db56-5f71-45d5-9827-a383103a809c",
+      "jobId": "b3faa679-12a1-402e-8223-5f2106dc936d"
+    },
+    {
+      "status": 202,
+      "projectId": "c254ddbe-3e7f-44b4-8acc-a2de2bf76852",
+      "fileId": "32eb69aa-2bb4-4374-9b99-9662bbc99df6",
+      "jobId": "2f695862-327a-4c47-a49d-4e30b80703c9"
+    }
+  ],
+  "preservedOldJournals": true,
+  "eightCategories": true,
+  "historyReopened": true,
+  "layouts": [
+    {
+      "width": 1440,
+      "noOverflow": true
+    },
+    {
+      "width": 1024,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "noOverflow": true
+    }
+  ],
+  "pageErrors": [],
+  "modelQuality": "NOT_VERIFIED"
+}

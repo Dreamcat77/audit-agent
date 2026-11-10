@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "mode": "default",
+  "previous": "/opt/audit-agent/releases/v22.material-20261029-r1",
+  "release": "/opt/audit-agent/releases/scan-20261030-r1",
+  "jarSha256": "1a0d7d64137ca84170d15ab4fa5ad4afeac988c59bf6f5d97a1aa593cea2be43",
+  "configPreserved": true,
+  "schemaChanged": false,
+  "frontendChanged": false,
+  "indexSha256": "be33d0929cfca0a212a8283ef20f3ab4e0e0afedf2e85f869e3a5f391ff51a2d",
+  "realModel": "NOT_VERIFIED_CONNECT_TIMEOUT"
+}

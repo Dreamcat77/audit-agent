@@ -1,0 +1,782 @@
+{
+  "id": "4562c28f-005a-36b4-9ade-34c140a44a83",
+  "caseNumber": "AC-4562c28f-005a-36b4-9ade-34c140a44a83",
+  "status": "PARTIAL",
+  "createdAt": "2026-10-27T08:43:39.389726200Z",
+  "documents": [
+    {
+      "id": "589794d0-08ef-40ba-9fa9-bb7c132d7be2",
+      "name": "01_办公终端及打印设备采购需求申请书.docx",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 1
+    },
+    {
+      "id": "a5f52ef7-2bb1-4637-adb4-7652c8531ba1",
+      "name": "02_办公终端采购技术需求表.pdf",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 1
+    },
+    {
+      "id": "603c1a05-1e57-4c3a-9f73-0e2f638effa5",
+      "name": "03_办公设备采购实施计划.docx",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 1
+    },
+    {
+      "id": "642f236f-f7e4-4188-ad44-4e5dea85d0c8",
+      "name": "04_办公设备更新项目预算批复.pdf",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 3
+    },
+    {
+      "id": "b7412bd3-de74-4d8e-bddb-8ba4016b07d8",
+      "name": "05_办公终端及打印设备采购招标文件.docx",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 1
+    },
+    {
+      "id": "3fdcced2-266b-460e-b98c-4763ad22d7cf",
+      "name": "06_办公设备采购评审办法.pdf",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 1
+    },
+    {
+      "id": "9241d085-cf8b-4d29-9ace-4931131d46d3",
+      "name": "07_澄川星河办公设备有限公司报价单.pdf",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 16
+    },
+    {
+      "id": "7d11b9b3-8416-4116-b595-ee3782081a31",
+      "name": "08_澄川明川数字设备有限公司报价单.pdf",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 16
+    },
+    {
+      "id": "89f85373-3c97-47f1-94e8-f0ce7f577d8e",
+      "name": "09_澄川启衡信息设备有限公司报价单.pdf",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 16
+    },
+    {
+      "id": "b483a4a7-7150-45af-969d-c6799c5bd67a",
+      "name": "10_办公设备采购文件澄清答复.docx",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 1
+    },
+    {
+      "id": "73ea103c-6470-4b5a-b763-90b929726719",
+      "name": "11_办公设备采购中标通知书.docx",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 3
+    },
+    {
+      "id": "607316e4-57e6-4b00-a0e5-183ed030e089",
+      "name": "12_办公设备采购履约验收方案.docx",
+      "status": "EXTRACTED",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": null,
+      "factCount": 1
+    }
+  ],
+  "report": {
+    "quoteStatus": "COMPLETED",
+    "budget": 222600.0,
+    "awardAmount": 212000.0,
+    "offers": [
+      {
+        "supplier": "澄川星河办公设备有限公司",
+        "amount": 212000.0,
+        "documentId": "9241d085-cf8b-4d29-9ace-4931131d46d3",
+        "lines": [
+          {
+            "item": "办公终端",
+            "quantity": 40.0,
+            "unitPrice": 4200.0,
+            "amount": 168000.0,
+            "locator": "pdf/page:1/text/part:1"
+          },
+          {
+            "item": "多功能打印设备",
+            "quantity": 4.0,
+            "unitPrice": 6800.0,
+            "amount": 27200.0,
+            "locator": "pdf/page:1/text/part:1"
+          },
+          {
+            "item": "安装调试及数据迁移",
+            "quantity": 1.0,
+            "unitPrice": 16800.0,
+            "amount": 16800.0,
+            "locator": "pdf/page:1/text/part:1"
+          }
+        ],
+        "lineValidation": "VERIFIED"
+      },
+      {
+        "supplier": "澄川明川数字设备有限公司",
+        "amount": 216400.0,
+        "documentId": "7d11b9b3-8416-4116-b595-ee3782081a31",
+        "lines": [
+          {
+            "item": "办公终端",
+            "quantity": 40.0,
+            "unitPrice": 4300.0,
+            "amount": 172000.0,
+            "locator": "pdf/page:1/text/part:1"
+          },
+          {
+            "item": "多功能打印设备",
+            "quantity": 4.0,
+            "unitPrice": 6900.0,
+            "amount": 27600.0,
+            "locator": "pdf/page:1/text/part:1"
+          },
+          {
+            "item": "安装调试及数据迁移",
+            "quantity": 1.0,
+            "unitPrice": 16800.0,
+            "amount": 16800.0,
+            "locator": "pdf/page:1/text/part:1"
+          }
+        ],
+        "lineValidation": "VERIFIED"
+      },
+      {
+        "supplier": "澄川启衡信息设备有限公司",
+        "amount": 219800.0,
+        "documentId": "89f85373-3c97-47f1-94e8-f0ce7f577d8e",
+        "lines": [
+          {
+            "item": "办公终端",
+            "quantity": 40.0,
+            "unitPrice": 4350.0,
+            "amount": 174000.0,
+            "locator": "pdf/page:1/text/part:1"
+          },
+          {
+            "item": "多功能打印设备",
+            "quantity": 4.0,
+            "unitPrice": 7000.0,
+            "amount": 28000.0,
+            "locator": "pdf/page:1/text/part:1"
+          },
+          {
+            "item": "安装调试及数据迁移",
+            "quantity": 1.0,
+            "unitPrice": 17800.0,
+            "amount": 17800.0,
+            "locator": "pdf/page:1/text/part:1"
+          }
+        ],
+        "lineValidation": "VERIFIED"
+      }
+    ],
+    "calculation": {
+      "id": "052c7391-541f-477e-9846-130d50003652",
+      "batchId": "4562c28f-005a-36b4-9ade-34c140a44a83",
+      "budgetAmount": 222600.0,
+      "averageQuote": 216066.67,
+      "standardDeviation": 3193.048,
+      "coefficientOfVariation": 0.0148,
+      "highlyConcentrated": true,
+      "riskLevel": "WARNING",
+      "createdTime": "2026-10-27T08:45:01.445738700Z",
+      "quotes": [
+        {
+          "id": "9f10e706-ff70-481d-aeff-26932989b7e5",
+          "rowNumber": 1,
+          "supplierName": "澄川星河办公设备有限公司",
+          "quoteAmount": 212000.0,
+          "productDescription": null,
+          "overBudget": false,
+          "overBudgetAmount": 0.0,
+          "overBudgetRatio": 0.0,
+          "deviationRatio": 0.0188,
+          "suspicious": false,
+          "suspiciousReason": null
+        },
+        {
+          "id": "1a17cf08-b565-4daa-bcf6-24182e4576cf",
+          "rowNumber": 2,
+          "supplierName": "澄川明川数字设备有限公司",
+          "quoteAmount": 216400.0,
+          "productDescription": null,
+          "overBudget": false,
+          "overBudgetAmount": 0.0,
+          "overBudgetRatio": 0.0,
+          "deviationRatio": 0.0015,
+          "suspicious": false,
+          "suspiciousReason": null
+        },
+        {
+          "id": "6a130eb2-018a-460a-a078-b34b29b12b7c",
+          "rowNumber": 3,
+          "supplierName": "澄川启衡信息设备有限公司",
+          "quoteAmount": 219800.0,
+          "productDescription": null,
+          "overBudget": false,
+          "overBudgetAmount": 0.0,
+          "overBudgetRatio": 0.0,
+          "deviationRatio": 0.0173,
+          "suspicious": false,
+          "suspiciousReason": null
+        }
+      ],
+      "comparison": null
+    },
+    "notices": [
+      "本结果为前期询价总价比较；报价集中是统计线索，不构成围串标或正式中标推荐。"
+    ],
+    "modules": {
+      "COLLUSION": "NOT_EXECUTED",
+      "SPLIT_PURCHASE": "NOT_EXECUTED",
+      "QUOTE": "COMPLETED",
+      "BLACKLIST": "NOT_EXECUTED",
+      "TENDER_COMPLIANCE": "COMPLETED",
+      "AGENT_PRECHECK": "UNKNOWN"
+    },
+    "reviews": {
+      "TENDER_COMPLIANCE": {
+        "status": "COMPLETED",
+        "inputDigest": "4b3edfb3d2e7e86ca4d843b0d4b94bdb200e7a97ec890b1ffd58cecb2e759be2",
+        "version": "case-cross-file-v1",
+        "model": "MOCK_CASE_REVIEW",
+        "startedAt": "2026-10-27T09:45:05.481937400Z",
+        "completedAt": "2026-10-27T09:45:07.263593300Z",
+        "scope": [
+          {
+            "documentId": "589794d0-08ef-40ba-9fa9-bb7c132d7be2",
+            "fileName": "01_办公终端及打印设备采购需求申请书.docx",
+            "role": "DEMAND",
+            "sourceChars": 621,
+            "suppliedChars": 621
+          },
+          {
+            "documentId": "a5f52ef7-2bb1-4637-adb4-7652c8531ba1",
+            "fileName": "02_办公终端采购技术需求表.pdf",
+            "role": "TECHNICAL",
+            "sourceChars": 513,
+            "suppliedChars": 513
+          },
+          {
+            "documentId": "b7412bd3-de74-4d8e-bddb-8ba4016b07d8",
+            "fileName": "05_办公终端及打印设备采购招标文件.docx",
+            "role": "TENDER",
+            "sourceChars": 1025,
+            "suppliedChars": 1025
+          },
+          {
+            "documentId": "3fdcced2-266b-460e-b98c-4763ad22d7cf",
+            "fileName": "06_办公设备采购评审办法.pdf",
+            "role": "EVALUATION",
+            "sourceChars": 363,
+            "suppliedChars": 363
+          },
+          {
+            "documentId": "b483a4a7-7150-45af-969d-c6799c5bd67a",
+            "fileName": "10_办公设备采购文件澄清答复.docx",
+            "role": "CLARIFICATION",
+            "sourceChars": 406,
+            "suppliedChars": 406
+          }
+        ],
+        "coverageGaps": [],
+        "checks": [
+          {
+            "code": "TECHNICAL_REQUIREMENTS",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "Mock协议测试：仅验证执行与引用契约，不代表语义审查通过",
+            "evidence": [
+              {
+                "id": "E-5725b6f97f76cabb9f0f91b5",
+                "documentId": "589794d0-08ef-40ba-9fa9-bb7c132d7be2",
+                "fileName": "01_办公终端及打印设备采购需求申请书.docx",
+                "sha256": "1175341a3b8335daccb439eef2003392642bff901d7338234bb1b142184bace2",
+                "locator": "docx/body/node:1/part:1",
+                "excerpt": "办公终端及打印设备采购需求申请书\n"
+              }
+            ]
+          },
+          {
+            "code": "SCORING_METHOD",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "Mock协议测试：仅验证执行与引用契约，不代表语义审查通过",
+            "evidence": [
+              {
+                "id": "E-5725b6f97f76cabb9f0f91b5",
+                "documentId": "589794d0-08ef-40ba-9fa9-bb7c132d7be2",
+                "fileName": "01_办公终端及打印设备采购需求申请书.docx",
+                "sha256": "1175341a3b8335daccb439eef2003392642bff901d7338234bb1b142184bace2",
+                "locator": "docx/body/node:1/part:1",
+                "excerpt": "办公终端及打印设备采购需求申请书\n"
+              }
+            ]
+          },
+          {
+            "code": "PAYMENT_CLARIFICATION",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "Mock协议测试：仅验证执行与引用契约，不代表语义审查通过",
+            "evidence": [
+              {
+                "id": "E-5725b6f97f76cabb9f0f91b5",
+                "documentId": "589794d0-08ef-40ba-9fa9-bb7c132d7be2",
+                "fileName": "01_办公终端及打印设备采购需求申请书.docx",
+                "sha256": "1175341a3b8335daccb439eef2003392642bff901d7338234bb1b142184bace2",
+                "locator": "docx/body/node:1/part:1",
+                "excerpt": "办公终端及打印设备采购需求申请书\n"
+              }
+            ]
+          },
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SOURCE_GROUNDED_OBSERVATION",
+            "explanation": "Mock协议测试：仅验证执行与引用契约，不代表语义审查通过",
+            "evidence": [
+              {
+                "id": "E-5725b6f97f76cabb9f0f91b5",
+                "documentId": "589794d0-08ef-40ba-9fa9-bb7c132d7be2",
+                "fileName": "01_办公终端及打印设备采购需求申请书.docx",
+                "sha256": "1175341a3b8335daccb439eef2003392642bff901d7338234bb1b142184bace2",
+                "locator": "docx/body/node:1/part:1",
+                "excerpt": "办公终端及打印设备采购需求申请书\n"
+              }
+            ]
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": null
+      },
+      "AGENT_PRECHECK": {
+        "status": "UNKNOWN",
+        "inputDigest": "3e3c48b6ccd03b598e4555c0b2272f3fec12bd1127c7a14ef3fa4f3f22ea2e9c",
+        "version": "case-cross-file-v1",
+        "model": null,
+        "startedAt": "2026-10-27T08:44:38.716007900Z",
+        "completedAt": "2026-10-27T09:45:03.599915700Z",
+        "scope": [
+          {
+            "documentId": "589794d0-08ef-40ba-9fa9-bb7c132d7be2",
+            "fileName": "01_办公终端及打印设备采购需求申请书.docx",
+            "role": "DEMAND",
+            "sourceChars": 621,
+            "suppliedChars": 621
+          },
+          {
+            "documentId": "a5f52ef7-2bb1-4637-adb4-7652c8531ba1",
+            "fileName": "02_办公终端采购技术需求表.pdf",
+            "role": "TECHNICAL",
+            "sourceChars": 513,
+            "suppliedChars": 513
+          },
+          {
+            "documentId": "603c1a05-1e57-4c3a-9f73-0e2f638effa5",
+            "fileName": "03_办公设备采购实施计划.docx",
+            "role": "PLAN",
+            "sourceChars": 431,
+            "suppliedChars": 431
+          },
+          {
+            "documentId": "642f236f-f7e4-4188-ad44-4e5dea85d0c8",
+            "fileName": "04_办公设备更新项目预算批复.pdf",
+            "role": "BUDGET",
+            "sourceChars": 398,
+            "suppliedChars": 398
+          },
+          {
+            "documentId": "b7412bd3-de74-4d8e-bddb-8ba4016b07d8",
+            "fileName": "05_办公终端及打印设备采购招标文件.docx",
+            "role": "TENDER",
+            "sourceChars": 1025,
+            "suppliedChars": 1025
+          },
+          {
+            "documentId": "3fdcced2-266b-460e-b98c-4763ad22d7cf",
+            "fileName": "06_办公设备采购评审办法.pdf",
+            "role": "EVALUATION",
+            "sourceChars": 363,
+            "suppliedChars": 363
+          },
+          {
+            "documentId": "9241d085-cf8b-4d29-9ace-4931131d46d3",
+            "fileName": "07_澄川星河办公设备有限公司报价单.pdf",
+            "role": "QUOTATION",
+            "sourceChars": 450,
+            "suppliedChars": 450
+          },
+          {
+            "documentId": "7d11b9b3-8416-4116-b595-ee3782081a31",
+            "fileName": "08_澄川明川数字设备有限公司报价单.pdf",
+            "role": "QUOTATION",
+            "sourceChars": 450,
+            "suppliedChars": 450
+          },
+          {
+            "documentId": "89f85373-3c97-47f1-94e8-f0ce7f577d8e",
+            "fileName": "09_澄川启衡信息设备有限公司报价单.pdf",
+            "role": "QUOTATION",
+            "sourceChars": 450,
+            "suppliedChars": 450
+          },
+          {
+            "documentId": "b483a4a7-7150-45af-969d-c6799c5bd67a",
+            "fileName": "10_办公设备采购文件澄清答复.docx",
+            "role": "CLARIFICATION",
+            "sourceChars": 406,
+            "suppliedChars": 406
+          },
+          {
+            "documentId": "73ea103c-6470-4b5a-b763-90b929726719",
+            "fileName": "11_办公设备采购中标通知书.docx",
+            "role": "AWARD",
+            "sourceChars": 348,
+            "suppliedChars": 348
+          },
+          {
+            "documentId": "607316e4-57e6-4b00-a0e5-183ed030e089",
+            "fileName": "12_办公设备采购履约验收方案.docx",
+            "role": "ACCEPTANCE_PLAN",
+            "sourceChars": 388,
+            "suppliedChars": 388
+          }
+        ],
+        "coverageGaps": [],
+        "checks": [
+          {
+            "code": "IDENTITY_projectName",
+            "status": "UNKNOWN",
+            "explanation": "projectName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_projectNo",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "projectNo：FZ-CG-2026-001；缺少该字段的文件不作为冲突依据",
+            "evidence": [
+              {
+                "id": "E-0f12694b77ccaab505a86495",
+                "documentId": "589794d0-08ef-40ba-9fa9-bb7c132d7be2",
+                "fileName": "01_办公终端及打印设备采购需求申请书.docx",
+                "sha256": "1175341a3b8335daccb439eef2003392642bff901d7338234bb1b142184bace2",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+              },
+              {
+                "id": "E-c0324e9f9f67daf0f5a231e8",
+                "documentId": "a5f52ef7-2bb1-4637-adb4-7652c8531ba1",
+                "fileName": "02_办公终端采购技术需求表.pdf",
+                "sha256": "87e50a7b0c6f9dd7404db41a823c34b0ef78b25182c4dfa34a7a55ba09aa9ab8",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "办公终端采购技术需求表\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n一 办公终端\r\n参数项目 需求说明 验收方法\r\n处理器与内存 满足日常文档、表格和业务客户端并行运行；内存不低于16GB 核对配置与运行测试\r\n存储 固态硬盘不低于512GB；支持硬盘故障提示 开机检查并核对容量\r\n接口与网络 具备有线网络接口及必要USB接口 连接现有外设并测试\r\n安装采购单位合法软件进\r\n软件兼容 兼容采购单位现有办公软件和业务客户端\r\n行验证\r\n二 打印及服务\r\n打印设备应支持双面打印、扫描和网络连接；按正常办公纸张测试连续输出，不以特定商标作为资格条\r\n件。供应商应列明耗材类型、建议更换周期和含税报价。\r\n安装调试包括到货清点、资产标签粘贴、用户设置和使用培训。原有合法软件许可继续使用，新增许可\r\n须在报价中单独说明，不得含入不明服务费。\r\n本表用于描述使用需求。等效产品可以响应；供应商应提供具体配置、差异说明和服务承诺，评审时结\r\n合可核验资料判断。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-100db20d5fe2690c1cfba62d",
+                "documentId": "603c1a05-1e57-4c3a-9f73-0e2f638effa5",
+                "fileName": "03_办公设备采购实施计划.docx",
+                "sha256": "a15f3f1c79022c7116611c8292d78b7c50888ae13818ee5ab393943a9ca7fe83",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+              },
+              {
+                "id": "E-d05e3637b97637fb0f502ff4",
+                "documentId": "642f236f-f7e4-4188-ad44-4e5dea85d0c8",
+                "fileName": "04_办公设备更新项目预算批复.pdf",
+                "sha256": "116c6aa362cd756bb2b8048ba51c76f48dc3b7ba06b8e7ce4b0efcde756032c4",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "办公设备更新项目预算批复\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n综保财〔2026〕31号\r\n综合管理部：你部报送的办公设备更新项目预算申请收悉。同意安排本项目经费人民币222600.00元，\r\n大写贰拾贰万贰仟陆佰元整，用于40台办公终端、4台多功能打印设备及配套安装调试。\r\n本批复确定的是经费控制上限，具体成交价格以采购结果和合同为准。项目实施不得自行扩大范围，节\r\n余经费按财务制度处理；必要的预算调整须另行报批。\r\n本项目尚未支付采购款。经费来源为2026年度综合保障项目支出，不得将预算控制数、报价金额和已支\r\n付金额相互替代。\r\n财务部门 2026年9月5日。审批签署栏保留为空，本材料不构成真实批准文件。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-e4f4221e9eaaae61fae3d843",
+                "documentId": "b7412bd3-de74-4d8e-bddb-8ba4016b07d8",
+                "fileName": "05_办公终端及打印设备采购招标文件.docx",
+                "sha256": "fdb01fff100d6bee87fcbf9f1b264e0ce25ab03004dd8d6c800c7c2a23cc13d2",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+              },
+              {
+                "id": "E-6e2fac722ca4b81518aa990e",
+                "documentId": "3fdcced2-266b-460e-b98c-4763ad22d7cf",
+                "fileName": "06_办公设备采购评审办法.pdf",
+                "sha256": "165ca2bb14d2803d0546c949ce1b57ccd1700d2f34dda24ddd0b42f2054adf1d",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "办公设备采购评审办法\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n一 分值组成\r\n评审项 分值 评分依据\r\n报价 30 有效最低价÷本供应商报价×30\r\n技术响应 45 配置、兼容测试和技术偏离说明\r\n售后服务 20 保修期、响应时间及备件保障\r\n实施方案 5 交付组织、替换安排及数据保护\r\n报价不是唯一评分依据。涉及同分处理、算术修正、无效响应及异常低价核实的，由评审组根据最终采\r\n购文件和适用制度记录理由。分值相加应为100分，不将服务承诺中的金额重复计入采购总价。\r\n本办法对应文件FZ-ZB-2026-001，由评审人员在实施前确认适用版本。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-af4ca16cee5277df6162c2d9",
+                "documentId": "9241d085-cf8b-4d29-9ace-4931131d46d3",
+                "fileName": "07_澄川星河办公设备有限公司报价单.pdf",
+                "sha256": "5dedf7d854f945769db35d4aa6925e38a9be59577dfa47d0c8f873e9a740ca1e",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川星河办公设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川星河办公设备有限公司。报价编号：FZ-BJ-2026-A。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,200.00 168,000.00\r\n多功能打印设备 4 台 6,800.00 27,200.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币212,000.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-5a37baacab864b1f074513c8",
+                "documentId": "7d11b9b3-8416-4116-b595-ee3782081a31",
+                "fileName": "08_澄川明川数字设备有限公司报价单.pdf",
+                "sha256": "86495b4d4687d813ca40c677691893508458bfb009061ac70408f84e64de5154",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川明川数字设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川明川数字设备有限公司。报价编号：FZ-BJ-2026-B。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,300.00 172,000.00\r\n多功能打印设备 4 台 6,900.00 27,600.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币216,400.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-e255688bda67b7113380cb88",
+                "documentId": "89f85373-3c97-47f1-94e8-f0ce7f577d8e",
+                "fileName": "09_澄川启衡信息设备有限公司报价单.pdf",
+                "sha256": "bf4b23e99cd118b6281735d602e0d69b3b700808e3e86f1f82e46004812c1f25",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川启衡信息设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川启衡信息设备有限公司。报价编号：FZ-BJ-2026-C。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,350.00 174,000.00\r\n多功能打印设备 4 台 7,000.00 28,000.00\r\n安装调试及数据迁移 1 项 17,800.00 17,800.00\r\n含税报价合计：人民币219,800.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-8c3b29a2fadc0d78397ef05e",
+                "documentId": "b483a4a7-7150-45af-969d-c6799c5bd67a",
+                "fileName": "10_办公设备采购文件澄清答复.docx",
+                "sha256": "31238059f27fbc75cf01ea611d74f8c93c3970ad0a39abbbfd1df1721d15a207",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+              },
+              {
+                "id": "E-3bc900919b26074accfe89d1",
+                "documentId": "73ea103c-6470-4b5a-b763-90b929726719",
+                "fileName": "11_办公设备采购中标通知书.docx",
+                "sha256": "3994d74c6868f5ba28f116f79dc8becc23d77aece871a4c7252aa7fa12b4c4aa",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+              },
+              {
+                "id": "E-63b98760705374cba8b7b8da",
+                "documentId": "607316e4-57e6-4b00-a0e5-183ed030e089",
+                "fileName": "12_办公设备采购履约验收方案.docx",
+                "sha256": "f94391cfe087e268d926d63e019204b201cfc2a7eb49511707bebe70c94de2c8",
+                "locator": "docx/body/node:2/part:2",
+                "excerpt": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+              }
+            ]
+          },
+          {
+            "code": "IDENTITY_purchaserName",
+            "status": "UNKNOWN",
+            "explanation": "purchaserName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "BUDGET_CONFLICT",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "仅比较预算角色金额，不将成交价或已付款作为预算：[222600.00]",
+            "evidence": [
+              {
+                "id": "E-d05e3637b97637fb0f502ff4",
+                "documentId": "642f236f-f7e4-4188-ad44-4e5dea85d0c8",
+                "fileName": "04_办公设备更新项目预算批复.pdf",
+                "sha256": "116c6aa362cd756bb2b8048ba51c76f48dc3b7ba06b8e7ce4b0efcde756032c4",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "办公设备更新项目预算批复\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n综保财〔2026〕31号\r\n综合管理部：你部报送的办公设备更新项目预算申请收悉。同意安排本项目经费人民币222600.00元，\r\n大写贰拾贰万贰仟陆佰元整，用于40台办公终端、4台多功能打印设备及配套安装调试。\r\n本批复确定的是经费控制上限，具体成交价格以采购结果和合同为准。项目实施不得自行扩大范围，节\r\n余经费按财务制度处理；必要的预算调整须另行报批。\r\n本项目尚未支付采购款。经费来源为2026年度综合保障项目支出，不得将预算控制数、报价金额和已支\r\n付金额相互替代。\r\n财务部门 2026年9月5日。审批签署栏保留为空，本材料不构成真实批准文件。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              }
+            ]
+          },
+          {
+            "code": "QUANTITY_CONFLICT",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "同名采购项 办公终端 数量：[40]；不同名称/配置不强行合并",
+            "evidence": [
+              {
+                "id": "E-af4ca16cee5277df6162c2d9",
+                "documentId": "9241d085-cf8b-4d29-9ace-4931131d46d3",
+                "fileName": "07_澄川星河办公设备有限公司报价单.pdf",
+                "sha256": "5dedf7d854f945769db35d4aa6925e38a9be59577dfa47d0c8f873e9a740ca1e",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川星河办公设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川星河办公设备有限公司。报价编号：FZ-BJ-2026-A。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,200.00 168,000.00\r\n多功能打印设备 4 台 6,800.00 27,200.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币212,000.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-5a37baacab864b1f074513c8",
+                "documentId": "7d11b9b3-8416-4116-b595-ee3782081a31",
+                "fileName": "08_澄川明川数字设备有限公司报价单.pdf",
+                "sha256": "86495b4d4687d813ca40c677691893508458bfb009061ac70408f84e64de5154",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川明川数字设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川明川数字设备有限公司。报价编号：FZ-BJ-2026-B。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,300.00 172,000.00\r\n多功能打印设备 4 台 6,900.00 27,600.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币216,400.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-e255688bda67b7113380cb88",
+                "documentId": "89f85373-3c97-47f1-94e8-f0ce7f577d8e",
+                "fileName": "09_澄川启衡信息设备有限公司报价单.pdf",
+                "sha256": "bf4b23e99cd118b6281735d602e0d69b3b700808e3e86f1f82e46004812c1f25",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川启衡信息设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川启衡信息设备有限公司。报价编号：FZ-BJ-2026-C。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,350.00 174,000.00\r\n多功能打印设备 4 台 7,000.00 28,000.00\r\n安装调试及数据迁移 1 项 17,800.00 17,800.00\r\n含税报价合计：人民币219,800.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              }
+            ]
+          },
+          {
+            "code": "QUANTITY_CONFLICT",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "同名采购项 多功能打印设备 数量：[4]；不同名称/配置不强行合并",
+            "evidence": [
+              {
+                "id": "E-af4ca16cee5277df6162c2d9",
+                "documentId": "9241d085-cf8b-4d29-9ace-4931131d46d3",
+                "fileName": "07_澄川星河办公设备有限公司报价单.pdf",
+                "sha256": "5dedf7d854f945769db35d4aa6925e38a9be59577dfa47d0c8f873e9a740ca1e",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川星河办公设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川星河办公设备有限公司。报价编号：FZ-BJ-2026-A。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,200.00 168,000.00\r\n多功能打印设备 4 台 6,800.00 27,200.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币212,000.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-5a37baacab864b1f074513c8",
+                "documentId": "7d11b9b3-8416-4116-b595-ee3782081a31",
+                "fileName": "08_澄川明川数字设备有限公司报价单.pdf",
+                "sha256": "86495b4d4687d813ca40c677691893508458bfb009061ac70408f84e64de5154",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川明川数字设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川明川数字设备有限公司。报价编号：FZ-BJ-2026-B。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,300.00 172,000.00\r\n多功能打印设备 4 台 6,900.00 27,600.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币216,400.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-e255688bda67b7113380cb88",
+                "documentId": "89f85373-3c97-47f1-94e8-f0ce7f577d8e",
+                "fileName": "09_澄川启衡信息设备有限公司报价单.pdf",
+                "sha256": "bf4b23e99cd118b6281735d602e0d69b3b700808e3e86f1f82e46004812c1f25",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川启衡信息设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川启衡信息设备有限公司。报价编号：FZ-BJ-2026-C。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,350.00 174,000.00\r\n多功能打印设备 4 台 7,000.00 28,000.00\r\n安装调试及数据迁移 1 项 17,800.00 17,800.00\r\n含税报价合计：人民币219,800.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              }
+            ]
+          },
+          {
+            "code": "QUANTITY_CONFLICT",
+            "status": "CONSISTENT_IN_OBSERVED",
+            "explanation": "同名采购项 安装调试及数据迁移 数量：[1]；不同名称/配置不强行合并",
+            "evidence": [
+              {
+                "id": "E-af4ca16cee5277df6162c2d9",
+                "documentId": "9241d085-cf8b-4d29-9ace-4931131d46d3",
+                "fileName": "07_澄川星河办公设备有限公司报价单.pdf",
+                "sha256": "5dedf7d854f945769db35d4aa6925e38a9be59577dfa47d0c8f873e9a740ca1e",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川星河办公设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川星河办公设备有限公司。报价编号：FZ-BJ-2026-A。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,200.00 168,000.00\r\n多功能打印设备 4 台 6,800.00 27,200.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币212,000.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-5a37baacab864b1f074513c8",
+                "documentId": "7d11b9b3-8416-4116-b595-ee3782081a31",
+                "fileName": "08_澄川明川数字设备有限公司报价单.pdf",
+                "sha256": "86495b4d4687d813ca40c677691893508458bfb009061ac70408f84e64de5154",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川明川数字设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川明川数字设备有限公司。报价编号：FZ-BJ-2026-B。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,300.00 172,000.00\r\n多功能打印设备 4 台 6,900.00 27,600.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币216,400.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-e255688bda67b7113380cb88",
+                "documentId": "89f85373-3c97-47f1-94e8-f0ce7f577d8e",
+                "fileName": "09_澄川启衡信息设备有限公司报价单.pdf",
+                "sha256": "bf4b23e99cd118b6281735d602e0d69b3b700808e3e86f1f82e46004812c1f25",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川启衡信息设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川启衡信息设备有限公司。报价编号：FZ-BJ-2026-C。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,350.00 174,000.00\r\n多功能打印设备 4 台 7,000.00 28,000.00\r\n安装调试及数据迁移 1 项 17,800.00 17,800.00\r\n含税报价合计：人民币219,800.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              }
+            ]
+          },
+          {
+            "code": "QUOTE_BUDGET",
+            "status": "WITHIN_BUDGET",
+            "explanation": "澄川星河办公设备有限公司 报价 212000.00；预算上限 222600.00",
+            "evidence": [
+              {
+                "id": "E-af4ca16cee5277df6162c2d9",
+                "documentId": "9241d085-cf8b-4d29-9ace-4931131d46d3",
+                "fileName": "07_澄川星河办公设备有限公司报价单.pdf",
+                "sha256": "5dedf7d854f945769db35d4aa6925e38a9be59577dfa47d0c8f873e9a740ca1e",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川星河办公设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川星河办公设备有限公司。报价编号：FZ-BJ-2026-A。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,200.00 168,000.00\r\n多功能打印设备 4 台 6,800.00 27,200.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币212,000.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-d05e3637b97637fb0f502ff4",
+                "documentId": "642f236f-f7e4-4188-ad44-4e5dea85d0c8",
+                "fileName": "04_办公设备更新项目预算批复.pdf",
+                "sha256": "116c6aa362cd756bb2b8048ba51c76f48dc3b7ba06b8e7ce4b0efcde756032c4",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "办公设备更新项目预算批复\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n综保财〔2026〕31号\r\n综合管理部：你部报送的办公设备更新项目预算申请收悉。同意安排本项目经费人民币222600.00元，\r\n大写贰拾贰万贰仟陆佰元整，用于40台办公终端、4台多功能打印设备及配套安装调试。\r\n本批复确定的是经费控制上限，具体成交价格以采购结果和合同为准。项目实施不得自行扩大范围，节\r\n余经费按财务制度处理；必要的预算调整须另行报批。\r\n本项目尚未支付采购款。经费来源为2026年度综合保障项目支出，不得将预算控制数、报价金额和已支\r\n付金额相互替代。\r\n财务部门 2026年9月5日。审批签署栏保留为空，本材料不构成真实批准文件。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              }
+            ]
+          },
+          {
+            "code": "QUOTE_BUDGET",
+            "status": "WITHIN_BUDGET",
+            "explanation": "澄川明川数字设备有限公司 报价 216400.00；预算上限 222600.00",
+            "evidence": [
+              {
+                "id": "E-5a37baacab864b1f074513c8",
+                "documentId": "7d11b9b3-8416-4116-b595-ee3782081a31",
+                "fileName": "08_澄川明川数字设备有限公司报价单.pdf",
+                "sha256": "86495b4d4687d813ca40c677691893508458bfb009061ac70408f84e64de5154",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川明川数字设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川明川数字设备有限公司。报价编号：FZ-BJ-2026-B。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,300.00 172,000.00\r\n多功能打印设备 4 台 6,900.00 27,600.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币216,400.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-d05e3637b97637fb0f502ff4",
+                "documentId": "642f236f-f7e4-4188-ad44-4e5dea85d0c8",
+                "fileName": "04_办公设备更新项目预算批复.pdf",
+                "sha256": "116c6aa362cd756bb2b8048ba51c76f48dc3b7ba06b8e7ce4b0efcde756032c4",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "办公设备更新项目预算批复\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n综保财〔2026〕31号\r\n综合管理部：你部报送的办公设备更新项目预算申请收悉。同意安排本项目经费人民币222600.00元，\r\n大写贰拾贰万贰仟陆佰元整，用于40台办公终端、4台多功能打印设备及配套安装调试。\r\n本批复确定的是经费控制上限，具体成交价格以采购结果和合同为准。项目实施不得自行扩大范围，节\r\n余经费按财务制度处理；必要的预算调整须另行报批。\r\n本项目尚未支付采购款。经费来源为2026年度综合保障项目支出，不得将预算控制数、报价金额和已支\r\n付金额相互替代。\r\n财务部门 2026年9月5日。审批签署栏保留为空，本材料不构成真实批准文件。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              }
+            ]
+          },
+          {
+            "code": "QUOTE_BUDGET",
+            "status": "WITHIN_BUDGET",
+            "explanation": "澄川启衡信息设备有限公司 报价 219800.00；预算上限 222600.00",
+            "evidence": [
+              {
+                "id": "E-e255688bda67b7113380cb88",
+                "documentId": "89f85373-3c97-47f1-94e8-f0ce7f577d8e",
+                "fileName": "09_澄川启衡信息设备有限公司报价单.pdf",
+                "sha256": "bf4b23e99cd118b6281735d602e0d69b3b700808e3e86f1f82e46004812c1f25",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "澄川启衡信息设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川启衡信息设备有限公司。报价编号：FZ-BJ-2026-C。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,350.00 174,000.00\r\n多功能打印设备 4 台 7,000.00 28,000.00\r\n安装调试及数据迁移 1 项 17,800.00 17,800.00\r\n含税报价合计：人民币219,800.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              },
+              {
+                "id": "E-d05e3637b97637fb0f502ff4",
+                "documentId": "642f236f-f7e4-4188-ad44-4e5dea85d0c8",
+                "fileName": "04_办公设备更新项目预算批复.pdf",
+                "sha256": "116c6aa362cd756bb2b8048ba51c76f48dc3b7ba06b8e7ce4b0efcde756032c4",
+                "locator": "pdf/page:1/text/part:1",
+                "excerpt": "办公设备更新项目预算批复\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n综保财〔2026〕31号\r\n综合管理部：你部报送的办公设备更新项目预算申请收悉。同意安排本项目经费人民币222600.00元，\r\n大写贰拾贰万贰仟陆佰元整，用于40台办公终端、4台多功能打印设备及配套安装调试。\r\n本批复确定的是经费控制上限，具体成交价格以采购结果和合同为准。项目实施不得自行扩大范围，节\r\n余经费按财务制度处理；必要的预算调整须另行报批。\r\n本项目尚未支付采购款。经费来源为2026年度综合保障项目支出，不得将预算控制数、报价金额和已支\r\n付金额相互替代。\r\n财务部门 2026年9月5日。审批签署栏保留为空，本材料不构成真实批准文件。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+              }
+            ]
+          },
+          {
+            "code": "AWARD_QUOTE_MISMATCH",
+            "status": "UNKNOWN",
+            "explanation": "中标供应商 null；中标金额 212000.00；仅核对同一供应商报价，不据最低价推断中标依据",
+            "evidence": [
+              {
+                "id": "E-bf0bd9bbdf142f72acdc246f",
+                "documentId": "73ea103c-6470-4b5a-b763-90b929726719",
+                "fileName": "11_办公设备采购中标通知书.docx",
+                "sha256": "3994d74c6868f5ba28f116f79dc8becc23d77aece871a4c7252aa7fa12b4c4aa",
+                "locator": "docx/body/node:4/part:4",
+                "excerpt": "澄川星河办公设备有限公司：根据评审结果及采购人确认，你单位为本项目中标供应商。中标金额人民币212000.00元，大写贰拾壹万贰仟元整。预算最高限价222600.00元不作为合同价款。\n"
+              }
+            ]
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "EXECUTOR_LOST_MODEL_OUTCOME_UNKNOWN"
+      }
+    }
+  }
+}

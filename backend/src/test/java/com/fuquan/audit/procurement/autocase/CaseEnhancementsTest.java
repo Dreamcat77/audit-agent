@@ -60,12 +60,12 @@ class CaseEnhancementsTest {
         var json=new ObjectMapper().findAndRegisterModules();
         assertThat(json.readValue(json.writeValueAsString(report),Report.class)).isEqualTo(report);
     }
-    @Test void conflictingProjectNumbersCannotApplyAnotherProjectsBudgetToAnOffer() {
+    @Test void historicalBudgetCannotApplyToTheCurrentOffer() {
         var a=supplier("甲公司");
         var quote=new Document(a.id(),a.name(),a.size(),a.sha256(),a.storageKey(),a.status(),a.segments(),
                 List.of(fact("projectNo","A","编号A"),fact("documentType","报价单","报价单"),fact("supplierName","甲公司","供应商甲公司"),fact("quoteAmount","12000元","报价12000元")),a.parseMethod(),null,1);
         var budget=new Document(UUID.randomUUID(),"预算.pdf",10,"b".repeat(64),"key","EXTRACTED",List.of(),
-                List.of(fact("projectNo","B","编号B"),fact("budgetAmount","10000元","预算10000元")),"PDF",null,1);
+                List.of(fact("projectNo","B","编号B"),new Fact("r","budgetAmount","10000元","MONEY","p1","预算10000元","SOURCE_VERIFIED","TEST","v4","REFERENCE","TOTAL")),"PDF",null,1);
         var report=CaseFactPolicy.report(UUID.randomUUID(),List.of(quote,budget));
         assertThat(report.budget()).isNull();assertThat(report.quoteComparisons()).allMatch(c->c.status().equals("NOT_EVALUATED"));
     }

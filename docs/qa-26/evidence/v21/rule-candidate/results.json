@@ -1,0 +1,25 @@
+{
+  "base": "http://192.168.0.26:18082",
+  "browser": "109.0.5412.0",
+  "scope": "DETERMINISTIC_F10_RULE_AND_HISTORY_ONLY",
+  "modelQualityVerified": false,
+  "results": [
+    {
+      "label": "forbidden",
+      "state": "DATA_INSUFFICIENT",
+      "regionFindings": 0,
+      "modelState": "UNKNOWN",
+      "ruleAssertion": "PASS",
+      "historyReopen": "PASS"
+    },
+    {
+      "label": "operative",
+      "state": "DATA_INSUFFICIENT",
+      "regionFindings": 1,
+      "modelState": "UNKNOWN",
+      "ruleAssertion": "PASS",
+      "historyReopen": "PASS"
+    }
+  ],
+  "errors": []
+}

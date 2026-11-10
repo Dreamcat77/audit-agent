@@ -8,8 +8,14 @@ final class CaseReportHtml {
     static String render(AuditCase value) {
         var html=new StringBuilder("<!doctype html><html lang=\"zh-CN\"><meta charset=\"UTF-8\"><title>采购审查报告</title><style>body{max-width:1000px;margin:36px auto;padding:0 24px;font-family:Arial,'Microsoft YaHei',sans-serif;color:#243247;line-height:1.8}section{border:1px solid #dce2ea;border-radius:8px;padding:20px;margin:20px 0}h1{font-size:25px}h2{font-size:19px}h3{font-size:16px}.risk{border-left:4px solid #bc3939;background:#fff6f5;padding:12px;margin:12px 0}blockquote{white-space:pre-wrap;font-size:13px;background:#f7f8fa;padding:12px}table{width:100%;border-collapse:collapse}td,th{padding:8px;border:1px solid #ddd;text-align:left}@media print{section{break-inside:avoid}}</style><h1>采购材料审查报告</h1>");
         html.append("<p>项目：").append(esc(CaseFactPolicy.projectName(value))).append("</p><p>处理时间：").append(esc(value.createdAt())).append("</p>");
-        var report=value.report();
+        var report=CaseReviewAssurance.project(value.report());
         if(report==null)return html.append("<p>材料正在处理，尚未生成审查结果。</p></html>").toString();
+        html.append("<section><h2>材料要点</h2>");
+        for(var detail:CaseAvailableResults.details(value)) {
+            html.append("<p><strong>").append(esc(detail.label())).append("：</strong>").append(esc(detail.value())).append("</p>");
+            html.append("<p>来源：").append(esc(String.join("、",detail.evidence().stream().map(AuditCase.SourceEvidence::fileName).distinct().toList()))).append("</p>");
+        }
+        html.append("</section>");
         html.append("<section><h2>项目金额及报价</h2>");
         if(report.budget()!=null)html.append("<p>预算金额：").append(esc(report.budget())).append(" 元</p>");
         if(report.ceilingAmount()!=null)html.append("<p>最高限价：").append(esc(report.ceilingAmount())).append(" 元</p>");
@@ -32,20 +38,20 @@ final class CaseReportHtml {
         if(report.calculation()!=null)html.append("<section><h2>报价统计参考</h2><p>平均报价：").append(esc(report.calculation().averageQuote()))
                 .append(" 元。</p><p>").append(report.calculation().highlyConcentrated()?"报价较集中，可关注报价独立性；统计线索不构成围串标认定。":"按当前统计参考线未见报价高度集中。").append("</p></section>");
         for(var entry:new TreeMap<>(report.reviews()).entrySet()) {
-            html.append("<section><h2>").append(esc(switch(entry.getKey()) {case "BLACKLIST"->"供应商黑名单比对";case "TENDER_COMPLIANCE"->"招标文件合规性审查";default->"跨材料核对";})).append("</h2>");
+            var visibleChecks=entry.getValue().checks().stream().filter(CaseAvailableResults::display).toList();
+            html.append("<section><h2>").append(esc(switch(entry.getKey()) {case "BLACKLIST"->"供应商黑名单比对";case "TENDER_COMPLIANCE"->"招标文件合规性审查";default->"项目与采购信息核对";})).append("</h2>");
             for(var finding:entry.getValue().findings()) {
                 html.append("<div class=\"risk\"><h3>").append(esc(finding.title())).append("</h3><p>").append(esc(CaseReviewText.explanation(new AuditCase.ReviewCheck(finding.code(),"CONFLICT",finding.explanation(),finding.evidence())))).append("</p><p>建议：").append(esc(finding.suggestion())).append("</p>");
                 for(var source:finding.evidence())html.append("<p>涉及材料：").append(esc(source.fileName())).append("</p><blockquote>").append(esc(source.excerpt())).append("</blockquote>");
                 html.append("</div>");
             }
-            for(var check:entry.getValue().checks())if(!check.code().equals("MATERIAL_COVERAGE"))html.append("<p>").append(esc(CaseReviewText.explanation(check))).append("</p>");
-            if(entry.getValue().checks().isEmpty()&&entry.getValue().findings().isEmpty())html.append("<p>材料不足，未生成</p>");
+            for(var check:visibleChecks)html.append("<p>").append(esc(CaseReviewText.explanation(check))).append("</p>");
+            if(visibleChecks.isEmpty()&&entry.getValue().findings().isEmpty())html.append("<p>").append(Set.of("UNKNOWN","FAILED").contains(entry.getValue().status())?"本项暂未完成":"材料不足，未生成").append("</p>");
             html.append("</section>");
         }
         html.append("<section><h2>材料清单</h2><ul>");
         value.documents().forEach(d->html.append("<li>").append(esc(d.name())).append("</li>"));
         html.append("</ul></section><section><h2>核对范围说明</h2>");
-        report.notices().forEach(n->html.append("<p>").append(esc(n)).append("</p>"));
         return html.append("<p>本报告为上传材料范围内的审查参考，统计线索不构成围串标认定。</p></section></html>").toString();
     }
     private static String esc(Object value) {return Objects.toString(value,"").replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\"","&quot;").replace("'","&#39;");}

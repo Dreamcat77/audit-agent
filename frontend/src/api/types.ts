@@ -185,12 +185,17 @@ export interface BudgetMaterialReference {
   status: 'PENDING' | 'COMPLETED';
   coverage?: 'COMPLETE' | 'PARTIAL' | null;
   summary: string;
+  projectName?: string | null;
+  analysisCoverage?: 'COMPLETE'|'PARTIAL'|null;
+  totals?: {role:string;scope:string;year:string|null;amount:number;sources:BudgetSourceEvidence[]}[];
   assessments?: {code:string;level:string;title:string;explanation:string;basis:string;
-    sources:{taskId:string;fileName:string;field:string;value:string;locator:string;excerpt:string}[];}[];
+    sources:BudgetSourceEvidence[];}[];
   lines: {project:string|null;subject:string|null;subjectCode:string|null;year:string|null;department:string|null;
     declaredAmount:number|null;approvalAmount:number|null;status:string;opinion:string;
-    sources:{taskId:string;fileName:string;field:string;value:string;locator:string;excerpt:string}[];}[];
+    sources:BudgetSourceEvidence[];}[];
 }
+
+export interface BudgetSourceEvidence {taskId:string;fileName:string;field:string;value:string;locator:string;excerpt:string;start?:number|null;end?:number|null;pageNumber?:number|null;}
 
 export interface BudgetConfirmationProgress {
   confirmed: boolean;

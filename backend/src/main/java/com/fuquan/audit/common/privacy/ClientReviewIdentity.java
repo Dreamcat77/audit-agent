@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public final class ClientReviewIdentity {
     public static final String HEADER = "X-Audit-Client-Identity";
-    private static final Pattern PARTY = Pattern.compile(
-        "(甲方|乙方)(?:\\s*[（(][^）)\\n]{0,24}[）)])?\\s*[:：]\\s*([^\\n\\r|；;]{2,160})");
     private final ClientIdentityRepository repository;
     private List<String> snapshot;
 
@@ -50,12 +48,7 @@ public final class ClientReviewIdentity {
 
     public String party(String fullText) {
         if(!repository.required()) return "UNMATCHED";
-        var names=names();var matches=new HashSet<String>();var matcher=PARTY.matcher(fullText);
-        while(matcher.find()) {
-            if(names.contains(normalize(matcher.group(2))))
-                matches.add(matcher.group(1).equals("甲方")?"PARTY_A":"PARTY_B");
-        }
-        return matches.size()>1?"AMBIGUOUS":matches.stream().findFirst().orElse("UNMATCHED");
+        return ClientPartyMatcher.party(fullText,names());
     }
 
     public Map<UUID,String> parties(Map<UUID,String> fullTexts,List<UUID> selected) {

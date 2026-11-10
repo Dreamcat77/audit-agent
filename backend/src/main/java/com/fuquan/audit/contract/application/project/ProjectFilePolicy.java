@@ -87,8 +87,7 @@ public final class ProjectFilePolicy {
         return switch (extension) {
             case "pdf" -> startsWith(header, "%PDF-".getBytes(java.nio.charset.StandardCharsets.US_ASCII));
             case "zip", "docx", "xlsx" -> startsWith(header, new byte[]{'P', 'K', 3, 4});
-            case "doc" -> startsWith(header, new byte[]{(byte) 0xd0, (byte) 0xcf, 0x11, (byte) 0xe0,
-                    (byte) 0xa1, (byte) 0xb1, 0x1a, (byte) 0xe1});
+            case "doc" -> com.fuquan.audit.common.material.application.OfficeMaterialTypes.validSignature("application/msword",header);
             case "xls" -> startsWith(header, new byte[]{(byte) 0xd0, (byte) 0xcf, 0x11, (byte) 0xe0});
             case "png" -> startsWith(header, new byte[]{(byte) 0x89, 'P', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a});
             case "jpg", "jpeg" -> header.length >= 3 && (header[0] & 0xff) == 0xff

@@ -14,6 +14,8 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.security.*;
 import java.util.*;
+import java.util.concurrent.*;
+import jakarta.annotation.PreDestroy;
 import javax.imageio.ImageIO;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.hwpf.HWPFDocument;
@@ -32,12 +34,37 @@ import org.w3c.dom.Node;
 /** Office parsing and page/image OCR adapter. Never invokes macros, external links or a desktop office app. */
 @Component
 public class OfficeDocumentTextReader implements DocumentTextPort {
+    private com.fuquan.audit.common.material.visual.VisualIndexStore visualStore;
+    @org.springframework.beans.factory.annotation.Autowired
+    public void setVisualStore(com.fuquan.audit.common.material.visual.VisualIndexStore store){this.visualStore=store;}
     private static final String PDF_CHECKPOINT_POLICY="office-pdf-pages-v1";
+    // A legitimate rotated page may exceed two minutes. Queue admission must
+    // allow one bounded OCR call to finish instead of failing a second file.
+    private static final int OCR_CAPACITY_WAIT_SECONDS=1900;
     private final MaterialContainerPort docxGuard;
     private final OcrPort ocr;
-    private final java.util.concurrent.Semaphore ocrCapacity=new java.util.concurrent.Semaphore(1,true);
-    public OfficeDocumentTextReader(@Qualifier("procurementDocxGuard") MaterialContainerPort docxGuard, OcrPort ocr) {
-        this.docxGuard=docxGuard; this.ocr=ocr;
+    private final int pageConcurrency;
+    private final Semaphore ocrCapacity;
+    private final ExecutorService pageWorkers;
+    public OfficeDocumentTextReader(MaterialContainerPort docxGuard, OcrPort ocr) {
+        this(docxGuard,ocr,1);
+    }
+    @org.springframework.beans.factory.annotation.Autowired
+    public OfficeDocumentTextReader(@Qualifier("procurementDocxGuard") MaterialContainerPort docxGuard, OcrPort ocr,
+            @org.springframework.beans.factory.annotation.Value("${audit.ocr.page-concurrency:1}") int pageConcurrency) {
+        if(pageConcurrency<1||pageConcurrency>4)throw new IllegalArgumentException("OCR page concurrency must be between one and four");
+        this.docxGuard=docxGuard; this.ocr=ocr;this.pageConcurrency=pageConcurrency;
+        this.ocrCapacity=new Semaphore(pageConcurrency,true);
+        this.pageWorkers=pageConcurrency==1?null:Executors.newFixedThreadPool(pageConcurrency,r->{
+            var thread=new Thread(r,"office-ocr-page");thread.setDaemon(true);return thread;
+        });
+    }
+    @PreDestroy public void close() {
+        if(pageWorkers==null)return;
+        pageWorkers.shutdown();boolean interrupted=false;
+        while(!pageWorkers.isTerminated())try {pageWorkers.awaitTermination(1,TimeUnit.SECONDS);}
+        catch(InterruptedException failure){interrupted=true;}
+        if(interrupted)Thread.currentThread().interrupt();
     }
     @Override public Result read(InputStream input,String fileName,String id,long maxBytes,int maxPages,int maxChars)
             throws IOException {
@@ -67,10 +94,11 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
                 throw new ReadFailure("READ_CHECKPOINT_SOURCE_MISMATCH");
             var collector=new Collector(maxChars,maxPages,id);
             if(progress!=null)collector.ocrBudgetNanos=java.util.concurrent.TimeUnit.HOURS.toNanos(4);
-            String ext=OfficeMaterialTypes.extension(fileName);
+            String ext=WordContainerFormat.detect(temporary,OfficeMaterialTypes.extension(fileName));
             switch(ext) {
                 case "docx" -> word(temporary,collector);
                 case "doc" -> legacyWord(temporary,collector);
+                case "html" -> legacyHtml(temporary,collector,maxChars);
                 case "xls","xlsx" -> spreadsheet(temporary,collector);
                 case "ppt","pptx" -> slides(temporary,collector,ext.equals("pptx"));
                 case "pdf" -> pdf(temporary,collector,sourceSha,checkpoint,progress);
@@ -89,6 +117,9 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
                 default -> image(temporary,collector, "png".equals(ext) || "jpg".equals(ext) || "jpeg".equals(ext));
             }
             if(collector.segments.isEmpty()) {if(collector.firstOcrFailure!=null)throw collector.firstOcrFailure;throw new ReadFailure("DOCUMENT_TEXT_EMPTY");}
+            if(visualStore!=null&&!collector.visualBlocks.isEmpty())try{
+                visualStore.save(VisualIndexBuilder.build(id,sourceSha,collector.segments,collector.visualBlocks));
+            }catch(RuntimeException unavailable){org.slf4j.LoggerFactory.getLogger(getClass()).warn("VISUAL_INDEX outcome=UNAVAILABLE reason=GEOMETRY_NOT_PUBLISHED");}
             span.success(Map.of("outputChars",collector.chars,"segmentCount",collector.segments.size(),
                     "pageCount",collector.units,"itemCount",collector.ocrUnits,
                     "nativeTextChars",collector.chars-collector.ocrChars,"ocrTextChars",collector.ocrChars,
@@ -137,6 +168,16 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
         String name=node.getLocalName();
         if("altChunk".equals(name)||"object".equals(name))throw new ReadFailure("EMBEDDED_OBJECT_UNSUPPORTED");
         if("tbl".equals(name)&&budgetTableRows(node,c,prefix,counter))return;
+        if("tr".equals(name)&&!hasWordTable(node)) {
+            // Preserve physical cells and empty columns for downstream exact arithmetic.
+            // A cell's paragraphs must not become independent apparent table rows.
+            var cells=wordCells(node);
+            if(!cells.isEmpty()) {
+                c.add(prefix+"/node:"+(++counter[0]),String.join("\t",cells.stream()
+                        .map(v->v.replace("\r\n","\u2028").replace('\r','\u2028').replace('\n','\u2028')).toList()));
+                return;
+            }
+        }
         if("tr".equals(name)||"p".equals(name)) {
             c.add(prefix+"/node:"+(++counter[0]),wordXml(node));return;
         }
@@ -200,6 +241,26 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
             int index=0;
             for(var picture:doc.getPicturesTable().getAllPictures()) imageBytes(picture.getContent(),c,"doc/image:"+(++index));
         }
+    }
+    private void legacyHtml(Path file,Collector c,int maxChars)throws IOException{
+        if(Files.size(file)>32L*1024*1024)throw new ReadFailure("HTML_RESOURCE_LIMIT_EXCEEDED");
+        String raw=decode(file,maxChars);var output=new StringBuilder();int[] hidden={0};
+        new javax.swing.text.html.parser.ParserDelegator().parse(new java.io.StringReader(raw),new javax.swing.text.html.HTMLEditorKit.ParserCallback(){
+            @Override public void handleStartTag(javax.swing.text.html.HTML.Tag t,javax.swing.text.MutableAttributeSet a,int pos){
+                if(t==javax.swing.text.html.HTML.Tag.SCRIPT||t==javax.swing.text.html.HTML.Tag.STYLE)hidden[0]++;
+                if(t.breaksFlow())output.append('\n');
+            }
+            @Override public void handleEndTag(javax.swing.text.html.HTML.Tag t,int pos){
+                if(t==javax.swing.text.html.HTML.Tag.SCRIPT||t==javax.swing.text.html.HTML.Tag.STYLE)hidden[0]=Math.max(0,hidden[0]-1);
+                if(t.breaksFlow())output.append('\n');
+            }
+            @Override public void handleText(char[] chars,int pos){if(hidden[0]==0)output.append(chars).append(' ');}
+            @Override public void handleSimpleTag(javax.swing.text.html.HTML.Tag t,javax.swing.text.MutableAttributeSet a,int pos){
+                if(t==javax.swing.text.html.HTML.Tag.IMG)c.gaps.add("UNREAD:html/image:IMAGE_CONTENT_NOT_READ");
+                if(t.breaksFlow())output.append('\n');
+            }
+        },true);
+        c.unit();c.add("html/body",output.toString().strip());
     }
     private void spreadsheet(Path file,Collector c) throws IOException {
         com.fuquan.audit.common.material.infra.SpreadsheetSafety.verify(file);
@@ -300,6 +361,10 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
                     ||checkpoint.provenance().stream().anyMatch(p->!checkpoint.completedPages().contains(pdfPage(p.locator()))))
                     throw new ReadFailure("READ_CHECKPOINT_INVALID");
                 completed.addAll(checkpoint.completedPages());
+                if(checkpoint.visualBlocks()!=null){
+                    if(checkpoint.visualBlocks().stream().anyMatch(b->!completed.contains(b.pageNumber())))throw new ReadFailure("READ_CHECKPOINT_INVALID");
+                    c.visualBlocks.addAll(checkpoint.visualBlocks());
+                }
                 for(var segment:checkpoint.segments())c.addExact(segment);
                 c.provenance.addAll(checkpoint.provenance());c.ocrUnits=c.provenance.size();
                 c.ocrChars=c.segments.stream().filter(s->s.locator().contains("/ocr/")).mapToInt(s->s.text().length()).sum();
@@ -311,7 +376,10 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
             for(int page=0;page<document.getNumberOfPages();page++) {
                 c.unit();if(completed.contains(page+1))continue;
                 stripper.setStartPage(page+1);stripper.setEndPage(page+1);
-                String text=stripper.getText(document);c.add("pdf/page:"+(page+1)+"/text",text);
+                var positioned=new PdfPositionedText();positioned.setSortByPosition(true);positioned.setStartPage(page+1);positioned.setEndPage(page+1);
+                String text=positioned.getText(document);String nativeLocator="pdf/page:"+(page+1)+"/text";c.add(nativeLocator,text);
+                if(!text.isBlank()&&!positioned.regions(text).isEmpty())c.visualBlocks.add(new com.fuquan.audit.common.material.visual.VisualIndex.Block(nativeLocator,page+1,
+                    com.fuquan.audit.common.material.visual.MaterialVisualEvidence.digest(text),text.length(),"NATIVE",positioned.regions(text)));
                 boolean useful=new PdfTextUsefulness().isUseful(text);
                 boolean hasContent=document.getPage(page).hasContents();
                 boolean supplemental=useful&&PdfImageCoverage.hasLargeImage(document.getPage(page));
@@ -325,7 +393,8 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
             checkpointPdf(c,sourceSha,pageCount,completed,progress);
             // Process a page as a PDF, retaining crop/rotation and the OCR
             // adapter's own rendering/orientation policy rather than re-encoding.
-            for(int page:scanPages) {
+            if(pageConcurrency>1)parallelPdf(document,c,sourceSha,pageCount,scanPages,completed,progress);
+            else for(int page:scanPages) {
                 int pageNumber=page+1;
                 Path selected=Files.createTempFile("audit-office-page-", ".pdf");
                 try {
@@ -339,7 +408,102 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
             }
             // Canonical evidence follows page order even though OCR was deferred.
             c.segments.sort(Comparator.comparingInt(segment -> pdfPage(segment.locator())));
+            c.provenance.sort(Comparator.comparingInt(value -> pdfPage(value.locator())));
         }
+    }
+    private record PendingPage(int number,Future<OcrResult> result) {}
+    private void parallelPdf(PDDocument document,Collector c,String sha,int count,List<Integer> pages,
+            Set<Integer> completed,java.util.function.Consumer<PdfCheckpoint> progress) throws IOException {
+        var completion=new ExecutorCompletionService<OcrResult>(pageWorkers);
+        var pending=new LinkedHashMap<Future<OcrResult>,Integer>();int next=0;
+        try {
+            while(next<pages.size()||!pending.isEmpty()) {
+                // Only this document owner touches PDFBox, Collector or checkpoints.
+                // Acquire the global lease BEFORE submission: even the executor queue
+                // can never exceed the configured global page budget across files.
+                while(next<pages.size()&&pending.size()<pageConcurrency&&!c.ocrStopped
+                        &&System.nanoTime()-c.startedNanos<=c.ocrBudgetNanos) {
+                    var submitted=submitPage(document,pages.get(next),c.id,completion);
+                    pending.put(submitted.result(),submitted.number());next++;
+                }
+                if(pending.isEmpty()) {
+                    for(;next<pages.size();next++)c.gaps.add("UNREAD:pdf/page:"+(pages.get(next)+1)+"/ocr:OCR_BUDGET_EXHAUSTED");
+                    break;
+                }
+                Future<OcrResult> finished;
+                try {finished=completion.take();}
+                catch(InterruptedException failure){Thread.currentThread().interrupt();throw new ReadFailure("DOCUMENT_INTERRUPTED",failure);}
+                int number=pending.get(finished);String locator="pdf/page:"+number+"/ocr";
+                // A dispatched page always drains, including when a prior page stopped
+                // further dispatch. Successfully acknowledged pages remain usable.
+                c.acceptAttempt(locator,true,()->awaitPage(finished));
+                pending.remove(finished);
+                if(c.gaps.stream().noneMatch(g->g.startsWith("UNREAD:pdf/page:"+number+"/")))completed.add(number);
+                checkpointPdf(c,sha,count,completed,progress);
+            }
+        } finally {
+            // Never cancel a Future and then delete its input: cancellation does not
+            // prove that native/HTTP work has stopped. The worker owns its temp file.
+            boolean interrupted=Thread.interrupted();
+            for(var page:pending.keySet())for(;;)try {page.get();break;}
+            catch(InterruptedException failure){interrupted=true;}
+            catch(ExecutionException failure){break;}
+            if(interrupted)Thread.currentThread().interrupt();
+        }
+    }
+    private PendingPage submitPage(PDDocument document,int page,String id,CompletionService<OcrResult> completion) throws IOException {
+        try(var span=PipelineDiagnostics.start("MATERIAL","OCR_PAGE_CAPACITY",PipelineDiagnostics.resourceId(id),Map.of("pageNumber",page+1,"workerCount",pageConcurrency))){
+            long started=System.nanoTime();
+            try {if(!ocrCapacity.tryAcquire(OCR_CAPACITY_WAIT_SECONDS,TimeUnit.SECONDS))throw new ReadFailure("OCR_CAPACITY_TIMEOUT");
+                span.success(Map.of("queueWaitMs",TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-started)));}
+            catch(InterruptedException failure){Thread.currentThread().interrupt();span.fail(failure);throw new ReadFailure("DOCUMENT_INTERRUPTED",failure);}
+            catch(RuntimeException failure){span.fail(failure);throw failure;}
+        }
+        Path selected=null;boolean submitted=false;
+        try {
+            selected=Files.createTempFile("audit-office-page-", ".pdf");
+            try(var single=new PDDocument()) {single.importPage(document.getPage(page));single.save(selected.toFile());}
+            Path owned=selected;
+            var diagnostics=org.slf4j.MDC.getCopyOfContextMap();
+            var future=completion.submit(()->{
+                var previous=org.slf4j.MDC.getCopyOfContextMap();
+                try {
+                    if(diagnostics==null)org.slf4j.MDC.clear();else org.slf4j.MDC.setContextMap(diagnostics);
+                    return recognize(owned,id,"page.pdf","application/pdf",true);
+                } finally {
+                    if(previous==null)org.slf4j.MDC.clear();else org.slf4j.MDC.setContextMap(previous);
+                    try {Files.deleteIfExists(owned);}finally {ocrCapacity.release();}
+                }
+            });
+            submitted=true;return new PendingPage(page+1,future);
+        } finally {if(!submitted)try {if(selected!=null)Files.deleteIfExists(selected);}finally {ocrCapacity.release();}}
+    }
+    private static OcrResult awaitPage(Future<OcrResult> future) throws IOException {
+        try {return future.get();}
+        catch(InterruptedException failure){Thread.currentThread().interrupt();throw new ReadFailure("DOCUMENT_INTERRUPTED",failure);}
+        catch(ExecutionException failure) {
+            Throwable cause=failure.getCause();
+            if(cause instanceof IOException error)throw error;
+            if(cause instanceof RuntimeException error)throw error;
+            if(cause instanceof Error error)throw error;
+            throw new ReadFailure("OCR_UNAVAILABLE",cause);
+        }
+    }
+    @FunctionalInterface private interface OcrCall {OcrResult run() throws IOException;}
+    private OcrResult recognize(Path file,String id,String fileName,String contentType,boolean leased) throws IOException {
+        var source=new OcrDocumentSource(){
+            public InputStream openStream() throws IOException{return Files.newInputStream(file);}
+            public long contentLength(){try{return Files.size(file);}catch(IOException e){throw new UncheckedIOException(e);}}
+        };
+        boolean acquired=false;
+        try {
+            if(!leased){acquired=ocrCapacity.tryAcquire(OCR_CAPACITY_WAIT_SECONDS,TimeUnit.SECONDS);if(!acquired)throw new ReadFailure("OCR_CAPACITY_TIMEOUT");}
+            return ocr.recognize(new OcrRequest(id,fileName,contentType,source));
+        } catch(InterruptedException e){Thread.currentThread().interrupt();throw new ReadFailure("DOCUMENT_INTERRUPTED",e);}
+          catch(OcrCapacityUnavailableException|OcrOutcomeUnprovenException e){throw e;}
+          catch(com.fuquan.audit.common.exception.ExternalServiceException e){throw new OcrOutcomeUnprovenException(e);}
+          catch(RuntimeException e){throw new ReadFailure("OCR_UNAVAILABLE",e);}
+        finally {if(acquired)ocrCapacity.release();}
     }
     private static void checkpointPdf(Collector c,String sha,int count,Set<Integer> completed,
             java.util.function.Consumer<PdfCheckpoint> progress) {
@@ -347,7 +511,9 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
         try {progress.accept(new PdfCheckpoint(sha,PDF_CHECKPOINT_POLICY,count,List.copyOf(completed),
                 c.segments.stream().filter(s->completed.contains(pdfPage(s.locator())))
                     .sorted(Comparator.comparingInt(s->pdfPage(s.locator()))).toList(),
-                c.provenance.stream().filter(p->completed.contains(pdfPage(p.locator()))).toList()));}
+                c.provenance.stream().filter(p->completed.contains(pdfPage(p.locator())))
+                    .sorted(Comparator.comparingInt(p->pdfPage(p.locator()))).toList(),
+                c.visualBlocks.isEmpty()?null:c.visualBlocks.stream().filter(b->completed.contains(b.pageNumber())).toList()));}
         catch(RuntimeException failure){throw new ProgressFailure(failure);}
     }
     private static final class ProgressFailure extends RuntimeException {ProgressFailure(RuntimeException cause){super(cause);}}
@@ -415,6 +581,7 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
         return text.startsWith("\ufeff")?text.substring(1):text;
     }
     private final class Collector {
+        final List<com.fuquan.audit.common.material.visual.VisualIndex.Block> visualBlocks=new ArrayList<>();
         final List<MaterialParsePort.Table> tables=new ArrayList<>();
         final List<MaterialParsePort.OcrProvenance> provenance=new ArrayList<>();
         final List<String> gaps=new ArrayList<>();
@@ -456,10 +623,13 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
             if(ocrStopped||System.nanoTime()-startedNanos>ocrBudgetNanos) {
                 gaps.add("UNREAD:"+locator+":OCR_BUDGET_EXHAUSTED");return;
             }
-            try {
-                if(fileName==null)ocr(file,locator,requiredText);
-                else ocr(file,locator,requiredText,fileName,contentType);
-            } catch(OcrCapacityUnavailableException|OcrOutcomeUnprovenException failure) {
+            String name=fileName==null?file.getFileName().toString().toLowerCase(Locale.ROOT):fileName;
+            String media=contentType==null?(name.endsWith(".jpg")||name.endsWith(".jpeg")?"image/jpeg":"image/png"):contentType;
+            acceptAttempt(locator,requiredText,()->recognize(file,id,name,media,false));
+        }
+        void acceptAttempt(String locator,boolean requiredText,OcrCall call) throws IOException {
+            try {acceptOcr(call.run(),locator,requiredText);}
+            catch(OcrCapacityUnavailableException|OcrOutcomeUnprovenException failure) {
                 if(segments.isEmpty())throw failure;
                 ocrStopped=true;gaps.add("UNREAD:"+locator+":OCR_OUTCOME_UNPROVEN");
             } catch(ReadFailure failure) {
@@ -471,30 +641,18 @@ public class OfficeDocumentTextReader implements DocumentTextPort {
                 span.outcome("PARTIAL",Map.of());
             }
         }
-        void ocr(Path file,String locator,boolean requiredText) throws IOException {
-            String name=file.getFileName().toString().toLowerCase(Locale.ROOT);
-            String contentType=name.endsWith(".jpg")||name.endsWith(".jpeg")?"image/jpeg":"image/png";
-            ocr(file,locator,requiredText,name,contentType);
-        }
-        void ocr(Path file,String locator,boolean requiredText,String fileName,String contentType) throws IOException {
-            var source=new OcrDocumentSource(){
-                public InputStream openStream() throws IOException{return Files.newInputStream(file);}
-                public long contentLength(){try{return Files.size(file);}catch(IOException e){throw new UncheckedIOException(e);}}
-            };
-            OcrResult result;boolean acquired=false;
-            try{
-                acquired=ocrCapacity.tryAcquire(120,java.util.concurrent.TimeUnit.SECONDS);
-                if(!acquired)throw new ReadFailure("OCR_CAPACITY_TIMEOUT");
-                result=ocr.recognize(new OcrRequest(id,fileName,contentType,source));
-            } catch(InterruptedException e){Thread.currentThread().interrupt();throw new ReadFailure("DOCUMENT_INTERRUPTED",e);}
-              catch(OcrCapacityUnavailableException|OcrOutcomeUnprovenException e){throw e;}
-              catch(com.fuquan.audit.common.exception.ExternalServiceException e){throw new OcrOutcomeUnprovenException(e);}
-              catch(RuntimeException e){throw new ReadFailure("OCR_UNAVAILABLE",e);}
-            finally {if(acquired)ocrCapacity.release();}
+        void acceptOcr(OcrResult result,String locator,boolean requiredText) throws IOException {
             if(result==null||!id.equals(result.documentId())||result.simulated()||result.pages().size()!=1||result.pages().get(0).pageNumber()!=1)throw new ReadFailure("OCR_PAGE_COVERAGE_INVALID");
             ++ocrUnits;
             provenance.add(new MaterialParsePort.OcrProvenance(locator,result.engine(),null,"USED",result.confidence()));
             String text=result.pages().get(0).text();
+            var ocrPage=result.pages().get(0);
+            if(!text.isBlank()&&!ocrPage.regions().isEmpty()&&(locator.startsWith("pdf/page:")||locator.startsWith("image"))){
+                int number=locator.startsWith("pdf/page:")?pdfPage(locator):1;
+                var frame=java.util.regex.Pattern.compile("/frame:(\\d+)").matcher(locator);if(frame.find())number=Integer.parseInt(frame.group(1));
+                visualBlocks.add(new com.fuquan.audit.common.material.visual.VisualIndex.Block(locator,number,
+                    com.fuquan.audit.common.material.visual.MaterialVisualEvidence.digest(text),text.length(),"OCR",ocrPage.regions()));
+            }
             int outputChars=text.codePointCount(0,text.length());
             ocrChars+=outputChars;
             try(var span=PipelineDiagnostics.start("MATERIAL","OCR_PAGE_TEXT",PipelineDiagnostics.resourceId(id),

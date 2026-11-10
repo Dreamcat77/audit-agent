@@ -62,4 +62,18 @@ class ContractAnalysisFactPublisherTest {
         assertThatThrownBy(()->publisher.publish(c,source,List.of(),stranger)).hasMessage("ANALYSIS_OWNER_UNPROVEN");
         verifyNoInteractions(files,facts);
     }
+    @Test void historicalRuleRecallAndAiFactsCannotEnterFormalContractStorage(){
+        String content="第三章 历史业绩\n合同名称：旧园区服务合同\n甲方：旧园区管理中心\n合同金额：800000元";
+        var s=new Source(UUID.randomUUID(),"投标文件.txt","a".repeat(64),100,SourceState.READY,UUID.randomUUID(),1,sha256(content),null);
+        var p=new ProjectFileParseResult(s.parseResultId(),c.projectId(),s.fileId(),s.sha256(),1,
+            ProjectFileParseOrigin.CURRENT_PIPELINE,ProjectFileParseStatus.PARSED,ProjectFileParseMethod.DOCX_TEXT,"test",null,content,sha256(content),1,1L,null,null,clock.instant(),clock.instant(),0);
+        doAnswer(i->((Supplier<?>)i.getArgument(2)).get()).when(files).withFileAuthorityFence(eq(c.projectId()),eq(s.fileId()),any());
+        when(sources.load(c.projectId(),s)).thenReturn(p);when(sources.file(c.projectId(),s)).thenReturn(new ContractAnalysisAdmissionTest().file(c.projectId(),s.fileId()));
+        when(parses.findLatestByFileId(s.fileId())).thenReturn(Optional.of(p));
+        var e=new ContractAnalysisEvidence().locate(new ContractAnalysisEvidence.Scope(s,content,0,content.length()),"合同金额：800000元").orElseThrow();
+        var out=new Output("BID","GENERAL",true,List.of(new Fact("TOTAL_AMOUNT","800000元","AI_SOURCE_VERIFIED",List.of(e))),List.of(),List.of(),List.of(),0,"synthetic","test");
+        var step=ContractAnalysisPlan.step("model",s,"FILE",0,content.length()).finish(StepState.COMPLETED,out,null,clock.instant());
+        publisher.publish(c,s,List.of(step),actor);verifyNoInteractions(facts);
+    }
+
 }

@@ -1,0 +1,159 @@
+{
+  "id": "b9a17b97-747a-3a8f-b8cc-83ea427ec4d9",
+  "caseNumber": "AC-b9a17b97-747a-3a8f-b8cc-83ea427ec4d9",
+  "projectName": "合成地域规则核对项目599CE9forbidden",
+  "status": "DATA_INSUFFICIENT",
+  "createdAt": "2026-10-30T02:08:34.548235207Z",
+  "documents": [
+    {
+      "id": "6810688b-99bf-4266-9ee8-9f4d00126d2e",
+      "name": "招标文件.txt",
+      "status": "UNKNOWN",
+      "parseMethod": "OFFICE_TEXT",
+      "errorCode": "EXTRACTION_OUTCOME_UNPROVEN",
+      "factCount": 0
+    }
+  ],
+  "report": {
+    "quoteStatus": "DATA_INSUFFICIENT",
+    "budget": null,
+    "awardAmount": null,
+    "offers": [],
+    "calculation": null,
+    "notices": [
+      "材料中的预算金额不足或冲突，超预算检查未执行；已识别报价仍保留",
+      "可靠供应商报价少于三家，三方询比价数据不足",
+      "部分文件未完成读取/提取，报告覆盖不完整，不能声称全部审查通过"
+    ],
+    "modules": {
+      "TENDER_COMPLIANCE": "UNKNOWN",
+      "AGENT_PRECHECK": "UNKNOWN",
+      "COLLUSION": "NOT_EXECUTED",
+      "SPLIT_PURCHASE": "NOT_EXECUTED",
+      "QUOTE": "DATA_INSUFFICIENT",
+      "BLACKLIST": "DATA_INSUFFICIENT"
+    },
+    "reviews": {
+      "TENDER_COMPLIANCE": {
+        "status": "UNKNOWN",
+        "inputDigest": "713b167a1265b34234ceb992eef2f6580dc2f8d8be5059f0779fd8f806344865",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-30T02:08:45.464084385Z",
+        "completedAt": "2026-10-30T02:08:50.487557839Z",
+        "scope": [
+          {
+            "documentId": "6810688b-99bf-4266-9ee8-9f4d00126d2e",
+            "fileName": "招标文件.txt",
+            "role": "TENDER",
+            "sourceChars": 152,
+            "suppliedChars": 152
+          }
+        ],
+        "coverageGaps": [
+          "6810688b-99bf-4266-9ee8-9f4d00126d2e:FILE_UNKNOWN",
+          "UPLOADED_SCOPE_MISSING_TECHNICAL",
+          "UPLOADED_SCOPE_MISSING_EVALUATION",
+          "UPLOADED_SCOPE_MISSING_CLARIFICATION"
+        ],
+        "checks": [
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 1 份材料，本项选取 1 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "MODEL_CALL_FAILED"
+      },
+      "AGENT_PRECHECK": {
+        "status": "UNKNOWN",
+        "inputDigest": "779cb70deb8d86ee9f7bea3918a3034955488d9584421d600036a737b411ec96",
+        "version": "case-cross-file-v2",
+        "model": null,
+        "startedAt": "2026-10-30T02:08:40.422156105Z",
+        "completedAt": "2026-10-30T02:08:45.451634875Z",
+        "scope": [
+          {
+            "documentId": "6810688b-99bf-4266-9ee8-9f4d00126d2e",
+            "fileName": "招标文件.txt",
+            "role": "TENDER",
+            "sourceChars": 152,
+            "suppliedChars": 152
+          }
+        ],
+        "coverageGaps": [
+          "6810688b-99bf-4266-9ee8-9f4d00126d2e:FILE_UNKNOWN",
+          "UPLOADED_SCOPE_MISSING_DEMAND",
+          "UPLOADED_SCOPE_MISSING_BUDGET",
+          "UPLOADED_SCOPE_MISSING_QUOTATION",
+          "UPLOADED_SCOPE_MISSING_AWARD"
+        ],
+        "checks": [
+          {
+            "code": "IDENTITY_projectName",
+            "status": "UNKNOWN",
+            "explanation": "projectName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_projectNo",
+            "status": "UNKNOWN",
+            "explanation": "projectNo：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "IDENTITY_purchaserName",
+            "status": "UNKNOWN",
+            "explanation": "purchaserName：；缺少该字段的文件不作为冲突依据",
+            "evidence": []
+          },
+          {
+            "code": "BUDGET_CONFLICT",
+            "status": "UNKNOWN",
+            "explanation": "仅比较预算角色金额，不将成交价或已付款作为预算：[]",
+            "evidence": []
+          },
+          {
+            "code": "MATERIAL_COVERAGE",
+            "status": "SYSTEM_SCOPE",
+            "explanation": "本批已保存 1 份材料，本项选取 1 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": "MODEL_CALL_FAILED"
+      },
+      "BLACKLIST": {
+        "status": "DATA_INSUFFICIENT",
+        "inputDigest": "6ed05638cf1f05bf0f80688011fbb7f75b9818714406289e734f0ac0e84d71cb",
+        "version": "case-blacklist-v1",
+        "model": null,
+        "startedAt": "2026-10-30T02:08:40.389223253Z",
+        "completedAt": "2026-10-30T02:08:40.389224183Z",
+        "scope": [
+          {
+            "documentId": "6810688b-99bf-4266-9ee8-9f4d00126d2e",
+            "fileName": "招标文件.txt",
+            "role": "TENDER",
+            "sourceChars": 152,
+            "suppliedChars": 152
+          }
+        ],
+        "coverageGaps": [],
+        "checks": [],
+        "findings": [],
+        "rejectedCitations": 0,
+        "errorCode": null
+      }
+    },
+    "projectName": "合成地域规则核对项目599CE9forbidden",
+    "ceilingAmount": null,
+    "quoteComparisons": [],
+    "ceilingComparisons": []
+  },
+  "findingIds": {}
+}

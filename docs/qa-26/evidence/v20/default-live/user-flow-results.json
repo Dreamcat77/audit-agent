@@ -1,0 +1,15 @@
+{
+  "browser": "109.0.5412.0",
+  "results": [
+    {
+      "label": "proc-inverted-scan",
+      "module": "procurement",
+      "failures": [],
+      "caseId": "afa86474-4ead-3a9d-964a-f84e5b4c8588",
+      "uploadFromPage": true,
+      "fixedModuleLayout": true,
+      "status": "PASS"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,67 @@
+{
+  "fileName": "采购需求表.pdf",
+  "sha256": "66907294b58d6eac48293664830cf4a10e0364741a0b66847426c02f639b1c6a",
+  "segments": [
+    {
+      "locator": "pdf/page:1/text/part:1",
+      "text": "合成测试材料，仅用于功能验收。\n项目名称：澄湾阅览室终端更新项目\n项目编号：SYN-V20-P01\n采购人：澄湾合成档案中心\n本项目采购预算为人民币叁拾陆万元整（含税），最高投标限价为350000元。\n投标保证金5000元不是货物报价。拟采购终端设备并完成安装。\n不得指定生产厂家、品牌或者要求供应商在投标前设立本地机构。\n"
+    }
+  ],
+  "facts": [
+    {
+      "row": "0:0",
+      "type": "projectName",
+      "value": "澄湾阅览室终端更新项目",
+      "dataType": "TEXT",
+      "locator": "pdf/page:1/text/part:1",
+      "excerpt": "项目名称：澄湾阅览室终端更新项目",
+      "verification": "SOURCE_VERIFIED",
+      "model": "audit-qwen-27b-16k:latest",
+      "extractionVersion": "procurement-auto-fields-v3"
+    },
+    {
+      "row": "0:0",
+      "type": "projectNo",
+      "value": "SYN-V20-P01",
+      "dataType": "TEXT",
+      "locator": "pdf/page:1/text/part:1",
+      "excerpt": "项目编号：SYN-V20-P01",
+      "verification": "SOURCE_VERIFIED",
+      "model": "audit-qwen-27b-16k:latest",
+      "extractionVersion": "procurement-auto-fields-v3"
+    },
+    {
+      "row": "0:0",
+      "type": "purchaserName",
+      "value": "澄湾合成档案中心",
+      "dataType": "TEXT",
+      "locator": "pdf/page:1/text/part:1",
+      "excerpt": "采购人：澄湾合成档案中心",
+      "verification": "SOURCE_VERIFIED",
+      "model": "audit-qwen-27b-16k:latest",
+      "extractionVersion": "procurement-auto-fields-v3"
+    },
+    {
+      "row": "0:0",
+      "type": "budgetAmount",
+      "value": "人民币叁拾陆万元整（含税）",
+      "dataType": "MONEY",
+      "locator": "pdf/page:1/text/part:1",
+      "excerpt": "本项目采购预算为人民币叁拾陆万元整（含税）",
+      "verification": "UNVERIFIED",
+      "model": "audit-qwen-27b-16k:latest",
+      "extractionVersion": "procurement-auto-fields-v3"
+    },
+    {
+      "row": "0:0",
+      "type": "ceilingAmount",
+      "value": "350000元",
+      "dataType": "MONEY",
+      "locator": "pdf/page:1/text/part:1",
+      "excerpt": "最高投标限价为350000元",
+      "verification": "UNVERIFIED",
+      "model": "audit-qwen-27b-16k:latest",
+      "extractionVersion": "procurement-auto-fields-v3"
+    }
+  ]
+}

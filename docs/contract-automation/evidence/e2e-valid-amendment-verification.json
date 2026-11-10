@@ -1,0 +1,16 @@
+{
+  "scenario": "valid-amendment",
+  "caseId": "8be87c84-822d-3bdb-867e-de74fb31ab16",
+  "status": "COMPLETED",
+  "documents": 2,
+  "facts": 15,
+  "clauses": 11,
+  "risks": 1,
+  "followUps": 1,
+  "evidenceChecks": 36,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "freshVerifier": true
+}

@@ -1,0 +1,131 @@
+{
+  "status": "COLLECTED",
+  "files": [
+    {
+      "fileId": "a2f9da97-93f9-4365-a755-c28f110b5f40",
+      "status": "COMPLETED",
+      "pages": [
+        {
+          "page": 1,
+          "requestId": "diagnostic-5392c427-2e8e-4886-abf3-af77ff1a75f4",
+          "httpStatus": 200,
+          "elapsedMs": 8277,
+          "renderWidth": 1250,
+          "renderHeight": 1667,
+          "chars": 47,
+          "nonWhitespaceChars": 43,
+          "hanChars": 32,
+          "replacementChars": 0,
+          "signals": {
+            "BUDGET": 2,
+            "DECLARED": 1,
+            "APPROVAL": 0,
+            "CEILING": 0,
+            "MONEY": 2
+          },
+          "budgetNearMoney": 2,
+          "financialNumeralChars": 2,
+          "status": "OK",
+          "confidenceMilli": 1000
+        },
+        {
+          "page": 2,
+          "requestId": "diagnostic-d1f725a9-08cd-43c5-bbd4-384d58b627a5",
+          "httpStatus": 200,
+          "elapsedMs": 4847,
+          "renderWidth": 1250,
+          "renderHeight": 1667,
+          "chars": 47,
+          "nonWhitespaceChars": 43,
+          "hanChars": 32,
+          "replacementChars": 0,
+          "signals": {
+            "BUDGET": 2,
+            "DECLARED": 1,
+            "APPROVAL": 0,
+            "CEILING": 0,
+            "MONEY": 2
+          },
+          "budgetNearMoney": 2,
+          "financialNumeralChars": 2,
+          "status": "OK",
+          "confidenceMilli": 1000
+        },
+        {
+          "page": 3,
+          "requestId": "diagnostic-cce0ddf8-ccca-4987-9be2-5dd5214bef2d",
+          "httpStatus": 200,
+          "elapsedMs": 4888,
+          "renderWidth": 1250,
+          "renderHeight": 1667,
+          "chars": 47,
+          "nonWhitespaceChars": 43,
+          "hanChars": 32,
+          "replacementChars": 0,
+          "signals": {
+            "BUDGET": 2,
+            "DECLARED": 1,
+            "APPROVAL": 0,
+            "CEILING": 0,
+            "MONEY": 2
+          },
+          "budgetNearMoney": 2,
+          "financialNumeralChars": 2,
+          "status": "OK",
+          "confidenceMilli": 1000
+        },
+        {
+          "page": 4,
+          "requestId": "diagnostic-c5d3d1c3-fd6c-4dbe-a839-3a09c47767d5",
+          "httpStatus": 200,
+          "elapsedMs": 4923,
+          "renderWidth": 1250,
+          "renderHeight": 1667,
+          "chars": 47,
+          "nonWhitespaceChars": 43,
+          "hanChars": 32,
+          "replacementChars": 0,
+          "signals": {
+            "BUDGET": 2,
+            "DECLARED": 1,
+            "APPROVAL": 0,
+            "CEILING": 0,
+            "MONEY": 2
+          },
+          "budgetNearMoney": 2,
+          "financialNumeralChars": 2,
+          "status": "OK",
+          "confidenceMilli": 1000
+        }
+      ],
+      "businessResultsModified": false,
+      "pageCount": 4,
+      "features": {
+        "chars": 191,
+        "nonWhitespaceChars": 172,
+        "hanChars": 128,
+        "replacementChars": 0,
+        "signals": {
+          "BUDGET": 8,
+          "DECLARED": 4,
+          "APPROVAL": 0,
+          "CEILING": 0,
+          "MONEY": 8
+        },
+        "budgetNearMoney": 8,
+        "financialNumeralChars": 8
+      }
+    }
+  ],
+  "maxFiles": 3,
+  "pagesPerFile": 4,
+  "renderDpi": 150,
+  "maxRenderDimension": 2400,
+  "perPageReadTimeoutSeconds": 600,
+  "httpEnvironmentProxyUsed": false,
+  "sameOcrService": true,
+  "separateDiagnosticReplay": true,
+  "notProofOfOriginalRead": true,
+  "databaseWrites": 0,
+  "contentExported": false
+}

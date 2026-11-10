@@ -1,0 +1,85 @@
+{
+  "value": {
+    "batchId": "8e4c2662-3097-4533-868d-4de8ab247b31",
+    "status": "REVIEWED",
+    "budgetYear": "",
+    "departmentCode": "",
+    "createdAt": "2026-10-29T17:08:35.514806Z",
+    "files": [
+      {
+        "taskId": "0d1e7c7e-2ad1-4908-b6d1-6b1db16e3c0e",
+        "fileName": "设备经费申请.docx",
+        "status": "UNKNOWN"
+      },
+      {
+        "taskId": "2fdab442-8480-4962-a1c6-01457325c771",
+        "fileName": "设备经费批复.docx",
+        "status": "UNKNOWN"
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "task": {
+        "taskId": "0d1e7c7e-2ad1-4908-b6d1-6b1db16e3c0e",
+        "fileName": "设备经费申请.docx",
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "fileSize": 36862,
+        "status": "UNKNOWN",
+        "parsedLineCount": 0,
+        "errorDetail": "智能分析服务未能正常返回结果，本次处理已结束。",
+        "budgetYear": "",
+        "departmentCode": "",
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T17:08:35.749597Z",
+        "updatedTime": "2026-10-29T17:09:22.208190Z"
+      },
+      "allPassed": false,
+      "totalItems": 0,
+      "passedItems": 0,
+      "exceptionItems": 0,
+      "items": [],
+      "materialReference": {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "这份材料的处理状态尚未确认，不能视为没有预算信息。本批仍有材料或部分信息未能核实，结果依据尚不完整；未列出的内容不代表没有问题。",
+        "lines": [],
+        "assessments": []
+      }
+    },
+    {
+      "task": {
+        "taskId": "2fdab442-8480-4962-a1c6-01457325c771",
+        "fileName": "设备经费批复.docx",
+        "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "fileSize": 36858,
+        "status": "UNKNOWN",
+        "parsedLineCount": 0,
+        "errorDetail": "智能分析服务未能正常返回结果，本次处理已结束。",
+        "budgetYear": "",
+        "departmentCode": "",
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T17:08:36.391528Z",
+        "updatedTime": "2026-10-29T17:09:27.998950Z"
+      },
+      "allPassed": false,
+      "totalItems": 0,
+      "passedItems": 0,
+      "exceptionItems": 0,
+      "items": [],
+      "materialReference": {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "这份材料的处理状态尚未确认，不能视为没有预算信息。本批仍有材料或部分信息未能核实，结果依据尚不完整；未列出的内容不代表没有问题。",
+        "lines": [],
+        "assessments": []
+      }
+    }
+  ]
+}

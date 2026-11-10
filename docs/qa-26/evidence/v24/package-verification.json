@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "archive": "E:\\audit-agent-new\\deliverables\\Update_v24.tar.gz",
+  "sha256": "b55dd21f181b916ca87f45bf76b220726e9c7b36a5a8d542c4686d7cbd635867",
+  "bytes": 99113696,
+  "javaTests": 3440,
+  "javaSkipped": 24,
+  "pythonPassed": 2049,
+  "inventory": true,
+  "tamperRejected": true,
+  "java17": true,
+  "lf": true,
+  "localAssets": true,
+  "permissions": true,
+  "installerUnchanged": true,
+  "ocrModelFiles": 9,
+  "realModel": "NOT_VERIFIED_CONNECT_TIMEOUT"
+}

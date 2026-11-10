@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 /** Reads the entire bounded document. Explicit table labels need no model paraphrase. */
 @Component
 public class BudgetUploadedMaterialReader {
+    private com.fuquan.audit.common.material.visual.MaterialVisualEvidence visualQuality;
+    @org.springframework.beans.factory.annotation.Autowired public void setVisualQuality(com.fuquan.audit.common.material.visual.MaterialVisualEvidence value){this.visualQuality=value;}
     private final DocumentTextPort text;
     private final MaterialFieldAiPort ai;
     private final BudgetMaterialStoragePort storage;
@@ -25,7 +27,10 @@ public class BudgetUploadedMaterialReader {
         Map.entry("支出用途","spendingPurpose"),Map.entry("批准用途","approvedPurpose"),
         Map.entry("已完成审批环节","actualApprovalStep"),Map.entry("审批日期","approvalDate"),
         Map.entry("申报日期","applicationDate"),Map.entry("申请日期","applicationDate"),
-        Map.entry("申报编号","applicationNo"),Map.entry("申请编号","applicationNo"));
+        Map.entry("申报编号","applicationNo"),Map.entry("申请编号","applicationNo"),
+        Map.entry("项目预算","projectBudgetAmount"),Map.entry("项目预算金额","projectBudgetAmount"),Map.entry("预算金额","projectBudgetAmount"),Map.entry("预算总额","projectBudgetAmount"),
+        Map.entry("申报总额","declaredTotalAmount"),Map.entry("申请总额","declaredTotalAmount"),Map.entry("申报合计","declaredTotalAmount"),
+        Map.entry("批复总额","approvedTotalAmount"),Map.entry("批复控制数","approvedTotalAmount"),Map.entry("最高限价","ceilingAmount"));
     private static final Set<String> SUPPORTED_FIELDS=java.util.stream.Stream.concat(LABELS.values().stream(),
             java.util.stream.Stream.of("parentProjectName","applicationNo","applicationDate","actualApprovalStep","requiredApprovalStep",
                     "policyClause","approvalThreshold","thresholdCondition","spendingPurpose","approvedPurpose","requiredPreviousStep","approvalDate"))
@@ -142,7 +147,11 @@ public class BudgetUploadedMaterialReader {
                     }
                     if(!value.isBlank()&&!missingAmount(field,value)) {
                         if(field.endsWith("Amount"))value=withUnit(value,amountUnit);
-                        facts.add(new Fact(field,value,segment.locator()+"/line:"+lineNumber,excerpt));
+                        // A labelled amount is exact, but its label can still belong to a historical example.
+                        String prefix=line.substring(0,matcher.start());
+                        String reference=prefix.matches("(?s).*(?:历史|旧|以往|往年|上年|其他|参考|示例)(?:项目|案例|年度)?(?:的)?\\s*$")
+                                &&!prefix.matches("(?s).*(?:非|不是|不属于|并非|不含)(?:历史|旧|其他|参考|示例)[^。；;]*$")?"REFERENCE":null;
+                        facts.add(new Fact(field,value,segment.locator()+"/line:"+lineNumber,excerpt,reference,null));
                     }
                     if(resume>=0)matcher.region(resume,line.length());
                 }
@@ -165,7 +174,14 @@ public class BudgetUploadedMaterialReader {
             if(!remainder.isEmpty())semantic.add(segment);
         }
         if(!semantic.isEmpty()) {
-            Result result=ai.extract("BUDGET",id,document.sha256(),semantic);
+            Result result;
+            try{result=ai.extract("BUDGET",id,document.sha256(),semantic);}
+            catch(RuntimeException unavailable){
+                if(Thread.currentThread().isInterrupted())throw unavailable;
+                // A failed optional extraction cannot erase independently read text and explicit amounts.
+                issues.add(new ExtractionIssue("document","document/extraction","MODEL_EXTRACTION_INCOMPLETE"));
+                result=new Result(List.of(),"UNAVAILABLE","budget-partial");
+            }
             if(result==null||result.rows()==null||result.rows().size()>10000)throw new IOException("BUDGET_AI_RESULT_INVALID");
             issues.addAll(result.issues());
             var sources=new HashMap<String,String>();for(var s:semantic)sources.put(s.locator(),s.text());
@@ -204,13 +220,32 @@ public class BudgetUploadedMaterialReader {
                     if(fact.field().equals("applicationDate")&&original.contains("审批日期")
                             &&explicitFacts.stream().anyMatch(f->f.field().equals("approvalDate")&&f.value().equals(modelValue)
                             &&f.locator().startsWith(modelLocator+"/")))continue;
-                    if(explicitDuplicate(explicitFacts,fact,original))continue;
+                    if(explicitDuplicate(explicitFacts,fact,original)) {
+                        // Keep the deterministic value/position, while preserving grounded semantic scope.
+                        // Otherwise a locally read label could silently lose the model's historical/annual context.
+                        if(fact.subjectScope()!=null||fact.amountScope()!=null) {
+                            String modelLine=physicalLine(original,fact.excerpt());
+                            for(int n=0;n<rows.size();n++) {
+                                var local=rows.get(n);var refined=new ArrayList<Fact>();boolean changed=false;
+                                for(var known:local.facts()) {
+                                    boolean same=known.field().equals(fact.field())&&known.locator().replaceFirst("/line:[0-9]+$","").equals(fact.locator());
+                                    if(same)try{same=physicalLine(original,known.excerpt()).equals(modelLine);}catch(IOException ambiguous){same=false;}
+                                    if(same) {
+                                        String subject="REFERENCE".equals(known.subjectScope())?"REFERENCE":fact.subjectScope()!=null?fact.subjectScope():known.subjectScope();
+                                        refined.add(new Fact(known.field(),known.value(),known.locator(),known.excerpt(),subject,fact.amountScope()!=null?fact.amountScope():known.amountScope()));changed=true;
+                                    }else refined.add(known);
+                                }
+                                if(changed)rows.set(n,new Row(local.rowKey(),List.copyOf(refined)));
+                            }
+                        }
+                        continue;
+                    }
                     Scope scope=scopes.get(row);
                     boolean scoped=scope!=null&&scope.locator().equals(fact.locator());
                     fact=scoped?scopeEvidence(original,fact,scope):resolveEvidence(original,fact,row.facts());
                     if(fact.field().endsWith("Amount"))fact=amountEvidence(fact,scoped?original.substring(scope.start(),scope.end()):physicalLine(original,fact.excerpt()));
                     // A model may not replace an explicit amount by another labelled amount.
-                    if(fact.field().endsWith("Amount")) {
+                    if(Set.of("declaredAmount","approvalAmount").contains(fact.field())) {
                         // Validate against its original physical row as well as the
                         // supplied excerpt: a cropped "5000元" must not conceal
                         // the source's explicit approval label.
@@ -266,7 +301,7 @@ public class BudgetUploadedMaterialReader {
                     Scope scope=scopes.get(row);
                     if(scope!=null&&scope.locator().equals(fact.locator())) {
                         String locator=fact.locator()+"/record:"+scope.start()+":"+scope.end();
-                        located.computeIfAbsent(locator,k->new ArrayList<>()).add(new Fact(fact.field(),fact.value(),locator,fact.excerpt()));
+                        located.computeIfAbsent(locator,k->new ArrayList<>()).add(new Fact(fact.field(),fact.value(),locator,fact.excerpt(),fact.subjectScope(),fact.amountScope()));
                         continue;
                     }
                     int position=original.indexOf(fact.excerpt());
@@ -280,7 +315,7 @@ public class BudgetUploadedMaterialReader {
                         &&row.facts().stream().anyMatch(f->Set.of("subjectCode","subjectName").contains(f.field())))locator+="/mention:"+mentionId;
                     var enriched=enrichedFacts.get(fact);
                     located.computeIfAbsent(locator,k->new ArrayList<>()).add(enriched==fact
-                        ?new Fact(fact.field(),fact.value(),locator,fact.excerpt()):enriched);
+                        ?new Fact(fact.field(),fact.value(),locator,fact.excerpt(),fact.subjectScope(),fact.amountScope()):enriched);
                 }
                 for(var group:located.entrySet())rows.add(new Row(group.getKey(),List.copyOf(group.getValue())));
             }
@@ -337,8 +372,14 @@ public class BudgetUploadedMaterialReader {
         // Merge only after uncertainty filtering so discarded OCR identities cannot
         // re-enter the published snapshot through an earlier aggregate.
         var merged=new LinkedHashMap<String,LinkedHashSet<Fact>>();
-        for(var row:distinct)merged.computeIfAbsent(row.rowKey(),k->new LinkedHashSet<>()).addAll(row.facts());
-        return new BudgetUploadedFacts.Snapshot(merged.entrySet().stream().map(e->new Row(e.getKey(),List.copyOf(e.getValue()))).toList(),List.copyOf(issues));
+        var quoteQuality=visualQuality==null?null:visualQuality.quotes(id,document.sha256(),document.segments());
+        for(var row:distinct)for(var fact:row.facts()){
+            if(quoteQuality!=null&&quoteQuality.uncertain(fact.locator(),fact.excerpt())){
+                issues.add(new ExtractionIssue(fact.field(),fact.locator(),"EVIDENCE_UNVERIFIED"));continue;
+            }
+            merged.computeIfAbsent(row.rowKey(),k->new LinkedHashSet<>()).add(fact);
+        }
+        return new BudgetUploadedFacts.Snapshot(merged.entrySet().stream().map(e->new Row(e.getKey(),List.copyOf(e.getValue()))).toList(),List.copyOf(issues),document.segments(),document.sha256(),document.method());
     }
 
     private static boolean adjacentWordNodes(String previous,String current) {
@@ -475,7 +516,7 @@ public class BudgetUploadedMaterialReader {
         if(values.size()>1)throw new IOException("BUDGET_AI_ROW_AMBIGUOUS");
         if(values.isEmpty())return fact;
         String value=values.iterator().next();
-        return new Fact(fact.field(),value,fact.locator(),fact.excerpt().contains(value)?fact.excerpt():context);
+        return new Fact(fact.field(),value,fact.locator(),fact.excerpt().contains(value)?fact.excerpt():context,fact.subjectScope(),fact.amountScope());
     }
     private static Fact spreadsheetAmount(Fact fact,String source,Map<String,List<String>> headers,Map<String,String> sheetUnits)throws IOException {
         if(!fact.field().endsWith("Amount")||!fact.locator().startsWith("excel/")||!fact.locator().contains("/row:"))return fact;
@@ -493,7 +534,7 @@ public class BudgetUploadedMaterialReader {
         String value=withUnit(fact.value(),declaredUnit);
         // The source column and its real header together establish the unit.
         // This follows the deterministic table path's original-unit convention.
-        return new Fact(fact.field(),value,fact.locator()+"/col:"+(columns.get(0)+1),label+"："+value);
+        return new Fact(fact.field(),value,fact.locator()+"/col:"+(columns.get(0)+1),label+"："+value,fact.subjectScope(),fact.amountScope());
     }
     private static Fact singleLineEvidence(String source,Fact fact)throws IOException {
         if(fact.excerpt().indexOf('\n')<0&&fact.excerpt().indexOf('\r')<0)return fact;
@@ -504,7 +545,7 @@ public class BudgetUploadedMaterialReader {
         if(lines.size()!=1)throw new IOException("BUDGET_AI_ROW_AMBIGUOUS");
         String excerpt=lines.get(0);
         physicalLine(source,excerpt);
-        return new Fact(fact.field(),fact.value(),fact.locator(),excerpt);
+        return new Fact(fact.field(),fact.value(),fact.locator(),excerpt,fact.subjectScope(),fact.amountScope());
     }
 
     private static Fact resolveEvidence(String source,Fact fact,List<Fact> peers)throws IOException {
@@ -525,7 +566,7 @@ public class BudgetUploadedMaterialReader {
             }
             if(candidates.size()!=1)throw ambiguity;
             String line=candidates.iterator().next();physicalLine(source,line);
-            return new Fact(fact.field(),fact.value(),fact.locator(),line);
+            return new Fact(fact.field(),fact.value(),fact.locator(),line,fact.subjectScope(),fact.amountScope());
         }
     }
 

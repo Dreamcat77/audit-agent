@@ -33,7 +33,11 @@ public final class OfficeMaterialTypes {
             case "image/jpeg" -> starts(header, new byte[]{(byte)255,(byte)216,(byte)255});
             case "image/bmp" -> starts(header, new byte[]{66,77});
             case "image/tiff" -> starts(header,new byte[]{73,73,42,0}) || starts(header,new byte[]{77,77,0,42});
-            case "application/msword", "application/vnd.ms-excel", "application/vnd.ms-powerpoint" ->
+            case "application/msword" -> starts(header,new byte[]{(byte)0xd0,(byte)0xcf,0x11,(byte)0xe0,(byte)0xa1,(byte)0xb1,0x1a,(byte)0xe1})
+                || starts(header,new byte[]{80,75,3,4}) || starts(header,"{\\rtf".getBytes(StandardCharsets.US_ASCII))
+                || new String(header,StandardCharsets.ISO_8859_1).stripLeading().toLowerCase(Locale.ROOT)
+                    .matches("(?s)^(?:<!doctype\\s+html|<html(?:\\s|>)|<head(?:\\s|>)|<meta\\s|<body(?:\\s|>)).*");
+            case "application/vnd.ms-excel", "application/vnd.ms-powerpoint" ->
                 starts(header,new byte[]{(byte)0xd0,(byte)0xcf,0x11,(byte)0xe0,(byte)0xa1,(byte)0xb1,0x1a,(byte)0xe1});
             case "application/rtf" -> starts(header,"{\\rtf".getBytes(StandardCharsets.US_ASCII));
             default -> starts(header,new byte[]{80,75,3,4});

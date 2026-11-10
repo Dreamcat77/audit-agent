@@ -1,0 +1,44 @@
+[
+  {
+    "scenario": "agreement-body",
+    "title": true,
+    "eight": true,
+    "filter": true,
+    "copyChecked": true
+  },
+  {
+    "scenario": "document-title-only",
+    "title": true,
+    "eight": true,
+    "filter": true,
+    "copyChecked": true
+  },
+  {
+    "scenario": "suffixed-title-only",
+    "title": true,
+    "eight": true,
+    "filter": true,
+    "copyChecked": true
+  },
+  {
+    "scenario": "table-name",
+    "title": true,
+    "eight": true,
+    "filter": true,
+    "copyChecked": true
+  },
+  {
+    "scenario": "cross-files",
+    "title": true,
+    "eight": true,
+    "filter": true,
+    "copyChecked": true
+  },
+  {
+    "scenario": "inline-name",
+    "title": true,
+    "eight": true,
+    "filter": true,
+    "copyChecked": true
+  }
+]

@@ -18,19 +18,21 @@ from starlette.concurrency import run_in_threadpool
 from audit_ai.errors import AuditAiError
 from audit_ai.model.gateway import ModelGatewayPort, ModelGatewayFailure, ModelNotConfigured
 from audit_ai.config import Settings
+from audit_ai.client_privacy import CURRENT
 from audit_ai.model.material_chunks import bounded_chunks, render, split_chunk
 from audit_ai.model.material_checkpoints import MaterialCheckpoints, digest
 from audit_ai.model.automatic_procurement_prompt import AUTO_CASE_FIELDS_VERSION
+from audit_ai.model.procurement_context import contextual_renderer
 
 _STRICT = ConfigDict(extra="forbid", populate_by_name=True)
 _PROCUREMENT = frozenset({"projectName", "projectNo", "departmentName", "procurementType", "budgetAmount",
     "subjectCode", "subjectName", "procurementMethod", "requirementDescription", "applicantName"})
-_BUDGET = frozenset({"subjectCode", "subjectName", "declaredAmount", "approvalAmount", "supplierName", "projectCode", "projectName", "budgetYear", "departmentName",
+_BUDGET = frozenset({"subjectCode", "subjectName", "declaredAmount", "approvalAmount", "projectBudgetAmount", "declaredTotalAmount", "approvedTotalAmount", "ceilingAmount", "supplierName", "projectCode", "projectName", "budgetYear", "departmentName",
                      "parentProjectName", "applicationNo", "applicationDate", "actualApprovalStep", "requiredApprovalStep", "policyClause", "approvalThreshold", "thresholdCondition", "spendingPurpose", "approvedPurpose", "requiredPreviousStep", "approvalDate"})
 _PROCUREMENT_REVIEW = _PROCUREMENT | frozenset({
     'purchaserName', 'agencyName', 'supplierName', 'quoteAmount', 'ceilingAmount', 'productDescription'
 })
-_PROCUREMENT_AUTO = frozenset({"documentType", "projectName", "projectNo", "purchaserName",
+_PROCUREMENT_AUTO = frozenset({"documentType", "projectName", "projectNo", "purchaserName", "agencyName", "packageName",
     "budgetAmount", "ceilingAmount", "supplierName", "quoteAmount", "awardAmount",
     "productDescription", "itemName", "quantity", "unitPrice", "lineAmount"})
 
@@ -50,12 +52,18 @@ class Segment(BaseModel):
     locator: str = Field(min_length=1, max_length=300)
     text: str = Field(min_length=1, max_length=6000, repr=False)
 
+class DocumentContext(BaseModel):
+    model_config = _STRICT
+    header: str = Field(default='', max_length=800, repr=False)
+    section: str = Field(default='', max_length=160, repr=False)
+
 class ExtractionRequest(BaseModel):
     model_config = _STRICT
     business_type: Literal["PROCUREMENT", "BUDGET", "PROCUREMENT_REVIEW", "PROCUREMENT_AUTO"] = Field(alias="businessType")
     material_id: str = Field(alias="materialId", min_length=1, max_length=36)
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     segments: list[Segment] = Field(min_length=1, max_length=10000)
+    context: DocumentContext | None = None
     policy_id: str | None = Field(default=None, alias='policyId', pattern=r'^[a-f0-9]{64}$')
     call_limit: int = Field(default=512, alias='callLimit', ge=1, le=512)
     time_limit_millis: int = Field(default=900000, alias='timeLimitMillis', ge=1, le=900000)
@@ -66,6 +74,8 @@ class Fact(BaseModel):
     value: str = Field(min_length=1, max_length=2000, repr=False)
     locator: str = Field(min_length=1, max_length=300)
     excerpt: str = Field(min_length=1, max_length=2400, repr=False)
+    subject_scope: Literal['CURRENT_PROJECT', 'REFERENCE', 'GENERAL', 'UNKNOWN'] | None = Field(default=None, alias='subjectScope')
+    amount_scope: Literal['TOTAL', 'ANNUAL', 'PACKAGE', 'UNIT', 'UNKNOWN'] | None = Field(default=None, alias='amountScope')
 
 class Row(BaseModel):
     model_config = _STRICT
@@ -106,7 +116,7 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
     capacity = threading.BoundedSemaphore(1)
     checkpoints = MaterialCheckpoints(settings.material_checkpoint_root,settings.material_checkpoint_ttl_seconds)
     namespace = gateway.material_cache_namespace() if hasattr(gateway,'material_cache_namespace') else type(gateway).__qualname__
-    policy_id=digest([namespace,'material-evidence-v11-budget-procedure',AUTO_CASE_FIELDS_VERSION,settings.material_chunk_chars,settings.material_chunk_bytes,
+    policy_id=digest([namespace,'material-evidence-v12-budget-scope',AUTO_CASE_FIELDS_VERSION,settings.material_chunk_chars,settings.material_chunk_bytes,
                       settings.material_context_chars,settings.material_output_tokens])
 
     @router.get('/policy')
@@ -157,10 +167,14 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                     semantic_segments.append(Segment(locator=segment.locator,text=''.join(pending)))
             if len(explicit)>2000:
                 raise AuditAiError(413, "MATERIAL_AI_RESULT_LIMIT", "too many extracted fields")
-            try: chunks=bounded_chunks(semantic_segments,settings,text_parts)
+            renderer = (contextual_renderer(data.segments, data.context, settings)
+                        if data.business_type == 'PROCUREMENT_AUTO' else render)
+            try: chunks=bounded_chunks(semantic_segments,settings,text_parts,renderer)
             except ValueError as exc:
                 raise AuditAiError(413,'MATERIAL_AI_INPUT_LIMIT','source metadata exceeds configured chunk bound') from exc
-            operation=digest([namespace,policy_id,'material-adaptive-v1',data.model_dump(),
+            identity = CURRENT.get()
+            identity_scope = digest(sorted(identity.names)) if identity is not None else None
+            operation=digest([namespace,policy_id,identity_scope,'material-adaptive-v1',data.model_dump(),
                               settings.material_chunk_chars,settings.material_chunk_bytes,
                               settings.material_context_chars,settings.material_output_tokens])
             logger = logging.getLogger("audit_ai.material_fields")
@@ -189,7 +203,7 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                     raise AuditAiError(504, "MATERIAL_AI_TIME_LIMIT", "material extraction time budget exceeded")
                 views={s['locator']:s for s in [p.view(settings.material_context_chars) for p in chunk]}
                 texts={locator:v.get('contextBefore','')+v['text']+v.get('contextAfter','') for locator,v in views.items()}
-                source=render(chunk,settings.material_context_chars)
+                source=renderer(chunk,settings.material_context_chars)
                 checkpoint_key=digest([path,source])
                 cached=checkpoints.get(operation,checkpoint_key)
                 completion=None
@@ -299,7 +313,10 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                             log_event(logger,'MATERIAL_FACT_EXCLUDED',stage='RESULT_VALIDATION',
                                       outcome='PARTIAL',reason_code='MATERIAL_AI_UNGROUNDED')
                             continue
-                        value = fact.model_dump()
+                        value = fact.model_dump(by_alias=True, exclude_none=True)
+                        if data.business_type not in {'PROCUREMENT_AUTO','BUDGET'}:
+                            value.pop('subjectScope', None)
+                            value.pop('amountScope', None)
                         view=views[fact.locator]
                         # An overlap is context, not a second budget row. Only keep
                         # evidence that intersects the newly processed core text.

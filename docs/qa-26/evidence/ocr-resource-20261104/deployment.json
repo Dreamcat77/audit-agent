@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/releases/ocr-pdf-20261104-r1",
+  "previous": "/opt/audit-agent/releases/personal-roles-20261104-r2",
+  "jarSha256": "0083e4041d212646906ceeb1af31a56f1987402efcce4d3ba3577936550ca4ce",
+  "indexSha256": "b2b4c3b06cced2ee3d7085be7adfea4494fdddd6273d5e33d9e57f36a655ef4c",
+  "schemaChanged": false,
+  "frontendChanged": false,
+  "existingConfigPreserved": true,
+  "ocrConcurrencyCap": 4,
+  "perProcessThreads": 1,
+  "mkldnn": false
+}

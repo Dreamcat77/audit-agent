@@ -1,0 +1,796 @@
+{
+  "jobs": [
+    {
+      "id": "c3c16bdf-2ee6-4830-8598-6dd4deca3179",
+      "fileName": "预算申报.pdf",
+      "status": "PARSED",
+      "errorCode": null,
+      "updatedAt": "2026-10-29T07:30:35.776691Z",
+      "task": {
+        "taskId": "c3c16bdf-2ee6-4830-8598-6dd4deca3179",
+        "fileName": "预算申报.pdf",
+        "contentType": "application/octet-stream",
+        "fileSize": 30857,
+        "status": "REVIEWED",
+        "parsedLineCount": 1,
+        "errorDetail": null,
+        "budgetYear": null,
+        "departmentCode": null,
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T07:30:04.325152Z",
+        "updatedTime": "2026-10-29T07:30:37.981745Z"
+      }
+    },
+    {
+      "id": "4c974e27-8150-4c8f-91c6-83e9262cb2b0",
+      "fileName": "预算说明.docx",
+      "status": "PARSED",
+      "errorCode": null,
+      "updatedAt": "2026-10-29T07:30:36.660878Z",
+      "task": {
+        "taskId": "4c974e27-8150-4c8f-91c6-83e9262cb2b0",
+        "fileName": "预算说明.docx",
+        "contentType": "application/octet-stream",
+        "fileSize": 36776,
+        "status": "REVIEWED",
+        "parsedLineCount": 1,
+        "errorDetail": null,
+        "budgetYear": null,
+        "departmentCode": null,
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T07:30:04.353266Z",
+        "updatedTime": "2026-10-29T07:30:37.977924Z"
+      }
+    },
+    {
+      "id": "f5a4d8c7-6cbf-4782-8fe2-fbc92412df28",
+      "fileName": "预算表.xlsx",
+      "status": "FAILED",
+      "errorCode": "BUDGET_PARSE_FAILED",
+      "updatedAt": "2026-10-29T07:30:37.938436Z",
+      "task": {
+        "taskId": "f5a4d8c7-6cbf-4782-8fe2-fbc92412df28",
+        "fileName": "预算表.xlsx",
+        "contentType": "application/octet-stream",
+        "fileSize": 5023,
+        "status": "FAILED",
+        "parsedLineCount": 0,
+        "errorDetail": "本次处理已结束，尚未取得可核实的分析结果，具体原因需要管理员查看关联日志；不能据此判断材料不足或预算没有问题。",
+        "budgetYear": null,
+        "departmentCode": null,
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T07:30:04.370231Z",
+        "updatedTime": "2026-10-29T07:30:37.939869Z"
+      }
+    }
+  ],
+  "reviews": [
+    {
+      "task": {
+        "taskId": "c3c16bdf-2ee6-4830-8598-6dd4deca3179",
+        "fileName": "预算申报.pdf",
+        "contentType": "application/octet-stream",
+        "fileSize": 30857,
+        "status": "REVIEWED",
+        "parsedLineCount": 1,
+        "errorDetail": null,
+        "budgetYear": null,
+        "departmentCode": null,
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T07:30:04.325152Z",
+        "updatedTime": "2026-10-29T07:30:37.981745Z"
+      },
+      "allPassed": false,
+      "totalItems": 1,
+      "passedItems": 0,
+      "exceptionItems": 1,
+      "items": [
+        {
+          "id": "f7e7e8e5-cda1-4cbc-8289-4e8697c77337",
+          "taskId": "c3c16bdf-2ee6-4830-8598-6dd4deca3179",
+          "rowNumber": 1,
+          "subjectCode": null,
+          "subjectName": "办公设备",
+          "declaredAmount": 120000.0,
+          "supplierName": null,
+          "projectCode": "SYN-V15-",
+          "approvalSubjectCode": null,
+          "approvalSubjectName": null,
+          "approvalAmount": null,
+          "approvalSupplierName": null,
+          "matchStatus": "UNMATCHED",
+          "matchMethod": "UPLOADED_MATERIAL",
+          "matchDistance": null,
+          "amountStatus": "NOT_CHECKED",
+          "differenceAmount": null,
+          "exceptionType": "INSUFFICIENT",
+          "errorDetail": "已读取申报信息，现有材料未能确认对应批复金额，暂不能判断是否超过批复。",
+          "createdTime": "2026-10-29T07:30:37.979359Z",
+          "riskLevel": "WARNING",
+          "missingFields": null,
+          "amountFormatErrors": null,
+          "codeFormatError": null,
+          "requiredFieldsStatus": "NOT_CHECKED",
+          "amountFormatStatus": "NOT_CHECKED",
+          "categoryAttributionStatus": "NOT_CHECKED",
+          "categorySuggestion": null,
+          "projectCodeStatus": "NOT_CHECKED",
+          "projectDepartmentStatus": "NOT_CHECKED",
+          "budgetYearValidityStatus": "NOT_CHECKED",
+          "abnormalReasons": [
+            "已读取申报信息，现有材料未能确认对应批复金额，暂不能判断是否超过批复。"
+          ],
+          "checks": [
+            {
+              "checkType": "REQUIRED_FIELDS",
+              "expectedValue": "科目编码、科目名称、申报金额、供应商名称、项目编号",
+              "actualValue": "3/5",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "必填信息完整"
+            },
+            {
+              "checkType": "AMOUNT_FORMAT",
+              "expectedValue": "正数，≤2位小数",
+              "actualValue": "120000.00",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "金额格式合法"
+            },
+            {
+              "checkType": "SUBJECT_CODE",
+              "expectedValue": null,
+              "actualValue": null,
+              "passed": false,
+              "status": "FAILED",
+              "errorDetail": "匹配失败"
+            },
+            {
+              "checkType": "SUBJECT_NAME",
+              "expectedValue": null,
+              "actualValue": "办公设备",
+              "passed": false,
+              "status": "FAILED",
+              "errorDetail": "匹配失败"
+            },
+            {
+              "checkType": "CATEGORY_ATTRIBUTION",
+              "expectedValue": "科目编码所属分类",
+              "actualValue": "办公设备",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "分类规则未配置，跳过校验"
+            },
+            {
+              "checkType": "BUDGET_AMOUNT",
+              "expectedValue": null,
+              "actualValue": "120000.00",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "申报金额不超过预算批复金额"
+            },
+            {
+              "checkType": "SUPPLIER_NAME",
+              "expectedValue": null,
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "供应商名称一致"
+            },
+            {
+              "checkType": "PROJECT_CODE",
+              "expectedValue": "同批次唯一",
+              "actualValue": "SYN-V15-",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "项目编号唯一"
+            },
+            {
+              "checkType": "PROJECT_DEPARTMENT",
+              "expectedValue": "项目属于当前部门",
+              "actualValue": "SYN-V15-",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "项目与部门匹配"
+            },
+            {
+              "checkType": "BUDGET_YEAR_VALIDITY",
+              "expectedValue": "所选年度在有效期内",
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "预算年度有效"
+            }
+          ],
+          "currentStep": 10,
+          "moduleGroups": [
+            {
+              "moduleKey": "DATA_VALIDATION",
+              "moduleName": "数据规范性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "REQUIRED_FIELDS",
+                  "expectedValue": "科目编码、科目名称、申报金额、供应商名称、项目编号",
+                  "actualValue": "3/5",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "必填信息完整"
+                },
+                {
+                  "checkType": "AMOUNT_FORMAT",
+                  "expectedValue": "正数，≤2位小数",
+                  "actualValue": "120000.00",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "金额格式合法"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "SUBJECT_CONSISTENCY",
+              "moduleName": "科目一致性校验",
+              "moduleStatus": "ERROR",
+              "children": [
+                {
+                  "checkType": "SUBJECT_CODE",
+                  "expectedValue": null,
+                  "actualValue": null,
+                  "passed": false,
+                  "status": "FAILED",
+                  "errorDetail": "匹配失败"
+                },
+                {
+                  "checkType": "SUBJECT_NAME",
+                  "expectedValue": null,
+                  "actualValue": "办公设备",
+                  "passed": false,
+                  "status": "FAILED",
+                  "errorDetail": "匹配失败"
+                },
+                {
+                  "checkType": "CATEGORY_ATTRIBUTION",
+                  "expectedValue": "科目编码所属分类",
+                  "actualValue": "办公设备",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "分类规则未配置，跳过校验"
+                }
+              ],
+              "exceptionSummary": "匹配失败；匹配失败"
+            },
+            {
+              "moduleKey": "AMOUNT_COMPLIANCE",
+              "moduleName": "金额合规性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "BUDGET_AMOUNT",
+                  "expectedValue": null,
+                  "actualValue": "120000.00",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "申报金额不超过预算批复金额"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "SUPPLIER_CHECK",
+              "moduleName": "关联方校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "SUPPLIER_NAME",
+                  "expectedValue": null,
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "供应商名称一致"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "PROJECT_COMPLIANCE",
+              "moduleName": "项目合规性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "PROJECT_CODE",
+                  "expectedValue": "同批次唯一",
+                  "actualValue": "SYN-V15-",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "项目编号唯一"
+                },
+                {
+                  "checkType": "PROJECT_DEPARTMENT",
+                  "expectedValue": "项目属于当前部门",
+                  "actualValue": "SYN-V15-",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "项目与部门匹配"
+                },
+                {
+                  "checkType": "BUDGET_YEAR_VALIDITY",
+                  "expectedValue": "所选年度在有效期内",
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "预算年度有效"
+                }
+              ],
+              "exceptionSummary": ""
+            }
+          ],
+          "aiSemanticAnalysis": {
+            "operation": "BUDGET_SEMANTIC_ANALYSIS",
+            "available": false,
+            "suggestedCategory": null,
+            "hint": null,
+            "model": null,
+            "durationMs": null,
+            "confidence": null,
+            "judgment": null,
+            "similarityScore": null,
+            "enhancedDescription": null,
+            "suggestion": null
+          }
+        }
+      ],
+      "materialReference": {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "根据本批上传材料整理了以下预算信息与核对意见，供工作参考。本批仍有材料或部分信息未能核实，结果依据尚不完整；未列出的内容不代表没有问题。已保留能够核实的预算信息。部分重复或跨段内容无法确认属于哪一项，未参与金额比较。",
+        "lines": [
+          {
+            "project": "澄川档案数字化建设项目",
+            "projectCode": "SYN-V15-",
+            "subject": "办公设备",
+            "subjectCode": null,
+            "year": "2026",
+            "department": null,
+            "declaredAmount": 120000.0,
+            "approvalAmount": null,
+            "status": "INSUFFICIENT",
+            "opinion": "已读取申报信息，现有材料未能确认对应批复金额，暂不能判断是否超过批复。",
+            "sources": [
+              {
+                "taskId": "c3c16bdf-2ee6-4830-8598-6dd4deca3179",
+                "fileName": "预算申报.pdf",
+                "field": "budgetYear",
+                "value": "2026",
+                "locator": "pdf/page:1/text/part:1/line:1",
+                "excerpt": "预算年度：2026"
+              },
+              {
+                "taskId": "c3c16bdf-2ee6-4830-8598-6dd4deca3179",
+                "fileName": "预算申报.pdf",
+                "field": "subjectName",
+                "value": "办公设备",
+                "locator": "pdf/page:1/text/part:1/line:1",
+                "excerpt": "科目名称：办公设备"
+              },
+              {
+                "taskId": "c3c16bdf-2ee6-4830-8598-6dd4deca3179",
+                "fileName": "预算申报.pdf",
+                "field": "declaredAmount",
+                "value": "壹拾贰万元整",
+                "locator": "pdf/page:1/text/part:1/line:1",
+                "excerpt": "申报金额：壹拾贰万元整"
+              },
+              {
+                "taskId": "c3c16bdf-2ee6-4830-8598-6dd4deca3179",
+                "fileName": "预算申报.pdf",
+                "field": "projectCode",
+                "value": "SYN-V15-",
+                "locator": "pdf/page:1/text/part:1/line:0",
+                "excerpt": "项目编号：SYN-V15-"
+              },
+              {
+                "taskId": "c3c16bdf-2ee6-4830-8598-6dd4deca3179",
+                "fileName": "预算申报.pdf",
+                "field": "projectName",
+                "value": "澄川档案数字化建设项目",
+                "locator": "pdf/page:1/text/part:1/line:0",
+                "excerpt": "项目名称：澄川档案数字化建设项目"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": {
+        "taskId": "4c974e27-8150-4c8f-91c6-83e9262cb2b0",
+        "fileName": "预算说明.docx",
+        "contentType": "application/octet-stream",
+        "fileSize": 36776,
+        "status": "REVIEWED",
+        "parsedLineCount": 1,
+        "errorDetail": null,
+        "budgetYear": null,
+        "departmentCode": null,
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T07:30:04.353266Z",
+        "updatedTime": "2026-10-29T07:30:37.977924Z"
+      },
+      "allPassed": false,
+      "totalItems": 1,
+      "passedItems": 0,
+      "exceptionItems": 1,
+      "items": [
+        {
+          "id": "33b05121-5fbe-472e-ba72-76353c83beb3",
+          "taskId": "4c974e27-8150-4c8f-91c6-83e9262cb2b0",
+          "rowNumber": 1,
+          "subjectCode": null,
+          "subjectName": "办公设备",
+          "declaredAmount": 120000.0,
+          "supplierName": null,
+          "projectCode": "SYN-V15-001",
+          "approvalSubjectCode": null,
+          "approvalSubjectName": "办公设备",
+          "approvalAmount": 110000.0,
+          "approvalSupplierName": null,
+          "matchStatus": "MATCHED",
+          "matchMethod": "UPLOADED_MATERIAL",
+          "matchDistance": null,
+          "amountStatus": "OVER_BUDGET",
+          "differenceAmount": 10000.0,
+          "exceptionType": "OVER_APPROVAL",
+          "errorDetail": "材料所列申报金额超过对应批复金额 10000.00 元，建议核对申报依据与批复版本。",
+          "createdTime": "2026-10-29T07:30:37.969648Z",
+          "riskLevel": "CRITICAL",
+          "missingFields": null,
+          "amountFormatErrors": null,
+          "codeFormatError": null,
+          "requiredFieldsStatus": "NOT_CHECKED",
+          "amountFormatStatus": "NOT_CHECKED",
+          "categoryAttributionStatus": "NOT_CHECKED",
+          "categorySuggestion": null,
+          "projectCodeStatus": "NOT_CHECKED",
+          "projectDepartmentStatus": "NOT_CHECKED",
+          "budgetYearValidityStatus": "NOT_CHECKED",
+          "abnormalReasons": [
+            "材料所列申报金额超过对应批复金额 10000.00 元，建议核对申报依据与批复版本。"
+          ],
+          "checks": [
+            {
+              "checkType": "REQUIRED_FIELDS",
+              "expectedValue": "科目编码、科目名称、申报金额、供应商名称、项目编号",
+              "actualValue": "3/5",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "必填信息完整"
+            },
+            {
+              "checkType": "AMOUNT_FORMAT",
+              "expectedValue": "正数，≤2位小数",
+              "actualValue": "120000.00",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "金额格式合法"
+            },
+            {
+              "checkType": "SUBJECT_CODE",
+              "expectedValue": null,
+              "actualValue": null,
+              "passed": false,
+              "status": "FAILED",
+              "errorDetail": "科目编码为空或不一致"
+            },
+            {
+              "checkType": "SUBJECT_NAME",
+              "expectedValue": "办公设备",
+              "actualValue": "办公设备",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "科目名称匹配成功"
+            },
+            {
+              "checkType": "CATEGORY_ATTRIBUTION",
+              "expectedValue": "科目编码所属分类",
+              "actualValue": "办公设备",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "分类规则未配置，跳过校验"
+            },
+            {
+              "checkType": "BUDGET_AMOUNT",
+              "expectedValue": "110000.00",
+              "actualValue": "120000.00",
+              "passed": false,
+              "status": "OVER_BUDGET",
+              "errorDetail": "申报金额超过预算批复金额（10000.00）"
+            },
+            {
+              "checkType": "SUPPLIER_NAME",
+              "expectedValue": null,
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "供应商名称一致"
+            },
+            {
+              "checkType": "PROJECT_CODE",
+              "expectedValue": "同批次唯一",
+              "actualValue": "SYN-V15-001",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "项目编号唯一"
+            },
+            {
+              "checkType": "PROJECT_DEPARTMENT",
+              "expectedValue": "项目属于当前部门",
+              "actualValue": "SYN-V15-001",
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "项目与部门匹配"
+            },
+            {
+              "checkType": "BUDGET_YEAR_VALIDITY",
+              "expectedValue": "所选年度在有效期内",
+              "actualValue": null,
+              "passed": true,
+              "status": "PASSED",
+              "errorDetail": "预算年度有效"
+            }
+          ],
+          "currentStep": 10,
+          "moduleGroups": [
+            {
+              "moduleKey": "DATA_VALIDATION",
+              "moduleName": "数据规范性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "REQUIRED_FIELDS",
+                  "expectedValue": "科目编码、科目名称、申报金额、供应商名称、项目编号",
+                  "actualValue": "3/5",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "必填信息完整"
+                },
+                {
+                  "checkType": "AMOUNT_FORMAT",
+                  "expectedValue": "正数，≤2位小数",
+                  "actualValue": "120000.00",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "金额格式合法"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "SUBJECT_CONSISTENCY",
+              "moduleName": "科目一致性校验",
+              "moduleStatus": "ERROR",
+              "children": [
+                {
+                  "checkType": "SUBJECT_CODE",
+                  "expectedValue": null,
+                  "actualValue": null,
+                  "passed": false,
+                  "status": "FAILED",
+                  "errorDetail": "科目编码为空或不一致"
+                },
+                {
+                  "checkType": "SUBJECT_NAME",
+                  "expectedValue": "办公设备",
+                  "actualValue": "办公设备",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "科目名称匹配成功"
+                },
+                {
+                  "checkType": "CATEGORY_ATTRIBUTION",
+                  "expectedValue": "科目编码所属分类",
+                  "actualValue": "办公设备",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "分类规则未配置，跳过校验"
+                }
+              ],
+              "exceptionSummary": "科目编码为空或不一致"
+            },
+            {
+              "moduleKey": "AMOUNT_COMPLIANCE",
+              "moduleName": "金额合规性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "BUDGET_AMOUNT",
+                  "expectedValue": "110000.00",
+                  "actualValue": "120000.00",
+                  "passed": false,
+                  "status": "OVER_BUDGET",
+                  "errorDetail": "申报金额超过预算批复金额（10000.00）"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "SUPPLIER_CHECK",
+              "moduleName": "关联方校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "SUPPLIER_NAME",
+                  "expectedValue": null,
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "供应商名称一致"
+                }
+              ],
+              "exceptionSummary": ""
+            },
+            {
+              "moduleKey": "PROJECT_COMPLIANCE",
+              "moduleName": "项目合规性校验",
+              "moduleStatus": "PASS",
+              "children": [
+                {
+                  "checkType": "PROJECT_CODE",
+                  "expectedValue": "同批次唯一",
+                  "actualValue": "SYN-V15-001",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "项目编号唯一"
+                },
+                {
+                  "checkType": "PROJECT_DEPARTMENT",
+                  "expectedValue": "项目属于当前部门",
+                  "actualValue": "SYN-V15-001",
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "项目与部门匹配"
+                },
+                {
+                  "checkType": "BUDGET_YEAR_VALIDITY",
+                  "expectedValue": "所选年度在有效期内",
+                  "actualValue": null,
+                  "passed": true,
+                  "status": "PASSED",
+                  "errorDetail": "预算年度有效"
+                }
+              ],
+              "exceptionSummary": ""
+            }
+          ],
+          "aiSemanticAnalysis": {
+            "operation": "BUDGET_SEMANTIC_ANALYSIS",
+            "available": false,
+            "suggestedCategory": null,
+            "hint": null,
+            "model": null,
+            "durationMs": null,
+            "confidence": null,
+            "judgment": null,
+            "similarityScore": null,
+            "enhancedDescription": null,
+            "suggestion": null
+          }
+        }
+      ],
+      "materialReference": {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "根据本批上传材料整理了以下预算信息与核对意见，供工作参考。本批仍有材料或部分信息未能核实，结果依据尚不完整；未列出的内容不代表没有问题。",
+        "lines": [
+          {
+            "project": "澄川档案数字化建设项目",
+            "projectCode": "SYN-V15-001",
+            "subject": "办公设备",
+            "subjectCode": null,
+            "year": "2026",
+            "department": null,
+            "declaredAmount": 120000.0,
+            "approvalAmount": 110000.0,
+            "status": "OVER_APPROVAL",
+            "opinion": "材料所列申报金额超过对应批复金额 10000.00 元，建议核对申报依据与批复版本。",
+            "sources": [
+              {
+                "taskId": "4c974e27-8150-4c8f-91c6-83e9262cb2b0",
+                "fileName": "预算说明.docx",
+                "field": "projectName",
+                "value": "澄川档案数字化建设项目",
+                "locator": "docx/body/node:1/part:1/line:0",
+                "excerpt": "项目名称：澄川档案数字化建设项目"
+              },
+              {
+                "taskId": "4c974e27-8150-4c8f-91c6-83e9262cb2b0",
+                "fileName": "预算说明.docx",
+                "field": "projectCode",
+                "value": "SYN-V15-001",
+                "locator": "docx/body/node:1/part:1/line:0",
+                "excerpt": "项目编号：SYN-V15-001"
+              },
+              {
+                "taskId": "4c974e27-8150-4c8f-91c6-83e9262cb2b0",
+                "fileName": "预算说明.docx",
+                "field": "budgetYear",
+                "value": "2026",
+                "locator": "docx/body/node:1/part:1/line:0",
+                "excerpt": "预算年度：2026"
+              },
+              {
+                "taskId": "4c974e27-8150-4c8f-91c6-83e9262cb2b0",
+                "fileName": "预算说明.docx",
+                "field": "subjectName",
+                "value": "办公设备",
+                "locator": "docx/body/node:1/part:1/line:0",
+                "excerpt": "科目名称：办公设备"
+              },
+              {
+                "taskId": "4c974e27-8150-4c8f-91c6-83e9262cb2b0",
+                "fileName": "预算说明.docx",
+                "field": "declaredAmount",
+                "value": "壹拾贰万元整",
+                "locator": "docx/body/node:1/part:1/line:0",
+                "excerpt": "申报金额：壹拾贰万元整"
+              },
+              {
+                "taskId": "4c974e27-8150-4c8f-91c6-83e9262cb2b0",
+                "fileName": "预算说明.docx",
+                "field": "approvalAmount",
+                "value": "壹拾壹万元整",
+                "locator": "docx/body/node:1/part:1/line:0",
+                "excerpt": "批复参考金额：壹拾壹万元整"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": {
+        "taskId": "f5a4d8c7-6cbf-4782-8fe2-fbc92412df28",
+        "fileName": "预算表.xlsx",
+        "contentType": "application/octet-stream",
+        "fileSize": 5023,
+        "status": "FAILED",
+        "parsedLineCount": 0,
+        "errorDetail": "本次处理已结束，尚未取得可核实的分析结果，具体原因需要管理员查看关联日志；不能据此判断材料不足或预算没有问题。",
+        "budgetYear": null,
+        "departmentCode": null,
+        "reviewCursor": 0,
+        "pendingRowNumber": null,
+        "pendingStep": null,
+        "pendingReason": null,
+        "createdTime": "2026-10-29T07:30:04.370231Z",
+        "updatedTime": "2026-10-29T07:30:37.939869Z"
+      },
+      "allPassed": false,
+      "totalItems": 0,
+      "passedItems": 0,
+      "exceptionItems": 0,
+      "items": [],
+      "materialReference": {
+        "status": "COMPLETED",
+        "coverage": "PARTIAL",
+        "summary": "这份材料未能完成读取；同批其他材料的可用信息仍已保留。本批仍有材料或部分信息未能核实，结果依据尚不完整；未列出的内容不代表没有问题。",
+        "lines": []
+      }
+    }
+  ]
+}

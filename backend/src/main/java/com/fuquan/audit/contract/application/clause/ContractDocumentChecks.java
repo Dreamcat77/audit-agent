@@ -13,7 +13,8 @@ final class ContractDocumentChecks {
     private ContractDocumentChecks() {}
     private static final String NUM = "[0-9零〇一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟]+";
     private static final Pattern TOTAL = Pattern.compile("一式\\s*(" + NUM + ")\\s*份");
-    private static final Pattern SHARE = Pattern.compile("(甲方|乙方|丙方|采购人|供应商|委托方|受托方)\\s*(?:各)?(?:执|持|留存|保存|保留)\\s*(" + NUM + ")\\s*份");
+    private static final Pattern SHARE = Pattern.compile("(共同)?(甲方|乙方|丙方|采购人|供应商|委托方|受托方)([一二三四五六七八九0-9]+)?\\s*(各)?(?:执|持|留存|保存|保留)\\s*(" + NUM + ")\\s*份");
+    private static final Pattern NUMBERED_PARTY = Pattern.compile("(?m)^\\h*(甲方|乙方|采购人|供应商)([一二三四五六七八九0-9]+)(?:[（(][^\\r\\n）)]{1,30}[）)])?\\h*[:：]\\h*([^\\r\\n]{2,120})$");
     private static final Pattern BOTH_SHARE = Pattern.compile("(?:甲乙双方|甲、乙双方|双方)\\s*各(?:执|持|留存|保存|保留)\\s*(" + NUM + ")\\s*份");
     private static final Pattern TEMPLATE = Pattern.compile("^\\s*(?:第[一二三四五六七八九十百0-9]+章\\s*)?(?:合同条款(?:及|与)?格式|合同条款及合同格式|合同主要条款|合同格式|合同范本|合同模板)\\s*$");
     private static final Pattern CHAPTER = Pattern.compile("^\\s*第[一二三四五六七八九十百0-9]+章.*");
@@ -99,12 +100,30 @@ final class ContractDocumentChecks {
         var sources = new ArrayList<CheckSource>();
         totals.values().forEach(v -> sources.add(source(contract, v)));
         var shares = new TreeMap<String, Set<BigDecimal>>();
+        var declared = new LinkedHashMap<String, Map<String, Set<String>>>();
+        var declarations = NUMBERED_PARTY.matcher(contract.text());
+        while (declarations.find()) {
+            String family = declarations.group(1).replace("采购人", "甲方").replace("供应商", "乙方");
+            String identity = java.text.Normalizer.normalize(declarations.group(3), java.text.Normalizer.Form.NFKC).replaceAll("[\\s\\p{Z}]+", "");
+            declared.computeIfAbsent(family, k -> new LinkedHashMap<>()).computeIfAbsent(declarations.group(2), k -> new HashSet<>()).add(identity);
+        }
+        boolean unresolvedAllocation = false;
         var share = SHARE.matcher(contract.text());
         while (share.find()) {
-            var count = ChineseNumber.parse(share.group(2));
+            var count = ChineseNumber.parse(share.group(5));
             if (count.isEmpty()) continue;
-            String party = share.group(1).replace("采购人", "甲方").replace("供应商", "乙方");
-            shares.computeIfAbsent(party, k -> new TreeSet<>()).add(count.get());
+            String party = share.group(2).replace("采购人", "甲方").replace("供应商", "乙方");
+            var members = declared.getOrDefault(party, Map.of());
+            if (share.group(4) != null && share.group(3) == null && (share.group(1) != null || !members.isEmpty())) {
+                boolean proven = members.size() >= 2 && members.values().stream().allMatch(v -> v.size() == 1)
+                        && members.values().stream().map(v -> v.iterator().next()).distinct().count() == members.size();
+                if (!proven) { unresolvedAllocation = true; continue; }
+                for (String member : members.keySet()) shares.computeIfAbsent(party + member, k -> new TreeSet<>()).add(count.get());
+                var anchors = NUMBERED_PARTY.matcher(contract.text());
+                while (anchors.find()) if (anchors.group(1).replace("采购人", "甲方").replace("供应商", "乙方").equals(party)) sources.add(source(contract, anchors.group()));
+            } else {
+                shares.computeIfAbsent(party + Objects.toString(share.group(3), ""), k -> new TreeSet<>()).add(count.get());
+            }
             sources.add(source(contract, share.group()));
         }
         var both = BOTH_SHARE.matcher(contract.text());
@@ -115,7 +134,9 @@ final class ContractDocumentChecks {
             sources.add(source(contract,both.group()));
         }
         boolean ambiguous = totals.size() != 1 || shares.values().stream().anyMatch(v -> v.size() != 1);
-        boolean allocated = shares.size() >= 2 && !ambiguous;
+        for (var family : declared.entrySet())
+            if (family.getValue().keySet().stream().anyMatch(member -> !shares.containsKey(family.getKey() + member))) unresolvedAllocation = true;
+        boolean allocated = shares.size() >= 2 && !ambiguous && !unresolvedAllocation;
         BigDecimal sum = shares.values().stream().filter(v -> v.size() == 1).map(v -> v.iterator().next()).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal total = totals.keySet().iterator().next();
         boolean mismatch = allocated && sum.compareTo(total) != 0;
@@ -147,6 +168,9 @@ final class ContractDocumentChecks {
         boolean substantive=contract.text().lines().filter(ContractDocumentChecks::substantive).count()>=2;
         boolean structured=contract.text().length()>=300 && substantive && (Pattern.compile("第[一二三四五六七八九十百0-9]+条").matcher(contract.text()).results().count()>=2
                 ||contract.text().contains("甲方")&&contract.text().contains("乙方")&&contract.text().length()>=150);
+        var endConditions=conditions.stream().filter(c->c.sourceFileId().equals(contract.fileId())&&c.type().equals("TERMINATION")).toList();
+        if(!endConditions.isEmpty())checks.add(new DeterministicCheck("TERMINATION_COMPLETENESS","NORMAL","合同已载明结束节点或终止条件。",null,
+                endConditions.stream().map(c->source(contract,c.excerpt())).distinct().toList()));
         if(own.isEmpty()&&!structured)return;
         for (String type : List.of("SIGNING_DATE", "EFFECTIVE_DATE", "TERMINATION_DATE")) {
             var found = own.stream().filter(d -> d.type().equals(type)).toList();
@@ -156,7 +180,8 @@ final class ContractDocumentChecks {
                         found.stream().filter(d -> d.normalizedDate() == null).map(d -> source(contract, d.excerpt())).toList()));
         }
         var sign = own.stream().filter(d -> d.type().equals("SIGNING_DATE") && d.normalizedDate() != null).map(DateItem::normalizedDate).distinct().toList();
-        if (structured && sign.isEmpty()) checks.add(new DeterministicCheck("SIGN_DATE_COMPLETENESS", "ATTENTION", "合同签订日期未完整列明。", "补全签订日期。", List.of(source(contract, firstLine(contract.text())))));
+        if (structured && sign.isEmpty() && own.stream().noneMatch(d->d.type().equals("SIGNING_DATE")&&d.normalizedDate()==null))
+            checks.add(new DeterministicCheck("SIGN_DATE_COMPLETENESS", "INSUFFICIENT", "现有材料未形成可核实的签订日期。", null, List.of()));
         for (String first : List.of("SIGNING_DATE", "EFFECTIVE_DATE")) {
             var starts = own.stream().filter(d -> d.type().equals(first) && d.normalizedDate() != null).map(DateItem::normalizedDate).distinct().toList();
             var ends = own.stream().filter(d -> d.type().equals("TERMINATION_DATE") && d.normalizedDate() != null).map(DateItem::normalizedDate).distinct().toList();
@@ -166,7 +191,7 @@ final class ContractDocumentChecks {
         }
         if (structured && own.stream().noneMatch(d -> d.type().equals("TERMINATION_DATE"))
                 && conditions.stream().noneMatch(c -> c.sourceFileId().equals(contract.fileId()) && c.type().equals("TERMINATION")))
-            checks.add(new DeterministicCheck("TERMINATION_COMPLETENESS", "ATTENTION", "合同未列明可识别的终止日期或终止条件。", "明确合同结束节点或终止条件。", List.of(source(contract, firstLine(contract.text())))));
+            checks.add(new DeterministicCheck("TERMINATION_COMPLETENESS", "INSUFFICIENT", "现有材料未形成可核实的合同结束节点。", null, List.of()));
     }
     private static boolean substantive(String line) {
         var heading=HEADING.matcher(line);

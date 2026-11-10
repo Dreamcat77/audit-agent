@@ -1,0 +1,198 @@
+ M DEPLOYMENT-MEMORY.md
+ M backend/src/main/java/com/fuquan/audit/budget/api/BudgetMaterialController.java
+ M backend/src/main/java/com/fuquan/audit/budget/application/BudgetAmountEvidence.java
+ M backend/src/main/java/com/fuquan/audit/budget/application/BudgetMaterialBatchService.java
+ M backend/src/main/java/com/fuquan/audit/budget/application/port/BudgetMaterialBatchRepository.java
+ M backend/src/main/java/com/fuquan/audit/budget/infra/memory/InMemoryBudgetMaterialBatchRepository.java
+ M backend/src/main/java/com/fuquan/audit/common/material/application/DurableMaterialExtractionService.java
+ M backend/src/main/java/com/fuquan/audit/common/material/application/MaterialFieldNormalizer.java
+ M backend/src/main/java/com/fuquan/audit/common/material/application/MaterialIntakeService.java
+ M backend/src/main/java/com/fuquan/audit/common/material/application/port/MaterialExtractionUnknown.java
+ M backend/src/main/java/com/fuquan/audit/common/observability/PipelineDiagnostics.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/closeout/DeterministicHtmlReportRenderer.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/closeout/ReportSnapshotFactory.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/CandidateSourceAuthorityValidator.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/CandidateSupportAuthorityValidator.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ContractCandidateConfirmationService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ContractCandidateConfirmationTransactionCoordinator.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ContractCandidateMaterializationTransactionCoordinator.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ContractCandidatePromotionService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ContractCandidateSupportReplacementTransactionCoordinator.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ProjectApplicationService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ProjectFileIngestionService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ProjectFileIngestionTransactionCoordinator.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ProjectFileProcessingService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ProjectFileProgressionProjectionService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/ProjectIntakeProgressionService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/extraction/ContractCandidateAssembler.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/extraction/ContractCandidateFactPolicy.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/extraction/ProjectFactExtractor.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/factai/ContractFactExtractionService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/factai/ContractFactSegmenter.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/factai/DefaultContractFactExtractionAuthorityResolver.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/identity/DeterministicProjectIdentityResolver.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/identity/EffectiveProjectIdentity.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/identity/IdentityAssessmentService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/identity/IdentityConfirmationService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/port/ContractCandidateRepository.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/role/AiRoleAssessmentService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/role/EffectiveDocumentRoleResolver.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/role/EffectiveDocumentRoleResult.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/role/EffectiveDocumentRoleSource.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/role/ProjectFileRoleProjection.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/role/ProjectFileRoleProjectionService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/role/RoleAssessmentService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/project/role/RoleConfirmationService.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/reviewrun/ReviewRunReadinessResolver.java
+ M backend/src/main/java/com/fuquan/audit/contract/application/session/ProjectSessionReadiness.java
+ M backend/src/main/java/com/fuquan/audit/contract/domain/project/ContractCandidate.java
+ M backend/src/main/java/com/fuquan/audit/contract/domain/project/ContractCandidateAuthoritySource.java
+ M backend/src/main/java/com/fuquan/audit/contract/domain/project/ProjectFileJob.java
+ M backend/src/main/java/com/fuquan/audit/contract/infra/memory/project/InMemoryProjectRepositories.java
+ M backend/src/main/java/com/fuquan/audit/integration/dm8/ContractCandidateMapper.java
+ M backend/src/main/java/com/fuquan/audit/integration/dm8/Dm8BudgetMaterialBatchRepository.java
+ M backend/src/main/java/com/fuquan/audit/integration/dm8/Dm8ProjectRepositories.java
+ M backend/src/main/java/com/fuquan/audit/integration/http/FastApiHttpClientConfiguration.java
+ M backend/src/main/java/com/fuquan/audit/integration/material/OfficeDocumentTextReader.java
+ M backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementBidQuotationExtractor.java
+ M backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementMaterialBatchService.java
+ M backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementMaterialClassifier.java
+ M backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementQuoteCheckService.java
+ M backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementReportDocument.java
+ M backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementReviewMaterialService.java
+ M backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementReviewReportService.java
+ M backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementTenderDocumentService.java
+ M backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementTenderRuleScanService.java
+ M backend/src/main/java/com/fuquan/audit/procurement/domain/ProcurementTenderParseResult.java
+ M backend/src/main/resources/application-local-ai.yml
+ M backend/src/main/resources/application.yml
+ M backend/src/main/resources/mappers/dm8/ContractCandidateMapper.xml
+ M backend/src/test/java/com/fuquan/audit/budget/api/BudgetMaterialBackgroundIntegrationTest.java
+ M backend/src/test/java/com/fuquan/audit/budget/application/BudgetUploadedMaterialAnalyzerTest.java
+ M backend/src/test/java/com/fuquan/audit/common/material/application/MaterialFieldNormalizerTest.java
+ M backend/src/test/java/com/fuquan/audit/common/material/application/MaterialIntakeServiceTest.java
+ M backend/src/test/java/com/fuquan/audit/common/observability/PipelineDiagnosticsTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/api/project/ProjectIntakeContinuityApiIntegrationTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/closeout/BusinessReviewProjectionTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/closeout/ReportSnapshotTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/CandidateCrossMaterialAuthorityArchitectureGuardTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/ContractCandidateMaterializationServiceTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/ProjectApplicationServiceTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/ProjectFileIngestionServiceTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/ProjectFileProcessingServiceTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/ProjectFileProgressionConfirmationVersionTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/ProjectFileProgressionRecoveryProjectionTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/ProjectOcrFallbackTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/extraction/ProjectFactExtractorTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/factai/ContractFactSegmenterTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/factai/DefaultContractFactExtractionTransactionCoordinatorTest.java
+ M backend/src/test/java/com/fuquan/audit/contract/application/project/identity/DeterministicProjectIdentityResolverTest.java
+ M backend/src/test/java/com/fuquan/audit/integration/AiOcrAdapterProfileWiringTest.java
+ M backend/src/test/java/com/fuquan/audit/integration/dm8/ContractMigrationNamespacePolicyTest.java
+ M backend/src/test/java/com/fuquan/audit/integration/material/OfficeDocumentTextReaderTest.java
+ M backend/src/test/java/com/fuquan/audit/procurement/application/ProcurementMaterialBatchServiceTest.java
+ M backend/src/test/java/com/fuquan/audit/procurement/application/ProcurementReportSnapshotTest.java
+ M db/dm8/README.md
+ M frontend/src/api/audit.ts
+ M frontend/src/api/types.ts
+ M frontend/src/app/App.tsx
+ M frontend/src/app/BudgetCheckPage.tsx
+ M frontend/src/features/budget/BudgetFileResults.tsx
+ M frontend/src/features/budget/BudgetHistoryResults.tsx
+ M frontend/src/features/budget/BudgetResultHistory.tsx
+ M frontend/src/features/budget/budgetResultState.test.ts
+ M frontend/src/features/budget/budgetResultState.ts
+ M frontend/src/features/budget/f05/BudgetProjectRiskPanel.tsx
+ M frontend/src/features/contract/closeout/ContractReviewReportPanel.tsx
+ M frontend/src/features/contract/closeout/closeoutComponents.test.ts
+ M frontend/src/features/contract/closeout/closeoutPresentation.test.ts
+ M frontend/src/features/contract/closeout/closeoutPresentation.ts
+ M frontend/src/features/contract/pmUiAlignmentPresentation.test.ts
+ M frontend/src/features/procurement/ProcurementTenderReviewPanel.tsx
+ M frontend/src/features/project/components/ProjectDetailPage.tsx
+ M frontend/src/features/project/components/ProjectFileProcessingPanel.tsx
+ M frontend/src/features/project/components/ProjectFileProgressionPanel.tsx
+ M frontend/src/features/project/components/ProjectManagementLandingPage.tsx
+ M frontend/src/features/project/factExtractionPresentation.test.ts
+ M frontend/src/features/project/factExtractionPresentation.ts
+ M frontend/src/features/project/projectDetailViewModel.test.ts
+ M frontend/src/features/project/projectDurableState.test.ts
+ M frontend/src/features/project/projectFileProcessingPanel.test.ts
+ M frontend/src/features/project/projectListViewModel.test.ts
+ M frontend/src/features/project/projectListViewModel.ts
+ M frontend/src/features/project/projectMaterialPresentation.ts
+ M frontend/src/features/project/projectProgressionPresentation.test.ts
+ M frontend/src/features/project/projectProgressionPresentation.ts
+ M frontend/src/styles/budget-results.css
+ M services/audit-ai/src/audit_ai/logging.py
+ M services/audit-ai/src/audit_ai/model/gateway.py
+ M services/audit-ai/src/audit_ai/model/material_fields.py
+ M services/audit-ai/src/audit_ai/model/semantic_replay_bundle.py
+ M services/audit-ai/src/audit_ai/ocr/orientation.py
+ M services/audit-ai/src/audit_ai/ocr/process_adapter.py
+ M services/audit-ai/src/audit_ai/ocr/service.py
+ M services/audit-ai/tests/test_budget_partial_evidence.py
+ M services/audit-ai/tests/test_material_fields.py
+ M services/audit-ai/tests/test_ocr_orientation.py
+ M services/audit-ai/tests/test_ocr_process_adapter.py
+ M services/audit-ai/tests/test_semantic_replay_bundle.py
+ M tools/test-budget-material-risk26.py
+ M tools/test-budget-material-split26.py
+ M tools/test-office-formats26.py
+?? .cursor/rules/customer-deployment.mdc
+?? backend/src/main/java/com/fuquan/audit/contract/application/project/AutomaticDecisionProvenance.java
+?? backend/src/main/java/com/fuquan/audit/contract/application/project/AutomaticProjectFileClassificationService.java
+?? backend/src/main/java/com/fuquan/audit/contract/application/project/AutomaticProjectMetadataService.java
+?? backend/src/main/java/com/fuquan/audit/integration/dm8/AutoCaseMapper.java
+?? backend/src/main/java/com/fuquan/audit/integration/dm8/Dm8AuditCaseRepository.java
+?? backend/src/main/java/com/fuquan/audit/procurement/autocase/
+?? backend/src/test/java/com/fuquan/audit/budget/application/BudgetMaterialBatchHistoryTest.java
+?? backend/src/test/java/com/fuquan/audit/contract/application/project/AutomaticProjectFileClassificationServiceTest.java
+?? backend/src/test/java/com/fuquan/audit/contract/application/project/AutomaticProjectMetadataServiceTest.java
+?? backend/src/test/java/com/fuquan/audit/procurement/autocase/
+?? backend/src/test/resources/application.properties
+?? db/dm8/CONTRACT__contract_system_auto_authority.sql
+?? db/dm8/PROCUREMENT__automatic_case_v1.sql
+?? deliverables/
+?? docs/automatic-procurement-20261027/
+?? docs/evidence/budget-batch-history-results-20261027.md
+?? docs/runbook/customer-offline-deployment.md
+?? frontend/src/features/budget/budgetBatchResult.test.ts
+?? frontend/src/features/budget/budgetBatchResult.ts
+?? frontend/src/features/procurement/AutomaticCasePanel.tsx
+?? phase2-initial-git-status.txt
+?? sample-remote.xlsx
+?? scripts/offline/customer-v10/
+?? scripts/offline/font-fix-v3/
+?? scripts/offline/schema-fix-v1/
+?? services/audit-ai/src/audit_ai/model/automatic_procurement_prompt.py
+?? services/audit-ai/tests/test_automatic_procurement_fields.py
+?? tools/BudgetBatchHistoryReadOnlyProbe.java
+?? tools/ContractAutomaticAuthorityMigration.java
+?? tools/QuerySyntheticContractState.java
+?? tools/SoakStatusPlatformCheck.java
+?? tools/ThreeModuleDeploymentReadyCheck.java
+?? tools/build-customer-v10.py
+?? tools/build-font-fix-v3.py
+?? tools/build-schema-fix.py
+?? tools/build-test26-candidate.py
+?? tools/debug-budget-browse26.py
+?? tools/debug-budget-formats26.py
+?? tools/debug-budget-risk26.py
+?? tools/inspect-contract-auto-state26.py
+?? tools/inspect-synthetic-audit-output26.py
+?? tools/local-test/CustomerSemanticBudgetProbe.java
+?? tools/remote-acceptance-session.py
+?? tools/run-deployed-soak26.sh
+?? tools/run-isolated-soak26.sh
+?? tools/run-synthetic-remote.py
+?? tools/soak-status.py
+?? tools/test-budget-batch-history-local.py
+?? tools/test-budget-batch-history.mjs
+?? tools/test-contract-autopromotion26.py
+?? tools/test-contract-reviewrun26.py
+?? tools/test-customer-repeat-update.py
+?? tools/test-font-fix-v3-package.py
+?? tools/test-procurement-intake-review26.py
+?? tools/test-schema-fix.py
+?? tools/verify-schema-fix.py

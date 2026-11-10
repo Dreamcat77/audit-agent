@@ -185,6 +185,72 @@ class ContractAuditTaskListServiceTest {
         assertThat(page.items()).singleElement().extracting(ContractAuditTaskView::project).isNull();
     }
 
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(strings={"PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER"})
+    void personalPagingSummaryAndHistoryNeverIncludeAnotherUpload(String role) {
+        var tasks=mock(AuditTaskReadQueryPort.class);
+        var contracts=mock(ContractRepository.class);
+        var associations=mock(ProjectContractQueryPort.class);
+        var projects=mock(ProjectRepository.class);
+        var progress=mock(F02ReviewProgressService.class);
+        Contract own=LocalContractFixtures.contracts().get(0), other=LocalContractFixtures.contracts().get(1);
+        var ownTask=task(own,AuditTaskStatus.DONE,UUID.randomUUID().toString());
+        var foreignTask=task(other,AuditTaskStatus.DONE,UUID.randomUUID().toString());
+        UUID ownProject=UUID.randomUUID(),foreignProject=UUID.randomUUID();
+        var now=Instant.now();
+        when(associations.findByContractId(own.id())).thenReturn(Optional.of(new ProjectContract(ownProject,own.id(),UUID.randomUUID(),"alice",now)));
+        when(associations.findByContractId(other.id())).thenReturn(Optional.of(new ProjectContract(foreignProject,other.id(),UUID.randomUUID(),"bob",now)));
+        when(projects.findById(ownProject)).thenReturn(Optional.of(Project.blank(ownProject,"alice",now)));
+        when(projects.findById(foreignProject)).thenReturn(Optional.of(Project.blank(foreignProject,"bob",now)));
+        when(contracts.findById(own.id())).thenReturn(Optional.of(own));
+        when(progress.summarize(own.id(),ownTask)).thenReturn(new F02ReviewProgressSummary(5,5,true,false,1,false,"低风险"));
+        when(tasks.findAllLatest("CONTRACT",ContractReviewService.REVIEW_TYPE)).thenReturn(List.of(foreignTask,ownTask));
+        when(tasks.findAll("CONTRACT",ContractReviewService.REVIEW_TYPE)).thenReturn(List.of(foreignTask,ownTask));
+        var actor=new com.fuquan.audit.security.domain.CurrentUser("alice","alice","Alice",java.util.Set.of(role));
+        var service=new ContractAuditTaskListService(tasks,contracts,associations,projects,progress);
+        for(boolean history:List.of(false,true)) {
+            var page=service.list(new ContractAuditTaskListQuery(1,1,null,null,null,null,null),history,actor);
+            assertThat(page.total()).isEqualTo(1);
+            assertThat(page.items()).extracting(v->v.task().id()).containsExactly(ownTask.id());
+            assertThat(service.list(new ContractAuditTaskListQuery(2,1,null,null,null,null,null),history,actor).items()).isEmpty();
+            assertThat(service.summary(history,actor)).isEqualTo(new ContractAuditTaskSummary(1,0,1,1));
+        }
+        // No durable project owner means it cannot enter personal history, even if a task exists.
+        when(associations.findByContractId(own.id())).thenReturn(Optional.empty());
+        assertThat(service.summary(false,actor).total()).isZero();
+        org.mockito.Mockito.verify(contracts,org.mockito.Mockito.never()).findById(other.id());
+    }
+
+    @Test
+    void systemAdminOverridesModuleRoleAndSeesAllContractTasks() {
+        var tasks=mock(AuditTaskReadQueryPort.class);
+        var contracts=mock(ContractRepository.class);
+        var associations=mock(ProjectContractQueryPort.class);
+        var projects=mock(ProjectRepository.class);
+        var progress=mock(F02ReviewProgressService.class);
+        Contract own=LocalContractFixtures.contracts().get(0), other=LocalContractFixtures.contracts().get(1);
+        var ownTask=task(own,AuditTaskStatus.DONE,UUID.randomUUID().toString());
+        var otherTask=task(other,AuditTaskStatus.DONE,UUID.randomUUID().toString());
+        UUID ownProject=UUID.randomUUID(),otherProject=UUID.randomUUID();
+        var now=Instant.now();
+        when(tasks.findLatest("CONTRACT",ContractReviewService.REVIEW_TYPE,1,20))
+                .thenReturn(new AuditTaskReadQueryPort.Page(List.of(ownTask,otherTask),1,20,2));
+        when(tasks.findAllLatest("CONTRACT",ContractReviewService.REVIEW_TYPE)).thenReturn(List.of(ownTask,otherTask));
+        when(contracts.findById(own.id())).thenReturn(Optional.of(own));
+        when(contracts.findById(other.id())).thenReturn(Optional.of(other));
+        when(associations.findByContractId(own.id())).thenReturn(Optional.of(new ProjectContract(ownProject,own.id(),UUID.randomUUID(),"alice",now)));
+        when(associations.findByContractId(other.id())).thenReturn(Optional.of(new ProjectContract(otherProject,other.id(),UUID.randomUUID(),"bob",now)));
+        when(projects.findById(ownProject)).thenReturn(Optional.of(Project.blank(ownProject,"alice",now)));
+        when(projects.findById(otherProject)).thenReturn(Optional.of(Project.blank(otherProject,"bob",now)));
+        when(progress.summarize(own.id(),ownTask)).thenReturn(new F02ReviewProgressSummary(5,5,true,false,0,false,"无风险"));
+        when(progress.summarize(other.id(),otherTask)).thenReturn(new F02ReviewProgressSummary(5,5,true,false,1,false,"低风险"));
+        var admin=new com.fuquan.audit.security.domain.CurrentUser("admin","admin","Admin",java.util.Set.of("CONTRACT_USER","SYSTEM_ADMIN"));
+        var service=new ContractAuditTaskListService(tasks,contracts,associations,projects,progress);
+
+        assertThat(service.list(new ContractAuditTaskListQuery(1,20,null,null,null,null,null),false,admin).total()).isEqualTo(2);
+        assertThat(service.summary(false,admin)).isEqualTo(new ContractAuditTaskSummary(2,0,2,1));
+    }
+
     private static AuditTask task(Contract contract, AuditTaskStatus status, String id) {
         Instant createdAt = Instant.parse("2026-08-26T09:00:00Z");
         Instant startedAt = status == AuditTaskStatus.PENDING ? null : createdAt.plusSeconds(1);

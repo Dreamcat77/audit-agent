@@ -22,19 +22,24 @@ public class ProcurementNotificationController {
     public void setCaseNotices(com.fuquan.audit.procurement.autocase.CaseBlacklistNotifications value){caseNotices=value;}
     public ProcurementNotificationController(ProcurementNotificationPort port, AuthContext auth) { this.port=port; this.auth=auth; }
     @GetMapping public ApiResponse<List<NotificationResponse>> list(@RequestParam(defaultValue="false") boolean unreadOnly) {
-        var values=new java.util.ArrayList<>(port.findByRecipient(userId(),unreadOnly));
+        var values=new java.util.ArrayList<ProcurementNotification>();
+        if(!personal())values.addAll(port.findByRecipient(userId(),unreadOnly));
         if(caseNotices!=null)values.addAll(caseNotices.list(userId(),unreadOnly));
         return ApiResponse.success(values.stream().sorted(java.util.Comparator.comparing(ProcurementNotification::createdTime).reversed()).map(NotificationResponse::from).toList());
     }
     @GetMapping("/unread-count") public ApiResponse<Integer> unreadCount() {
-        return ApiResponse.success(port.findByRecipient(userId(), true).size()+(caseNotices==null?0:caseNotices.list(userId(),true).size()));
+        return ApiResponse.success((personal()?0:port.findByRecipient(userId(), true).size())+(caseNotices==null?0:caseNotices.list(userId(),true).size()));
     }
     @PostMapping("/{id}/read") public ApiResponse<Void> read(@PathVariable UUID id) {
         var user=auth.currentUser().orElseThrow(()->new BusinessException(BusinessErrorCode.UNAUTHENTICATED));
-        if(caseNotices==null||!caseNotices.readIfOwned(id,user))port.markRead(id, userId(), Instant.now());
+        if(caseNotices==null||!caseNotices.readIfOwned(id,user)) {
+            if(personal())throw new BusinessException(BusinessErrorCode.NOT_FOUND);
+            port.markRead(id, userId(), Instant.now());
+        }
         return ApiResponse.success(null);
     }
     private String userId() { return auth.currentUser().orElseThrow(() -> new BusinessException(BusinessErrorCode.UNAUTHENTICATED)).userId(); }
+    private boolean personal(){return com.fuquan.audit.security.domain.PersonalUploadRoles.applies(auth.currentUser().orElse(null));}
     public record NotificationResponse(UUID id, UUID projectId, String projectName, String type, String title,
                                        String content, String operatorName, String opinion, boolean read,
                                        Instant createdTime) {

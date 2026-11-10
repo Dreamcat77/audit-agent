@@ -6,6 +6,17 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.*;
 
 class ContractAnalysisTableTest {
+    @Test void serviceWorkloadTableCanProveAllFourPhysicalRowsWithoutMergingEqualAmounts(){
+        String rows="服务事项\t工作量\u2028（人月）\t含税单价\u2028（元/人月）\t含税经费（元）\n"
+                +"核对合计功能服务\t1.00\t45,580\t45,580\n".repeat(4)+"合计\t4.00\t\t182,320\n";
+        var table=parse("乙方依据需求说明提供下列维护服务，各项工作量及经费分别列明：\n"+rows);
+        assertThat(table.complete()).isTrue();assertThat(table.rows()).hasSize(4);
+        assertThat(table.rows().stream().map(r->r.evidence().start()).distinct().count()).isEqualTo(4);
+        assertThat(table.rows().stream().map(ContractAnalysisTable.Row::amount).reduce(java.math.BigDecimal.ZERO,java.math.BigDecimal::add))
+                .isEqualByComparingTo("182320");
+        assertThat(parse("内部成本预测\n"+rows).complete()).isFalse();
+        assertThat(parse("乙方提供服务，各项工作量及经费分别列明：\n"+rows.replace("合计\t4.00\t\t182,320\n","")).complete()).isFalse();
+    }
     ContractAnalysisTable.Table parse(String text){return ContractAnalysisTable.parse(ContractAnalysisEvidenceTest.source(text),text);}
     @Test void unrelatedFirstTableCannotBecomeWholeContractPrice(){
         var table=parse("差旅测算\n项目\t数量\t单价\t金额\n车费\t2\t10\t20\n合计\t\t\t20\n");

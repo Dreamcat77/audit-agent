@@ -1,0 +1,11 @@
+{
+  "release": "/opt/audit-agent/releases/v15.material-20261029-r1",
+  "previous": "/opt/audit-agent/releases/v15.material-20261029",
+  "schemaChanges": false,
+  "status": "PASS",
+  "backendHealth": 200,
+  "aiHealth": 200,
+  "configPreserved": true,
+  "jarSha256": "148c7768ac51ab778abd909d555e30874433064c5bfdb6b41ffa86e61944f0c9",
+  "indexSha256": "b58008636f69c2d00fd8a985ac5b99ab173cdff9717a5c335d9fc9ddb7ce30d2"
+}

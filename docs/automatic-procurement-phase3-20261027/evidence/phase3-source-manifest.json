@@ -1,0 +1,212 @@
+{
+  "git": {
+    "worktree": "E:/audit-agent-new/.runtime/budget-home-e17-20261014",
+    "commonDir": "E:/audit-agent-new/.runtime/integration-repo/.git",
+    "branch": "fix/budget-procurement-ready-20261019",
+    "head": "35f95499c4d5efa475dffc3a3628222750124672"
+  },
+  "backup": "E:\\audit-agent-new\\.backups\\automatic-case-phase3-20261027-040540",
+  "phase2SourceFilesMatchAtStart": true,
+  "unchangedSourceFiles": 2283,
+  "changedSourceFiles": [
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/integration/ai/fake/UnavailableCaseReviewAdapter.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "9a19550435ba5bf546eb6306a54d95a2ab97a196ce1a3fbfc3ba01e4a147004a",
+      "bytes": 455
+    },
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/integration/ai/fastapi/FastApiCaseReviewAdapter.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "9b27957bf32a321318949d0621ff44180dcb50b252c83adac74643f9a9a9fd77",
+      "bytes": 1013
+    },
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/procurement/application/ProcurementTenderRuleScanService.java",
+      "change": "MODIFIED",
+      "before": "432bd8ba0f42e6e56b4450c79f7967f8ba028c538aaea6dcccbcaf10afe36974",
+      "after": "4f608f35cd7f958a778de34ac2ddce29ef11945bc9f08f1c44657d832a8e8241",
+      "bytes": 20915
+    },
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/procurement/application/TenderRuleMatcher.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "a1eb6453841b15be7a8ea4c8cf7cd2f0337c70ce117d306dc279018fbf57569f",
+      "bytes": 861
+    },
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/AuditCase.java",
+      "change": "MODIFIED",
+      "before": "f8db81c92e95b77a7ade934814c2dc99890f3f2c4295ae72d6cf4a0d82974d51",
+      "after": "aadc5168c1fd8a5dd80bc39af643c55983d225b2dc67c25196ff2c17d52b3031",
+      "bytes": 4580
+    },
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/AuditCaseService.java",
+      "change": "MODIFIED",
+      "before": "59f94e80fb458a4b17da7965304c0d4e5f8ba6d844048de968400d747e567e1b",
+      "after": "aa3a164e1fed44db380d72fd460cc682483d9eaebbe506f84215f50eb467f798",
+      "bytes": 15461
+    },
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/CaseReviewAiPort.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "56959e48cdd773a4e9207cebf62a0732503382e051cd484eec1f9f580cd3cbe1",
+      "bytes": 1048
+    },
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/CaseReviewContext.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "88eed799afc30ffc49cd9586a396994dace3549a1db30d85a5de89d747aceade",
+      "bytes": 4325
+    },
+    {
+      "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/CaseReviewEngine.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "02be3de93e99d7a9ea242fe1797e3976bd8776c7767229a7e7528a5daaf02d0a",
+      "bytes": 14277
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/AuditCaseIntegrationTest.java",
+      "change": "MODIFIED",
+      "before": "01f35b7843bd320eba36912719e1bada6623f06e82cf740696be96b37d754f54",
+      "after": "9a906b78c4cec1a98f45977b5aab03916fd75e41b8dae0f7ee5ba1aa71b019db",
+      "bytes": 14969
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/AutomaticCaseHttpTest.java",
+      "change": "MODIFIED",
+      "before": "1638790ef803d1dd89a2c78339c1d23421ff54aaa28902ab2f444d33797a8b74",
+      "after": "57dcf9dc5f36f0e622bd7314b1949f1ab628b270f254435dfd6a57118a312c36",
+      "bytes": 7716
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/AutomaticCasePhase3Harness.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "486b994746049071c28b4551b016e6ad6e347347aa6fb129864a858673035117",
+      "bytes": 1974
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/CaseReviewDm8RealIntegrationTest.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "6e4dcb0ebaa55ae3454cabe8167ccf73e514df38f20239ce5ed18e740198c5fa",
+      "bytes": 1996
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/CaseReviewEngineTest.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "994775a19bd3d75a62ae2af50ec077971829060fdb59ef99378a211c47afd9b6",
+      "bytes": 6365
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/CaseReviewFixtures.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "710cf0a9167cffcf001d56afa609a1f854981f358f8843790f9eec2af4606644",
+      "bytes": 941
+    },
+    {
+      "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/CaseReviewWorkflowTest.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "4c0cf54be46e54bacd4aff91975e72fcdfda6d7af00bfefe66ba24c8a058a142",
+      "bytes": 4497
+    },
+    {
+      "path": "frontend/src/features/procurement/AutomaticCasePanel.tsx",
+      "change": "MODIFIED",
+      "before": "712545237a3ee5595cd74b919e11ce9e3bab00117028a2b2e56e79fb878baad0",
+      "after": "8b3612e9b5b3975d57bae0c9a5a6ae5260373dcb6e92500af13dc554176c6b10",
+      "bytes": 13160
+    },
+    {
+      "path": "services/audit-ai/src/audit_ai/config.py",
+      "change": "MODIFIED",
+      "before": "a013204bef2b8a4b7ddb4b6d229b58580ef29ae63800d4e65753b503121c4e63",
+      "after": "72a2bd3bc4dbe2f4613855fe0ee7b9eba1044caca524cbd1b8744ba318be76bd",
+      "bytes": 10658
+    },
+    {
+      "path": "services/audit-ai/src/audit_ai/main.py",
+      "change": "MODIFIED",
+      "before": "dd3265edfae90ba02a0999ff279cd60fa48a52a65f3df8a788ed39cafdb33e78",
+      "after": "f8474659ac586725e28eea4c12dfbc705eccfa4a956ac296f5472a7f579a7f3e",
+      "bytes": 7486
+    },
+    {
+      "path": "services/audit-ai/src/audit_ai/model/case_review.py",
+      "change": "ADDED",
+      "before": null,
+      "after": "3b5d93ae03a1182a873c4ba0f7cda696148e6b6ba3bc37f9c4c6c2c90837f113",
+      "bytes": 9573
+    },
+    {
+      "path": "services/audit-ai/src/audit_ai/model/gateway.py",
+      "change": "MODIFIED",
+      "before": "696b1d513e9cfe87b723ae0c42d78e3e24c7a88a7e1af736bfe7d1c82c25a912",
+      "after": "ef98cb8ab693ef96bcd467183f65b053512683b2d3c83fd5e3c70ab91ee87cad",
+      "bytes": 161146
+    },
+    {
+      "path": "services/audit-ai/tests/test_case_review.py",
+      "change": "ADDED",
+      "before": null,
+      "after": "0efe5ea54d08ae829a038605a06dd248783af61390eccfeba70a9c01978b1a2a",
+      "bytes": 3799
+    },
+    {
+      "path": "tools/automatic-case-phase3/CaseContextProbe.java",
+      "change": "ADDED",
+      "before": null,
+      "after": "fcdf4733ceadb1ac575f1380140d1f6de6f2b5f29b679dde4406b87627e0c612",
+      "bytes": 2436
+    },
+    {
+      "path": "tools/automatic-case-phase3/acceptance_runner.py",
+      "change": "ADDED",
+      "before": null,
+      "after": "a1cfef66df2755fd7b1db527723ddd16e7dd44bfc83a46a190008b112e527b68",
+      "bytes": 14103
+    },
+    {
+      "path": "tools/automatic-case-phase3/browser-acceptance.mjs",
+      "change": "ADDED",
+      "before": null,
+      "after": "62aca53b84e02337a5340e5ce01845b4ee821a6b1558e7f1e9ba775766deeb87",
+      "bytes": 14765
+    },
+    {
+      "path": "tools/automatic-case-phase3/finalize_evidence.py",
+      "change": "ADDED",
+      "before": null,
+      "after": "8de6da5fac8028184f05bce8b4e257fbae7397bc4685a631df200105b7b938cc",
+      "bytes": 2958
+    },
+    {
+      "path": "tools/automatic-case-phase3/remote_reopen.py",
+      "change": "ADDED",
+      "before": null,
+      "after": "abdd6ce716977aff920e19ff7ed67b9d4fb45d37515c030c0b14481f4f1b0f73",
+      "bytes": 1349
+    },
+    {
+      "path": "tools/automatic-case-phase3/scenarios.py",
+      "change": "ADDED",
+      "before": null,
+      "after": "827616b97640c914601124dad93c2ede7e65552fa0311cbc710696fff9c63786",
+      "bytes": 11263
+    }
+  ],
+  "databaseDdlChanged": false,
+  "preservedBaselineFilesOutsideModifiedSource": 4719,
+  "unexpectedBaselineChanges": []
+}

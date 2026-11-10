@@ -1,0 +1,44 @@
+{
+  "environment": "Windows JDK17",
+  "java": {
+    "command": ".\\mvnw.cmd clean verify",
+    "workdir": "backend",
+    "result": "BUILD SUCCESS",
+    "tests": 3617,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 24
+  },
+  "jarSha256": "dd885e7a61ee1cc9315f84a4dda6edbdfc71768bae538aacaffd2e309e0ff1ee",
+  "pythonLocal": {
+    "focused": {
+      "passed": 193
+    },
+    "expandedShortPath": {
+      "passed": 84,
+      "skipped": 4
+    },
+    "scanDiagnostics": {
+      "passed": 14
+    },
+    "fieldDiagnostics": {
+      "passed": 13
+    }
+  },
+  "pythonLinux26": {
+    "passed": 300,
+    "skipped": 12,
+    "failed": 0,
+    "interpreter": "/opt/python/venvs/audit-ai/bin/python",
+    "runtimeModified": false
+  },
+  "gitDiffCheck": "PASS",
+  "schemaChanges": false,
+  "oaIntegration": "NOT_IN_SCOPE",
+  "customerArm64": "NOT VERIFIED",
+  "targetedCustomerRegression": {
+    "tests": 20,
+    "failures": 0,
+    "errors": 0
+  }
+}

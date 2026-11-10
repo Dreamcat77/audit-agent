@@ -51,7 +51,7 @@ def split_chunk(chunk):
     return [[p] for p in pieces] if pieces else None
 
 
-def bounded_chunks(segments, settings, text_parts):
+def bounded_chunks(segments, settings, text_parts, renderer=render):
     pieces=[]
     for segment in segments:
         start=0
@@ -61,7 +61,7 @@ def bounded_chunks(segments, settings, text_parts):
     queue=list(pieces);fitted=[]
     while queue:
         piece=queue.pop(0)
-        source=render([piece],settings.material_context_chars)
+        source=renderer([piece],settings.material_context_chars)
         if len(source)>settings.material_chunk_chars or len(source.encode('utf-8'))>settings.material_chunk_bytes:
             split=split_piece(piece)
             if split is None:
@@ -71,7 +71,7 @@ def bounded_chunks(segments, settings, text_parts):
             fitted.append(piece)
     chunks=[];current=[]
     for piece in fitted:
-        source=render([*current,piece],settings.material_context_chars)
+        source=renderer([*current,piece],settings.material_context_chars)
         if current and (len(current)>=6 or any(p.locator==piece.locator for p in current)
                         or len(source)>settings.material_chunk_chars
                         or len(source.encode('utf-8'))>settings.material_chunk_bytes):

@@ -7,6 +7,14 @@ import static com.fuquan.audit.budget.application.BudgetUploadedFacts.*;
 import com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.*;
 
 class BudgetBatchChecksTest {
+    @Test void completionWordInsideActualStepCannotCreateMissingApprovalWarning() {
+        var policy=file("制度.txt",row("p","projectName","设施更新","requiredApprovalStep","财务部门书面批准","policyClause","须经财务部门书面批准后方可付款。"));
+        var record=file("审批记录.txt",row("a","projectName","设施更新","actualApprovalStep","财务部门已书面批准","approvalDate","2026年3月1日"));
+        var result=new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(policy,record));
+        assertThat(result.get(policy.taskId()).assessments()).filteredOn(a->a.code().equals("APPROVAL_PROCEDURE")).singleElement().satisfies(a->assertThat(a.level()).isEqualTo("INFO"));
+        var unapproved=file("未批.txt",row("u","projectName","设施更新","actualApprovalStep","财务部门未书面批准"));
+        assertThat(new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(policy,unapproved)).get(policy.taskId()).assessments()).filteredOn(a->a.code().equals("APPROVAL_PROCEDURE")).singleElement().satisfies(a->assertThat(a.level()).isEqualTo("WARNING"));
+    }
     @Test void wordHeadingNameAndCodeInDifferentParagraphsStillScopePolicyAndPurposes() {
         var declaration=file("申报.docx",row("n","projectName","设备更新"),row("c","projectCode","P001"),
                 row("d","subjectName","设备","declaredAmount","120000元","spendingPurpose","旅游"));

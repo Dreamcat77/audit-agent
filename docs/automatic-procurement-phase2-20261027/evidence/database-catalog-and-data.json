@@ -1,0 +1,1056 @@
+{
+  "environment": "separate AUTOCASE2 instance / AUTOCASE_APP schema / real DM8",
+  "tables": {
+    "AUDIT_CASE": {
+      "rows": 18,
+      "sha256": "30de66f0338d47976636ae1646f5b466fcf305a44684686cd8ab8fc7c4bf006c"
+    },
+    "AUDIT_CASE_FILE": {
+      "rows": 84,
+      "sha256": "8347bf8b7baf4d0b270a943fd1348c0a1c720b79867e471e94aba521a23e74eb"
+    },
+    "AUDIT_FACT": {
+      "rows": 468,
+      "sha256": "f04573e935c988a0dd1cd20280fdff07e066d45f4304be3b5b937e3bf5c352c0"
+    },
+    "AUDIT_QUOTE_LINE": {
+      "rows": 54,
+      "sha256": "cde09ba4ea7a26e07262a6dcfb54c5e4e4ed2dcc75e9f0d9db74a3aac9dd785a"
+    }
+  },
+  "USER_TAB_COLUMNS": [
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "COLUMN_NAME": "OWNER_ID",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "128",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "COLUMN_NAME": "SNAPSHOT_JSON",
+      "DATA_TYPE": "CLOB",
+      "DATA_LENGTH": "2147483647",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "COLUMN_NAME": "CREATED_AT",
+      "DATA_TYPE": "TIMESTAMP",
+      "DATA_LENGTH": "8",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "6",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "COLUMN_NAME": "OPERATION_KEY",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "COLUMN_NAME": "LEASE_TOKEN",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "COLUMN_NAME": "ID",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "COLUMN_NAME": "STATUS",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "32",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "COLUMN_NAME": "LEASE_UNTIL",
+      "DATA_TYPE": "TIMESTAMP",
+      "DATA_LENGTH": "8",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "6",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "COLUMN_NAME": "FINGERPRINT",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "64",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "COLUMN_NAME": "ROW_VERSION",
+      "DATA_TYPE": "BIGINT",
+      "DATA_LENGTH": "8",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "COLUMN_NAME": "SHA256",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "64",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "COLUMN_NAME": "FILE_ORDER",
+      "DATA_TYPE": "INT",
+      "DATA_LENGTH": "4",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "COLUMN_NAME": "STORAGE_KEY",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "64",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "COLUMN_NAME": "CASE_ID",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "COLUMN_NAME": "ID",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "COLUMN_NAME": "SNAPSHOT_JSON",
+      "DATA_TYPE": "CLOB",
+      "DATA_LENGTH": "2147483647",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "COLUMN_NAME": "STATUS",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "32",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "COLUMN_NAME": "FACT_JSON",
+      "DATA_TYPE": "CLOB",
+      "DATA_LENGTH": "2147483647",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "COLUMN_NAME": "VERIFICATION",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "24",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "COLUMN_NAME": "DATA_TYPE",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "16",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "COLUMN_NAME": "FACT_TYPE",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "40",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "COLUMN_NAME": "FACT_ORDER",
+      "DATA_TYPE": "INT",
+      "DATA_LENGTH": "4",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "COLUMN_NAME": "FILE_ID",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "COLUMN_NAME": "CASE_ID",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "COLUMN_NAME": "ID",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "COLUMN_NAME": "QUANTITY",
+      "DATA_TYPE": "DECIMAL",
+      "DATA_LENGTH": "22",
+      "DATA_PRECISION": "18",
+      "DATA_SCALE": "4",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "COLUMN_NAME": "ITEM_NAME",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "2000",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "COLUMN_NAME": "FILE_ID",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "COLUMN_NAME": "CASE_ID",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "COLUMN_NAME": "UNIT_PRICE",
+      "DATA_TYPE": "DECIMAL",
+      "DATA_LENGTH": "22",
+      "DATA_PRECISION": "18",
+      "DATA_SCALE": "2",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "COLUMN_NAME": "ID",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "36",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "COLUMN_NAME": "LOCATOR",
+      "DATA_TYPE": "VARCHAR",
+      "DATA_LENGTH": "300",
+      "DATA_PRECISION": null,
+      "DATA_SCALE": "0",
+      "NULLABLE": "N"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "COLUMN_NAME": "LINE_AMOUNT",
+      "DATA_TYPE": "DECIMAL",
+      "DATA_LENGTH": "22",
+      "DATA_PRECISION": "18",
+      "DATA_SCALE": "2",
+      "NULLABLE": "N"
+    }
+  ],
+  "USER_CONSTRAINTS": [
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "CONSTRAINT_NAME": "CK_AUDIT_CASE_STATUS",
+      "CONSTRAINT_TYPE": "C",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": "STATUS IN ('UPLOADING', 'QUEUED', 'RUNNING', 'COMPLETED', 'PARTIAL', 'DATA_INSUFFICIENT', 'FAILED', 'UNKNOWN')",
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "CONSTRAINT_NAME": "UK_AUDIT_CASE_OPERATION",
+      "CONSTRAINT_TYPE": "U",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "CONSTRAINT_NAME": "CK_AUDIT_CASE_VERSION",
+      "CONSTRAINT_TYPE": "C",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": "ROW_VERSION >= 0",
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "CONSTRAINT_NAME": "CONS134219381",
+      "CONSTRAINT_TYPE": "P",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "CK_AUTO_FILE_ORDER",
+      "CONSTRAINT_TYPE": "C",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": "FILE_ORDER >= 0",
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "FK_AUTO_FILE_CASE",
+      "CONSTRAINT_TYPE": "R",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": "CONS134219381"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "CONS134219385",
+      "CONSTRAINT_TYPE": "P",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "CK_AUTO_FILE_STATUS",
+      "CONSTRAINT_TYPE": "C",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": "STATUS IN ('STAGING', 'STORED', 'PARSING', 'PARSED', 'CALLING', 'EXTRACTED', 'FAILED', 'UNKNOWN')",
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "UK_AUTO_FILE_ORDER",
+      "CONSTRAINT_TYPE": "U",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "UK_AUTO_FILE_CASE_ID",
+      "CONSTRAINT_TYPE": "U",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "CK_AUTO_FACT_ORDER",
+      "CONSTRAINT_TYPE": "C",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": "FACT_ORDER >= 0",
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "FK_AUTO_FACT_FILE",
+      "CONSTRAINT_TYPE": "R",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": "UK_AUTO_FILE_CASE_ID"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "CONS134219391",
+      "CONSTRAINT_TYPE": "P",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "CK_AUTO_FACT_VERIFY",
+      "CONSTRAINT_TYPE": "C",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": "VERIFICATION IN ('SOURCE_VERIFIED', 'UNVERIFIED')",
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "UK_AUTO_FACT_ORDER",
+      "CONSTRAINT_TYPE": "U",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "CONSTRAINT_NAME": "CK_AUTO_LINE_VALUES",
+      "CONSTRAINT_TYPE": "C",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": " (QUANTITY > 0 AND UNIT_PRICE >= 0 AND LINE_AMOUNT >= 0 )",
+      "R_CONSTRAINT_NAME": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "CONSTRAINT_NAME": "FK_AUTO_LINE_FILE",
+      "CONSTRAINT_TYPE": "R",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": "UK_AUTO_FILE_CASE_ID"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "CONSTRAINT_NAME": "CONS134219396",
+      "CONSTRAINT_TYPE": "P",
+      "STATUS": "ENABLED",
+      "SEARCH_CONDITION": null,
+      "R_CONSTRAINT_NAME": null
+    }
+  ],
+  "USER_CONS_COLUMNS": [
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "CONSTRAINT_NAME": "UK_AUDIT_CASE_OPERATION",
+      "COLUMN_NAME": "OWNER_ID",
+      "POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "CONSTRAINT_NAME": "CK_AUDIT_CASE_VERSION",
+      "COLUMN_NAME": "ROW_VERSION",
+      "POSITION": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "CONSTRAINT_NAME": "CK_AUDIT_CASE_STATUS",
+      "COLUMN_NAME": "STATUS",
+      "POSITION": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "CONSTRAINT_NAME": "CONS134219381",
+      "COLUMN_NAME": "ID",
+      "POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "CONSTRAINT_NAME": "UK_AUDIT_CASE_OPERATION",
+      "COLUMN_NAME": "OPERATION_KEY",
+      "POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "UK_AUTO_FILE_ORDER",
+      "COLUMN_NAME": "CASE_ID",
+      "POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "FK_AUTO_FILE_CASE",
+      "COLUMN_NAME": "CASE_ID",
+      "POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "UK_AUTO_FILE_CASE_ID",
+      "COLUMN_NAME": "ID",
+      "POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "CK_AUTO_FILE_ORDER",
+      "COLUMN_NAME": "FILE_ORDER",
+      "POSITION": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "CK_AUTO_FILE_STATUS",
+      "COLUMN_NAME": "STATUS",
+      "POSITION": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "UK_AUTO_FILE_ORDER",
+      "COLUMN_NAME": "FILE_ORDER",
+      "POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "CONS134219385",
+      "COLUMN_NAME": "ID",
+      "POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "CONSTRAINT_NAME": "UK_AUTO_FILE_CASE_ID",
+      "COLUMN_NAME": "CASE_ID",
+      "POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "UK_AUTO_FACT_ORDER",
+      "COLUMN_NAME": "FACT_ORDER",
+      "POSITION": "3"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "UK_AUTO_FACT_ORDER",
+      "COLUMN_NAME": "FILE_ID",
+      "POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "UK_AUTO_FACT_ORDER",
+      "COLUMN_NAME": "CASE_ID",
+      "POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "CK_AUTO_FACT_VERIFY",
+      "COLUMN_NAME": "VERIFICATION",
+      "POSITION": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "CK_AUTO_FACT_ORDER",
+      "COLUMN_NAME": "FACT_ORDER",
+      "POSITION": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "FK_AUTO_FACT_FILE",
+      "COLUMN_NAME": "CASE_ID",
+      "POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "CONS134219391",
+      "COLUMN_NAME": "ID",
+      "POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "CONSTRAINT_NAME": "FK_AUTO_FACT_FILE",
+      "COLUMN_NAME": "FILE_ID",
+      "POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "CONSTRAINT_NAME": "CK_AUTO_LINE_VALUES",
+      "COLUMN_NAME": "LINE_AMOUNT",
+      "POSITION": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "CONSTRAINT_NAME": "CK_AUTO_LINE_VALUES",
+      "COLUMN_NAME": "UNIT_PRICE",
+      "POSITION": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "CONSTRAINT_NAME": "CK_AUTO_LINE_VALUES",
+      "COLUMN_NAME": "QUANTITY",
+      "POSITION": null
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "CONSTRAINT_NAME": "FK_AUTO_LINE_FILE",
+      "COLUMN_NAME": "FILE_ID",
+      "POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "CONSTRAINT_NAME": "FK_AUTO_LINE_FILE",
+      "COLUMN_NAME": "CASE_ID",
+      "POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "CONSTRAINT_NAME": "CONS134219396",
+      "COLUMN_NAME": "ID",
+      "POSITION": "1"
+    }
+  ],
+  "USER_INDEXES": [
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "IX_AUDIT_CASE_PENDING",
+      "UNIQUENESS": "NONUNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "IX_AUDIT_CASE_OWNER",
+      "UNIQUENESS": "NONUNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "INDEX33556066",
+      "UNIQUENESS": "UNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "INDEX33556065",
+      "UNIQUENESS": "NONUNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "INDEX33556067",
+      "UNIQUENESS": "UNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556073",
+      "UNIQUENESS": "UNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556072",
+      "UNIQUENESS": "NONUNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556071",
+      "UNIQUENESS": "UNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556070",
+      "UNIQUENESS": "NONUNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556074",
+      "UNIQUENESS": "UNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "INDEX33556078",
+      "UNIQUENESS": "UNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "INDEX33556077",
+      "UNIQUENESS": "NONUNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "INDEX33556076",
+      "UNIQUENESS": "UNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "INDEX33556075",
+      "UNIQUENESS": "NONUNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "IX_AUDIT_FACT_CASE",
+      "UNIQUENESS": "NONUNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "INDEX_NAME": "INDEX33556082",
+      "UNIQUENESS": "NONUNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "INDEX_NAME": "INDEX33556081",
+      "UNIQUENESS": "UNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "INDEX_NAME": "INDEX33556080",
+      "UNIQUENESS": "NONUNIQUE"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "INDEX_NAME": "IX_AUTO_LINE_CASE",
+      "UNIQUENESS": "NONUNIQUE"
+    }
+  ],
+  "USER_IND_COLUMNS": [
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "IX_AUDIT_CASE_PENDING",
+      "COLUMN_NAME": "LEASE_UNTIL",
+      "COLUMN_POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "IX_AUDIT_CASE_PENDING",
+      "COLUMN_NAME": "CREATED_AT",
+      "COLUMN_POSITION": "3"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "IX_AUDIT_CASE_OWNER",
+      "COLUMN_NAME": "CREATED_AT",
+      "COLUMN_POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "INDEX33556066",
+      "COLUMN_NAME": "ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "IX_AUDIT_CASE_OWNER",
+      "COLUMN_NAME": "OWNER_ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "INDEX33556067",
+      "COLUMN_NAME": "OWNER_ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "INDEX33556067",
+      "COLUMN_NAME": "OPERATION_KEY",
+      "COLUMN_POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE",
+      "INDEX_NAME": "IX_AUDIT_CASE_PENDING",
+      "COLUMN_NAME": "STATUS",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556071",
+      "COLUMN_NAME": "ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556073",
+      "COLUMN_NAME": "FILE_ORDER",
+      "COLUMN_POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556073",
+      "COLUMN_NAME": "CASE_ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556074",
+      "COLUMN_NAME": "CASE_ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556074",
+      "COLUMN_NAME": "ID",
+      "COLUMN_POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_CASE_FILE",
+      "INDEX_NAME": "INDEX33556072",
+      "COLUMN_NAME": "CASE_ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "INDEX33556078",
+      "COLUMN_NAME": "FACT_ORDER",
+      "COLUMN_POSITION": "3"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "INDEX33556078",
+      "COLUMN_NAME": "FILE_ID",
+      "COLUMN_POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "INDEX33556078",
+      "COLUMN_NAME": "CASE_ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "IX_AUDIT_FACT_CASE",
+      "COLUMN_NAME": "CASE_ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "INDEX33556076",
+      "COLUMN_NAME": "ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "INDEX33556077",
+      "COLUMN_NAME": "FILE_ID",
+      "COLUMN_POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "INDEX33556077",
+      "COLUMN_NAME": "CASE_ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_FACT",
+      "INDEX_NAME": "IX_AUDIT_FACT_CASE",
+      "COLUMN_NAME": "FACT_TYPE",
+      "COLUMN_POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "INDEX_NAME": "INDEX33556081",
+      "COLUMN_NAME": "ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "INDEX_NAME": "INDEX33556082",
+      "COLUMN_NAME": "FILE_ID",
+      "COLUMN_POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "INDEX_NAME": "INDEX33556082",
+      "COLUMN_NAME": "CASE_ID",
+      "COLUMN_POSITION": "1"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "INDEX_NAME": "IX_AUTO_LINE_CASE",
+      "COLUMN_NAME": "FILE_ID",
+      "COLUMN_POSITION": "2"
+    },
+    {
+      "TABLE_NAME": "AUDIT_QUOTE_LINE",
+      "INDEX_NAME": "IX_AUTO_LINE_CASE",
+      "COLUMN_NAME": "CASE_ID",
+      "COLUMN_POSITION": "1"
+    }
+  ],
+  "cases": [
+    {
+      "id": "ba0dcfde-745d-4b08-8621-0d78abc87f14",
+      "status": "COMPLETED",
+      "version": 0,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 1,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "5b4fc7cb-eebc-4b0a-accb-9c3a2c8b80fb",
+      "status": "COMPLETED",
+      "version": 0,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 1,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "326ac6a3-b1ef-49c4-8c97-53b60e7eeb2b",
+      "status": "COMPLETED",
+      "version": 0,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 1,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "d03120ef-fb4d-4998-8b23-ce7616fd9de3",
+      "status": "COMPLETED",
+      "version": 0,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 1,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "470feaf6-d4bb-4440-a302-99ee84b38cb7",
+      "status": "UNKNOWN",
+      "version": 1,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 1,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "2951c0d4-5154-3dbc-b8b9-0754d9ebff8d",
+      "status": "COMPLETED",
+      "version": 65,
+      "attempts": 1,
+      "AUDIT_CASE_FILE": 12,
+      "AUDIT_FACT": 61,
+      "AUDIT_QUOTE_LINE": 9
+    },
+    {
+      "id": "5e12d689-f88a-37e3-9a48-d4599a076196",
+      "status": "COMPLETED",
+      "version": 65,
+      "attempts": 1,
+      "AUDIT_CASE_FILE": 12,
+      "AUDIT_FACT": 61,
+      "AUDIT_QUOTE_LINE": 9
+    },
+    {
+      "id": "509eb8c7-6362-343b-ba46-d5b9551b2c47",
+      "status": "DATA_INSUFFICIENT",
+      "version": 64,
+      "attempts": 2,
+      "AUDIT_CASE_FILE": 12,
+      "AUDIT_FACT": 58,
+      "AUDIT_QUOTE_LINE": 9
+    },
+    {
+      "id": "eee63216-0126-33fc-b02a-2eca6e6c5474",
+      "status": "COMPLETED",
+      "version": 53,
+      "attempts": 1,
+      "AUDIT_CASE_FILE": 12,
+      "AUDIT_FACT": 107,
+      "AUDIT_QUOTE_LINE": 9
+    },
+    {
+      "id": "79772469-f8cb-4e86-8792-f8035951bdf8",
+      "status": "COMPLETED",
+      "version": 0,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 1,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "2e24579f-a71e-42db-b9d7-125fc49b0219",
+      "status": "COMPLETED",
+      "version": 0,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 1,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "4a8c0df2-3a58-49b8-bd72-8fa9271f9741",
+      "status": "COMPLETED",
+      "version": 0,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 1,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "bead267b-7fc4-45ff-930a-395cda6134cf",
+      "status": "COMPLETED",
+      "version": 0,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 1,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "2a53b117-254b-4dda-af74-30af0a5b6a8a",
+      "status": "DATA_INSUFFICIENT",
+      "version": 1,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 3,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "fb50ad4d-fbe2-463b-a31e-8360b35be9b8",
+      "status": "UNKNOWN",
+      "version": 1,
+      "attempts": 0,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 1,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "8f5bfac9-cb3f-3f53-bfa0-bd427bced458",
+      "status": "COMPLETED",
+      "version": 65,
+      "attempts": 1,
+      "AUDIT_CASE_FILE": 12,
+      "AUDIT_FACT": 61,
+      "AUDIT_QUOTE_LINE": 9
+    },
+    {
+      "id": "fae1886e-0bf6-3ae8-98ec-1f289a14760e",
+      "status": "DATA_INSUFFICIENT",
+      "version": 8,
+      "attempts": 2,
+      "AUDIT_CASE_FILE": 1,
+      "AUDIT_FACT": 0,
+      "AUDIT_QUOTE_LINE": 0
+    },
+    {
+      "id": "74c808d7-aaa3-313b-b59d-7c0fe400b055",
+      "status": "COMPLETED",
+      "version": 53,
+      "attempts": 1,
+      "AUDIT_CASE_FILE": 12,
+      "AUDIT_FACT": 107,
+      "AUDIT_QUOTE_LINE": 9
+    }
+  ],
+  "testDurableOperationAuditRows": 380
+}

@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/releases/procurement-semantics-20261105-r6",
+  "previous": "/opt/audit-agent/releases/procurement-semantics-20261105-r5",
+  "jarSha256": "45c5676701031c619ca293bf27939e6d8b3d3a4397132e71406a2ed1c7061607",
+  "indexSha256": "8353b86a6d21af40d4c062b2e638f9146ad5f6ec9dba5742a58fc6997aca7e9e",
+  "schemaChanged": false,
+  "frontendChanged": true,
+  "existingConfigPreserved": true,
+  "ocrConcurrencyCap": 4,
+  "perProcessThreads": 1,
+  "mkldnn": false,
+  "http": {
+    "backend": 200,
+    "ai": 200,
+    "frontend": 200
+  },
+  "unchangedHistoricalSnapshots": 10,
+  "historyCheck": "PASS"
+}

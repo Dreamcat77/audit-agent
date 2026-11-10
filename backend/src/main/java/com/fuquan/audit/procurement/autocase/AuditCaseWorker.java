@@ -22,7 +22,7 @@ public class AuditCaseWorker {
                 try {executor.execute(()->{
                     try {
                         var owner=users.findActiveById(c.owner());
-                        if(owner.isEmpty()||Collections.disjoint(owner.get().roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR"))) {service.rejectOwner(c);return;}
+                        if(owner.isEmpty()||Collections.disjoint(owner.get().roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER"))) {service.rejectOwner(c);return;}
                         service.process(c.id(),owner.get().toCurrentUser());
                     }catch(RuntimeException failure){org.slf4j.LoggerFactory.getLogger(getClass()).warn("AUTO_CASE_EXECUTION_FAILED exceptionType={}",failure.getClass().getSimpleName());}
                 });}catch(java.util.concurrent.RejectedExecutionException full){break;}

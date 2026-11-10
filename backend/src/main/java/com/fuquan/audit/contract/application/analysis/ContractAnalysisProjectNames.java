@@ -15,7 +15,21 @@ public final class ContractAnalysisProjectNames {
         value.steps().stream().map(ContractAnalysisCase.Step::output).filter(Objects::nonNull)
                 .flatMap(output -> output.facts().stream())
                 .filter(fact -> fact.type().equals("PROJECT_NAME")).map(ContractAnalysisCase.Fact::value).forEach(names::add);
-        return ProjectNameResolver.resolve(names, texts, "自动整理项目-" + value.projectId().toString().substring(0, 8));
+        String explicit=ProjectNameResolver.resolve(names,texts,null);
+        org.slf4j.LoggerFactory.getLogger(ContractAnalysisProjectNames.class).debug("CONTRACT_PROJECT_NAME candidateCount={} sourceCount={} outcome={}",names.size(),texts.size(),explicit==null?"FALLBACK":"SELECTED");
+        if(explicit!=null)return explicit;
+        var subjects=value.steps().stream().map(ContractAnalysisCase.Step::output).filter(Objects::nonNull)
+                .flatMap(output->output.facts().stream()).filter(f->f.type().equals("CONTRACT_NAME"))
+                .map(ContractAnalysisCase.Fact::value).map(ContractAnalysisProjectNames::contractSubject).filter(Objects::nonNull).distinct().toList();
+        return subjects.size()==1?subjects.get(0):"自动整理项目-"+value.projectId().toString().substring(0,8);
+    }
+
+    private static String contractSubject(String title){
+        if(title==null)return null;
+        String subject=title.strip().replaceFirst("(?:合同书|合同)$","").strip();
+        if(subject.equals(title.strip())||subject.length()<6||subject.length()>100
+                ||subject.matches(".*[：:。；;\\r\\n].*")||subject.matches(".*(?:委托协议|补充协议|通知书|招标文件|合同模板|合同范本).*"))return null;
+        return com.fuquan.audit.common.material.ProjectNameResolver.isProjectName(subject)?subject:null;
     }
 
     public static boolean matches(ContractAnalysisCase value, String established, String keyword) {

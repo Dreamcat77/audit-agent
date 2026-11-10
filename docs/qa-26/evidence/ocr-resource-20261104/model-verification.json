@@ -1,0 +1,1 @@
+{"status": "PASS", "seconds": 29.7, "inputSegments": 6, "inputChars": 4991, "factCount": 8, "factKinds": ["projectName", "projectNo", "purchaserName", "quoteAmount", "supplierName"], "sourceGrounded": true}

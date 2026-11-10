@@ -14,7 +14,7 @@ import java.util.Map;
  * taking a dependency on Project or Contract.</p>
  */
 public interface MaterialParsePort {
-    String PARSER_VERSION = "material-parse-v4";
+    String PARSER_VERSION = "material-parse-v5";
 
     ParseResult parse(ParseRequest request) throws IOException;
     default ParseResult parse(ParseRequest request, DocumentTextPort.PdfCheckpoint checkpoint,

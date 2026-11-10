@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "environment": "local Windows JDK17",
+  "command": "backend/mvnw.cmd clean verify",
+  "log": ".runtime/budget-extra-r7-verify.log",
+  "backend": {
+    "tests": 3596,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 24
+  },
+  "python": {
+    "command": "pytest test_budget_batch_review.py test_material_fields.py test_material_unit_policy.py test_automatic_procurement_fields.py test_client_privacy.py -q",
+    "passed": 68,
+    "log": ".runtime/budget-extra-r7-python.log"
+  },
+  "frontendSourceChanged": false,
+  "finalJarSha256": "4f7d5fb78f6d617c9f66276cfab6ef8ee329052948f35d15dd29c77b2fa780b5"
+}

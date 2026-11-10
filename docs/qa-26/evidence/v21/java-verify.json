@@ -1,0 +1,10 @@
+{
+  "environment": "local Java 17",
+  "command": "backend/mvnw.cmd clean verify",
+  "build": "SUCCESS",
+  "suites": 474,
+  "tests": 3424,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 24
+}

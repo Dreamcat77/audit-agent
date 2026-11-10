@@ -1,0 +1,16 @@
+{
+  "scenario": "complex-table",
+  "caseId": "73288db9-1fb6-361c-bf27-22d49f2b0a3d",
+  "status": "COMPLETED",
+  "documents": 1,
+  "facts": 10,
+  "clauses": 8,
+  "risks": 2,
+  "followUps": 0,
+  "evidenceChecks": 62,
+  "realModel": true,
+  "realDm8": true,
+  "synthetic": true,
+  "failures": [],
+  "freshVerifier": true
+}

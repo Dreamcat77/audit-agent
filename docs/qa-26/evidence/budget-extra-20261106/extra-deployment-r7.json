@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/releases/budget-batch-20261106-r7",
+  "previous": "/opt/audit-agent/releases/budget-batch-20261106-r6",
+  "jarSha256": "4f7d5fb78f6d617c9f66276cfab6ef8ee329052948f35d15dd29c77b2fa780b5",
+  "indexSha256": "6e8471bb5b1b64ba6fbdfc23674edff23b304ff109444ae999ad3a94eb1c15c0",
+  "schemaChanged": false,
+  "chrome109Build": true,
+  "configsPreserved": true,
+  "budgetSemanticReview": "PASS_REAL_MODEL_SYNTHETIC",
+  "verifiedHealth": {
+    "8001": 200,
+    "8080": 200,
+    "80": 200
+  },
+  "sourceHashesVerified": true,
+  "finalModelBatchIds": [
+    "e68ff5d8-0de1-447d-8287-a61d97542ec3",
+    "8a0be2a4-26af-4717-aab3-19f252240214",
+    "e2fc38ea-5fd2-4322-ac9a-ed2f79321a17",
+    "8eed5d05-c830-4a54-b9bf-3e9f3896d285",
+    "9eed0cad-f55c-469b-a8bb-f325cf7be258",
+    "5df1b924-2001-43d2-9b38-c6f41a7d6044"
+  ]
+}

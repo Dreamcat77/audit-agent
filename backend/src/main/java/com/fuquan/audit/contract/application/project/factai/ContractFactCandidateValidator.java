@@ -277,6 +277,8 @@ public final class ContractFactCandidateValidator {
         String evidence = normalizeText(candidate.excerpt());
         if (normalized == null || evidence == null || normalized.length() > 500
                 || !evidence.contains(normalized)) return null;
+        if (Set.of(FactType.PARTY_A, FactType.PARTY_B, FactType.AWARD_SUPPLIER).contains(candidate.factType())
+                && !com.fuquan.audit.contract.domain.ContractPartyName.isPresent(normalized)) return null;
         if ((candidate.factType() == FactType.PARTY_B_CREDIT_CODE
                 || candidate.factType() == FactType.AWARD_SUPPLIER_CREDIT_CODE)
                 && !CREDIT_CODE.matcher(normalized).matches()) return null;

@@ -1,0 +1,177 @@
+{
+  "value": {
+    "id": "efdace50-64ad-3317-874d-9ff567f75f6f",
+    "caseNumber": "AC-efdace50-64ad-3317-874d-9ff567f75f6f",
+    "projectName": "昭宁甲区系统更新项目9D4325",
+    "status": "DATA_INSUFFICIENT",
+    "createdAt": "2026-10-29T17:08:39.062980233Z",
+    "documents": [
+      {
+        "id": "94753abc-d85e-4a50-86f4-6fdee08d8146",
+        "name": "甲项目预算说明.docx",
+        "status": "UNKNOWN",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": "EXTRACTION_OUTCOME_UNPROVEN",
+        "factCount": 0
+      },
+      {
+        "id": "767b03ab-459c-417a-822c-54e8ff4ae7fd",
+        "name": "乙项目预算及报价.docx",
+        "status": "UNKNOWN",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": "EXTRACTION_OUTCOME_UNPROVEN",
+        "factCount": 0
+      }
+    ],
+    "report": {
+      "quoteStatus": "DATA_INSUFFICIENT",
+      "budget": null,
+      "awardAmount": null,
+      "offers": [],
+      "calculation": null,
+      "notices": [
+        "材料中的预算金额不足或冲突，超预算检查未执行；已识别报价仍保留",
+        "可靠供应商报价少于三家，三方询比价数据不足",
+        "部分文件未完成读取/提取，报告覆盖不完整，不能声称全部审查通过"
+      ],
+      "modules": {
+        "TENDER_COMPLIANCE": "DATA_INSUFFICIENT",
+        "AGENT_PRECHECK": "UNKNOWN",
+        "COLLUSION": "NOT_EXECUTED",
+        "SPLIT_PURCHASE": "NOT_EXECUTED",
+        "QUOTE": "DATA_INSUFFICIENT",
+        "BLACKLIST": "DATA_INSUFFICIENT"
+      },
+      "reviews": {
+        "TENDER_COMPLIANCE": {
+          "status": "DATA_INSUFFICIENT",
+          "inputDigest": "d00d788eff2ed8e2ece8a423386c058b23098ac3f841ed8971482793c2e9466b",
+          "version": "case-cross-file-v2",
+          "model": null,
+          "startedAt": "2026-10-29T17:09:44.132910881Z",
+          "completedAt": "2026-10-29T17:09:44.135817095Z",
+          "scope": [],
+          "coverageGaps": [
+            "UPLOADED_SCOPE_MISSING_TECHNICAL",
+            "UPLOADED_SCOPE_MISSING_TENDER",
+            "UPLOADED_SCOPE_MISSING_EVALUATION",
+            "UPLOADED_SCOPE_MISSING_CLARIFICATION"
+          ],
+          "checks": [
+            {
+              "code": "MATERIAL_COVERAGE",
+              "status": "SYSTEM_SCOPE",
+              "explanation": "本批已保存 2 份材料，本项选取 0 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+              "evidence": []
+            }
+          ],
+          "findings": [],
+          "rejectedCitations": 0,
+          "errorCode": "NO_READABLE_SOURCE"
+        },
+        "AGENT_PRECHECK": {
+          "status": "UNKNOWN",
+          "inputDigest": "8be9dd2cff9eada5890df75adbf9090ecf15335460218beba627de13b3bde664",
+          "version": "case-cross-file-v2",
+          "model": null,
+          "startedAt": "2026-10-29T17:09:39.107032401Z",
+          "completedAt": "2026-10-29T17:09:44.127465469Z",
+          "scope": [
+            {
+              "documentId": "94753abc-d85e-4a50-86f4-6fdee08d8146",
+              "fileName": "甲项目预算说明.docx",
+              "role": "OTHER",
+              "sourceChars": 84,
+              "suppliedChars": 84
+            },
+            {
+              "documentId": "767b03ab-459c-417a-822c-54e8ff4ae7fd",
+              "fileName": "乙项目预算及报价.docx",
+              "role": "OTHER",
+              "sourceChars": 130,
+              "suppliedChars": 130
+            }
+          ],
+          "coverageGaps": [
+            "94753abc-d85e-4a50-86f4-6fdee08d8146:FILE_UNKNOWN",
+            "767b03ab-459c-417a-822c-54e8ff4ae7fd:FILE_UNKNOWN",
+            "UPLOADED_SCOPE_MISSING_DEMAND",
+            "UPLOADED_SCOPE_MISSING_BUDGET",
+            "UPLOADED_SCOPE_MISSING_QUOTATION",
+            "UPLOADED_SCOPE_MISSING_AWARD"
+          ],
+          "checks": [
+            {
+              "code": "IDENTITY_projectName",
+              "status": "UNKNOWN",
+              "explanation": "projectName：；缺少该字段的文件不作为冲突依据",
+              "evidence": []
+            },
+            {
+              "code": "IDENTITY_projectNo",
+              "status": "UNKNOWN",
+              "explanation": "projectNo：；缺少该字段的文件不作为冲突依据",
+              "evidence": []
+            },
+            {
+              "code": "IDENTITY_purchaserName",
+              "status": "UNKNOWN",
+              "explanation": "purchaserName：；缺少该字段的文件不作为冲突依据",
+              "evidence": []
+            },
+            {
+              "code": "BUDGET_CONFLICT",
+              "status": "UNKNOWN",
+              "explanation": "仅比较预算角色金额，不将成交价或已付款作为预算：[]",
+              "evidence": []
+            },
+            {
+              "code": "MATERIAL_COVERAGE",
+              "status": "SYSTEM_SCOPE",
+              "explanation": "本批已保存 2 份材料，本项选取 2 份正文进行分析。未选入本项的材料仍保留在本批目录中，不据此认定未上传；分类或正文不完整时，仅对可核实范围出具结果。",
+              "evidence": []
+            }
+          ],
+          "findings": [],
+          "rejectedCitations": 0,
+          "errorCode": "MODEL_CALL_FAILED"
+        },
+        "BLACKLIST": {
+          "status": "DATA_INSUFFICIENT",
+          "inputDigest": "fcd342e8af1d1011999e0e82cf4e44cbdca6938245bdd56dd106f9bcb220b880",
+          "version": "case-blacklist-v1",
+          "model": null,
+          "startedAt": "2026-10-29T17:09:39.099738991Z",
+          "completedAt": "2026-10-29T17:09:39.099739131Z",
+          "scope": [
+            {
+              "documentId": "94753abc-d85e-4a50-86f4-6fdee08d8146",
+              "fileName": "甲项目预算说明.docx",
+              "role": "OTHER",
+              "sourceChars": 84,
+              "suppliedChars": 84
+            },
+            {
+              "documentId": "767b03ab-459c-417a-822c-54e8ff4ae7fd",
+              "fileName": "乙项目预算及报价.docx",
+              "role": "OTHER",
+              "sourceChars": 130,
+              "suppliedChars": 130
+            }
+          ],
+          "coverageGaps": [],
+          "checks": [],
+          "findings": [],
+          "rejectedCitations": 0,
+          "errorCode": null
+        }
+      },
+      "projectName": "昭宁甲区系统更新项目9D4325",
+      "ceilingAmount": null,
+      "quoteComparisons": [],
+      "ceilingComparisons": []
+    },
+    "findingIds": {}
+  },
+  "reviews": null
+}

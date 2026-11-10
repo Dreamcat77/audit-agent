@@ -1,0 +1,35 @@
+[
+  {
+    "fileName": "预算申报.pdf",
+    "status": "PARSED",
+    "lines": [
+      {
+        "declaredAmount": 120000.0,
+        "approvalAmount": 110000.0,
+        "status": "OVER_APPROVAL"
+      }
+    ]
+  },
+  {
+    "fileName": "预算说明.docx",
+    "status": "PARSED",
+    "lines": [
+      {
+        "declaredAmount": 120000.0,
+        "approvalAmount": 110000.0,
+        "status": "OVER_APPROVAL"
+      }
+    ]
+  },
+  {
+    "fileName": "预算表.xlsx",
+    "status": "PARSED",
+    "lines": [
+      {
+        "declaredAmount": 120000.0,
+        "approvalAmount": 110000.0,
+        "status": "OVER_APPROVAL"
+      }
+    ]
+  }
+]

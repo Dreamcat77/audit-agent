@@ -1,0 +1,183 @@
+{
+  "id": "4300fd4f-415c-3f56-9f66-6a8a6e1cd708",
+  "status": "PARTIAL",
+  "statusLabel": "已生成部分结果",
+  "headline": "合同材料分析（1份）",
+  "explanation": "已形成可参考的阶段结果，请优先查看有原文依据的关注事项；尚未完成的范围单独列出。",
+  "createdAt": "2026-10-27T17:33:20.929900800Z",
+  "documents": [
+    {
+      "fileId": "6659b64a-125f-4b7e-9206-fd8aa198419f",
+      "name": "无编号无金额服务合同.docx",
+      "status": "READY",
+      "role": "CONTRACT",
+      "profile": "SERVICE",
+      "facts": [
+        {
+          "type": "CONTRACT_NAME",
+          "value": "无编号无金额服务合同",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "6659b64a-125f-4b7e-9206-fd8aa198419f",
+              "fileSha256": "86801a8f373b15a13133cccde1e17ac44868781abb6a1a55619f206ca9bc9a3d",
+              "parseResultId": "c6498244-ffe9-45f3-873e-b71c07f0ef72",
+              "parseVersion": 1,
+              "textSha256": "50660972cbda879fb99aff714e0e573087307307da43e2f9dee40f3a824b8eb6",
+              "start": 0,
+              "end": 10,
+              "excerpt": "无编号无金额服务合同"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NAME",
+          "value": "合成测试数据 仅用于内审系统功能验收 不是真实业务合同",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "6659b64a-125f-4b7e-9206-fd8aa198419f",
+              "fileSha256": "86801a8f373b15a13133cccde1e17ac44868781abb6a1a55619f206ca9bc9a3d",
+              "parseResultId": "c6498244-ffe9-45f3-873e-b71c07f0ef72",
+              "parseVersion": 1,
+              "textSha256": "50660972cbda879fb99aff714e0e573087307307da43e2f9dee40f3a824b8eb6",
+              "start": 11,
+              "end": 38,
+              "excerpt": "合成测试数据 仅用于内审系统功能验收 不是真实业务合同"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NAME",
+          "value": "澄川档案整理服务合同",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "6659b64a-125f-4b7e-9206-fd8aa198419f",
+              "fileSha256": "86801a8f373b15a13133cccde1e17ac44868781abb6a1a55619f206ca9bc9a3d",
+              "parseResultId": "c6498244-ffe9-45f3-873e-b71c07f0ef72",
+              "parseVersion": 1,
+              "textSha256": "50660972cbda879fb99aff714e0e573087307307da43e2f9dee40f3a824b8eb6",
+              "start": 39,
+              "end": 54,
+              "excerpt": "合同名称：澄川档案整理服务合同"
+            }
+          ]
+        },
+        {
+          "type": "PROJECT_NO",
+          "value": "SYN-ARCHIVE-2026",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "6659b64a-125f-4b7e-9206-fd8aa198419f",
+              "fileSha256": "86801a8f373b15a13133cccde1e17ac44868781abb6a1a55619f206ca9bc9a3d",
+              "parseResultId": "c6498244-ffe9-45f3-873e-b71c07f0ef72",
+              "parseVersion": 1,
+              "textSha256": "50660972cbda879fb99aff714e0e573087307307da43e2f9dee40f3a824b8eb6",
+              "start": 55,
+              "end": 76,
+              "excerpt": "项目编号：SYN-ARCHIVE-2026"
+            }
+          ]
+        },
+        {
+          "type": "PARTY_A",
+          "value": "澄川测试档案中心",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "6659b64a-125f-4b7e-9206-fd8aa198419f",
+              "fileSha256": "86801a8f373b15a13133cccde1e17ac44868781abb6a1a55619f206ca9bc9a3d",
+              "parseResultId": "c6498244-ffe9-45f3-873e-b71c07f0ef72",
+              "parseVersion": 1,
+              "textSha256": "50660972cbda879fb99aff714e0e573087307307da43e2f9dee40f3a824b8eb6",
+              "start": 77,
+              "end": 88,
+              "excerpt": "甲方：澄川测试档案中心"
+            }
+          ]
+        },
+        {
+          "type": "PARTY_B",
+          "value": "澄川文汇技术有限公司",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "6659b64a-125f-4b7e-9206-fd8aa198419f",
+              "fileSha256": "86801a8f373b15a13133cccde1e17ac44868781abb6a1a55619f206ca9bc9a3d",
+              "parseResultId": "c6498244-ffe9-45f3-873e-b71c07f0ef72",
+              "parseVersion": 1,
+              "textSha256": "50660972cbda879fb99aff714e0e573087307307da43e2f9dee40f3a824b8eb6",
+              "start": 89,
+              "end": 102,
+              "excerpt": "乙方：澄川文汇技术有限公司"
+            }
+          ]
+        }
+      ],
+      "clauses": [],
+      "checks": [
+        {
+          "code": "F02_AMOUNT_WORDS_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_ITEM_ARITHMETIC",
+          "status": "NOT_EVALUATED",
+          "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_SUM_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+          "evidence": []
+        }
+      ],
+      "findings": [],
+      "sourceChars": 508,
+      "reviewedChars": 0,
+      "fullyReviewed": false
+    }
+  ],
+  "findings": [],
+  "checks": [
+    {
+      "code": "F02_AMOUNT_WORDS_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+      "evidence": []
+    },
+    {
+      "code": "F02_LINE_ITEM_ARITHMETIC",
+      "status": "NOT_EVALUATED",
+      "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+      "evidence": []
+    },
+    {
+      "code": "F02_LINE_SUM_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+      "evidence": []
+    },
+    {
+      "code": "F02_AWARD_AMOUNT_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+      "evidence": []
+    },
+    {
+      "code": "F02_AWARD_SUPPLIER_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+      "evidence": []
+    }
+  ],
+  "limitations": [
+    "“无编号无金额服务合同.docx”：仅展示已取得依据的内容，部分原文未完成模型审查，不能据此认定整份合同无风险。",
+    "部分处理步骤未成功，当前报告保留其他已完成的独立检查。"
+  ]
+}

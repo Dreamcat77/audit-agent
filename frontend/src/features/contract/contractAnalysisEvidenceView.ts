@@ -1,6 +1,6 @@
 /** Display-only grouping. Never rewrite a frozen quote or infer a locator from keywords. */
 export type SourceEvidence = {fileId:string;start:number|null;end:number|null;excerpt:string;
-  pageNumber?:number|null;paragraphIndex?:number|null;segmentIndex?:number|null};
+  pageNumber?:number|null;paragraphIndex?:number|null;segmentIndex?:number|null;sourceLocator?:string|null};
 export type SourceWindow = {fileId:string;start:number;end:number;evidence:SourceEvidence[]};
 export type SourceText = {text:string;start:number;totalChars:number};
 export type SourcePiece = {text:string;highlight:boolean};
@@ -14,7 +14,7 @@ export function uniqueSourceEvidence(items:readonly SourceEvidence[]):SourceEvid
   for(const e of items){
     if(!e.fileId||!e.excerpt.trim())continue;
     // Equal text at two distinct locations is not a duplicate.
-    const key=JSON.stringify([e.fileId,e.start,e.end,e.excerpt,...(located(e)?[]:[e.pageNumber,e.paragraphIndex,e.segmentIndex])]);
+    const key=JSON.stringify([e.fileId,e.start,e.end,e.excerpt,...(located(e)?[]:[e.pageNumber,e.paragraphIndex,e.segmentIndex,e.sourceLocator])]);
     if(!result.has(key))result.set(key,e);
   }
   return [...result.values()];

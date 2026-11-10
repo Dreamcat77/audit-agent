@@ -1,0 +1,1630 @@
+[
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "01_办公终端及打印设备采购需求申请书.docx",
+      "sha256": "1175341a3b8335daccb439eef2003392642bff901d7338234bb1b142184bace2",
+      "segments": [
+        {
+          "locator": "docx/body/node:1/part:1",
+          "text": "办公终端及打印设备采购需求申请书\n"
+        },
+        {
+          "locator": "docx/body/node:2/part:2",
+          "text": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+        },
+        {
+          "locator": "docx/body/node:3/part:3",
+          "text": "现有办公终端已连续使用七年，部分设备启动缓慢、故障频发。窗口业务办理和档案归档需要同步开展，拟替换40台终端、4台打印设备，并采购必要的安装调试服务。旧设备经资产管理流程处理，本次不新增人员或办公场所。\n"
+        },
+        {
+          "locator": "docx/body/node:4/part:4",
+          "text": "一 经费和范围\n"
+        },
+        {
+          "locator": "docx/body/node:5/part:5",
+          "text": "本项目采购预算上限为人民币222600.00元，前期市场测算为212000.00元。预算上限不等于拟成交价格，最终按采购程序形成的合同金额执行。\n"
+        },
+        {
+          "locator": "docx/body/node:6/part:6",
+          "text": "货物或服务\n | 数量\n | 单位\n | 含税单价（元）\n | 金额（元）\n | \n"
+        },
+        {
+          "locator": "docx/body/node:7/part:7",
+          "text": "办公终端\n | 40\n | 台\n | 4,200.00\n | 168,000.00\n | \n"
+        },
+        {
+          "locator": "docx/body/node:8/part:8",
+          "text": "多功能打印设备\n | 4\n | 台\n | 6,800.00\n | 27,200.00\n | \n"
+        },
+        {
+          "locator": "docx/body/node:9/part:9",
+          "text": "安装调试及数据迁移\n | 1\n | 项\n | 16,800.00\n | 16,800.00\n | \n"
+        },
+        {
+          "locator": "docx/body/node:11/part:10",
+          "text": "二 交付要求\n"
+        },
+        {
+          "locator": "docx/body/node:12/part:11",
+          "text": "合同签订后30个日历日内完成供货、安装和资料交接。乙方应负责现场清点、接线、驱动安装、数据迁移辅助和一次操作培训。迁移资料由采购单位工作人员监督，不得私自复制。\n"
+        },
+        {
+          "locator": "docx/body/node:13/part:12",
+          "text": "申请人：林知远  复核：周宁  申请日期：2026年9月2日。审批意见栏及签字栏留待履行程序后填写。\n"
+        },
+        {
+          "locator": "docx/footer:1/part:13",
+          "text": "仿真测试材料  单位与业务信息均为虚构\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:docx/body/node:1/part:1",
+          "type": "documentType",
+          "value": "采购需求申请书",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:1/part:1",
+          "excerpt": "办公终端及打印设备采购需求申请书",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectNo",
+          "value": "FZ-CG-2026-001",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目编号：FZ-CG-2026-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:docx/body/node:5/part:5",
+          "type": "ceilingAmount",
+          "value": "人民币222600.00元",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:5/part:5",
+          "excerpt": "本项目采购预算上限为人民币222600.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:0:docx/body/node:7/part:7",
+          "type": "itemName",
+          "value": "办公终端",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:7/part:7",
+          "excerpt": "办公终端",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:0:docx/body/node:7/part:7",
+          "type": "quantity",
+          "value": "40",
+          "dataType": "DECIMAL",
+          "locator": "docx/body/node:7/part:7",
+          "excerpt": "40",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:0:docx/body/node:7/part:7",
+          "type": "unitPrice",
+          "value": "4,200.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:7/part:7",
+          "excerpt": "4,200.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:0:docx/body/node:7/part:7",
+          "type": "lineAmount",
+          "value": "168,000.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:7/part:7",
+          "excerpt": "168,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:1:docx/body/node:8/part:8",
+          "type": "itemName",
+          "value": "多功能打印设备",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:8/part:8",
+          "excerpt": "多功能打印设备",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:1:docx/body/node:8/part:8",
+          "type": "quantity",
+          "value": "4",
+          "dataType": "DECIMAL",
+          "locator": "docx/body/node:8/part:8",
+          "excerpt": "4",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:1:docx/body/node:8/part:8",
+          "type": "unitPrice",
+          "value": "6,800.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:8/part:8",
+          "excerpt": "6,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:1:docx/body/node:8/part:8",
+          "type": "lineAmount",
+          "value": "27,200.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:8/part:8",
+          "excerpt": "27,200.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:2:docx/body/node:9/part:9",
+          "type": "itemName",
+          "value": "安装调试及数据迁移",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:9/part:9",
+          "excerpt": "安装调试及数据迁移",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:2:docx/body/node:9/part:9",
+          "type": "quantity",
+          "value": "1",
+          "dataType": "DECIMAL",
+          "locator": "docx/body/node:9/part:9",
+          "excerpt": "1",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:2:docx/body/node:9/part:9",
+          "type": "unitPrice",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:9/part:9",
+          "excerpt": "16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:2:docx/body/node:9/part:9",
+          "type": "lineAmount",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:9/part:9",
+          "excerpt": "16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "02_办公终端采购技术需求表.pdf",
+      "sha256": "87e50a7b0c6f9dd7404db41a823c34b0ef78b25182c4dfa34a7a55ba09aa9ab8",
+      "segments": [
+        {
+          "locator": "pdf/page:1/text/part:1",
+          "text": "办公终端采购技术需求表\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n一 办公终端\r\n参数项目 需求说明 验收方法\r\n处理器与内存 满足日常文档、表格和业务客户端并行运行；内存不低于16GB 核对配置与运行测试\r\n存储 固态硬盘不低于512GB；支持硬盘故障提示 开机检查并核对容量\r\n接口与网络 具备有线网络接口及必要USB接口 连接现有外设并测试\r\n安装采购单位合法软件进\r\n软件兼容 兼容采购单位现有办公软件和业务客户端\r\n行验证\r\n二 打印及服务\r\n打印设备应支持双面打印、扫描和网络连接；按正常办公纸张测试连续输出，不以特定商标作为资格条\r\n件。供应商应列明耗材类型、建议更换周期和含税报价。\r\n安装调试包括到货清点、资产标签粘贴、用户设置和使用培训。原有合法软件许可继续使用，新增许可\r\n须在报价中单独说明，不得含入不明服务费。\r\n本表用于描述使用需求。等效产品可以响应；供应商应提供具体配置、差异说明和服务承诺，评审时结\r\n合可核验资料判断。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+        }
+      ],
+      "facts": []
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "03_办公设备采购实施计划.docx",
+      "sha256": "a15f3f1c79022c7116611c8292d78b7c50888ae13818ee5ab393943a9ca7fe83",
+      "segments": [
+        {
+          "locator": "docx/body/node:1/part:1",
+          "text": "办公设备采购实施计划\n"
+        },
+        {
+          "locator": "docx/body/node:2/part:2",
+          "text": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+        },
+        {
+          "locator": "docx/body/node:3/part:3",
+          "text": "一 计划安排\n"
+        },
+        {
+          "locator": "docx/body/node:4/part:4",
+          "text": "2026年9月2日完成需求初审；9月5日前核对预算来源；9月8日至9月28日组织采购和评审；9月30日前办理成交确认并签订合同。日期为本单位工作计划，实际进度以履行程序的记录为准。\n"
+        },
+        {
+          "locator": "docx/body/node:5/part:5",
+          "text": "二 预算与职责\n"
+        },
+        {
+          "locator": "docx/body/node:6/part:6",
+          "text": "预算控制金额222600.00元。综合管理部负责技术需求和验收，财务部门核对经费来源，采购经办人员整理采购文件并保管评审记录。采购方式按本单位制度及适用规定另行确认，本计划不代替方式审批。\n"
+        },
+        {
+          "locator": "docx/body/node:7/part:7",
+          "text": "三 风险与安排\n"
+        },
+        {
+          "locator": "docx/body/node:8/part:8",
+          "text": "供货应避开窗口集中办理时段，分两批更换，每批安排现场联系人。旧设备数据由本单位管理人员清理，供应商不得带离存储介质。涉及变更数量或增加支出的，须先办理书面确认。\n"
+        },
+        {
+          "locator": "docx/body/node:9/part:9",
+          "text": "计划编制：林知远  审核：周宁  编制日期：2026年9月3日。\n"
+        },
+        {
+          "locator": "docx/footer:1/part:10",
+          "text": "仿真测试材料  单位与业务信息均为虚构\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:docx/body/node:1/part:1",
+          "type": "documentType",
+          "value": "实施计划",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:1/part:1",
+          "excerpt": "办公设备采购实施计划",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectNo",
+          "value": "FZ-CG-2026-001",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目编号：FZ-CG-2026-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:docx/body/node:6/part:6",
+          "type": "ceilingAmount",
+          "value": "222600.00元",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:6/part:6",
+          "excerpt": "预算控制金额222600.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "04_办公设备更新项目预算批复.pdf",
+      "sha256": "116c6aa362cd756bb2b8048ba51c76f48dc3b7ba06b8e7ce4b0efcde756032c4",
+      "segments": [
+        {
+          "locator": "pdf/page:1/text/part:1",
+          "text": "办公设备更新项目预算批复\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n综保财〔2026〕31号\r\n综合管理部：你部报送的办公设备更新项目预算申请收悉。同意安排本项目经费人民币222600.00元，\r\n大写贰拾贰万贰仟陆佰元整，用于40台办公终端、4台多功能打印设备及配套安装调试。\r\n本批复确定的是经费控制上限，具体成交价格以采购结果和合同为准。项目实施不得自行扩大范围，节\r\n余经费按财务制度处理；必要的预算调整须另行报批。\r\n本项目尚未支付采购款。经费来源为2026年度综合保障项目支出，不得将预算控制数、报价金额和已支\r\n付金额相互替代。\r\n财务部门 2026年9月5日。审批签署栏保留为空，本材料不构成真实批准文件。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "documentType",
+          "value": "预算批复",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公设备更新项目预算批复",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "projectNo",
+          "value": "FZ-CG-2026\r\n-001",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目编号：FZ-CG-2026\r\n-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "budgetAmount",
+          "value": "人民币222600.00元",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "同意安排本项目经费人民币222600.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "ceilingAmount",
+          "value": "人民币222600.00元",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "同意安排本项目经费人民币222600.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "05_办公终端及打印设备采购招标文件.docx",
+      "sha256": "fdb01fff100d6bee87fcbf9f1b264e0ce25ab03004dd8d6c800c7c2a23cc13d2",
+      "segments": [
+        {
+          "locator": "docx/body/node:1/part:1",
+          "text": "办公终端及打印设备采购招标文件\n"
+        },
+        {
+          "locator": "docx/body/node:2/part:2",
+          "text": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+        },
+        {
+          "locator": "docx/body/node:3/part:3",
+          "text": "文件编号：FZ-ZB-2026-001。采购范围为办公终端40台、打印设备4台及安装调试1项。最高限价222600.00元。投标报价应为含税总价，包含运输、安装、测试、培训及约定保修。\n"
+        },
+        {
+          "locator": "docx/body/node:4/part:4",
+          "text": "一 供应商须知\n"
+        },
+        {
+          "locator": "docx/body/node:5/part:5",
+          "text": "供应商应具备履行合同所需的人员、设备及服务能力，提交主体资格、报价和响应资料。不得以特定品牌、注册地区或不必要的历史业绩作为排他条件。联合体及分包事项按采购文件的最终批准文本执行。\n"
+        },
+        {
+          "locator": "docx/body/node:6/part:6",
+          "text": "二 技术与服务要求\n"
+        },
+        {
+          "locator": "docx/body/node:7/part:7",
+          "text": "办公终端满足16GB内存、512GB固态存储及现有业务软件运行要求；打印设备满足双面打印、扫描和联网使用。供应商对偏离项逐一说明，可提供等效方案，不得以空白响应代替说明。\n"
+        },
+        {
+          "locator": "docx/body/node:8/part:8",
+          "text": "货物或服务\n | 数量\n | 单位\n | 含税单价（元）\n | 金额（元）\n | \n"
+        },
+        {
+          "locator": "docx/body/node:9/part:9",
+          "text": "办公终端\n | 40\n | 台\n | 4,200.00\n | 168,000.00\n | \n"
+        },
+        {
+          "locator": "docx/body/node:10/part:10",
+          "text": "多功能打印设备\n | 4\n | 台\n | 6,800.00\n | 27,200.00\n | \n"
+        },
+        {
+          "locator": "docx/body/node:11/part:11",
+          "text": "安装调试及数据迁移\n | 1\n | 项\n | 16,800.00\n | 16,800.00\n | \n"
+        },
+        {
+          "locator": "docx/body/node:13/part:12",
+          "text": "三 报价和评审\n"
+        },
+        {
+          "locator": "docx/body/node:14/part:13",
+          "text": "评审采用综合评分方式，价格30分、技术45分、服务20分、实施方案5分，总分100分。价格分以有效最低报价为基准，评审人员应复核异常低价说明，不能仅以最低报价替代综合评价。\n"
+        },
+        {
+          "locator": "docx/body/node:16/part:14",
+          "text": "四 交付及验收\n"
+        },
+        {
+          "locator": "docx/body/node:17/part:15",
+          "text": "合同签订后30日内完成交付。到货验收核对型号、数量和外观；安装验收核对网络、打印和业务软件运行；终验时交付配置清单、保修资料和培训记录。问题处理形成书面清单，并载明复核日期。\n"
+        },
+        {
+          "locator": "docx/body/node:18/part:16",
+          "text": "五 付款及质保\n"
+        },
+        {
+          "locator": "docx/body/node:19/part:17",
+          "text": "货物到货并完成初验后支付合同价款30%；安装调试、培训和终验完成后支付65%；剩余5%在约定质保考核期满且无未解决问题后支付。乙方应提供合法有效票据。办公终端及打印设备保修不少于三年，现场服务响应时限以响应文件和合同为准。\n"
+        },
+        {
+          "locator": "docx/body/node:20/part:18",
+          "text": "六 文件澄清\n"
+        },
+        {
+          "locator": "docx/body/node:21/part:19",
+          "text": "供应商对文件提出疑问应采用书面方式。修改技术范围、报价口径或关键时间的，应统一通知所有接收文件的供应商，并留存送达记录。仅对个别供应商作口头承诺不得替代正式澄清。\n"
+        },
+        {
+          "locator": "docx/body/node:22/part:20",
+          "text": "需求联系人：林知远。采购文件编制日期：2026年9月8日。签发和公章栏留空。\n"
+        },
+        {
+          "locator": "docx/footer:1/part:21",
+          "text": "仿真测试材料  单位与业务信息均为虚构\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:docx/body/node:1/part:1",
+          "type": "documentType",
+          "value": "招标文件",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:1/part:1",
+          "excerpt": "办公终端及打印设备采购招标文件",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectNo",
+          "value": "FZ-CG-2026-001",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目编号：FZ-CG-2026-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:docx/body/node:3/part:3",
+          "type": "ceilingAmount",
+          "value": "222600.00元",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:3/part:3",
+          "excerpt": "最高限价222600.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:0:docx/body/node:9/part:9",
+          "type": "itemName",
+          "value": "办公终端",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:9/part:9",
+          "excerpt": "办公终端",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:0:docx/body/node:9/part:9",
+          "type": "quantity",
+          "value": "40",
+          "dataType": "DECIMAL",
+          "locator": "docx/body/node:9/part:9",
+          "excerpt": "40",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:0:docx/body/node:9/part:9",
+          "type": "unitPrice",
+          "value": "4,200.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:9/part:9",
+          "excerpt": "4,200.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:0:docx/body/node:9/part:9",
+          "type": "lineAmount",
+          "value": "168,000.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:9/part:9",
+          "excerpt": "168,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:1:docx/body/node:10/part:10",
+          "type": "itemName",
+          "value": "多功能打印设备",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:10/part:10",
+          "excerpt": "多功能打印设备",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:1:docx/body/node:10/part:10",
+          "type": "quantity",
+          "value": "4",
+          "dataType": "DECIMAL",
+          "locator": "docx/body/node:10/part:10",
+          "excerpt": "4",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:1:docx/body/node:10/part:10",
+          "type": "unitPrice",
+          "value": "6,800.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:10/part:10",
+          "excerpt": "6,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:1:docx/body/node:10/part:10",
+          "type": "lineAmount",
+          "value": "27,200.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:10/part:10",
+          "excerpt": "27,200.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:2:docx/body/node:11/part:11",
+          "type": "itemName",
+          "value": "安装调试及数据迁移",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:11/part:11",
+          "excerpt": "安装调试及数据迁移",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:2:docx/body/node:11/part:11",
+          "type": "quantity",
+          "value": "1",
+          "dataType": "DECIMAL",
+          "locator": "docx/body/node:11/part:11",
+          "excerpt": "1",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:2:docx/body/node:11/part:11",
+          "type": "unitPrice",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:11/part:11",
+          "excerpt": "16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:2:docx/body/node:11/part:11",
+          "type": "lineAmount",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:11/part:11",
+          "excerpt": "16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "06_办公设备采购评审办法.pdf",
+      "sha256": "165ca2bb14d2803d0546c949ce1b57ccd1700d2f34dda24ddd0b42f2054adf1d",
+      "segments": [
+        {
+          "locator": "pdf/page:1/text/part:1",
+          "text": "办公设备采购评审办法\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n一 分值组成\r\n评审项 分值 评分依据\r\n报价 30 有效最低价÷本供应商报价×30\r\n技术响应 45 配置、兼容测试和技术偏离说明\r\n售后服务 20 保修期、响应时间及备件保障\r\n实施方案 5 交付组织、替换安排及数据保护\r\n报价不是唯一评分依据。涉及同分处理、算术修正、无效响应及异常低价核实的，由评审组根据最终采\r\n购文件和适用制度记录理由。分值相加应为100分，不将服务承诺中的金额重复计入采购总价。\r\n本办法对应文件FZ-ZB-2026-001，由评审人员在实施前确认适用版本。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "documentType",
+          "value": "评审办法",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公设备采购评审办法",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "07_澄川星河办公设备有限公司报价单.pdf",
+      "sha256": "5dedf7d854f945769db35d4aa6925e38a9be59577dfa47d0c8f873e9a740ca1e",
+      "segments": [
+        {
+          "locator": "pdf/page:1/text/part:1",
+          "text": "澄川星河办公设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川星河办公设备有限公司。报价编号：FZ-BJ-2026-A。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,200.00 168,000.00\r\n多功能打印设备 4 台 6,800.00 27,200.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币212,000.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "documentType",
+          "value": "报价单",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "澄川星河办公设备有限公司报价单",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "projectNo",
+          "value": "FZ-CG-2026\r\n-001",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目编号：FZ-CG-2026\r\n-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "supplierName",
+          "value": "澄川星河办公设备有限公司",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "报价单位：澄川星河办公设备有限公司",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "quoteAmount",
+          "value": "212,000.00元",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "含税报价合计：人民币212,000.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "itemName",
+          "value": "办公终端",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "quantity",
+          "value": "40",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "40",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "unitPrice",
+          "value": "4,200.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "4,200.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "lineAmount",
+          "value": "168,000.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "168,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "itemName",
+          "value": "多功能打印设备",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "quantity",
+          "value": "4",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "4",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "unitPrice",
+          "value": "6,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "6,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "lineAmount",
+          "value": "27,200.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "27,200.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "itemName",
+          "value": "安装调试及数据迁移",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "quantity",
+          "value": "1",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "1",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "unitPrice",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "lineAmount",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "08_澄川明川数字设备有限公司报价单.pdf",
+      "sha256": "86495b4d4687d813ca40c677691893508458bfb009061ac70408f84e64de5154",
+      "segments": [
+        {
+          "locator": "pdf/page:1/text/part:1",
+          "text": "澄川明川数字设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川明川数字设备有限公司。报价编号：FZ-BJ-2026-B。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,300.00 172,000.00\r\n多功能打印设备 4 台 6,900.00 27,600.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币216,400.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "documentType",
+          "value": "报价单",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "澄川明川数字设备有限公司报价单",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "projectNo",
+          "value": "FZ-CG-2026\r\n-001",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目编号：FZ-CG-2026\r\n-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "supplierName",
+          "value": "澄川明川数字设备有限公司",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "报价单位：澄川明川数字设备有限公司",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "quoteAmount",
+          "value": "216,400.00元",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "含税报价合计：人民币216,400.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "itemName",
+          "value": "办公终端",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "quantity",
+          "value": "40",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "40",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "unitPrice",
+          "value": "4,300.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "4,300.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "lineAmount",
+          "value": "172,000.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "172,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "itemName",
+          "value": "多功能打印设备",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "quantity",
+          "value": "4",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "4",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "unitPrice",
+          "value": "6,900.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "6,900.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "lineAmount",
+          "value": "27,600.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "27,600.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "itemName",
+          "value": "安装调试及数据迁移",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "quantity",
+          "value": "1",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "1",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "unitPrice",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "lineAmount",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "09_澄川启衡信息设备有限公司报价单.pdf",
+      "sha256": "bf4b23e99cd118b6281735d602e0d69b3b700808e3e86f1f82e46004812c1f25",
+      "segments": [
+        {
+          "locator": "pdf/page:1/text/part:1",
+          "text": "澄川启衡信息设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川启衡信息设备有限公司。报价编号：FZ-BJ-2026-C。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,350.00 174,000.00\r\n多功能打印设备 4 台 7,000.00 28,000.00\r\n安装调试及数据迁移 1 项 17,800.00 17,800.00\r\n含税报价合计：人民币219,800.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "documentType",
+          "value": "报价单",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "澄川启衡信息设备有限公司报价单",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "projectNo",
+          "value": "FZ-CG-2026\r\n-001",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目编号：FZ-CG-2026\r\n-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "supplierName",
+          "value": "澄川启衡信息设备有限公司",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "报价单位：澄川启衡信息设备有限公司",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:0:pdf/page:1/text/part:1#meta",
+          "type": "quoteAmount",
+          "value": "219,800.00元",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "含税报价合计：人民币219,800.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "itemName",
+          "value": "办公终端",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "quantity",
+          "value": "40",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "40",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "unitPrice",
+          "value": "4,350.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "4,350.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:pdf/page:1/text/part:1#item-1",
+          "type": "lineAmount",
+          "value": "174,000.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "174,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "itemName",
+          "value": "多功能打印设备",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "quantity",
+          "value": "4",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "4",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "unitPrice",
+          "value": "7,000.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "7,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:pdf/page:1/text/part:1#item-2",
+          "type": "lineAmount",
+          "value": "28,000.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "28,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "itemName",
+          "value": "安装调试及数据迁移",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "quantity",
+          "value": "1",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "1",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "unitPrice",
+          "value": "17,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "17,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:3:pdf/page:1/text/part:1#item-3",
+          "type": "lineAmount",
+          "value": "17,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "17,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "10_办公设备采购文件澄清答复.docx",
+      "sha256": "31238059f27fbc75cf01ea611d74f8c93c3970ad0a39abbbfd1df1721d15a207",
+      "segments": [
+        {
+          "locator": "docx/body/node:1/part:1",
+          "text": "办公设备采购文件澄清答复\n"
+        },
+        {
+          "locator": "docx/body/node:2/part:2",
+          "text": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+        },
+        {
+          "locator": "docx/body/node:3/part:3",
+          "text": "澄清编号：FZ-CQ-2026-001。发布日期：2026年9月15日。接收范围：所有已获取采购文件的供应商。\n"
+        },
+        {
+          "locator": "docx/body/node:4/part:4",
+          "text": "一 软件及数据迁移\n"
+        },
+        {
+          "locator": "docx/body/node:5/part:5",
+          "text": "现有合法办公软件许可由采购单位提供，供应商负责安装和兼容验证。本次报价不得重复包含已有许可的购买费用。数据迁移只在指定场所进行，不允许供应商自带存储介质拷贝工作文件。\n"
+        },
+        {
+          "locator": "docx/body/node:6/part:6",
+          "text": "二 付款口径\n"
+        },
+        {
+          "locator": "docx/body/node:7/part:7",
+          "text": "文件中的30%、65%、5%均以最终签订合同的含税总价为计算基数。预算最高限价222600.00元仅用于报价约束，不作为实际付款计算基数。\n"
+        },
+        {
+          "locator": "docx/body/node:8/part:8",
+          "text": "三 其他事项\n"
+        },
+        {
+          "locator": "docx/body/node:9/part:9",
+          "text": "本澄清不改变采购数量、技术下限和综合评分分值。与原文件表述不一致的事项应在正式签发时明确适用顺序，接收单位应留存版本记录。\n"
+        },
+        {
+          "locator": "docx/footer:1/part:10",
+          "text": "仿真测试材料  单位与业务信息均为虚构\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:docx/body/node:1/part:1",
+          "type": "documentType",
+          "value": "澄清答复",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:1/part:1",
+          "excerpt": "办公设备采购文件澄清答复",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectNo",
+          "value": "FZ-CG-2026-001",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目编号：FZ-CG-2026-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "1:0:docx/body/node:7/part:7",
+          "type": "ceilingAmount",
+          "value": "222600.00元",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:7/part:7",
+          "excerpt": "预算最高限价222600.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "11_办公设备采购中标通知书.docx",
+      "sha256": "3994d74c6868f5ba28f116f79dc8becc23d77aece871a4c7252aa7fa12b4c4aa",
+      "segments": [
+        {
+          "locator": "docx/body/node:1/part:1",
+          "text": "办公设备采购中标通知书\n"
+        },
+        {
+          "locator": "docx/body/node:2/part:2",
+          "text": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+        },
+        {
+          "locator": "docx/body/node:3/part:3",
+          "text": "通知书编号：FZ-ZB-TZ-2026-001。\n"
+        },
+        {
+          "locator": "docx/body/node:4/part:4",
+          "text": "澄川星河办公设备有限公司：根据评审结果及采购人确认，你单位为本项目中标供应商。中标金额人民币212000.00元，大写贰拾壹万贰仟元整。预算最高限价222600.00元不作为合同价款。\n"
+        },
+        {
+          "locator": "docx/body/node:5/part:5",
+          "text": "请按采购文件、澄清文件和响应承诺办理合同签署。合同范围为40台办公终端、4台打印设备及安装调试1项。交付期限为合同签订后30日，付款以合同约定的验收节点为准。\n"
+        },
+        {
+          "locator": "docx/body/node:6/part:6",
+          "text": "采购人：澄川公共服务保障中心。通知日期：2026年9月28日。签发及盖章栏留空。\n"
+        },
+        {
+          "locator": "docx/footer:1/part:7",
+          "text": "仿真测试材料  单位与业务信息均为虚构\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:docx/body/node:1/part:1",
+          "type": "documentType",
+          "value": "中标通知书",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:1/part:1",
+          "excerpt": "办公设备采购中标通知书",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectNo",
+          "value": "FZ-CG-2026-001",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目编号：FZ-CG-2026-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:docx/body/node:4/part:4",
+          "type": "supplierName",
+          "value": "澄川星河办公设备有限公司",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:4/part:4",
+          "excerpt": "澄川星河办公设备有限公司",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:docx/body/node:4/part:4",
+          "type": "awardAmount",
+          "value": "212000.00元",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:4/part:4",
+          "excerpt": "中标金额人民币212000.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:2:docx/body/node:4/part:4",
+          "type": "ceilingAmount",
+          "value": "222600.00元",
+          "dataType": "MONEY",
+          "locator": "docx/body/node:4/part:4",
+          "excerpt": "预算最高限价222600.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "12_办公设备采购履约验收方案.docx",
+      "sha256": "f94391cfe087e268d926d63e019204b201cfc2a7eb49511707bebe70c94de2c8",
+      "segments": [
+        {
+          "locator": "docx/body/node:1/part:1",
+          "text": "办公设备采购履约验收方案\n"
+        },
+        {
+          "locator": "docx/body/node:2/part:2",
+          "text": "采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026-001。预算年度：2026。经办部门：综合管理部。\n"
+        },
+        {
+          "locator": "docx/body/node:3/part:3",
+          "text": "一 到货检查\n"
+        },
+        {
+          "locator": "docx/body/node:4/part:4",
+          "text": "核对办公终端40台、打印设备4台及安装服务1项。逐件登记序列号、外观、配置和随附资料；出现短缺或损坏时在送货单注明，由供应商签字确认。\n"
+        },
+        {
+          "locator": "docx/body/node:5/part:5",
+          "text": "二 测试及资料\n"
+        },
+        {
+          "locator": "docx/body/node:6/part:6",
+          "text": "选择不同工位测试业务客户端、办公软件、网络打印、扫描和数据迁移。培训记录应载明时间、参训人员和操作内容。验收组收集配置清单、保修凭证、合格证明及问题整改记录。\n"
+        },
+        {
+          "locator": "docx/body/node:7/part:7",
+          "text": "三 结论形成\n"
+        },
+        {
+          "locator": "docx/body/node:8/part:8",
+          "text": "本文件为验收方案，尚无实际验收结论。只有完成现场检查、问题整改和复核签署后才能形成验收单，不得从方案中的预期内容推断项目已验收或已付款。\n"
+        },
+        {
+          "locator": "docx/body/node:9/part:9",
+          "text": "拟组织验收人员：林知远、周宁、资产管理人员。编制日期：2026年9月29日。\n"
+        },
+        {
+          "locator": "docx/footer:1/part:10",
+          "text": "仿真测试材料  单位与业务信息均为虚构\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "0:0:docx/body/node:1/part:1",
+          "type": "documentType",
+          "value": "履约验收方案",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:1/part:1",
+          "excerpt": "办公设备采购履约验收方案",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectName",
+          "value": "行政办公终端及打印设备更新",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目名称：行政办公终端及打印设备更新",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "0:1:docx/body/node:2/part:2",
+          "type": "projectNo",
+          "value": "FZ-CG-2026-001",
+          "dataType": "TEXT",
+          "locator": "docx/body/node:2/part:2",
+          "excerpt": "项目编号：FZ-CG-2026-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "audit-qwen-27b-16k:latest",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  }
+]

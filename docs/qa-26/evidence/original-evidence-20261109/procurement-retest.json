@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "scopeChars": 383,
+  "suppliedChars": 383,
+  "supplierOffers": 1,
+  "budget": 2200000.0,
+  "ceiling": 2100000.0,
+  "offer": 2300000.0,
+  "overBudget": 100000,
+  "overCeiling": 200000,
+  "tenderFindings": 3,
+  "reviewStatus": "PARTIAL",
+  "quoteStatus": "DATA_INSUFFICIENT",
+  "caseStatus": "DATA_INSUFFICIENT",
+  "historyAmountExcluded": true,
+  "caseId": "7a66744d-7db0-322e-a65f-feb2b1f26dab"
+}

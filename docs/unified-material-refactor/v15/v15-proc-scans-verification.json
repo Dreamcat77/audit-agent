@@ -1,0 +1,23 @@
+{
+  "id": "950f4074-5468-3a28-a914-edb1253f53f9",
+  "status": "DATA_INSUFFICIENT",
+  "budget": "2200000.0",
+  "offers": 0,
+  "documents": [
+    [
+      "采购需求表-倒置.png",
+      "EXTRACTED",
+      5
+    ],
+    [
+      "采购需求表-混合扫描.pdf",
+      "EXTRACTED",
+      8
+    ],
+    [
+      "采购需求表-内嵌倒置.docx",
+      "EXTRACTED",
+      5
+    ]
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/releases/budget-1m-20261030-r1",
+  "previous": "/opt/audit-agent/releases/v24-20261030-r1",
+  "jarSha256": "2fa4065714196da5263e4b807d8a7e02549c1e13a12244a595c3edfcf449115c",
+  "indexSha256": "96e84220e81f3e71226374322d77d7d64ecf274f8992ad1cf291c60d8199b643",
+  "schemaChanged": false,
+  "configPreserved": true,
+  "newBandVersion": "SELECTED_SUM_V3",
+  "boundaryProbe": "PASS",
+  "realModel": "NOT_RETESTED_EXISTING_CONNECT_TIMEOUT"
+}

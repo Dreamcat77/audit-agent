@@ -36,10 +36,15 @@ public class FastApiOcrAdapter implements OcrPort {
     private static final Pattern UNSAFE_LOG_CHARACTER = Pattern.compile("[^A-Za-z0-9._:/-]");
     private final RestClient restClient;
     // Bound shared OCR calls across modules without creating waiting worker threads.
-    private final java.util.concurrent.Semaphore capacity = new java.util.concurrent.Semaphore(1, true);
+    private final java.util.concurrent.Semaphore capacity;
 
-    public FastApiOcrAdapter(@Qualifier("ocrRestClient") RestClient restClient) {
-        this.restClient = restClient;
+    public FastApiOcrAdapter(RestClient restClient) {this(restClient,1);}
+
+    @org.springframework.beans.factory.annotation.Autowired
+    public FastApiOcrAdapter(@Qualifier("ocrRestClient") RestClient restClient,
+            @org.springframework.beans.factory.annotation.Value("${audit.ocr.page-concurrency:1}") int concurrency) {
+        if(concurrency<1||concurrency>4)throw new IllegalArgumentException("OCR concurrency must be between one and four");
+        this.restClient = restClient;this.capacity=new java.util.concurrent.Semaphore(concurrency,true);
     }
 
     @Override
@@ -122,7 +127,18 @@ public class FastApiOcrAdapter implements OcrPort {
         if (page == null || page.pageNum() == null || page.text() == null || page.confidence() == null) {
             throw invalidResponse();
         }
-        return new OcrPage(page.pageNum(), page.text(), page.confidence());
+        var regions=new java.util.ArrayList<com.fuquan.audit.common.material.visual.VisualIndex.Region>();
+        if(page.regions()!=null&&page.regions().size()<=10000)for(var r:page.regions()){
+            try{
+                if(r==null||r.end()>page.text().length()||r.polygon()==null||r.polygon().size()!=4)continue;
+                var polygon=r.polygon().stream().map(p->{
+                    if(p==null||p.size()!=2)throw new IllegalArgumentException("invalid optional geometry");
+                    return new com.fuquan.audit.common.material.visual.VisualIndex.Point(p.get(0),p.get(1));
+                }).toList();
+                regions.add(new com.fuquan.audit.common.material.visual.VisualIndex.Region(r.start(),r.end(),polygon,r.confidence(),r.verification()));
+            }catch(IllegalArgumentException|NullPointerException ignored){/* Keep valid OCR text without an unproven box. */}
+        }
+        return new OcrPage(page.pageNum(), page.text(), page.confidence(),regions);
     }
 
     private ExternalServiceException invalidResponse() {
@@ -159,8 +175,9 @@ public class FastApiOcrAdapter implements OcrPort {
                            String engine, Long durationMs) {
     }
 
-    private record OcrPageData(Integer pageNum, String text, Double confidence) {
+    private record OcrPageData(Integer pageNum, String text, Double confidence,List<OcrRegionData> regions) {
     }
+    private record OcrRegionData(int start,int end,List<List<Double>> polygon,double confidence,String verification) {}
 
     private static final class ReopenableOcrResource extends AbstractResource {
         private final OcrRequest request;

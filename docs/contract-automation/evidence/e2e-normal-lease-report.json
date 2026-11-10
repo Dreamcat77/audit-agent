@@ -1,0 +1,358 @@
+{
+  "id": "a4925c82-245d-374e-a6ed-246e013662c9",
+  "status": "COMPLETED",
+  "statusLabel": "分析完成",
+  "headline": "澄川办公场地租赁合同",
+  "explanation": "本次处理范围内的分析已完成。金额核算与条款分析分开展示；仍需核对的事项不会计为通过。",
+  "createdAt": "2026-10-27T17:47:53.798988500Z",
+  "documents": [
+    {
+      "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+      "name": "办公场地租赁合同.docx",
+      "status": "READY",
+      "role": "CONTRACT",
+      "profile": "LEASE",
+      "facts": [
+        {
+          "type": "CONTRACT_NAME",
+          "value": "澄川办公场地租赁合同",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 37,
+              "end": 52,
+              "excerpt": "合同名称：澄川办公场地租赁合同"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NO",
+          "value": "SYN-LEASE-2026-01",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 53,
+              "end": 75,
+              "excerpt": "合同编号：SYN-LEASE-2026-01"
+            }
+          ]
+        },
+        {
+          "type": "PARTY_A",
+          "value": "澄川测试物业有限公司",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 76,
+              "end": 94,
+              "excerpt": "甲方（出租人）：澄川测试物业有限公司"
+            }
+          ]
+        },
+        {
+          "type": "PARTY_B",
+          "value": "澄川测试服务中心",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 95,
+              "end": 111,
+              "excerpt": "乙方（承租人）：澄川测试服务中心"
+            }
+          ]
+        },
+        {
+          "type": "TOTAL_AMOUNT",
+          "value": "120000元",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 186,
+              "end": 236,
+              "excerpt": "租金总额：120000元，每月10000元，乙方每月5日前支付当月租金；价款含税，甲方开具合规发票。"
+            }
+          ]
+        },
+        {
+          "type": "TAX_BASIS",
+          "value": "含税",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 186,
+              "end": 236,
+              "excerpt": "租金总额：120000元，每月10000元，乙方每月5日前支付当月租金；价款含税，甲方开具合规发票。"
+            }
+          ]
+        },
+        {
+          "type": "CURRENCY",
+          "value": "元",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 186,
+              "end": 236,
+              "excerpt": "租金总额：120000元，每月10000元，乙方每月5日前支付当月租金；价款含税，甲方开具合规发票。"
+            }
+          ]
+        }
+      ],
+      "clauses": [
+        {
+          "topic": "SUBJECT",
+          "summary": "租赁标的为澄川测试园区一号楼二层东侧办公室，面积200平方米，仅作办公用途。",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 112,
+              "end": 150,
+              "excerpt": "租赁标的：澄川测试园区一号楼二层东侧办公室，面积200平方米，仅作办公用途。"
+            }
+          ]
+        },
+        {
+          "topic": "TERM",
+          "summary": "租赁期限为2026年11月1日至2027年10月31日，共12个月。",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 151,
+              "end": 185,
+              "excerpt": "租赁期限：2026年11月1日至2027年10月31日，共12个月。"
+            }
+          ]
+        },
+        {
+          "topic": "PAYMENT",
+          "summary": "租金总额120000元，每月10000元，乙方每月5日前支付当月租金；价款含税，甲方开具合规发票。",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 186,
+              "end": 236,
+              "excerpt": "租金总额：120000元，每月10000元，乙方每月5日前支付当月租金；价款含税，甲方开具合规发票。"
+            }
+          ]
+        },
+        {
+          "topic": "OTHER",
+          "summary": "保证金20000元，不计入租金，乙方交还房屋且结清费用后10个工作日内退还；损坏扣款需凭修复记录及发票。",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 237,
+              "end": 290,
+              "excerpt": "保证金：20000元，不计入租金，乙方交还房屋且结清费用后10个工作日内退还；损坏扣款需凭修复记录及发票。"
+            }
+          ]
+        },
+        {
+          "topic": "ACCEPTANCE",
+          "summary": "2026年11月1日双方对房屋、消防和水电设施逐项验收，并签署交接清单。",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 291,
+              "end": 333,
+              "excerpt": "交付及验收：2026年11月1日双方对房屋、消防和水电设施逐项验收，并签署交接清单。"
+            }
+          ]
+        },
+        {
+          "topic": "WARRANTY",
+          "summary": "主体结构及原有设施自然损耗由甲方维修；乙方不当使用导致的损坏由乙方负责。甲方收到故障通知后24小时响应。",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 334,
+              "end": 389,
+              "excerpt": "维修：主体结构及原有设施自然损耗由甲方维修；乙方不当使用导致的损坏由乙方负责。甲方收到故障通知后24小时响应。"
+            }
+          ]
+        },
+        {
+          "topic": "TERMINATION",
+          "summary": "任何一方严重违约且书面催告15日未纠正的，对方可解除；提前解除须结算实际租用期间租金。",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 390,
+              "end": 436,
+              "excerpt": "解除：任何一方严重违约且书面催告15日未纠正的，对方可解除；提前解除须结算实际租用期间租金。"
+            }
+          ]
+        },
+        {
+          "topic": "OTHER",
+          "summary": "租期满后3日内按正常使用状态交还；自然损耗不属于承租人损坏。",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 437,
+              "end": 470,
+              "excerpt": "退还：租期满后3日内按正常使用状态交还；自然损耗不属于承租人损坏。"
+            }
+          ]
+        },
+        {
+          "topic": "OTHER",
+          "summary": "不自动续期，须期满前30日另行书面协商。",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 471,
+              "end": 494,
+              "excerpt": "续期：不自动续期，须期满前30日另行书面协商。"
+            }
+          ]
+        },
+        {
+          "topic": "DISPUTE",
+          "summary": "争议由房屋所在地人民法院处理，双方签字盖章生效。",
+          "evidence": [
+            {
+              "fileId": "446c9aa8-966f-443e-82f2-30e13fe3461c",
+              "fileSha256": "a94ac0a3aa2d34ae88043b93c1edf70ef3a1595a201e185a3b8659b4fa8b5055",
+              "parseResultId": "c8c55839-0852-494e-837a-a720d2d1ce83",
+              "parseVersion": 1,
+              "textSha256": "976a09f6b8b34d7870df01d659abdb83f0c454b0be55cb56de3ad70b0390d8b7",
+              "start": 495,
+              "end": 519,
+              "excerpt": "争议由房屋所在地人民法院处理，双方签字盖章生效。"
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "code": "F02_AMOUNT_WORDS_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_ITEM_ARITHMETIC",
+          "status": "NOT_EVALUATED",
+          "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_SUM_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+          "evidence": []
+        }
+      ],
+      "findings": [],
+      "sourceChars": 519,
+      "reviewedChars": 519,
+      "fullyReviewed": true
+    }
+  ],
+  "findings": [],
+  "checks": [
+    {
+      "code": "F02_AMOUNT_WORDS_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+      "evidence": []
+    },
+    {
+      "code": "F02_LINE_ITEM_ARITHMETIC",
+      "status": "NOT_EVALUATED",
+      "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+      "evidence": []
+    },
+    {
+      "code": "F02_LINE_SUM_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+      "evidence": []
+    },
+    {
+      "code": "F02_AWARD_AMOUNT_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+      "evidence": []
+    },
+    {
+      "code": "F02_AWARD_SUPPLIER_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+      "evidence": []
+    }
+  ],
+  "limitations": []
+}

@@ -32,7 +32,10 @@ class AuditCaseIntegrationTest {
     @MockitoBean AuditCaseWorker worker;
     @MockitoBean MaterialFieldAiPort ai;
     @MockitoBean CaseReviewAiPort caseReviewAi;
-    @BeforeEach void mockCaseReviewContract(){when(caseReviewAi.analyze(any())).thenAnswer(call->CaseReviewFixtures.result(call.getArgument(0)));}
+    @BeforeEach void mockCaseReviewContract(){
+        doCallRealMethod().when(ai).extractWithContext(anyString(),anyString(),anyString(),anyList(),any());
+        when(caseReviewAi.analyze(any())).thenAnswer(call->CaseReviewFixtures.result(call.getArgument(0)));
+    }
     private final CurrentUser owner=new CurrentUser("auto-case-test-owner","case-user","测试",Set.of("AUDITOR"));
     private UsernamePasswordAuthenticationToken auth(CurrentUser user){return new UsernamePasswordAuthenticationToken(user,null,List.of(new SimpleGrantedAuthority("ROLE_AUDITOR")));}
     private MockMultipartFile file(String text)throws Exception{
@@ -74,6 +77,30 @@ class AuditCaseIntegrationTest {
         assertThat(actual.report().calculation()).isNull();assertThat(actual.report().modules().get("COLLUSION")).isEqualTo("NOT_EXECUTED");
         verify(ai,times(1)).extract(anyString(),anyString(),anyString(),anyList());
     }
+    @Test void laterUnitFailureStillPublishesAcknowledgedQuoteAndExportsItWithoutAnotherModelCall()throws Exception {
+        String body="项目名称：北辰办公设备采购项目；供应商：北辰设备有限公司；投标报价：2200000元。";
+        when(ai.extract(anyString(),anyString(),anyString(),anyList())).thenThrow(new IllegalStateException("later unit invalid JSON"));
+        when(ai.acknowledgedResult(eq("PROCUREMENT_AUTO"),anyString(),anyString(),anyList())).thenAnswer(call->{
+            List<MaterialFieldAiPort.Segment> segments=call.getArgument(3);var s=segments.get(0);
+            return Optional.of(new MaterialFieldAiPort.Result(List.of(new MaterialFieldAiPort.Row("r",List.of(
+                new MaterialFieldAiPort.Fact("projectName","北辰办公设备采购项目",s.locator(),body),
+                new MaterialFieldAiPort.Fact("supplierName","北辰设备有限公司",s.locator(),body),
+                new MaterialFieldAiPort.Fact("quoteAmount","2200000元",s.locator(),body)))),"TEST","v1"));
+        });
+        byte[] bytes=file(body).getBytes();
+        var value=service.upload(UUID.randomUUID(),List.of(new AuditCaseService.Upload("投标文件.docx",()->new ByteArrayInputStream(bytes))),owner);
+        service.process(value.id(),owner);service.process(value.id(),owner);
+        var actual=service.owned(value.id(),owner);
+        assertThat(actual.documents().get(0).status()).isEqualTo("UNKNOWN");
+        assertThat(actual.report().offers()).singleElement().satisfies(o->assertThat(o.amount()).isEqualByComparingTo("2200000"));
+        assertThat(actual.report().budget()).isNull();assertThat(actual.report().awardAmount()).isNull();
+        mvc.perform(get("/api/v1/procurement/cases/"+value.id()).with(authentication(auth(owner))))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.data.materialDetails[?(@.label == '供应商')].value").value(org.hamcrest.Matchers.hasItem("北辰设备有限公司")));
+        mvc.perform(get("/api/v1/procurement/cases/"+value.id()+"/report.html").with(authentication(auth(owner))))
+            .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("2200000元")));
+        verify(ai,times(1)).extract(anyString(),anyString(),anyString(),anyList());
+        verify(ai,times(1)).acknowledgedResult(anyString(),anyString(),anyString(),anyList());
+    }
     @Test void staleWriterCannotOverwriteNewVersionAndInterruptedCallNeverReexecutes()throws Exception {
         byte[] bytes=file("报价单").getBytes();
         var value=service.upload(UUID.randomUUID(),List.of(new AuditCaseService.Upload("原文.docx",()->new ByteArrayInputStream(bytes))),owner);
@@ -82,6 +109,18 @@ class AuditCaseIntegrationTest {
         assertThat(repository.replace(value,interrupted)).isTrue();assertThat(repository.replace(value,value.update("COMPLETED",value.documents(),null))).isFalse();
         service.process(value.id(),owner);
         assertThat(service.owned(value.id(),owner).documents().get(0).errorCode()).contains("EXECUTOR_LOST");verifyNoInteractions(ai);
+    }
+    @Test void staleExecutorCannotPublishAcknowledgedFactsAfterItsCaseFenceWasLost()throws Exception {
+        byte[] bytes=file("报价单，供应商北辰设备有限公司，报价100元。").getBytes();
+        var value=service.upload(UUID.randomUUID(),List.of(new AuditCaseService.Upload("报价.docx",()->new ByteArrayInputStream(bytes))),owner);
+        when(ai.extract(anyString(),anyString(),anyString(),anyList())).thenAnswer(call->{
+            var running=service.owned(value.id(),owner);
+            assertThat(repository.replace(running,running.update("UNKNOWN",running.documents(),null))).isTrue();
+            throw new IllegalStateException("executor lost after call");
+        });
+        assertThatThrownBy(()->service.process(value.id(),owner)).hasMessageContaining("executor lost");
+        verify(ai,never()).acknowledgedResult(anyString(),anyString(),anyString(),anyList());
+        assertThat(service.owned(value.id(),owner).documents()).allSatisfy(d->assertThat(d.facts()).isEmpty());
     }
     @Test void twelveRealDocumentsReachCorrectQuoteReportWithSimulatedSemanticExtraction()throws Exception {
         runTwelve(false);

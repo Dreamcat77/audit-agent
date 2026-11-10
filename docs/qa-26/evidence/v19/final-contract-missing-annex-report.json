@@ -1,0 +1,1336 @@
+{
+  "id": "c1d27ced-6350-3960-ba7f-5130003519b0",
+  "status": "PARTIAL",
+  "statusLabel": "已生成部分结果",
+  "headline": "青榆机房节能改造项目",
+  "explanation": "已形成可参考的阶段结果，请优先查看有原文依据的关注事项；尚未完成的范围单独列出。",
+  "createdAt": "2026-10-29T14:28:19.096209795Z",
+  "documents": [
+    {
+      "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+      "name": "合同书.docx",
+      "status": "READY",
+      "role": "CONTRACT",
+      "profile": "SERVICE",
+      "facts": [
+        {
+          "type": "PROJECT_NO",
+          "value": "SYN-V19-C01",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 39,
+              "end": 55,
+              "excerpt": "项目编号：SYN-V19-C01"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NAME",
+          "value": "机房节能改造服务合同",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 57,
+              "end": 72,
+              "excerpt": "合同名称：机房节能改造服务合同"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NO",
+          "value": "SYN-V19-HT01",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 85,
+              "end": 102,
+              "excerpt": "合同编号：SYN-V19-HT01"
+            }
+          ]
+        },
+        {
+          "type": "PARTY_A",
+          "value": "青榆合成档案中心",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 104,
+              "end": 115,
+              "excerpt": "甲方：青榆合成档案中心"
+            }
+          ]
+        },
+        {
+          "type": "PARTY_B",
+          "value": "青榆合成工程有限公司",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 117,
+              "end": 130,
+              "excerpt": "乙方：青榆合成工程有限公司"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_TYPE",
+          "value": "服务采购",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 74,
+              "end": 83,
+              "excerpt": "合同类型：服务采购"
+            }
+          ]
+        },
+        {
+          "type": "PROJECT_NAME",
+          "value": "青榆机房节能改造项目",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 22,
+              "end": 37,
+              "excerpt": "项目名称：青榆机房节能改造项目"
+            }
+          ]
+        },
+        {
+          "type": "TOTAL_AMOUNT",
+          "value": "￥120000.00",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 132,
+              "end": 167,
+              "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+            }
+          ]
+        },
+        {
+          "type": "AMOUNT_WORDS",
+          "value": "壹拾贰万元整",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 132,
+              "end": 167,
+              "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+            }
+          ]
+        },
+        {
+          "type": "SIGN_DATE",
+          "value": "2026年10月29日",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 255,
+              "end": 271,
+              "excerpt": "签订日期：2026年10月29日"
+            }
+          ]
+        }
+      ],
+      "clauses": [
+        {
+          "topic": "PAYMENT",
+          "summary": "合同总价12万元含税，含设备维护费8万、安装调试费4万。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 169,
+              "end": 203,
+              "excerpt": "设备维护费80000元，安装调试费40000元，合计120000元。"
+            }
+          ]
+        },
+        {
+          "topic": "BREACH",
+          "summary": "乙方逾期交付按日付总价千分之一违约金，上限5%；文中称已逾期60日。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 205,
+              "end": 253,
+              "excerpt": "乙方逾期交付的，每日按合同总价款千分之一支付违约金，累计不超过总价款百分之五；目前已逾期60日。"
+            }
+          ]
+        },
+        {
+          "topic": "TERM",
+          "summary": "服务期自2026年11月1日至2027年10月31日。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 272,
+              "end": 301,
+              "excerpt": "服务期自2026年11月1日起至2027年10月31日止。"
+            }
+          ]
+        },
+        {
+          "topic": "EFFECTIVENESS",
+          "summary": "双方签字盖章后生效，合同一式肆份，双方各执贰份。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 301,
+              "end": 328,
+              "excerpt": "双方签字盖章后生效。本合同一式肆份，甲乙双方各执贰份。"
+            }
+          ]
+        },
+        {
+          "topic": "ATTACHMENT",
+          "summary": "附件一《服务标准》为合同组成部分。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 330,
+              "end": 347,
+              "excerpt": "附件一《服务标准》为合同组成部分。"
+            }
+          ]
+        },
+        {
+          "topic": "ACCEPTANCE",
+          "summary": "附件实际交付后按标准验收。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 347,
+              "end": 360,
+              "excerpt": "附件实际交付后按标准验收。"
+            }
+          ]
+        },
+        {
+          "topic": "DISPUTE",
+          "summary": "争议先协商，不成提交有管辖权的人民法院。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 360,
+              "end": 384,
+              "excerpt": "争议由双方协商，协商不成提交有管辖权的人民法院。"
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "code": "F02_AMOUNT_WORDS_MATCH",
+          "status": "PASS",
+          "explanation": "合同金额大小写核对：120000.00元，与依据金额120000.00元一致",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 132,
+              "end": 167,
+              "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+            }
+          ]
+        },
+        {
+          "code": "F02_LINE_ITEM_ARITHMETIC",
+          "status": "NOT_EVALUATED",
+          "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_SUM_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+          "evidence": []
+        },
+        {
+          "code": "ATTACHMENT_REFERENCE_MATCH",
+          "status": "FAIL",
+          "explanation": "合同正文引用附件“服务标准”，但本次冻结材料中未能证明匹配。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 330,
+              "end": 346,
+              "excerpt": "附件一《服务标准》为合同组成部分"
+            }
+          ]
+        },
+        {
+          "code": "COPY_COUNT_REQUIREMENT_COMPARISON",
+          "status": "PASS",
+          "explanation": "合同约定一式4份；各方留存合计4份，与总份数一致。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 314,
+              "end": 318,
+              "excerpt": "一式肆份"
+            },
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 319,
+              "end": 327,
+              "excerpt": "甲乙双方各执贰份"
+            }
+          ]
+        },
+        {
+          "code": "BREACH_AMOUNT_CAP",
+          "status": "FAIL",
+          "explanation": "违约金每日 120.00 元；约定上限 6000.00 元；按材料实际期间累计 7200.00 元。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 205,
+              "end": 253,
+              "excerpt": "乙方逾期交付的，每日按合同总价款千分之一支付违约金，累计不超过总价款百分之五；目前已逾期60日。"
+            }
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "code": "ATTACHMENT_REFERENCE_MATCH",
+          "level": "WARNING",
+          "title": "合同引用附件待补齐",
+          "explanation": "合同正文引用附件“服务标准”，但本次冻结材料中未能证明匹配。",
+          "suggestion": "请核对该附件是否另行提供或已完整内嵌。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 330,
+              "end": 346,
+              "excerpt": "附件一《服务标准》为合同组成部分"
+            }
+          ],
+          "origin": "DETERMINISTIC_DOCUMENT"
+        },
+        {
+          "code": "BREACH_AMOUNT_CAP",
+          "level": "WARNING",
+          "title": "违约金累计金额超过约定上限",
+          "explanation": "违约金每日 120.00 元；约定上限 6000.00 元；按材料实际期间累计 7200.00 元。",
+          "suggestion": "关注计费期间、基数与合同上限。",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 205,
+              "end": 253,
+              "excerpt": "乙方逾期交付的，每日按合同总价款千分之一支付违约金，累计不超过总价款百分之五；目前已逾期60日。"
+            }
+          ],
+          "origin": "DETERMINISTIC_DOCUMENT"
+        }
+      ],
+      "sourceChars": 385,
+      "reviewedChars": 0,
+      "fullyReviewed": false
+    },
+    {
+      "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+      "name": "中标通知书.docx",
+      "status": "READY",
+      "role": "AWARD",
+      "profile": "GENERAL",
+      "facts": [
+        {
+          "type": "PROJECT_NO",
+          "value": "SYN-V19-C01",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+              "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+              "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+              "parseVersion": 1,
+              "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+              "start": 41,
+              "end": 57,
+              "excerpt": "项目编号：SYN-V19-C01"
+            }
+          ]
+        },
+        {
+          "type": "AWARD_SUPPLIER",
+          "value": "青榆合成工程有限公司",
+          "method": "RULE_RECALL_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+              "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+              "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+              "parseVersion": 1,
+              "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+              "start": 59,
+              "end": 75,
+              "excerpt": "中标供应商：青榆合成工程有限公司"
+            }
+          ]
+        },
+        {
+          "type": "CONTRACT_NAME",
+          "value": "中标通知书",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+              "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+              "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+              "parseVersion": 1,
+              "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+              "start": 17,
+              "end": 22,
+              "excerpt": "中标通知书"
+            }
+          ]
+        },
+        {
+          "type": "PROJECT_NAME",
+          "value": "青榆机房节能改造项目",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+              "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+              "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+              "parseVersion": 1,
+              "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+              "start": 24,
+              "end": 39,
+              "excerpt": "项目名称：青榆机房节能改造项目"
+            }
+          ]
+        },
+        {
+          "type": "AWARD_AMOUNT",
+          "value": "人民币壹拾壹万元整",
+          "method": "AI_SOURCE_VERIFIED",
+          "evidence": [
+            {
+              "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+              "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+              "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+              "parseVersion": 1,
+              "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+              "start": 77,
+              "end": 92,
+              "excerpt": "中标金额：人民币壹拾壹万元整。"
+            }
+          ]
+        }
+      ],
+      "clauses": [],
+      "checks": [
+        {
+          "code": "F02_AMOUNT_WORDS_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_ITEM_ARITHMETIC",
+          "status": "NOT_EVALUATED",
+          "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+          "evidence": []
+        },
+        {
+          "code": "F02_LINE_SUM_MATCH",
+          "status": "NOT_EVALUATED",
+          "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+          "evidence": []
+        }
+      ],
+      "findings": [],
+      "sourceChars": 93,
+      "reviewedChars": 93,
+      "fullyReviewed": true
+    }
+  ],
+  "findings": [
+    {
+      "code": "F02_AWARD_AMOUNT_MATCH",
+      "level": "WARNING",
+      "title": "合同与关联中标金额核对不一致",
+      "explanation": "合同与关联中标金额核对：120000.00元，与依据金额110000.00元不一致，差额10000.00元",
+      "suggestion": "请核对所引原文金额及适用口径。",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 132,
+          "end": 167,
+          "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+        },
+        {
+          "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+          "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+          "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+          "parseVersion": 1,
+          "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+          "start": 77,
+          "end": 92,
+          "excerpt": "中标金额：人民币壹拾壹万元整。"
+        }
+      ],
+      "origin": "DETERMINISTIC_F02"
+    },
+    {
+      "code": "CROSS_FILE_CONFLICT",
+      "level": "WARNING",
+      "title": "合同总价与中标金额不一致",
+      "explanation": "合同书明确约定总价为12万元，而中标通知书载明中标金额为11万元。两者针对同一项目主体和编号，金额存在1万元差异，且材料中未见补充协议或变更条款说明该差异的合法性或调整依据，导致付款依据冲突。",
+      "suggestion": "核实是否存在未提供的补充协议或变更单，确认最终结算金额依据。",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 132,
+          "end": 167,
+          "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+        },
+        {
+          "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+          "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+          "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+          "parseVersion": 1,
+          "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+          "start": 77,
+          "end": 92,
+          "excerpt": "中标金额：人民币壹拾壹万元整。"
+        }
+      ],
+      "origin": "AI_REVIEW_SUGGESTION"
+    },
+    {
+      "code": "ATTACHMENT_REFERENCE_MATCH",
+      "level": "WARNING",
+      "title": "合同引用附件待补齐",
+      "explanation": "合同正文引用附件“服务标准”，但本次冻结材料中未能证明匹配。",
+      "suggestion": "请核对该附件是否另行提供或已完整内嵌。",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 330,
+          "end": 346,
+          "excerpt": "附件一《服务标准》为合同组成部分"
+        }
+      ],
+      "origin": "DETERMINISTIC_DOCUMENT"
+    },
+    {
+      "code": "BREACH_AMOUNT_CAP",
+      "level": "WARNING",
+      "title": "违约金累计金额超过约定上限",
+      "explanation": "违约金每日 120.00 元；约定上限 6000.00 元；按材料实际期间累计 7200.00 元。",
+      "suggestion": "关注计费期间、基数与合同上限。",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 205,
+          "end": 253,
+          "excerpt": "乙方逾期交付的，每日按合同总价款千分之一支付违约金，累计不超过总价款百分之五；目前已逾期60日。"
+        }
+      ],
+      "origin": "DETERMINISTIC_DOCUMENT"
+    }
+  ],
+  "checks": [
+    {
+      "code": "F02_AMOUNT_WORDS_MATCH",
+      "status": "PASS",
+      "explanation": "合同金额大小写核对：120000.00元，与依据金额120000.00元一致",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 132,
+          "end": 167,
+          "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+        }
+      ]
+    },
+    {
+      "code": "F02_LINE_ITEM_ARITHMETIC",
+      "status": "NOT_EVALUATED",
+      "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+      "evidence": []
+    },
+    {
+      "code": "F02_LINE_SUM_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+      "evidence": []
+    },
+    {
+      "code": "ATTACHMENT_REFERENCE_MATCH",
+      "status": "FAIL",
+      "explanation": "合同正文引用附件“服务标准”，但本次冻结材料中未能证明匹配。",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 330,
+          "end": 346,
+          "excerpt": "附件一《服务标准》为合同组成部分"
+        }
+      ]
+    },
+    {
+      "code": "COPY_COUNT_REQUIREMENT_COMPARISON",
+      "status": "PASS",
+      "explanation": "合同约定一式4份；各方留存合计4份，与总份数一致。",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 314,
+          "end": 318,
+          "excerpt": "一式肆份"
+        },
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 319,
+          "end": 327,
+          "excerpt": "甲乙双方各执贰份"
+        }
+      ]
+    },
+    {
+      "code": "BREACH_AMOUNT_CAP",
+      "status": "FAIL",
+      "explanation": "违约金每日 120.00 元；约定上限 6000.00 元；按材料实际期间累计 7200.00 元。",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 205,
+          "end": 253,
+          "excerpt": "乙方逾期交付的，每日按合同总价款千分之一支付违约金，累计不超过总价款百分之五；目前已逾期60日。"
+        }
+      ]
+    },
+    {
+      "code": "F02_AMOUNT_WORDS_MATCH",
+      "status": "NOT_EVALUATED",
+      "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+      "evidence": []
+    },
+    {
+      "code": "F02_AWARD_AMOUNT_MATCH",
+      "status": "FAIL",
+      "explanation": "合同与关联中标金额核对：120000.00元，与依据金额110000.00元不一致，差额10000.00元",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 132,
+          "end": 167,
+          "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+        },
+        {
+          "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+          "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+          "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+          "parseVersion": 1,
+          "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+          "start": 77,
+          "end": 92,
+          "excerpt": "中标金额：人民币壹拾壹万元整。"
+        }
+      ]
+    },
+    {
+      "code": "F02_AWARD_SUPPLIER_MATCH",
+      "status": "PASS",
+      "explanation": "合同乙方“青榆合成工程有限公司”与关联中标供应商“青榆合成工程有限公司”名称一致",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 117,
+          "end": 130,
+          "excerpt": "乙方：青榆合成工程有限公司"
+        },
+        {
+          "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+          "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+          "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+          "parseVersion": 1,
+          "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+          "start": 59,
+          "end": 75,
+          "excerpt": "中标供应商：青榆合成工程有限公司"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "“合同书.docx”：仅展示已取得依据的内容，部分原文未完成模型审查，不能据此认定整份合同无风险。",
+    "部分模型请求的最终结果无法确认，系统已停止自动重发；已取得的有效结果仍保留。",
+    "个别模型描述未能通过原文核对，未纳入本报告。"
+  ],
+  "comparisons": [
+    {
+      "topic": "PAYMENT",
+      "summary": "合同书约定合同总价款为人民币壹拾贰万元整（￥120000.00），中标通知书载明中标金额为人民币壹拾壹万元整。两份文件对同一项目（SYN-V19-C01）的金额约定不一致，且未提供补充协议或变更说明以解释差异。",
+      "evidence": [
+        {
+          "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+          "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+          "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+          "parseVersion": 1,
+          "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+          "start": 132,
+          "end": 167,
+          "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+        },
+        {
+          "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+          "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+          "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+          "parseVersion": 1,
+          "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+          "start": 77,
+          "end": 92,
+          "excerpt": "中标金额：人民币壹拾壹万元整。"
+        }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "QUANTITATIVE",
+      "order": 1,
+      "title": "合同条款量化一致性审查",
+      "status": "ATTENTION",
+      "summary": "请优先查看以下问题及涉及材料",
+      "items": [
+        {
+          "title": "合同与关联中标金额核对不一致",
+          "summary": "合同与关联中标金额核对：120000.00元，与依据金额110000.00元不一致，差额10000.00元 建议：请核对所引原文金额及适用口径。",
+          "level": "WARNING",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 132,
+              "end": 167,
+              "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+            },
+            {
+              "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+              "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+              "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+              "parseVersion": 1,
+              "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+              "start": 77,
+              "end": 92,
+              "excerpt": "中标金额：人民币壹拾壹万元整。"
+            }
+          ]
+        },
+        {
+          "title": "核对结果",
+          "summary": "合同金额大小写核对：120000.00元，与依据金额120000.00元一致",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 132,
+              "end": 167,
+              "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+            }
+          ]
+        },
+        {
+          "title": "核对结果",
+          "summary": "合同乙方“青榆合成工程有限公司”与关联中标供应商“青榆合成工程有限公司”名称一致",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 117,
+              "end": 130,
+              "excerpt": "乙方：青榆合成工程有限公司"
+            },
+            {
+              "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+              "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+              "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+              "parseVersion": 1,
+              "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+              "start": 59,
+              "end": 75,
+              "excerpt": "中标供应商：青榆合成工程有限公司"
+            }
+          ]
+        },
+        {
+          "title": "合同金额",
+          "summary": "合同金额：￥120000.00",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 132,
+              "end": 167,
+              "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+            }
+          ]
+        },
+        {
+          "title": "大写金额",
+          "summary": "大写金额：壹拾贰万元整",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 132,
+              "end": 167,
+              "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DRAFT_STRUCTURE",
+      "order": 2,
+      "title": "合同草本结构对标审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "合同名称",
+          "summary": "合同名称：机房节能改造服务合同",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 57,
+              "end": 72,
+              "excerpt": "合同名称：机房节能改造服务合同"
+            }
+          ]
+        },
+        {
+          "title": "合同编号",
+          "summary": "合同编号：SYN-V19-HT01",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 85,
+              "end": 102,
+              "excerpt": "合同编号：SYN-V19-HT01"
+            }
+          ]
+        },
+        {
+          "title": "材料名称",
+          "summary": "材料名称：中标通知书",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+              "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+              "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+              "parseVersion": 1,
+              "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+              "start": 17,
+              "end": 22,
+              "excerpt": "中标通知书"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "BREACH",
+      "order": 3,
+      "title": "违约责任条款量化审查",
+      "status": "ATTENTION",
+      "summary": "请优先查看以下问题及涉及材料",
+      "items": [
+        {
+          "title": "违约金累计金额超过约定上限",
+          "summary": "违约金每日 120.00 元；约定上限 6000.00 元；按材料实际期间累计 7200.00 元。 建议：关注计费期间、基数与合同上限。",
+          "level": "WARNING",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 205,
+              "end": 253,
+              "excerpt": "乙方逾期交付的，每日按合同总价款千分之一支付违约金，累计不超过总价款百分之五；目前已逾期60日。"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "乙方逾期交付按日付总价千分之一违约金，上限5%；文中称已逾期60日。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 205,
+              "end": 253,
+              "excerpt": "乙方逾期交付的，每日按合同总价款千分之一支付违约金，累计不超过总价款百分之五；目前已逾期60日。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TERM",
+      "order": 4,
+      "title": "合同期限与终止条件格式审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "签订日期",
+          "summary": "签订日期：2026年10月29日",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 255,
+              "end": 271,
+              "excerpt": "签订日期：2026年10月29日"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "服务期自2026年11月1日至2027年10月31日。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 272,
+              "end": 301,
+              "excerpt": "服务期自2026年11月1日起至2027年10月31日止。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PARTY_QUALIFICATION",
+      "order": 5,
+      "title": "合同主体资格审查",
+      "status": "AVAILABLE",
+      "summary": "已整理合同主体信息；资质结论以材料中的证明为依据",
+      "items": [
+        {
+          "title": "甲方",
+          "summary": "甲方：青榆合成档案中心",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 104,
+              "end": 115,
+              "excerpt": "甲方：青榆合成档案中心"
+            }
+          ]
+        },
+        {
+          "title": "乙方",
+          "summary": "乙方：青榆合成工程有限公司",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 117,
+              "end": 130,
+              "excerpt": "乙方：青榆合成工程有限公司"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ATTACHMENT_COMPLETENESS",
+      "order": 6,
+      "title": "附件清单完整性审查",
+      "status": "ATTENTION",
+      "summary": "请优先查看以下问题及涉及材料",
+      "items": [
+        {
+          "title": "合同引用附件待补齐",
+          "summary": "合同正文引用附件“服务标准”，但本次冻结材料中未能证明匹配。 建议：请核对该附件是否另行提供或已完整内嵌。",
+          "level": "WARNING",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 330,
+              "end": 346,
+              "excerpt": "附件一《服务标准》为合同组成部分"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "附件一《服务标准》为合同组成部分。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 330,
+              "end": 347,
+              "excerpt": "附件一《服务标准》为合同组成部分。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "EFFECTIVENESS_COPIES",
+      "order": 7,
+      "title": "合同生效条件与份数审查",
+      "status": "AVAILABLE",
+      "summary": "已整理材料中的相关约定，供审查参考",
+      "items": [
+        {
+          "title": "核对结果",
+          "summary": "合同约定一式4份；各方留存合计4份，与总份数一致。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 314,
+              "end": 318,
+              "excerpt": "一式肆份"
+            },
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 319,
+              "end": 327,
+              "excerpt": "甲乙双方各执贰份"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "双方签字盖章后生效，合同一式肆份，双方各执贰份。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 301,
+              "end": 328,
+              "excerpt": "双方签字盖章后生效。本合同一式肆份，甲乙双方各执贰份。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CLAUSE_RISK",
+      "order": 8,
+      "title": "合同条款风险提示",
+      "status": "ATTENTION",
+      "summary": "请优先查看以下问题及涉及材料",
+      "items": [
+        {
+          "title": "合同总价与中标金额不一致",
+          "summary": "合同书明确约定总价为12万元，而中标通知书载明中标金额为11万元。两者针对同一项目主体和编号，金额存在1万元差异，且材料中未见补充协议或变更条款说明该差异的合法性或调整依据，导致付款依据冲突。 建议：核实是否存在未提供的补充协议或变更单，确认最终结算金额依据。",
+          "level": "WARNING",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 132,
+              "end": 167,
+              "excerpt": "本合同总价款为人民币壹拾贰万元整（小写：￥120000.00），含税。"
+            },
+            {
+              "fileId": "77dd88af-e82e-4d84-b722-73dfa65f2390",
+              "fileSha256": "a183b0451a38ea85f784ee16995c77ec2850fb50d19fb16e1890336582300fc0",
+              "parseResultId": "8ba730ce-09cb-4e70-a959-f1105aaa7657",
+              "parseVersion": 1,
+              "textSha256": "f4f4278a007b7970cc24efe06418116be621417fe552284738a505d87b990849",
+              "start": 77,
+              "end": 92,
+              "excerpt": "中标金额：人民币壹拾壹万元整。"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "合同总价12万元含税，含设备维护费8万、安装调试费4万。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 169,
+              "end": 203,
+              "excerpt": "设备维护费80000元，安装调试费40000元，合计120000元。"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "附件实际交付后按标准验收。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 347,
+              "end": 360,
+              "excerpt": "附件实际交付后按标准验收。"
+            }
+          ]
+        },
+        {
+          "title": "条款内容",
+          "summary": "争议先协商，不成提交有管辖权的人民法院。",
+          "level": "INFO",
+          "evidence": [
+            {
+              "fileId": "0edbe719-5135-44e9-887d-4def3e331b2f",
+              "fileSha256": "9c7cbfdc3873c0a26f188caa62fb01a0233fc948539955411ab4b66c8e7f1a8a",
+              "parseResultId": "937ee5f8-4181-43ca-9d03-b87c2ca608ab",
+              "parseVersion": 1,
+              "textSha256": "fa9424c5bc80c2899b1bf5ce6271d924451b9b7aaf5aa160cd5b182ca2b519c6",
+              "start": 360,
+              "end": 384,
+              "excerpt": "争议由双方协商，协商不成提交有管辖权的人民法院。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "projectId": "0e22846e-aa31-4c17-97b0-327e2b4d7e43",
+  "projectName": "青榆机房节能改造项目"
+}

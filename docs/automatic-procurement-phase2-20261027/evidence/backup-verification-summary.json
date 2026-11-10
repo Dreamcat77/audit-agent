@@ -1,0 +1,36 @@
+{
+  "databaseVersion": "V8",
+  "nativeToolBuild": "03134284604-20260707-335949-20228",
+  "jdbcDriverVersion": "8.1.3.140",
+  "environment": "existing user-designated test environment; restore and writes only on separate AUTOCASE2 instance",
+  "sourceAccountIsSystemAccount": false,
+  "privilegeEscalation": false,
+  "existingDatabaseConfigurationChanged": false,
+  "sourceBusinessDmlOrDdl": false,
+  "flashbackFalseAlsoFailedWithCode": -9803,
+  "workingExportMethod": "omit FLASHBACK_SCN entirely; 94-table SHARE locks held through manifest and export; NOWAIT conflict -6409 independently verified",
+  "applicationOwnedTableExport": {
+    "exitCode": 0,
+    "file": "consistent-source-default.dmp",
+    "bytes": 41012288,
+    "sha256": "e153d7af75b66ed8daee99461f2bfc6578f9868821221c7fd919607311d65359",
+    "tables": 94
+  },
+  "independentRestore": {
+    "nativeExitCode": 2,
+    "warnings": 33,
+    "crossSchemaForeignKeysNotRestored": 11,
+    "applicationOwnedTablesDataAndColumnsEqual": true,
+    "tables": 94,
+    "rows": 16422
+  },
+  "completeDependencyExport": {
+    "exitCode": 2,
+    "externalMaster": "SYSDBA.PROCUREMENT_DEMAND",
+    "nativeErrorCode": -2855,
+    "reason": "source account has SELECT/ALTER/REFERENCES but not DUMP on external master"
+  },
+  "completeDatabaseBackupVerified": false,
+  "allSourceLocksReleased": true,
+  "sourceFileBackupManifestSha256": "f99e792fc8122902fdcc889a1e1a217584a1fa33d1a30a647f758ce759312eab"
+}

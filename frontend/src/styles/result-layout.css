@@ -47,6 +47,14 @@
 .result-issue h4 { font-size: 15px; font-weight: 600; color: #3e3526; }
 .result-issue p { overflow-wrap: anywhere; }
 .result-issue-source { margin-top: 9px; color: #7a6b51; font-size: 12px; line-height: 1.8; overflow-wrap: anywhere; }
+.result-source-action { display: inline-block; margin-top: 8px; padding: 0; border: 0; background: transparent; color: #285c87; font-size: 14px; line-height: 1.8; cursor: pointer; }
+.result-source-action:hover { text-decoration: underline; }
+.procurement-results .result-item-heading { font-size: 15px; }
+.procurement-results .result-item-body,.procurement-results .result-issue>p { font-size: 14px; line-height: 1.9; }
+.procurement-results p.result-issue-source { font-size: 13px; font-weight: 400; }
+.procurement-results .procurement-copy-action { padding: 5px 10px; font-size: 13px; flex-shrink: 0; }
+.procurement-results .result-two-columns>.result-issue:only-child { grid-column: 1 / -1; }
+.procurement-issue-critical { border-color: #ebc4c4; border-left-color: #c65353; background: #fffafa; }
 .result-module-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; align-items: start; }
 .result-module { min-width: 0; border: 1px solid #dce3eb; border-radius: 10px; background: #fff; overflow: hidden; }
 .result-module>summary { display: block; cursor: pointer; padding: 18px 20px; min-height: 166px; list-style: none; }

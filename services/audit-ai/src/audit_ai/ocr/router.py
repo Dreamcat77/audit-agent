@@ -16,6 +16,9 @@ class OcrPageResponse(BaseModel):
     page_num: int = Field(alias="pageNum")
     text: str
     confidence: float
+    regions: list[dict] | None = None
+    width: int | None = None
+    height: int | None = None
 
 
 class OcrDataResponse(BaseModel):
@@ -46,6 +49,11 @@ def _response(extraction: OcrExtraction) -> OcrEnvelope:
                     pageNum=page.page_num,
                     text=page.text,
                     confidence=page.confidence,
+                    regions=[{"start":len(page.text[:r.start].encode("utf-16-le"))//2,
+                              "end":len(page.text[:r.end].encode("utf-16-le"))//2,
+                              "polygon":r.polygon,"confidence":r.confidence,"verification":r.verification}
+                             for r in page.regions] if page.regions and page.width and page.height else None,
+                    width=page.width or None, height=page.height or None,
                 )
                 for page in extraction.pages
             ],
@@ -59,7 +67,7 @@ def create_ocr_router(settings: Settings, port: OcrPort) -> APIRouter:
     router = APIRouter()
     service = OcrApplicationService(settings, port)
 
-    @router.post("/ai/v1/ocr/extract", response_model=OcrEnvelope)
+    @router.post("/ai/v1/ocr/extract", response_model=OcrEnvelope, response_model_exclude_none=True)
     async def extract_ocr(file: UploadFile = File(...)) -> OcrEnvelope:
         return _response(await service.extract(file))
 

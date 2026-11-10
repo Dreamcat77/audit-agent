@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "archive": "E:\\audit-agent-new\\deliverables\\ScanDiag_v2.tar.gz",
+  "sha256": "77916d562620c2f0884a30563d2ddde0b982abc2fdade1ff0b1efd7151ceb366",
+  "bytes": 68712,
+  "members": 13,
+  "pythonTests": 33,
+  "javaTests": 3445,
+  "javaSkipped": 24,
+  "contentIncluded": false
+}

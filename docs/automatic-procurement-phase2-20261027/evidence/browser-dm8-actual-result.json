@@ -1,0 +1,266 @@
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "id": "74c808d7-aaa3-313b-b59d-7c0fe400b055",
+    "caseNumber": "AC-74c808d7-aaa3-313b-b59d-7c0fe400b055",
+    "status": "COMPLETED",
+    "createdAt": "2026-10-27T07:22:28.017819Z",
+    "documents": [
+      {
+        "id": "4132f0c4-376b-4d64-9529-ff314463da89",
+        "name": "01_办公终端及打印设备采购需求申请书.docx",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 16
+      },
+      {
+        "id": "5ec63fe7-134c-43f3-9e12-814c2b0739f5",
+        "name": "02_办公终端采购技术需求表.pdf",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "37961fd5-e6da-4a00-aff1-62718bdf30ce",
+        "name": "03_办公设备采购实施计划.docx",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 4
+      },
+      {
+        "id": "f4f778e6-cbe0-48e0-a66d-8c148e6a0284",
+        "name": "04_办公设备更新项目预算批复.pdf",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 5
+      },
+      {
+        "id": "33036897-2fbe-479a-8c12-e611078e1ffc",
+        "name": "05_办公终端及打印设备采购招标文件.docx",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 16
+      },
+      {
+        "id": "6e17b7e1-5ef7-4187-85ad-e8c06a0bedb5",
+        "name": "06_办公设备采购评审办法.pdf",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 2
+      },
+      {
+        "id": "cc6c8baf-2d32-4415-84c2-9f0dcc5f69de",
+        "name": "07_澄川星河办公设备有限公司报价单.pdf",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 17
+      },
+      {
+        "id": "4c770632-5347-4c03-a4c8-32bb52307626",
+        "name": "08_澄川明川数字设备有限公司报价单.pdf",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 17
+      },
+      {
+        "id": "9be75216-7aa0-423c-924b-13efbc86848e",
+        "name": "09_澄川启衡信息设备有限公司报价单.pdf",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 17
+      },
+      {
+        "id": "5a49403d-960c-41aa-a852-e26385e0db1a",
+        "name": "10_办公设备采购文件澄清答复.docx",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 4
+      },
+      {
+        "id": "99aef461-c5f6-42bc-8387-465b1ebb40e1",
+        "name": "11_办公设备采购中标通知书.docx",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 6
+      },
+      {
+        "id": "d6cc9097-9527-4d82-977a-b9d2485b561d",
+        "name": "12_办公设备采购履约验收方案.docx",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 3
+      }
+    ],
+    "report": {
+      "quoteStatus": "COMPLETED",
+      "budget": 222600,
+      "awardAmount": 212000,
+      "offers": [
+        {
+          "supplier": "澄川星河办公设备有限公司",
+          "amount": 212000,
+          "documentId": "cc6c8baf-2d32-4415-84c2-9f0dcc5f69de",
+          "lines": [
+            {
+              "item": "办公终端",
+              "quantity": 40,
+              "unitPrice": 4200,
+              "amount": 168000,
+              "locator": "pdf/page:1/text/part:1"
+            },
+            {
+              "item": "多功能打印设备",
+              "quantity": 4,
+              "unitPrice": 6800,
+              "amount": 27200,
+              "locator": "pdf/page:1/text/part:1"
+            },
+            {
+              "item": "安装调试及数据迁移",
+              "quantity": 1,
+              "unitPrice": 16800,
+              "amount": 16800,
+              "locator": "pdf/page:1/text/part:1"
+            }
+          ],
+          "lineValidation": "VERIFIED"
+        },
+        {
+          "supplier": "澄川明川数字设备有限公司",
+          "amount": 216400,
+          "documentId": "4c770632-5347-4c03-a4c8-32bb52307626",
+          "lines": [
+            {
+              "item": "办公终端",
+              "quantity": 40,
+              "unitPrice": 4300,
+              "amount": 172000,
+              "locator": "pdf/page:1/text/part:1"
+            },
+            {
+              "item": "多功能打印设备",
+              "quantity": 4,
+              "unitPrice": 6900,
+              "amount": 27600,
+              "locator": "pdf/page:1/text/part:1"
+            },
+            {
+              "item": "安装调试及数据迁移",
+              "quantity": 1,
+              "unitPrice": 16800,
+              "amount": 16800,
+              "locator": "pdf/page:1/text/part:1"
+            }
+          ],
+          "lineValidation": "VERIFIED"
+        },
+        {
+          "supplier": "澄川启衡信息设备有限公司",
+          "amount": 219800,
+          "documentId": "9be75216-7aa0-423c-924b-13efbc86848e",
+          "lines": [
+            {
+              "item": "办公终端",
+              "quantity": 40,
+              "unitPrice": 4350,
+              "amount": 174000,
+              "locator": "pdf/page:1/text/part:1"
+            },
+            {
+              "item": "多功能打印设备",
+              "quantity": 4,
+              "unitPrice": 7000,
+              "amount": 28000,
+              "locator": "pdf/page:1/text/part:1"
+            },
+            {
+              "item": "安装调试及数据迁移",
+              "quantity": 1,
+              "unitPrice": 17800,
+              "amount": 17800,
+              "locator": "pdf/page:1/text/part:1"
+            }
+          ],
+          "lineValidation": "VERIFIED"
+        }
+      ],
+      "calculation": {
+        "id": "97c24e41-02c3-4be5-9abf-18f59ad1e76b",
+        "batchId": "74c808d7-aaa3-313b-b59d-7c0fe400b055",
+        "budgetAmount": 222600,
+        "averageQuote": 216066.67,
+        "standardDeviation": 3193.048,
+        "coefficientOfVariation": 0.0148,
+        "highlyConcentrated": true,
+        "riskLevel": "WARNING",
+        "createdTime": "2026-10-27T07:28:32.894630800Z",
+        "quotes": [
+          {
+            "id": "1022b6f1-e4fc-4111-99c8-5d53fb87d96b",
+            "rowNumber": 1,
+            "supplierName": "澄川星河办公设备有限公司",
+            "quoteAmount": 212000,
+            "productDescription": null,
+            "overBudget": false,
+            "overBudgetAmount": 0,
+            "overBudgetRatio": 0,
+            "deviationRatio": 0.0188,
+            "suspicious": false,
+            "suspiciousReason": null
+          },
+          {
+            "id": "2df31478-e283-4347-8ed7-43ca8d804e71",
+            "rowNumber": 2,
+            "supplierName": "澄川明川数字设备有限公司",
+            "quoteAmount": 216400,
+            "productDescription": null,
+            "overBudget": false,
+            "overBudgetAmount": 0,
+            "overBudgetRatio": 0,
+            "deviationRatio": 0.0015,
+            "suspicious": false,
+            "suspiciousReason": null
+          },
+          {
+            "id": "917d6fd2-680e-409d-9188-03be99e35e0f",
+            "rowNumber": 3,
+            "supplierName": "澄川启衡信息设备有限公司",
+            "quoteAmount": 219800,
+            "productDescription": null,
+            "overBudget": false,
+            "overBudgetAmount": 0,
+            "overBudgetRatio": 0,
+            "deviationRatio": 0.0173,
+            "suspicious": false,
+            "suspiciousReason": null
+          }
+        ],
+        "comparison": null
+      },
+      "notices": [
+        "本结果为前期询价总价比较；报价集中是统计线索，不构成围串标或正式中标推荐。"
+      ],
+      "modules": {
+        "BLACKLIST": "NOT_EXECUTED",
+        "QUOTE": "COMPLETED",
+        "COLLUSION": "NOT_EXECUTED",
+        "SPLIT_PURCHASE": "NOT_EXECUTED",
+        "AGENT_PRECHECK": "NOT_EXECUTED",
+        "TENDER_COMPLIANCE": "NOT_EXECUTED"
+      }
+    }
+  }
+}

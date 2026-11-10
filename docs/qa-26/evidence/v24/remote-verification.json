@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/releases/v24-20261030-r1",
+  "runningJavaAndAiReleaseVerified": true,
+  "jarSha256": "3c99b26f1458637aec6d144834f62166c4a7c5290c8d6fdba52e893d910019ad",
+  "frontendIndexSha256": "b54dfe4800fb01f66b740753f9b2cfdd30c4dcc4a2c2680446fcb124fc679c86",
+  "webAssetsVerified": 7,
+  "schemaChanged": false,
+  "configPreserved": true,
+  "businessOcr": "V24_BUSINESS_OCR=PASS budgetUppercaseAmounts=true budgetOverApproval=true contractTitle=true contractAmount=true contractDate=true model=NOT_EXECUTED",
+  "realModel": "NOT_VERIFIED_CONNECT_TIMEOUT"
+}

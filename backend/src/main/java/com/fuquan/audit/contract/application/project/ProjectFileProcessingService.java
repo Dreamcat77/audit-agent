@@ -97,7 +97,7 @@ public class ProjectFileProcessingService {
         }
     }
     public ProjectFileJob retry(UUID projectId,UUID fileId,CurrentUser actor,ProjectRequestMetadata metadata) {
-        if(Collections.disjoint(actor.roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL"))) {
+        if(Collections.disjoint(actor.roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER"))) {
             throw new BusinessException(BusinessErrorCode.FORBIDDEN);
         }
         return transactions.retryProcessing(projectId,fileId,jobs,actor,metadata);

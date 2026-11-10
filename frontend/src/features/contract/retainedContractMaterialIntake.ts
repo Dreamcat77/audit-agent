@@ -105,15 +105,15 @@ export function createRetainedContractMaterialIntake(dependencies:ContractMateri
     start(files) {
       if(flight)return flight as Promise<ContractMaterialIntakeResult>;
       storageKey=null;
-      if(load())return Promise.reject(new Error("上次材料上传结果尚未确认，请继续原操作。"));
+      if(!dependencies.newProjectPerBatch&&load())return Promise.reject(new Error("上次材料上传结果尚未确认，请继续原操作。"));
       if(files.length===0)return Promise.resolve({kind:"CANCELLED"});
       if(files.some(f=>!/\.(zip|pdf|docx?|png|jpe?g)$/i.test(f.name))
         ||files.some(f=>/\.zip$/i.test(f.name))&&files.length!==1)
         return Promise.reject(new Error("请选择单个ZIP资料包，或PDF、DOC（Word 97-2003）、DOCX、PNG、JPG/JPEG材料。"));
-      const journal:Journal={version:1,createKey:createKey(),projectId:retained.projectId??null,automaticAnalysis:dependencies.automaticAnalysis,
+      const journal:Journal={version:1,createKey:createKey(),projectId:dependencies.newProjectPerBatch?null:retained.projectId??null,automaticAnalysis:dependencies.automaticAnalysis,
         files:files.map(file=>({key:createKey(),name:file.name,size:file.size,lastModified:file.lastModified}))};
       // Saving must succeed before the first create or byte upload request.
-      save(journal,true);journal.files.forEach((item,index)=>selected.set(item.key,files[index]!));
+      save(journal,true);selected.clear();journal.files.forEach((item,index)=>selected.set(item.key,files[index]!));
       return run(true) as Promise<ContractMaterialIntakeResult>;
     },
     retry(files=[]) {

@@ -1,0 +1,86 @@
+{
+  "browser": "109.0.5412.0",
+  "base": "http://192.168.0.26",
+  "results": [
+    {
+      "module": "budget",
+      "label": "budget-mixed-table",
+      "failures": [],
+      "lineCount": 2,
+      "jobStates": [
+        "UNKNOWN",
+        "REVIEWED"
+      ],
+      "status": "PASS"
+    },
+    {
+      "module": "budget",
+      "label": "budget-csv-units",
+      "failures": [],
+      "lineCount": 0,
+      "jobStates": [
+        "UNKNOWN"
+      ],
+      "status": "PASS"
+    },
+    {
+      "module": "budget",
+      "label": "budget-sideways",
+      "failures": [],
+      "lineCount": 0,
+      "jobStates": [
+        "UNKNOWN"
+      ],
+      "status": "PASS"
+    },
+    {
+      "module": "budget",
+      "label": "budget-unrelated-projects",
+      "failures": [],
+      "lineCount": 0,
+      "jobStates": [
+        "UNKNOWN",
+        "UNKNOWN"
+      ],
+      "status": "PASS"
+    },
+    {
+      "module": "procurement",
+      "label": "proc-cent-boundaries",
+      "failures": [],
+      "offerCount": 0,
+      "status": "PASS"
+    },
+    {
+      "module": "procurement",
+      "label": "proc-policy-counterexample",
+      "failures": [],
+      "offerCount": 0,
+      "status": "PASS"
+    },
+    {
+      "module": "procurement",
+      "label": "proc-project-conflict",
+      "failures": [],
+      "offerCount": 0,
+      "status": "PASS"
+    },
+    {
+      "module": "contract",
+      "label": "contract-amount-mismatch",
+      "failures": [],
+      "formalContracts": 0,
+      "status": "PASS"
+    },
+    {
+      "module": "contract",
+      "label": "contract-relative-attachments",
+      "failures": [],
+      "formalContracts": 0,
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "verificationScope": "HISTORICAL_REPORT_READ_AND_LAYOUT_ONLY",
+  "businessQualityVerified": false
+}

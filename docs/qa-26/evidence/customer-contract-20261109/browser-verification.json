@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "caseId": "123ddb56-9329-3391-a3fa-30e70a5a1ad1",
+  "categories": 8,
+  "normalCollapsed": true,
+  "attentionExpanded": true,
+  "clipboard": "native-execCommand",
+  "exactHighlight": true,
+  "dialogHeights": [
+    1000,
+    720,
+    560
+  ],
+  "reopen": true,
+  "historyImmutable": true,
+  "noUploadOnResult": true,
+  "pageErrors": []
+}

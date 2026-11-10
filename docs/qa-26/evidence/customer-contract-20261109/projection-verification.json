@@ -1,0 +1,137 @@
+{
+  "aliases": {
+    "status": "PARTIAL",
+    "sourceRun": "r3",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 51,
+    "historicalCaseUnchanged": true,
+    "warnings": 0
+  },
+  "auxiliary": {
+    "status": "COMPLETED",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 69,
+    "historicalCaseUnchanged": true,
+    "warnings": 0
+  },
+  "blank-party": {
+    "status": "COMPLETED",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 53,
+    "historicalCaseUnchanged": true,
+    "warnings": 1
+  },
+  "dates": {
+    "status": "COMPLETED",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 57,
+    "historicalCaseUnchanged": true,
+    "warnings": 1
+  },
+  "local-prices": {
+    "status": "PARTIAL",
+    "sourceRun": "r3",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 59,
+    "historicalCaseUnchanged": true,
+    "warnings": 2
+  },
+  "normal": {
+    "status": "PARTIAL",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 76,
+    "historicalCaseUnchanged": true,
+    "warnings": 0
+  },
+  "placeholders": {
+    "status": "COMPLETED",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 56,
+    "historicalCaseUnchanged": true,
+    "warnings": 2
+  },
+  "reference": {
+    "status": "COMPLETED",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 56,
+    "historicalCaseUnchanged": true,
+    "warnings": 0
+  },
+  "repeat-a": {
+    "status": "COMPLETED",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 47,
+    "historicalCaseUnchanged": true,
+    "warnings": 0
+  },
+  "repeat-b": {
+    "status": "COMPLETED",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 51,
+    "historicalCaseUnchanged": true,
+    "warnings": 0
+  },
+  "repeat-c": {
+    "status": "COMPLETED",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 51,
+    "historicalCaseUnchanged": true,
+    "warnings": 0
+  },
+  "scan12": {
+    "status": "PARTIAL",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 53,
+    "historicalCaseUnchanged": true,
+    "warnings": 0
+  },
+  "scan4": {
+    "status": "COMPLETED",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 49,
+    "historicalCaseUnchanged": true,
+    "warnings": 0
+  },
+  "word-html": {
+    "status": "COMPLETED",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 5,
+    "exactEvidence": 30,
+    "historicalCaseUnchanged": true,
+    "warnings": 0
+  },
+  "word-real": {
+    "status": "PARTIAL",
+    "sourceRun": "r2",
+    "categories": 8,
+    "populatedCategories": 8,
+    "exactEvidence": 119,
+    "historicalCaseUnchanged": true,
+    "warnings": 2
+  }
+}

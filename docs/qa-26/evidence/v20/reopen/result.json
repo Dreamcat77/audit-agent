@@ -1,0 +1,26 @@
+{
+  "browser": "109.0.5412.0",
+  "base": "http://192.168.0.26:18082",
+  "results": [
+    {
+      "label": "proc-semantic",
+      "historyReopen": true,
+      "reportUnchanged": true,
+      "responsive": true
+    },
+    {
+      "label": "proc-inverted-scan",
+      "historyReopen": true,
+      "reportUnchanged": true,
+      "responsive": true
+    },
+    {
+      "module": "contract",
+      "eight": true,
+      "copy": true,
+      "reportUnchanged": true
+    }
+  ],
+  "errors": [],
+  "mutations": []
+}

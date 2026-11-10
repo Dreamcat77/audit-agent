@@ -119,6 +119,7 @@ _SAFE_FIELDS = frozenset(
     }
 )
 _PIPELINE_COUNTS = frozenset({
+    "worker_count", "requested_workers", "memory_budget_mb",
     "http_status", "input_bytes", "output_bytes", "prompt_chars", "user_chars",
     "prompt_tokens", "completion_tokens", "total_tokens", "max_output_tokens",
     "connect_timeout_ms", "read_timeout_ms", "remaining_budget_ms", "page_count",

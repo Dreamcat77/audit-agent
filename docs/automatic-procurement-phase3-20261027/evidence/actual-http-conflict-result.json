@@ -1,0 +1,362 @@
+{
+  "code": 200,
+  "data": {
+    "id": "7fb732bc-55ad-3127-91c3-b940882a7d30",
+    "caseNumber": "AC-7fb732bc-55ad-3127-91c3-b940882a7d30",
+    "status": "DATA_INSUFFICIENT",
+    "createdAt": "2026-10-27T08:54:15.766568500Z",
+    "documents": [
+      {
+        "id": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+        "name": "采购招标文件.docx",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 0
+      },
+      {
+        "id": "ec480212-770f-4679-8a50-843258687069",
+        "name": "采购澄清答复.docx",
+        "status": "EXTRACTED",
+        "parseMethod": "OFFICE_TEXT",
+        "errorCode": null,
+        "factCount": 0
+      }
+    ],
+    "report": {
+      "quoteStatus": "DATA_INSUFFICIENT",
+      "budget": null,
+      "awardAmount": null,
+      "offers": [],
+      "calculation": null,
+      "notices": [
+        "预算批复金额未知或冲突，超预算检查未执行；已识别报价仍保留",
+        "可靠供应商报价少于三家，三方询比价数据不足"
+      ],
+      "modules": {
+        "BLACKLIST": "NOT_EXECUTED",
+        "QUOTE": "DATA_INSUFFICIENT",
+        "COLLUSION": "NOT_EXECUTED",
+        "SPLIT_PURCHASE": "NOT_EXECUTED",
+        "AGENT_PRECHECK": "PARTIAL",
+        "TENDER_COMPLIANCE": "PARTIAL"
+      },
+      "reviews": {
+        "AGENT_PRECHECK": {
+          "status": "PARTIAL",
+          "inputDigest": "cd8e434e1d6e1023652a4fa6bb79266e48794916921bf15c809ee1c5d0aa6b7a",
+          "version": "case-cross-file-v1",
+          "model": "audit-qwen-27b-16k:latest",
+          "startedAt": "2026-10-27T08:54:24.598012900Z",
+          "completedAt": "2026-10-27T08:54:52.311563700Z",
+          "scope": [
+            {
+              "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+              "fileName": "采购招标文件.docx",
+              "role": "TENDER",
+              "sourceChars": 68,
+              "suppliedChars": 68
+            },
+            {
+              "documentId": "ec480212-770f-4679-8a50-843258687069",
+              "fileName": "采购澄清答复.docx",
+              "role": "CLARIFICATION",
+              "sourceChars": 99,
+              "suppliedChars": 99
+            }
+          ],
+          "coverageGaps": [
+            "UPLOADED_SCOPE_MISSING_DEMAND",
+            "UPLOADED_SCOPE_MISSING_BUDGET",
+            "UPLOADED_SCOPE_MISSING_QUOTATION",
+            "UPLOADED_SCOPE_MISSING_AWARD"
+          ],
+          "checks": [
+            {
+              "code": "IDENTITY_projectName",
+              "status": "UNKNOWN",
+              "explanation": "projectName：；缺少该字段的文件不作为冲突依据",
+              "evidence": []
+            },
+            {
+              "code": "IDENTITY_projectNo",
+              "status": "UNKNOWN",
+              "explanation": "projectNo：；缺少该字段的文件不作为冲突依据",
+              "evidence": []
+            },
+            {
+              "code": "IDENTITY_purchaserName",
+              "status": "UNKNOWN",
+              "explanation": "purchaserName：；缺少该字段的文件不作为冲突依据",
+              "evidence": []
+            },
+            {
+              "code": "BUDGET_CONFLICT",
+              "status": "UNKNOWN",
+              "explanation": "仅比较预算角色金额，不将成交价或已付款作为预算：[]",
+              "evidence": []
+            },
+            {
+              "code": "IDENTITY",
+              "status": "SOURCE_GROUNDED_OBSERVATION",
+              "explanation": "本次材料未提供项目名称、编号或采购单位，无法进行跨文件身份一致性核对。",
+              "evidence": [
+                {
+                  "id": "E-84b8ac22432446d0369ab085",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/body/node:1/part:1",
+                  "excerpt": "采购招标文件\n"
+                },
+                {
+                  "id": "E-b9f2330c3a4da3146a255e22",
+                  "documentId": "ec480212-770f-4679-8a50-843258687069",
+                  "fileName": "采购澄清答复.docx",
+                  "sha256": "9722d83a42d5d87b3a08c61c50cfb6d9410a610eb6ba113bed11d639d88a4dac",
+                  "locator": "docx/body/node:1/part:1",
+                  "excerpt": "采购澄清答复\n"
+                }
+              ]
+            },
+            {
+              "code": "BUDGET_VS_AWARD",
+              "status": "SOURCE_GROUNDED_OBSERVATION",
+              "explanation": "本次材料未包含预算金额、报价或成交金额，无法核对预算与成交关系。",
+              "evidence": [
+                {
+                  "id": "E-84b8ac22432446d0369ab085",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/body/node:1/part:1",
+                  "excerpt": "采购招标文件\n"
+                }
+              ]
+            },
+            {
+              "code": "QUANTITY",
+              "status": "SOURCE_GROUNDED_OBSERVATION",
+              "explanation": "本次材料未包含采购数量信息，无法进行数量一致性核对。",
+              "evidence": [
+                {
+                  "id": "E-84b8ac22432446d0369ab085",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/body/node:1/part:1",
+                  "excerpt": "采购招标文件\n"
+                }
+              ]
+            },
+            {
+              "code": "DATE_AND_PLAN",
+              "status": "SOURCE_GROUNDED_OBSERVATION",
+              "explanation": "本次材料未包含业务日期或计划节点，无法核对日期顺序及计划与实际完成情况。",
+              "evidence": [
+                {
+                  "id": "E-84b8ac22432446d0369ab085",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/body/node:1/part:1",
+                  "excerpt": "采购招标文件\n"
+                }
+              ]
+            },
+            {
+              "code": "MATERIAL_COVERAGE",
+              "status": "SOURCE_GROUNDED_OBSERVATION",
+              "explanation": "本次仅包含招标文件和澄清答复，缺少预算批复、评审记录、合同等关键文件，无法证明完整采购程序。",
+              "evidence": [
+                {
+                  "id": "E-84b8ac22432446d0369ab085",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/body/node:1/part:1",
+                  "excerpt": "采购招标文件\n"
+                },
+                {
+                  "id": "E-b9f2330c3a4da3146a255e22",
+                  "documentId": "ec480212-770f-4679-8a50-843258687069",
+                  "fileName": "采购澄清答复.docx",
+                  "sha256": "9722d83a42d5d87b3a08c61c50cfb6d9410a610eb6ba113bed11d639d88a4dac",
+                  "locator": "docx/body/node:1/part:1",
+                  "excerpt": "采购澄清答复\n"
+                }
+              ]
+            }
+          ],
+          "findings": [
+            {
+              "code": "PAYMENT_CONFLICT",
+              "level": "WARNING",
+              "title": "招标文件与澄清答复付款比例不一致",
+              "explanation": "D1规定初验30%、终验65%、质保5%；D2规定初验50%、终验40%、质保10%。D2称原条款继续有效且未规定优先适用，导致两套比例并行，执行依据不明确。",
+              "suggestion": "核实澄清是否构成变更，明确最终适用的付款比例及生效条件。",
+              "evidence": [
+                {
+                  "id": "E-b8544f36e860248afd338fcc",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/body/node:2/part:2",
+                  "excerpt": "货物到货初验后支付合同价30%；终验后65%；质保期满5%。本付款条款继续有效。\n"
+                },
+                {
+                  "id": "E-76e08898030101baf2cf7b36",
+                  "documentId": "ec480212-770f-4679-8a50-843258687069",
+                  "fileName": "采购澄清答复.docx",
+                  "sha256": "9722d83a42d5d87b3a08c61c50cfb6d9410a610eb6ba113bed11d639d88a4dac",
+                  "locator": "docx/body/node:2/part:2",
+                  "excerpt": "同一采购事项：到货初验后支付合同价50%；终验后40%；质保期满10%。原招标文件的付款条款继续有效，未规定本答复优先适用，两套比例并行执行。\n"
+                }
+              ],
+              "origin": "MODEL"
+            }
+          ],
+          "rejectedCitations": 0,
+          "errorCode": "SEMANTIC_OR_SOURCE_COVERAGE_INCOMPLETE"
+        },
+        "TENDER_COMPLIANCE": {
+          "status": "PARTIAL",
+          "inputDigest": "4d4a526c1863c1a671b41e920a33542b5b9e82adfe720ae048fb2387e641fbac",
+          "version": "case-cross-file-v1",
+          "model": "audit-qwen-27b-16k:latest",
+          "startedAt": "2026-10-27T08:54:52.511960600Z",
+          "completedAt": "2026-10-27T08:55:17.423197400Z",
+          "scope": [
+            {
+              "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+              "fileName": "采购招标文件.docx",
+              "role": "TENDER",
+              "sourceChars": 68,
+              "suppliedChars": 68
+            },
+            {
+              "documentId": "ec480212-770f-4679-8a50-843258687069",
+              "fileName": "采购澄清答复.docx",
+              "role": "CLARIFICATION",
+              "sourceChars": 99,
+              "suppliedChars": 99
+            }
+          ],
+          "coverageGaps": [
+            "UPLOADED_SCOPE_MISSING_TECHNICAL",
+            "UPLOADED_SCOPE_MISSING_EVALUATION"
+          ],
+          "checks": [
+            {
+              "code": "TECHNICAL_REQUIREMENTS",
+              "status": "SOURCE_GROUNDED_OBSERVATION",
+              "explanation": "本次材料仅含标题及付款条款，未提供技术需求、参数或验收标准，无法评估技术明确性。",
+              "evidence": [
+                {
+                  "id": "E-84b8ac22432446d0369ab085",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/body/node:1/part:1",
+                  "excerpt": "采购招标文件\n"
+                },
+                {
+                  "id": "E-b8544f36e860248afd338fcc",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/body/node:2/part:2",
+                  "excerpt": "货物到货初验后支付合同价30%；终验后65%；质保期满5%。本付款条款继续有效。\n"
+                }
+              ]
+            },
+            {
+              "code": "SCORING_METHOD",
+              "status": "SOURCE_GROUNDED_OBSERVATION",
+              "explanation": "材料中未包含评审办法、分值设置或评分依据，无法核验评分规则的一致性。",
+              "evidence": [
+                {
+                  "id": "E-84b8ac22432446d0369ab085",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/body/node:1/part:1",
+                  "excerpt": "采购招标文件\n"
+                }
+              ]
+            },
+            {
+              "code": "PAYMENT_CLARIFICATION",
+              "status": "SOURCE_GROUNDED_OBSERVATION",
+              "explanation": "澄清文件D2提出了与D1不同的付款比例，但声明原条款继续有效且未规定优先适用，导致付款执行存在歧义。",
+              "evidence": [
+                {
+                  "id": "E-76e08898030101baf2cf7b36",
+                  "documentId": "ec480212-770f-4679-8a50-843258687069",
+                  "fileName": "采购澄清答复.docx",
+                  "sha256": "9722d83a42d5d87b3a08c61c50cfb6d9410a610eb6ba113bed11d639d88a4dac",
+                  "locator": "docx/body/node:2/part:2",
+                  "excerpt": "同一采购事项：到货初验后支付合同价50%；终验后40%；质保期满10%。原招标文件的付款条款继续有效，未规定本答复优先适用，两套比例并行执行。\n"
+                }
+              ]
+            },
+            {
+              "code": "MATERIAL_COVERAGE",
+              "status": "SOURCE_GROUNDED_OBSERVATION",
+              "explanation": "本次分析范围仅包含招标文件和澄清答复的片段，缺少预算、报价、评审记录等关键文件，无法完成完整的合规性审查。",
+              "evidence": [
+                {
+                  "id": "E-cc716201fbb3e3cee8e8e8f5",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/footer:1/part:3",
+                  "excerpt": "仿真测试材料  单位与业务信息均为虚构\n"
+                },
+                {
+                  "id": "E-3e21491d84dbe0de40bc95cb",
+                  "documentId": "ec480212-770f-4679-8a50-843258687069",
+                  "fileName": "采购澄清答复.docx",
+                  "sha256": "9722d83a42d5d87b3a08c61c50cfb6d9410a610eb6ba113bed11d639d88a4dac",
+                  "locator": "docx/footer:1/part:3",
+                  "excerpt": "仿真测试材料  单位与业务信息均为虚构\n"
+                }
+              ]
+            }
+          ],
+          "findings": [
+            {
+              "code": "PAYMENT_CONFLICT",
+              "level": "WARNING",
+              "title": "招标文件与澄清答复付款比例冲突",
+              "explanation": "D1规定初验30%、终验65%、质保5%；D2规定初验50%、终验40%、质保10%。D2称原条款继续有效且未规定优先适用，导致两套比例并行，执行依据不明确。",
+              "suggestion": "核实澄清效力，明确唯一适用的付款比例。",
+              "evidence": [
+                {
+                  "id": "E-b8544f36e860248afd338fcc",
+                  "documentId": "ae82a3cb-154c-4513-a848-ff0cf874c4b3",
+                  "fileName": "采购招标文件.docx",
+                  "sha256": "1739ef8616a1c03b3fd712f652f21c6d568e9668306d5f580a9479d5054dc2b1",
+                  "locator": "docx/body/node:2/part:2",
+                  "excerpt": "货物到货初验后支付合同价30%；终验后65%；质保期满5%。本付款条款继续有效。\n"
+                },
+                {
+                  "id": "E-76e08898030101baf2cf7b36",
+                  "documentId": "ec480212-770f-4679-8a50-843258687069",
+                  "fileName": "采购澄清答复.docx",
+                  "sha256": "9722d83a42d5d87b3a08c61c50cfb6d9410a610eb6ba113bed11d639d88a4dac",
+                  "locator": "docx/body/node:2/part:2",
+                  "excerpt": "同一采购事项：到货初验后支付合同价50%；终验后40%；质保期满10%。原招标文件的付款条款继续有效，未规定本答复优先适用，两套比例并行执行。\n"
+                }
+              ],
+              "origin": "MODEL"
+            }
+          ],
+          "rejectedCitations": 0,
+          "errorCode": "SEMANTIC_OR_SOURCE_COVERAGE_INCOMPLETE"
+        }
+      }
+    }
+  },
+  "fixture": "Two deliberately contradictory synthetic DOCX files; not the twelve-file baseline"
+}

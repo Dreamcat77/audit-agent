@@ -3,9 +3,20 @@ package com.fuquan.audit.common.privacy;
 import static org.assertj.core.api.Assertions.*;
 import java.util.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 class ClientReviewIdentityTest {
+    @Test void javaAndPythonSharePartyVariantConformanceCases() throws Exception {
+        Path relative=Path.of("services/audit-ai/tests/fixtures/client_party_cases.json");
+        Path root=Path.of("").toAbsolutePath();
+        if(!java.nio.file.Files.isRegularFile(root.resolve(relative)))root=root.getParent();
+        var data=new com.fasterxml.jackson.databind.ObjectMapper().readTree(root.resolve(relative).toFile());
+        var names=new ArrayList<String>();data.path("names").forEach(n->names.add(n.asText()));
+        var policy=new ClientReviewIdentity(()->names);
+        for(var c:data.path("cases"))assertThat(policy.party(c.path("text").asText()))
+            .as(c.path("id").asText()).isEqualTo(c.path("expected").asText());
+    }
     private ClientReviewIdentity policy(){return new ClientReviewIdentity(()->List.of("北辰市公安局","警务保障处"));}
     @Test void fullPartyFieldsResolveEitherSideButMentionsAndSubstringsDoNot(){
         var p=policy();

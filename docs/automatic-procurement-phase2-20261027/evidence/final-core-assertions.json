@@ -1,0 +1,19 @@
+{
+  "twoRealModelCases": [
+    "eee63216-0126-33fc-b02a-2eca6e6c5474",
+    "74c808d7-aaa3-313b-b59d-7c0fe400b055"
+  ],
+  "coreResultsMatch": true,
+  "nineLineMultiplicationsAndSumsVerified": true,
+  "finalCaseDurableRows": {
+    "id": "74c808d7-aaa3-313b-b59d-7c0fe400b055",
+    "status": "COMPLETED",
+    "version": 53,
+    "attempts": 1,
+    "AUDIT_CASE_FILE": 12,
+    "AUDIT_FACT": 107,
+    "AUDIT_QUOTE_LINE": 9
+  },
+  "pendingCases": 0,
+  "otherFiveModulesExecuted": false
+}

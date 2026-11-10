@@ -1,0 +1,97 @@
+{
+  "request": {
+    "caseId": "fcd7cf47-a32b-4191-a3f6-2757037cf9fb",
+    "module": "TENDER_COMPLIANCE",
+    "inputDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "version": "case-cross-file-v1",
+    "documents": [
+      {
+        "documentId": "4428f7a8-1a7e-437b-bbc7-d52f40e4485d",
+        "fileName": "TENDER.pdf",
+        "role": "TENDER",
+        "sourceChars": 40,
+        "suppliedChars": 40
+      },
+      {
+        "documentId": "7af61b95-87ae-4ee2-b90c-af35ad55acfc",
+        "fileName": "CLARIFICATION.pdf",
+        "role": "CLARIFICATION",
+        "sourceChars": 55,
+        "suppliedChars": 55
+      }
+    ],
+    "evidence": [
+      {
+        "id": "E-111111111111111111111111",
+        "documentId": "4428f7a8-1a7e-437b-bbc7-d52f40e4485d",
+        "fileName": "TENDER.pdf",
+        "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "locator": "p1",
+        "excerpt": "招标文件：到货初验后付款30%，终验后付款65%，质保期满5%。本条款继续有效。"
+      },
+      {
+        "id": "E-222222222222222222222222",
+        "documentId": "7af61b95-87ae-4ee2-b90c-af35ad55acfc",
+        "fileName": "CLARIFICATION.pdf",
+        "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "locator": "p1",
+        "excerpt": "澄清答复：到货初验后付款50%，终验后付款40%，质保期满10%。原招标文件继续有效，本答复没有优先适用约定。"
+      }
+    ],
+    "facts": [],
+    "checks": [],
+    "ruleSignals": []
+  },
+  "status": 200,
+  "response": {
+    "model": "audit-qwen-27b-16k:latest",
+    "version": "case-cross-file-v1",
+    "complete": true,
+    "findings": [
+      {
+        "code": "PAYMENT_CONFLICT",
+        "level": "WARNING",
+        "title": "付款比例条款存在冲突",
+        "explanation": "招标文件规定付款比例为30%、65%、5%，而澄清文件规定为50%、40%、10%。澄清文件未声明优先适用，导致执行依据不明确。",
+        "suggestion": "核实澄清文件是否构成对原条款的实质性修改，并明确最终适用的付款比例。",
+        "evidenceIds": [
+          "E-111111111111111111111111",
+          "E-222222222222222222222222"
+        ]
+      }
+    ],
+    "observations": [
+      {
+        "code": "TECHNICAL_REQUIREMENTS",
+        "explanation": "本次提供的材料仅包含付款条款，未涉及技术需求、评分标准或报价范围，无法评估技术明确性及限制条件。",
+        "evidenceIds": [
+          "E-111111111111111111111111",
+          "E-222222222222222222222222"
+        ]
+      },
+      {
+        "code": "SCORING_METHOD",
+        "explanation": "材料中未包含评审办法或分值设置，无法核验评分依据的可核验性及一致性。",
+        "evidenceIds": [
+          "E-111111111111111111111111",
+          "E-222222222222222222222222"
+        ]
+      },
+      {
+        "code": "PAYMENT_CLARIFICATION",
+        "explanation": "澄清文件对付款比例进行了变更，但明确声明“原招标文件继续有效”且“没有优先适用约定”，导致新旧条款效力关系模糊。",
+        "evidenceIds": [
+          "E-222222222222222222222222"
+        ]
+      },
+      {
+        "code": "MATERIAL_COVERAGE",
+        "explanation": "本次分析范围仅包含招标文件和澄清文件的片段，缺少完整的招标文件正文、评审记录及合同草案，无法进行全面的合规性审查。",
+        "evidenceIds": [
+          "E-111111111111111111111111",
+          "E-222222222222222222222222"
+        ]
+      }
+    ]
+  }
+}

@@ -11,7 +11,7 @@ const headings=[['QUANTITATIVE','合同条款量化一致性审查'],['DRAFT_STR
 /** One batch, eight stable headings; only source-backed content is displayed. */
 export function ContractAnalysisCategories({categories,documents,copied,onCopy,evidenceButtons}:{
   categories:AnalysisCategory[];documents:{fileId:string;name:string}[];copied:string|null;
-  onCopy:(key:string,text:string)=>void;evidenceButtons:(evidence:AnalysisCategoryEvidence[])=>ReactNode;
+  onCopy:(key:string,text:string)=>void;evidenceButtons:(evidence:AnalysisCategoryEvidence[],focus?:string)=>ReactNode;
 }) {
   const names=new Map(documents.map(document=>[document.fileId,document.name]));
   const modules=headings.map(([id,title],index)=>categories.find(category=>category.id===id)??{id,title,order:index+1,status:'DATA_INSUFFICIENT',summary:'材料不足，未生成',items:[]});
@@ -25,7 +25,7 @@ export function ContractAnalysisCategories({categories,documents,copied,onCopy,e
           <div className="flex justify-end"><button type="button" className="inline-flex shrink-0 items-center gap-1 rounded border border-slate-200 bg-white px-2 py-1 text-xs text-slate-700" onClick={()=>onCopy(key,item.summary)}><Copy size={12}/>{copied===key?"已复制":"复制"}</button></div>
           <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-slate-700">{item.summary}</p>
           {sourceNames.length>0&&<p className="mt-2 break-words text-xs text-slate-500">涉及材料：{sourceNames.join("、")}</p>}
-          <div className="mt-2 flex flex-wrap gap-3">{evidenceButtons(item.evidence)}</div>
+          <div className="mt-2 flex flex-wrap gap-3">{evidenceButtons(item.evidence,`${item.title} ${item.summary}`)}</div>
         </ResultItem>;
       })}</div>
     </details>)}</div>

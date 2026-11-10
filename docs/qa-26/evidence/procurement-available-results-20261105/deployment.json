@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/releases/procurement-useful-20261105-r4",
+  "previous": "/opt/audit-agent/releases/procurement-useful-20261105-r3",
+  "jarSha256": "f45ec2cfd385c9c8d3201d5a032a0ec07660bef1b3244708fd6289131021e4e6",
+  "indexSha256": "7949441e46f67cca6e0e7da0103d66b35d5e76ef37160c47af1c0bdaf95fb130",
+  "schemaChanged": false,
+  "clientIdentityRequired": true,
+  "configuredIdentityCount": 4,
+  "frontendChanged": true,
+  "existingConfigPreserved": true,
+  "ocrConcurrencyCap": 4,
+  "perProcessThreads": 1,
+  "mkldnn": false
+}

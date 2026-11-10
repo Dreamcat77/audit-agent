@@ -22,7 +22,7 @@ public class CaseBlacklistReview {
             var refs=CaseReviewContext.factEvidence(context,doc,fact);
             if(refs.isEmpty() && doc.segments().stream().anyMatch(s->s.locator().equals(fact.locator())&&s.text().contains(fact.excerpt())))
                 refs=List.of(new SourceEvidence("BL-"+AuditCaseService.hash(doc.id()+fact.locator()+fact.excerpt()).substring(0,24),doc.id(),doc.name(),doc.sha256(),fact.locator(),fact.excerpt()));
-            if (!refs.isEmpty()) evidence.computeIfAbsent(fact.value().strip(),k->new ArrayList<>()).addAll(refs);
+            if (!refs.isEmpty()) evidence.computeIfAbsent(ProcurementMaterialSemantics.key(fact.value()),k->new ArrayList<>()).addAll(refs);
         }
         var commands=new ArrayList<BlacklistCheckPort.CheckCommand>();
         for (var supplier:evidence.keySet()) commands.add(new BlacklistCheckPort.CheckCommand(id.toString(), commands.size()+1, null, supplier, null));

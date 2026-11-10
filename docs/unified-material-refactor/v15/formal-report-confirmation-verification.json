@@ -1,0 +1,17 @@
+{
+  "acknowledgementStable": true,
+  "reviewUnchanged": true,
+  "htmlReport": "AVAILABLE",
+  "eightTitles": [
+    "金额一致性",
+    "合同结构",
+    "违约责任",
+    "期限与终止",
+    "主体资格",
+    "附件完整性",
+    "生效条件与份数",
+    "其他条款风险"
+  ],
+  "artifactSha256": "ccbaecc59ecf41119bfe002c48bfb277caba19010e8fbf1b138a32327e29693d",
+  "bytes": 18046
+}

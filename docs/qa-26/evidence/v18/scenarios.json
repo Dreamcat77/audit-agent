@@ -1,0 +1,68 @@
+[
+  {
+    "scenario": "agreement-body",
+    "id": "834e0ca5-e064-3e43-a1d4-ab6c5a8f56f3",
+    "projectId": "c8db83d3-5b21-4acd-9786-4f4184e0aef8",
+    "name": "青榆档案数字化服务项目",
+    "expected": "青榆档案数字化服务项目",
+    "status": "COMPLETED",
+    "files": 1,
+    "categories": 8,
+    "failures": []
+  },
+  {
+    "scenario": "document-title-only",
+    "id": "9d613472-55d3-33e0-b5ef-eedd47fdf067",
+    "projectId": "f4621d67-3ae6-4efd-8ce3-b1cee5503533",
+    "name": "自动整理项目-f4621d67",
+    "expected": null,
+    "status": "COMPLETED",
+    "files": 1,
+    "categories": 8,
+    "failures": []
+  },
+  {
+    "scenario": "suffixed-title-only",
+    "id": "5a140bc4-fd88-3e9d-8798-f56916e32f21",
+    "projectId": "54c22898-b8ea-4541-8ad2-6a2b4d9ce338",
+    "name": "自动整理项目-54c22898",
+    "expected": null,
+    "status": "COMPLETED",
+    "files": 1,
+    "categories": 8,
+    "failures": []
+  },
+  {
+    "scenario": "table-name",
+    "id": "88336da5-e6c0-3b1d-9d2c-41860a687db0",
+    "projectId": "5eeb5722-f1c3-49ca-9136-b40b5fa74dd9",
+    "name": "青榆会议室改造项目",
+    "expected": "青榆会议室改造项目",
+    "status": "PARTIAL",
+    "files": 1,
+    "categories": 8,
+    "failures": []
+  },
+  {
+    "scenario": "cross-files",
+    "id": "35fc31fb-534a-3f27-a59d-9517bb44ddbd",
+    "projectId": "4854f8f2-7380-4ca6-a2ae-9a9843a79c65",
+    "name": "青榆办公终端更新项目",
+    "expected": "青榆办公终端更新项目",
+    "status": "PARTIAL",
+    "files": 3,
+    "categories": 8,
+    "failures": []
+  },
+  {
+    "scenario": "inline-name",
+    "id": "aeb3e5e8-5213-398a-a2b5-8c79ffcfee14",
+    "projectId": "33bfa13e-479e-4cca-9c5e-f46c674cb4aa",
+    "name": "青榆库房改造项目",
+    "expected": "青榆库房改造项目",
+    "status": "PARTIAL",
+    "files": 1,
+    "categories": 8,
+    "failures": []
+  }
+]

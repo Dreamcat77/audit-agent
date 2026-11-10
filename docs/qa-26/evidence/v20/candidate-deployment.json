@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/pilots/v20-20261029-r3",
+  "jar": "a399e6d875862309e14f878564da6f4a74848be18016a899cf28ae0514d9f102",
+  "index": "ebb5a5d08ecc5c8e42a1aa8f9784921472f7e2f41a1f01c942cce61ba1e6aee9",
+  "schemaChanged": false,
+  "configPreserved": true
+}

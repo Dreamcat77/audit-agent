@@ -1,0 +1,257 @@
+{
+  "value": {
+    "id": "cf4bcf40-e935-32da-a607-e714ec9b62b5",
+    "status": "PARTIAL",
+    "statusLabel": "已生成部分结果",
+    "headline": "昭宁资料咨询服务项目9D4325",
+    "explanation": "已形成可参考的阶段结果，请优先查看有原文依据的关注事项；尚未完成的范围单独列出。",
+    "createdAt": "2026-10-29T17:10:32.390324942Z",
+    "documents": [
+      {
+        "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+        "name": "服务安排材料.docx",
+        "status": "READY",
+        "role": "CONTRACT",
+        "profile": "GENERAL",
+        "facts": [
+          {
+            "type": "PARTY_A",
+            "value": "昭宁合成服务中心",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+                "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+                "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+                "parseVersion": 1,
+                "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+                "start": 28,
+                "end": 39,
+                "excerpt": "甲方：昭宁合成服务中心"
+              }
+            ]
+          },
+          {
+            "type": "PARTY_B",
+            "value": "昭宁合成咨询有限公司",
+            "method": "RULE_RECALL_SOURCE_VERIFIED",
+            "evidence": [
+              {
+                "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+                "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+                "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+                "parseVersion": 1,
+                "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+                "start": 41,
+                "end": 54,
+                "excerpt": "乙方：昭宁合成咨询有限公司"
+              }
+            ]
+          }
+        ],
+        "clauses": [],
+        "checks": [
+          {
+            "code": "F02_AMOUNT_WORDS_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+            "evidence": []
+          },
+          {
+            "code": "F02_LINE_ITEM_ARITHMETIC",
+            "status": "NOT_EVALUATED",
+            "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+            "evidence": []
+          },
+          {
+            "code": "F02_LINE_SUM_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "sourceChars": 210,
+        "reviewedChars": 0,
+        "fullyReviewed": false
+      },
+      {
+        "fileId": "63cb5522-bf2b-4130-88e3-61a8043f9fd3",
+        "name": "服务人员清单.docx",
+        "status": "READY",
+        "role": "OTHER",
+        "profile": "GENERAL",
+        "facts": [],
+        "clauses": [],
+        "checks": [
+          {
+            "code": "F02_AMOUNT_WORDS_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+            "evidence": []
+          },
+          {
+            "code": "F02_LINE_ITEM_ARITHMETIC",
+            "status": "NOT_EVALUATED",
+            "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+            "evidence": []
+          },
+          {
+            "code": "F02_LINE_SUM_MATCH",
+            "status": "NOT_EVALUATED",
+            "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+            "evidence": []
+          }
+        ],
+        "findings": [],
+        "sourceChars": 83,
+        "reviewedChars": 0,
+        "fullyReviewed": false
+      }
+    ],
+    "findings": [],
+    "checks": [
+      {
+        "code": "F02_AMOUNT_WORDS_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "当前材料的合同总价或金额大写依据不足，未作金额一致结论",
+        "evidence": []
+      },
+      {
+        "code": "F02_LINE_ITEM_ARITHMETIC",
+        "status": "NOT_EVALUATED",
+        "explanation": "没有同时具备数量、单价及行金额的可靠同一行明细，未执行乘法核对",
+        "evidence": []
+      },
+      {
+        "code": "F02_LINE_SUM_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "尚不能证明全部合同价款明细均已提取，未将局部明细冒充完整合计",
+        "evidence": []
+      },
+      {
+        "code": "F02_AWARD_AMOUNT_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+        "evidence": []
+      },
+      {
+        "code": "F02_AWARD_SUPPLIER_MATCH",
+        "status": "NOT_EVALUATED",
+        "explanation": "现有材料尚不能证明合同与中标依据的明确对应关系，未作一致性结论",
+        "evidence": []
+      }
+    ],
+    "limitations": [
+      "“服务安排材料.docx”：仅展示已取得依据的内容，部分原文未完成模型审查，不能据此认定整份合同无风险。",
+      "“服务人员清单.docx”：仅展示已取得依据的内容，部分原文未完成模型审查，不能据此认定整份合同无风险。",
+      "部分处理步骤未成功，当前报告保留其他已完成的独立检查。",
+      "材料之间尚无足够明确的合同关联依据，分别展示结果，未将不同文件的主体或金额强行合并。"
+    ],
+    "comparisons": [],
+    "categories": [
+      {
+        "id": "QUANTITATIVE",
+        "order": 1,
+        "title": "合同条款量化一致性审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "DRAFT_STRUCTURE",
+        "order": 2,
+        "title": "合同草本结构对标审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "BREACH",
+        "order": 3,
+        "title": "违约责任条款量化审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "TERM",
+        "order": 4,
+        "title": "合同期限与终止条件格式审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "PARTY_QUALIFICATION",
+        "order": 5,
+        "title": "合同主体资格审查",
+        "status": "AVAILABLE",
+        "summary": "已整理合同主体信息；资质结论以材料中的证明为依据",
+        "items": [
+          {
+            "title": "甲方",
+            "summary": "甲方：昭宁合成服务中心",
+            "level": "INFO",
+            "evidence": [
+              {
+                "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+                "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+                "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+                "parseVersion": 1,
+                "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+                "start": 28,
+                "end": 39,
+                "excerpt": "甲方：昭宁合成服务中心"
+              }
+            ]
+          },
+          {
+            "title": "乙方",
+            "summary": "乙方：昭宁合成咨询有限公司",
+            "level": "INFO",
+            "evidence": [
+              {
+                "fileId": "52259e33-1f80-46bc-9b7c-bcf1ae3d2e2a",
+                "fileSha256": "a51e49e1fd8ff3d817d269915a08c0e4e76c34456e0f5d62a14aef59cff38a24",
+                "parseResultId": "e11b9be2-6de8-43a0-92b8-d21c94228104",
+                "parseVersion": 1,
+                "textSha256": "0786210ac4d8f6a8859db5a1862a5d471278273706d5b4af811622a0172cb587",
+                "start": 41,
+                "end": 54,
+                "excerpt": "乙方：昭宁合成咨询有限公司"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ATTACHMENT_COMPLETENESS",
+        "order": 6,
+        "title": "附件清单完整性审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "EFFECTIVENESS_COPIES",
+        "order": 7,
+        "title": "合同生效条件与份数审查",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      },
+      {
+        "id": "CLAUSE_RISK",
+        "order": 8,
+        "title": "合同条款风险提示",
+        "status": "DATA_INSUFFICIENT",
+        "summary": "材料不足，未生成",
+        "items": []
+      }
+    ],
+    "projectId": "2ba8909a-bbe2-4ba6-a364-35be0e3c6cbe",
+    "projectName": "昭宁资料咨询服务项目9D4325"
+  },
+  "reviews": null
+}

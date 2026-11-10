@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "release": "/opt/audit-agent/releases/contract-customer-20261109-r4",
+  "previous": "/opt/audit-agent/releases/contract-customer-20261109-r3",
+  "jarSha256": "dd885e7a61ee1cc9315f84a4dda6edbdfc71768bae538aacaffd2e309e0ff1ee",
+  "indexSha256": "6e8471bb5b1b64ba6fbdfc23674edff23b304ff109444ae999ad3a94eb1c15c0",
+  "schemaChanged": false,
+  "chrome109Build": true,
+  "configsPreserved": true,
+  "contractReview": "VERIFIED_ON_26_SYNTHETIC_AND_AUTHORIZED_SAMPLES",
+  "acceptanceEvidence": "award-verification.json"
+}

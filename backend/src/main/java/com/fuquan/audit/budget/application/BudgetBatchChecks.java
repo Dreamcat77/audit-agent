@@ -233,6 +233,8 @@ final class BudgetBatchChecks {
     private static String one(Row row,String field) {var values=row.facts().stream().filter(f->f.field().equals(field)).map(Fact::value).distinct().toList();return values.size()==1?values.get(0):null;}
     private static String coalesce(String... values){for(String value:values)if(value!=null&&!value.isBlank())return value;return null;}
     private static String key(String value){return value==null?"":value.replaceAll("\\s+","");}
-    private static String stepKey(String value){return key(value).replaceFirst("^(?:已经|已)","").replaceFirst("(?:审核通过|审批通过|同意|批准|签字|盖章|审核|审批|通过)$","");}
+    private static String stepKey(String value){return key(value).replaceFirst("^(?:已经|已)","")
+            .replaceFirst("(?<!未)(?:已经|已)(?=(?:书面)?(?:审核通过|审批通过|同意|批准|签字|盖章|审核|审批|通过)$)","")
+            .replaceFirst("(?:审核通过|审批通过|同意|批准|签字|盖章|审核|审批|通过)$","");}
     private static String signature(Row row){return row.facts().stream().map(f->f.field()+"="+f.value()+"@"+f.excerpt()).sorted().collect(java.util.stream.Collectors.joining("|"));}
 }

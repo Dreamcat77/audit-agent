@@ -1,0 +1,60 @@
+{
+  "id": "b9b0d778-b939-3f8a-ad73-f0da76912b56",
+  "eightCategories": [
+    {
+      "id": "QUANTITATIVE",
+      "items": 3,
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "DRAFT_STRUCTURE",
+      "items": 5,
+      "status": "ATTENTION"
+    },
+    {
+      "id": "BREACH",
+      "items": 2,
+      "status": "ATTENTION"
+    },
+    {
+      "id": "TERM",
+      "items": 7,
+      "status": "ATTENTION"
+    },
+    {
+      "id": "PARTY_QUALIFICATION",
+      "items": 3,
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "ATTACHMENT_COMPLETENESS",
+      "items": 2,
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "EFFECTIVENESS_COPIES",
+      "items": 2,
+      "status": "ATTENTION"
+    },
+    {
+      "id": "CLAUSE_RISK",
+      "items": 8,
+      "status": "ATTENTION"
+    }
+  ],
+  "formalContracts": 1,
+  "documentRules": [
+    "ATTACHMENT_REFERENCE_MATCH",
+    "BREACH_AMOUNT_CAP",
+    "COPY_COUNT_REQUIREMENT_COMPARISON",
+    "DATE_SEQUENCE",
+    "F02_AMOUNT_WORDS_MATCH",
+    "F02_AWARD_AMOUNT_MATCH",
+    "F02_AWARD_SUPPLIER_MATCH",
+    "F02_LINE_ITEM_ARITHMETIC",
+    "F02_LINE_SUM_MATCH",
+    "TEMPLATE_STRUCTURE_COMPARISON"
+  ],
+  "immutableRead": true,
+  "status": "PARTIAL"
+}

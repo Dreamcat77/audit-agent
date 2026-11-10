@@ -1,3 +1,4 @@
+import {ProcessingStatusCard} from '../components/status/ProcessingStatusCard';
 import {
   Fragment,
   useEffect,
@@ -476,20 +477,21 @@ export function BudgetCheckPage({
   };
 
   return (
-    <div className="min-h-full bg-[#f5f5f7] px-3 py-3 sm:px-5 sm:py-5">
-      <div className="mx-auto max-w-[1440px] rounded-[28px] bg-[#f5f5f7] px-3 py-5 sm:px-6 sm:py-7 lg:px-8">
-        <header className="flex flex-wrap items-start justify-between gap-5">
+    <div className={historyOpen?"history-page-canvas":"min-h-full bg-[#f5f5f7] px-3 py-3 sm:px-5 sm:py-5"}>
+      <div className={historyOpen?"history-page":"mx-auto max-w-[1440px] rounded-[28px] bg-[#f5f5f7] px-3 py-5 sm:px-6 sm:py-7 lg:px-8"}>
+        <header className={historyOpen?"history-page-header":"flex flex-wrap items-start justify-between gap-5"}>
+          {historyOpen&&!historyEntry&&<h1 className="history-page-title">历史结果</h1>}
           {!historyOpen && <div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">预算审查</h1>
             <p className="mt-1.5 text-sm text-slate-400">上传同一项目的预算和批复材料，集中查看差异与审查结果</p>
           </div>}
           <div className="ml-auto flex flex-wrap items-center gap-3">
-          {(activeStep===1||historyOpen) && <button type="button" onClick={returnOneLevel} className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50"><ArrowRight size={16} className="rotate-180" />返回</button>}
+          {(activeStep===1||historyOpen) && <button type="button" onClick={returnOneLevel} className={historyOpen?"history-button":"inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50"}><ArrowRight size={16} className="rotate-180" />返回</button>}
           {!historyOpen && <button type="button" onClick={openHistory} className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50">历史结果</button>}
           </div>
         </header>
 
-        <main className="mt-7 space-y-6">
+        <main className={historyOpen?"history-page-content":"mt-7 space-y-6"}>
         {!historyOpen&&uploadNotice&&<p role="status" aria-live="polite" className="text-sm text-slate-600">{uploadNotice}</p>}
         {(error||snapshot.error) && (
           <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-700">
@@ -552,10 +554,8 @@ export function BudgetCheckPage({
 
             </div>
 
-            {(submittedBatch||batchBusy)&&<div role="status" aria-live="polite" aria-label="本批材料处理状态" className="flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
-              {batchBusy&&<Loader2 size={16} className="shrink-0 animate-spin text-[#ef9739]"/>}
-              <span>{overallProgressStatus}</span>
-            </div>}
+            {batchBusy?<ProcessingStatusCard variant="compact" label="本批材料处理状态" title="正在处理预算材料" description={overallProgressStatus} />
+              :submittedBatch&&<p role="status" className="text-center text-sm text-slate-600">{overallProgressStatus}</p>}
 
           </section>
         )}
@@ -566,7 +566,7 @@ export function BudgetCheckPage({
 
         {!historyOpen&&activeStep === 1 && !currentResultId && !review && (
           <section className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_2px_8px_rgba(15,23,42,0.03)]">
-            {resultLoading ? <p role="status" className="text-sm text-slate-500">正在读取预算结果...</p> : <>
+            {resultLoading ? <ProcessingStatusCard title="正在读取审查结果" description="正在加载已保存的预算结果，请稍候。" /> : <>
             <div className="flex items-center gap-3"><ScanLine size={18} className="text-[#ef9739]" /><div><h2 className="text-sm font-semibold text-slate-900">科目额度一致性校验</h2><p className="mt-1 text-xs text-slate-500">材料解析完成后，启动后端预算审查任务。</p></div></div>
             <div className="mt-5 flex flex-wrap items-center gap-3"><span className="text-xs text-emerald-700">{task ? `已准备 ${task.parsedLineCount} 行材料` : '请先上传并解析预算材料'}</span><button type="button" onClick={handleReview} disabled={!task || loading !== null} className="inline-flex items-center gap-2 rounded-xl bg-[#f6a142] px-4 py-2 text-xs font-semibold text-white hover:bg-[#ed9130] disabled:cursor-not-allowed disabled:opacity-40">{loading === 'review' ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle size={14} />}{loading === 'review' ? '审查中...' : '开始预算审查'}</button></div>
             </>}

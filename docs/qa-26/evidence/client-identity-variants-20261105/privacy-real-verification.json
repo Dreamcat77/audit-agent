@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "javaRoleChecks": 17,
+  "configuredNames": 4,
+  "providerCalls": 3,
+  "allCallsMasked": true,
+  "protectedNameLeaks": 0,
+  "exactCitationRestored": true,
+  "missingHeaderHttp": 503,
+  "actualModel": [
+    {
+      "role": "PARTY_B",
+      "http": 200,
+      "facts": 6,
+      "clauses": 5,
+      "findings": 1,
+      "exactCitations": 11
+    },
+    {
+      "role": "PURCHASER",
+      "http": 200,
+      "facts": 6,
+      "clauses": 4,
+      "findings": 1,
+      "exactCitations": 10
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+[
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/common/material/application/DurableMaterialExtractionService.java",
+    "change": "MODIFIED",
+    "sha256": "8b9aabbebcf0fb80cc771c4e786577a51e37212022c729fa82439186ade2af58",
+    "baseline_sha256": "1384a2cd749d7dd9338f73ee45110f0a3a60052d3fb102a1d425ea7ac8531ae7"
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/integration/dm8/AutoCaseMapper.java",
+    "change": "ADDED",
+    "sha256": "09b16d3cc05bfecd8ef7183ef8f6fba3f2b9314442ecc73c62c238a49e0beabb",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/integration/dm8/Dm8AuditCaseRepository.java",
+    "change": "ADDED",
+    "sha256": "9159c17f10324d6d1b81fcc818d9d121773223fc74398486e93c6997cc9ab42f",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/AuditCase.java",
+    "change": "ADDED",
+    "sha256": "f8db81c92e95b77a7ade934814c2dc99890f3f2c4295ae72d6cf4a0d82974d51",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/AuditCaseController.java",
+    "change": "ADDED",
+    "sha256": "b8763d803e2bb85c2e1595add5e31e5c747095bba86ad6b538d585a2146dd340",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/AuditCaseRepository.java",
+    "change": "ADDED",
+    "sha256": "d0c03352ed3513a11aaa6f3106633b99982852bbb40af01c6185499aea97d4c7",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/AuditCaseService.java",
+    "change": "ADDED",
+    "sha256": "59f94e80fb458a4b17da7965304c0d4e5f8ba6d844048de968400d747e567e1b",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/AuditCaseTransactions.java",
+    "change": "ADDED",
+    "sha256": "451d8d3e8f84e9a19cb4783bff2af5ec3a714829f8a6b73b78560d81f597a907",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/AuditCaseWorker.java",
+    "change": "ADDED",
+    "sha256": "43f5c6a5f5f08ae20a58e5f026d7d46b686c4ce2c96f81d210dee80a106cfa7d",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/CaseFactPolicy.java",
+    "change": "ADDED",
+    "sha256": "39196ef4ca5be09e1f9693618933c9b34537390d3705a1a8f61c6988f832a2e4",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/main/java/com/fuquan/audit/procurement/autocase/InMemoryAuditCaseRepository.java",
+    "change": "ADDED",
+    "sha256": "2d42c904cfc1a7888bca7eb41442c37734dc61cc6f726357349f6ad7e21b6828",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/AuditCaseIntegrationTest.java",
+    "change": "ADDED",
+    "sha256": "01f35b7843bd320eba36912719e1bada6623f06e82cf740696be96b37d754f54",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/AutomaticCaseHttpTest.java",
+    "change": "ADDED",
+    "sha256": "7c2471937aa8f073a829626b4fc9d9de92c70be85530aa4cb3f665ffe075cc99",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/CaseFactPolicyTest.java",
+    "change": "ADDED",
+    "sha256": "7ce9d24232ae55fab93a4e7e6aedd1ae2298cf19e7415f0c1c2a33d33327192f",
+    "baseline_sha256": null
+  },
+  {
+    "path": "backend/src/test/java/com/fuquan/audit/procurement/autocase/Dm8AuditCaseRepositoryTest.java",
+    "change": "ADDED",
+    "sha256": "08d9179041115f536bf458ec879e8f93aa0504d5b7de36a56a0cbea9b4571490",
+    "baseline_sha256": null
+  },
+  {
+    "path": "db/dm8/PROCUREMENT__automatic_case_v1.sql",
+    "change": "ADDED",
+    "sha256": "36196ccf91a6115b709564bfa53d0439ea24ce64d574442f2dcadb14fc060a3e",
+    "baseline_sha256": null
+  },
+  {
+    "path": "frontend/src/app/App.tsx",
+    "change": "MODIFIED",
+    "sha256": "e2711f714d7dac240969e71968c0486fbcfffb9cde91f38f5b4ccba15fb40893",
+    "baseline_sha256": "d1934b207958fdc5eda2bb8e18985e2bbc388cc26166c85f096ec490a9a18f20"
+  },
+  {
+    "path": "frontend/src/features/procurement/AutomaticCasePanel.tsx",
+    "change": "ADDED",
+    "sha256": "4caac2005f1559bffc65ee79b1f8ffaa248b699f5d110c64de5b7389dc9579dc",
+    "baseline_sha256": null
+  },
+  {
+    "path": "services/audit-ai/src/audit_ai/model/automatic_procurement_prompt.py",
+    "change": "ADDED",
+    "sha256": "2ba49474a5a8141ae9071ab2ebb39426d2b4d77c640a513c3d8839f0683bd0d6",
+    "baseline_sha256": null
+  },
+  {
+    "path": "services/audit-ai/src/audit_ai/model/gateway.py",
+    "change": "MODIFIED",
+    "sha256": "696b1d513e9cfe87b723ae0c42d78e3e24c7a88a7e1af736bfe7d1c82c25a912",
+    "baseline_sha256": "377339f2dd883f54fc3f2b792f811d4e04c8108a5f759a3f5afe6b67ac4eb66b"
+  },
+  {
+    "path": "services/audit-ai/src/audit_ai/model/material_fields.py",
+    "change": "MODIFIED",
+    "sha256": "c6d57f8997f9e399957180918a85163ee63a7d65bd2122c4e525302cad2c7d1a",
+    "baseline_sha256": "edaf7ec67950bbddc37a035a95a95e437ac573031d15997a3ec54d229bd7d94a"
+  },
+  {
+    "path": "services/audit-ai/tests/test_automatic_procurement_fields.py",
+    "change": "ADDED",
+    "sha256": "daebca460553ae60f19d2c75df49db8a4bc48323e193d65b8eb564b3f431a349",
+    "baseline_sha256": null
+  }
+]

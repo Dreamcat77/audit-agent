@@ -1,0 +1,10 @@
+{
+  "http": 200,
+  "durationSeconds": 38.19,
+  "sourceUnchanged": true,
+  "engine": "PADDLEOCR_3.7.0",
+  "chars": 99,
+  "pages": 1,
+  "declarationUppercaseFound": true,
+  "approvalUppercaseFound": true
+}

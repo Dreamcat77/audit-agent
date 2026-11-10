@@ -1,0 +1,20 @@
+{
+  "caseId": "c0a01355-61c5-3574-ade2-2380522787ad",
+  "status": "PARTIAL",
+  "formalContracts": 1,
+  "categories": 8,
+  "formalSteps": [
+    {
+      "status": "COMPLETED",
+      "reason": null
+    },
+    {
+      "status": "COMPLETED",
+      "reason": null
+    },
+    {
+      "status": "COMPLETED",
+      "reason": null
+    }
+  ]
+}

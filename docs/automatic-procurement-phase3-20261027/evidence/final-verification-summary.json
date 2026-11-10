@@ -1,0 +1,157 @@
+{
+  "command": ".\\mvnw.cmd clean verify -Daudit.build.directory=target-phase3-final",
+  "environment": "Windows / JDK 17.0.18 / local / real twelve-file fixtures / real DM8 suites enabled separately",
+  "totals": {
+    "tests": 3208,
+    "failures": 9,
+    "errors": 5,
+    "skipped": 22
+  },
+  "passed": 3172,
+  "baselineFailureSetExactlyMatches": true,
+  "newFailures": [],
+  "failures": [
+    {
+      "test": "com.fuquan.audit.contract.application.project.AutomaticProjectFileClassificationServiceTest#terminalFactAttemptsDoNotResendAndStillAdvanceToAvailableMaterialFacts",
+      "kind": "failure",
+      "category": "B",
+      "message": "\nNo interactions wanted here:\n-> at com.fuquan.audit.contract.application.project.AutomaticProjectFileClassificationServiceTest.terminalFactAttemptsDoNotResendAndStillAdvanceToAvailableMaterialFacts(AutomaticProjectFileClassificationServiceTest.java:113)\nBut found these interactions on mock 'contractCandidateMaterializationService':\n-> at com.fuquan.audit.contract.application.project.AutomaticProjectFileClassificationService.advanceOne(AutomaticProjectFileClassificationService.java:225)\nActually, above is the only interaction with this mock."
+    },
+    {
+      "test": "com.fuquan.audit.procurement.api.ProcurementMaterialBatchApiIntegrationTest#incrementalUploadsWaitForExplicitUnifiedAnalysisAndAutomaticallyPersistOneReport",
+      "kind": "failure",
+      "category": "C",
+      "message": "JSON path \"$.data.files[0].status\" expected:<READY> but was:<INCOMPLETE>"
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest#stagedSpreadsheetIsSavedAsPendingAnalysisAndCannotRunComparisonOnUpload",
+      "kind": "failure",
+      "category": "C",
+      "message": "\nexpected: \"READY\"\n but was: \"COMPLETED_WITH_PLACEHOLDER\""
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest#explicitAnalysisRetainsPreviouslyConfirmedBidderWithoutRequestingConfirmationAgain",
+      "kind": "error",
+      "category": "D",
+      "message": "Cannot invoke \"com.fuquan.audit.procurement.application.ProcurementTenderDocumentService$TenderDocumentResult.id()\" because \"source\" is null"
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest#oneUnreadableFileDoesNotDiscardAnotherFileResult",
+      "kind": "failure",
+      "category": "C",
+      "message": "\nExpecting actual:\n  [\"INCOMPLETE\"]\nto contain exactly (and in same order):\n  [\"INCOMPLETE\", \"NOT_APPLICABLE\"]\nbut could not find the following elements:\n  [\"NOT_APPLICABLE\"]\n"
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest#stagedUploadsAreRediscoverableWithoutRunningRiskAnalysisOrGeneratingReport",
+      "kind": "failure",
+      "category": "C",
+      "message": "\nNo interactions wanted here:\n-> at com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest.stagedUploadsAreRediscoverableWithoutRunningRiskAnalysisOrGeneratingReport(ProcurementMaterialBatchServiceTest.java:225)\nBut found these interactions on mock 'procurementReviewReportService':\n-> at com.fuquan.audit.procurement.application.ProcurementMaterialBatchService.analyzeSavedWithin(ProcurementMaterialBatchService.java:143)\nActually, above is the only interaction with this mock."
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest#oneExplicitAnalysisProducesReportAndRetryReopensSameReport",
+      "kind": "error",
+      "category": "D",
+      "message": "Cannot invoke \"com.fuquan.audit.procurement.application.ProcurementTenderDocumentService$TenderDocumentResult.id()\" because \"source\" is null"
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest#explicitAnalysisRetriesSavedAiFailuresButReusesOnlyAvailableResults",
+      "kind": "error",
+      "category": "D",
+      "message": "Cannot invoke \"com.fuquan.audit.procurement.application.ProcurementTenderDocumentService$TenderDocumentResult.id()\" because \"source\" is null"
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest#unreadableMaterialStillReturnsAReportWithoutInventingFacts",
+      "kind": "failure",
+      "category": "C",
+      "message": "\nexpected: \"PARSE_INCOMPLETE\"\n but was: \"COMPLETED_WITH_PLACEHOLDER\""
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest#unreadableSavedSpreadsheetDoesNotStopOtherFilesAndStillGeneratesPartialReport",
+      "kind": "error",
+      "category": "D",
+      "message": "Cannot invoke \"com.fuquan.audit.procurement.application.ProcurementTenderDocumentService$TenderDocumentResult.id()\" because \"source\" is null"
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialClassifierTest#quotationTemplatesAndConflictingSuppliersStayUnconfirmed",
+      "kind": "failure",
+      "category": "B",
+      "message": "\nexpected: \"BIDDER_UNCONFIRMED\"\n but was: \"QUOTATION\""
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialClassifierTest#scannedQuotationUsesExplicitSupplierAndNeverTheProjectOrBudget",
+      "kind": "failure",
+      "category": "B",
+      "message": "\nexpected: \"BIDDER\"\n but was: \"QUOTATION\""
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementMaterialClassifierTest#tenderContainingQuotationTemplatesDoesNotBecomeSupplierEvidence",
+      "kind": "failure",
+      "category": "B",
+      "message": "\nexpected: \"TENDER\"\n but was: \"OTHER\""
+    },
+    {
+      "test": "com.fuquan.audit.procurement.application.ProcurementReportSnapshotTest#oldReportForDifferentMaterialScopeIsNotReturnedAsCurrentBatchResult",
+      "kind": "error",
+      "category": "D",
+      "message": "采购审查报告不存在: 083990d6-3b4c-47e2-914a-db3130063791"
+    }
+  ],
+  "automaticCaseSuites": [
+    {
+      "name": "com.fuquan.audit.procurement.autocase.AuditCaseIntegrationTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "1"
+    },
+    {
+      "name": "com.fuquan.audit.procurement.autocase.AutomaticCaseHttpTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.fuquan.audit.procurement.autocase.CaseFactPolicyTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.fuquan.audit.procurement.autocase.CaseReviewDm8RealIntegrationTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "1"
+    },
+    {
+      "name": "com.fuquan.audit.procurement.autocase.CaseReviewEngineTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.fuquan.audit.procurement.autocase.CaseReviewWorkflowTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.fuquan.audit.procurement.autocase.Dm8AuditCaseRepositoryTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.fuquan.audit.procurement.autocase.Dm8AutoCaseRealIntegrationTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "5"
+    }
+  ]
+}

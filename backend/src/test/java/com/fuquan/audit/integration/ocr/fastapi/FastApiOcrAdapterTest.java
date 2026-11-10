@@ -36,6 +36,18 @@ import org.springframework.web.client.RestClient;
 
 class FastApiOcrAdapterTest {
 
+    @Test void optionalMalformedGeometryDoesNotDiscardTextOrOtherValidRegions(){
+        server.expect(requestTo("http://127.0.0.1/ai/v1/ocr/extract")).andRespond(withSuccess("""
+            {"code":200,"data":{"text":"金额100元","confidence":0.9,"engine":"PADDLEOCR_3.7.0","durationMs":1,"pages":[
+            {"pageNum":1,"text":"金额100元","confidence":0.9,"regions":[
+            {"start":0,"end":6,"confidence":0.9,"polygon":[[0.1,0.1],[0.9,0.1],[0.9,0.2],[0.1,0.2]],"verification":"UNCERTAIN"},
+            {"start":0,"end":6,"confidence":0.9,"polygon":[[0.1],[0.9,0.1],[0.9,0.2],[0.1,0.2]]},
+            {"start":0,"end":100,"confidence":0.9,"polygon":null},null]}]}}
+            """,MediaType.APPLICATION_JSON));
+        var result=adapter.recognize(request());assertThat(result.text()).isEqualTo("金额100元");
+        assertThat(result.pages().get(0).regions()).singleElement().satisfies(r->assertThat(r.verification()).isEqualTo("UNCERTAIN"));server.verify();
+    }
+
     private MockRestServiceServer server;
     private FastApiOcrAdapter adapter;
 
@@ -49,6 +61,28 @@ class FastApiOcrAdapterTest {
     @AfterEach
     void cleanMdc() {
         MDC.clear();
+    }
+
+    @Test
+    void configuredParallelSlotsReachHttpTogetherAndRejectOnlyExcessRequests() throws Exception {
+        var entered = new java.util.concurrent.CountDownLatch(2);
+        var release = new java.util.concurrent.CountDownLatch(1);
+        var builder=RestClient.builder().baseUrl("http://127.0.0.1");
+        var parallelServer=MockRestServiceServer.bindTo(builder).ignoreExpectOrder(true).build();
+        parallelServer.expect(org.springframework.test.web.client.ExpectedCount.times(2),requestTo("http://127.0.0.1/ai/v1/ocr/extract")).andRespond(request->{
+            entered.countDown();try {if(!release.await(5,java.util.concurrent.TimeUnit.SECONDS))throw new AssertionError("gate");}
+            catch(InterruptedException e){throw new AssertionError(e);}
+            return withSuccess("{}",MediaType.APPLICATION_JSON).createResponse(request);
+        });
+        var parallel=new FastApiOcrAdapter(builder.build(),2);var threads=java.util.concurrent.Executors.newFixedThreadPool(2);
+        var request=new OcrRequest("doc","contract.pdf","application/pdf",OcrTestSources.utf8("file-content"));
+        try {
+            var a=threads.submit(()->catchThrowableOfType(()->parallel.recognize(request),ExternalServiceException.class));
+            var b=threads.submit(()->catchThrowableOfType(()->parallel.recognize(request),ExternalServiceException.class));
+            assertThat(entered.await(5,java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+            assertThatThrownBy(()->parallel.recognize(request)).isInstanceOf(com.fuquan.audit.review.application.port.OcrCapacityUnavailableException.class);
+            release.countDown();assertThat(a.get(5,java.util.concurrent.TimeUnit.SECONDS)).isNotNull();assertThat(b.get(5,java.util.concurrent.TimeUnit.SECONDS)).isNotNull();parallelServer.verify();
+        }finally{release.countDown();threads.shutdownNow();}
     }
 
     @Test

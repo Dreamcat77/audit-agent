@@ -1,0 +1,578 @@
+[
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "07_澄川星河办公设备有限公司报价单.pdf",
+      "sha256": "5dedf7d854f945769db35d4aa6925e38a9be59577dfa47d0c8f873e9a740ca1e",
+      "segments": [
+        {
+          "locator": "pdf/page:1/text/part:1",
+          "text": "澄川星河办公设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川星河办公设备有限公司。报价编号：FZ-BJ-2026-A。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,200.00 168,000.00\r\n多功能打印设备 4 台 6,800.00 27,200.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币212,000.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "line-0",
+          "type": "itemName",
+          "value": "办公终端",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,200.00 168,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-0",
+          "type": "quantity",
+          "value": "40",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,200.00 168,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-0",
+          "type": "unitPrice",
+          "value": "4,200.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,200.00 168,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-0",
+          "type": "lineAmount",
+          "value": "168,000.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,200.00 168,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "itemName",
+          "value": "多功能打印设备",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 6,800.00 27,200.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "quantity",
+          "value": "4",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 6,800.00 27,200.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "unitPrice",
+          "value": "6,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 6,800.00 27,200.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "lineAmount",
+          "value": "27,200.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 6,800.00 27,200.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "itemName",
+          "value": "安装调试及数据迁移",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 16,800.00 16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "quantity",
+          "value": "1",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 16,800.00 16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "unitPrice",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 16,800.00 16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "lineAmount",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 16,800.00 16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "documentType",
+          "value": "报价单",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "报价单",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "projectNo",
+          "value": "FZ-CG-2026\r\n-001",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目编号：FZ-CG-2026\r\n-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "supplierName",
+          "value": "澄川星河办公设备有限公司",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "报价单位：澄川星河办公设备有限公司",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "quoteAmount",
+          "value": "212,000.00元",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "含税报价合计：人民币212,000.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "08_澄川明川数字设备有限公司报价单.pdf",
+      "sha256": "86495b4d4687d813ca40c677691893508458bfb009061ac70408f84e64de5154",
+      "segments": [
+        {
+          "locator": "pdf/page:1/text/part:1",
+          "text": "澄川明川数字设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川明川数字设备有限公司。报价编号：FZ-BJ-2026-B。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,300.00 172,000.00\r\n多功能打印设备 4 台 6,900.00 27,600.00\r\n安装调试及数据迁移 1 项 16,800.00 16,800.00\r\n含税报价合计：人民币216,400.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "line-0",
+          "type": "itemName",
+          "value": "办公终端",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,300.00 172,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-0",
+          "type": "quantity",
+          "value": "40",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,300.00 172,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-0",
+          "type": "unitPrice",
+          "value": "4,300.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,300.00 172,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-0",
+          "type": "lineAmount",
+          "value": "172,000.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,300.00 172,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "itemName",
+          "value": "多功能打印设备",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 6,900.00 27,600.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "quantity",
+          "value": "4",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 6,900.00 27,600.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "unitPrice",
+          "value": "6,900.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 6,900.00 27,600.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "lineAmount",
+          "value": "27,600.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 6,900.00 27,600.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "itemName",
+          "value": "安装调试及数据迁移",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 16,800.00 16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "quantity",
+          "value": "1",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 16,800.00 16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "unitPrice",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 16,800.00 16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "lineAmount",
+          "value": "16,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 16,800.00 16,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "documentType",
+          "value": "报价单",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "报价单",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "projectNo",
+          "value": "FZ-CG-2026\r\n-001",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目编号：FZ-CG-2026\r\n-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "supplierName",
+          "value": "澄川明川数字设备有限公司",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "报价单位：澄川明川数字设备有限公司",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "quoteAmount",
+          "value": "216,400.00元",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "含税报价合计：人民币216,400.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  },
+  {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "fileName": "09_澄川启衡信息设备有限公司报价单.pdf",
+      "sha256": "bf4b23e99cd118b6281735d602e0d69b3b700808e3e86f1f82e46004812c1f25",
+      "segments": [
+        {
+          "locator": "pdf/page:1/text/part:1",
+          "text": "澄川启衡信息设备有限公司报价单\r\n采购单位：澄川公共服务保障中心。项目名称：行政办公终端及打印设备更新。项目编号：FZ-CG-2026\r\n-001。预算年度：2026。经办部门：综合管理部。\r\n报价单位：澄川启衡信息设备有限公司。报价编号：FZ-BJ-2026-C。报价日期：2026年9月12日。报价\r\n有效期：30日。\r\n货物或服务 数量 单位 含税单价（元） 金额（元）\r\n办公终端 40 台 4,350.00 174,000.00\r\n多功能打印设备 4 台 7,000.00 28,000.00\r\n安装调试及数据迁移 1 项 17,800.00 17,800.00\r\n含税报价合计：人民币219,800.00元。报价包含到货运输、现场安装、调试、一次培训及三年保修，无\r\n另行收取的进场费。\r\n预计合同签订后30日内完成交付。报价人为前期询价对象，报价本身不等于中标。报价单位代表签字栏\r\n留空，不提供真实开户行、账号或统一社会信用代码。\r\n仿真测试材料  单位与业务信息均为虚构 第1页\r\n"
+        }
+      ],
+      "facts": [
+        {
+          "row": "line-0",
+          "type": "itemName",
+          "value": "办公终端",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,350.00 174,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-0",
+          "type": "quantity",
+          "value": "40",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,350.00 174,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-0",
+          "type": "unitPrice",
+          "value": "4,350.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,350.00 174,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-0",
+          "type": "lineAmount",
+          "value": "174,000.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "办公终端 40 台 4,350.00 174,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "itemName",
+          "value": "多功能打印设备",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 7,000.00 28,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "quantity",
+          "value": "4",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 7,000.00 28,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "unitPrice",
+          "value": "7,000.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 7,000.00 28,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-1",
+          "type": "lineAmount",
+          "value": "28,000.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "多功能打印设备 4 台 7,000.00 28,000.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "itemName",
+          "value": "安装调试及数据迁移",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 17,800.00 17,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "quantity",
+          "value": "1",
+          "dataType": "DECIMAL",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 17,800.00 17,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "unitPrice",
+          "value": "17,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 17,800.00 17,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "line-2",
+          "type": "lineAmount",
+          "value": "17,800.00",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "安装调试及数据迁移 1 项 17,800.00 17,800.00",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "documentType",
+          "value": "报价单",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "报价单",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "projectNo",
+          "value": "FZ-CG-2026\r\n-001",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "项目编号：FZ-CG-2026\r\n-001",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "supplierName",
+          "value": "澄川启衡信息设备有限公司",
+          "dataType": "TEXT",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "报价单位：澄川启衡信息设备有限公司",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        },
+        {
+          "row": "meta-3",
+          "type": "quoteAmount",
+          "value": "219,800.00元",
+          "dataType": "MONEY",
+          "locator": "pdf/page:1/text/part:1",
+          "excerpt": "含税报价合计：人民币219,800.00元",
+          "verification": "SOURCE_VERIFIED",
+          "model": "SIMULATED_SOURCE_REPLAY",
+          "extractionVersion": "procurement-auto-fields-v1"
+        }
+      ]
+    }
+  }
+]

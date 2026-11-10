@@ -1,0 +1,20 @@
+{
+  "provenFacts": {
+    "agencyName": 1,
+    "documentType": 3,
+    "itemName": 12,
+    "lineAmount": 10,
+    "projectName": 5,
+    "projectNo": 3,
+    "quoteAmount": 2,
+    "supplierName": 3
+  },
+  "sourceSegments": 361,
+  "id": "c9430386-5922-3fa8-8a9f-16f0bf4c0460",
+  "partialStatusPreserved": true,
+  "acknowledgedUnits": 14,
+  "status": "PASS",
+  "originalLedgerUnchanged": true,
+  "extractionModelCalls": 0,
+  "plannedUnits": 33
+}

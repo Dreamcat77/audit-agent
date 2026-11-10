@@ -1,0 +1,22 @@
+{
+  "finalRelease": "budget-batch-20261106-r7",
+  "retestedBatches": 6,
+  "baselineRelease": "budget-batch-20261106-r6",
+  "ocrConfusableNotConfirmedAsFault": true,
+  "longFileChars": 15448,
+  "synonymNoWarning": true,
+  "status": "PASS",
+  "batches": 17,
+  "files": 23,
+  "rotationAngles": [
+    90,
+    180
+  ],
+  "historyExcluded": true,
+  "normalApprovalNoWarning": true,
+  "exactCentDifference": "0.01",
+  "crossFilePurposeConflict": true,
+  "approvedRevisionNoWarning": true,
+  "nonBudgetStillFinished": true,
+  "sourceExactness": "remote acceptance asserts ranges against frozen text"
+}

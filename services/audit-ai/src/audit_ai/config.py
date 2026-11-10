@@ -60,6 +60,10 @@ class Settings:
     ocr_fast_enabled: bool = True
     ocr_fast_model_dir: str | None = None
     ocr_process_isolation: bool = False
+    ocr_worker_processes: int = 1
+    ocr_memory_budget_mb: int = 16384
+    ocr_memory_reserve_mb: int = 4096
+    ocr_worker_memory_mb: int = 4096
     max_upload_bytes: int = 50 * 1024 * 1024
     ocr_temp_root: str | None = None
     model_base_url: str | None = None
@@ -105,6 +109,11 @@ class Settings:
             raise ValueError("ocr_fast_enabled must be boolean")
         if not isinstance(self.ocr_process_isolation, bool):
             raise ValueError("ocr_process_isolation must be boolean")
+        if type(self.ocr_worker_processes) is not int or not 1 <= self.ocr_worker_processes <= 4:
+            raise ValueError("ocr_worker_processes must be between one and four")
+        for name in ('ocr_memory_budget_mb','ocr_memory_reserve_mb','ocr_worker_memory_mb'):
+            if type(getattr(self,name)) is not int or getattr(self,name)<512:
+                raise ValueError(name+' must be an integer of at least 512 MB')
         if self.ocr_cpu_threads != 1 or self.ocr_enable_mkldnn:
             raise ValueError(
                 "OCR runtime safety invariant requires one CPU thread and MKLDNN disabled"
@@ -170,6 +179,10 @@ class Settings:
             ocr_fast_enabled=_environment_bool("AUDIT_OCR_FAST_ENABLED", True),
             ocr_fast_model_dir=os.getenv("AUDIT_OCR_FAST_MODEL_DIR") or None,
             ocr_process_isolation=_environment_bool("AUDIT_OCR_PROCESS_ISOLATION", False),
+            ocr_worker_processes=_environment_int("AUDIT_OCR_WORKER_PROCESSES", 1),
+            ocr_memory_budget_mb=_environment_int("AUDIT_OCR_MEMORY_BUDGET_MB", 16384),
+            ocr_memory_reserve_mb=_environment_int("AUDIT_OCR_MEMORY_RESERVE_MB", 4096),
+            ocr_worker_memory_mb=_environment_int("AUDIT_OCR_WORKER_MEMORY_MB", 4096),
             max_upload_bytes=_environment_int(
                 "AUDIT_AI_MAX_UPLOAD_BYTES", 50 * 1024 * 1024
             ),

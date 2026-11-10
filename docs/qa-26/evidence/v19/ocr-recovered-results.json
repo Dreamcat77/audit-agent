@@ -1,0 +1,40 @@
+[
+  {
+    "module": "procurement",
+    "label": "proc-scans",
+    "failures": [],
+    "details": {
+      "id": "f30ff258-759f-3c52-bdd0-61e80ebb8b66",
+      "status": "DATA_INSUFFICIENT",
+      "budget": 2200000.0,
+      "ceiling": null,
+      "offers": [],
+      "documents": [
+        {
+          "id": "4dd5a4e9-76c3-4dab-9def-d7f00256c2a7",
+          "name": "采购需求表-倒置.png",
+          "status": "EXTRACTED",
+          "parseMethod": "OFFICE_TEXT_OCR",
+          "errorCode": null,
+          "factCount": 5
+        },
+        {
+          "id": "d8b818d1-6051-4fad-8c4f-2b443aba4239",
+          "name": "采购需求表-混合扫描.pdf",
+          "status": "EXTRACTED",
+          "parseMethod": "OFFICE_TEXT_OCR",
+          "errorCode": null,
+          "factCount": 8
+        },
+        {
+          "id": "776e58cd-1c5d-4124-90be-ad3021d6f2ec",
+          "name": "采购需求表-内嵌倒置.docx",
+          "status": "EXTRACTED",
+          "parseMethod": "OFFICE_TEXT_OCR",
+          "errorCode": null,
+          "factCount": 5
+        }
+      ]
+    }
+  }
+]

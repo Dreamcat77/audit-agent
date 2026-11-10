@@ -6,6 +6,7 @@ import com.fuquan.audit.common.material.application.OfficeMaterialTypes;
 import com.fuquan.audit.common.material.application.port.*;
 import com.fuquan.audit.contract.application.port.*;
 import com.fuquan.audit.security.domain.CurrentUser;
+import com.fuquan.audit.security.domain.PersonalUploadRoles;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
@@ -16,6 +17,8 @@ import static com.fuquan.audit.procurement.autocase.AuditCase.*;
 
 @Service
 public class AuditCaseService {
+    private CaseVisualQuality visualQuality;
+    @org.springframework.beans.factory.annotation.Autowired public void setVisualQuality(CaseVisualQuality value){this.visualQuality=value;}
     private final AuditCaseRepository repository;
     private final AuditCaseTransactions tx;
     private final FileStoragePort storage;
@@ -97,8 +100,8 @@ public class AuditCaseService {
             org.slf4j.LoggerFactory.getLogger(getClass()).warn("AUTO_CASE_STAGING_CLEANUP_FAILED exceptionType={}",cleanup.getClass().getSimpleName());
         }}finally{uploads.release();}}
     }
-    public AuditCase owned(UUID id,CurrentUser user){return repository.find(id).filter(c->c.owner().equals(user.userId())).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));}
-    public List<AuditCase> recent(CurrentUser user){return repository.recent(user.userId());}
+    public AuditCase owned(UUID id,CurrentUser user){return repository.find(id).filter(c->isSystemAdmin(user)||c.owner().equals(user.userId())).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));}
+    public List<AuditCase> recent(CurrentUser user){return repository.recent(isSystemAdmin(user)?null:user.userId());}
     public record HistoryPage(List<AuditCaseHistoryEntry> items,UUID nextCursor) {}
     public HistoryPage history(UUID before,int size,CurrentUser user){
         return history(before,size,null,null,null,user);
@@ -112,7 +115,7 @@ public class AuditCaseService {
         // Bounded metadata scanning also works with old snapshots, without a
         // new migration or loading document bodies/facts into the history API.
         for(int scanned=0;scanned<400;) {
-            var page=repository.history(user.userId(),cursor,Math.min(50,400-scanned));
+            var page=repository.history(isSystemAdmin(user)?null:user.userId(),cursor,Math.min(50,400-scanned));
             if(page.isEmpty())return new HistoryPage(List.copyOf(items),null);
             for(var entry:page) {
                 cursor=entry.id();scanned++;
@@ -129,6 +132,7 @@ public class AuditCaseService {
         UUID id=UUID.nameUUIDFromBytes(("auto-case/"+user.userId()+"/"+key).getBytes(StandardCharsets.UTF_8));
         return repository.find(id).filter(c->c.owner().equals(user.userId()));
     }
+    private static boolean isSystemAdmin(CurrentUser user){return user.roles().contains(PersonalUploadRoles.SYSTEM_ADMIN);}
     public void rejectOwner(AuditCase value){
         var report=new Report("FAILED",null,null,List.of(),null,
                 List.of("创建用户已失效或不具备审查权限，任务停止；文件原有处理状态和证据保留"),
@@ -158,6 +162,9 @@ public class AuditCaseService {
                 running=checkpoint(running,docs,user);continue;
             }
             String stage="DOCUMENT_READ";
+            String activeExtractionId=null;
+            List<MaterialFieldAiPort.Segment> activeSource=List.of();
+            int activeWindow=-1;
             try {
                 if(doc.status().equals("STAGING")) {
                     var state=storage.inspect(new StorageKey(doc.storageKey()));
@@ -188,10 +195,11 @@ public class AuditCaseService {
                         throw new IllegalStateException("WINDOW_POLICY_UNPROVEN");
                     for(int window=doc.calls();window<windows.size();window++) {
                         docs.set(i,doc.state("CALLING",null));running=checkpoint(running,docs,user);
-                        var result=ai.extract("PROCUREMENT_AUTO",CaseMaterialWindows.identity(doc.id(),window),doc.sha256(),windows.get(window));
+                        activeExtractionId=CaseMaterialWindows.identity(doc.id(),window);activeSource=windows.get(window);activeWindow=window;
+                        var result=ai.extractWithContext("PROCUREMENT_AUTO",activeExtractionId,doc.sha256(),activeSource,ProcurementMaterialSemantics.context(doc,activeSource));
                         var merged=new LinkedHashSet<>(doc.facts());
                         for(var fact:CaseFactPolicy.validate(doc,result))merged.add(new Fact("window"+window+":"+fact.row(),fact.type(),fact.value(),fact.dataType(),
-                                fact.locator(),fact.excerpt(),fact.verification(),fact.model(),fact.extractionVersion()));
+                                fact.locator(),fact.excerpt(),fact.verification(),fact.model(),fact.extractionVersion(),fact.subjectScope(),fact.amountScope()));
                         doc=doc.extractedWindow(List.copyOf(merged),window+1);docs.set(i,doc);running=checkpoint(running,docs,user);
                         if(Thread.currentThread().isInterrupted())return;
                     }
@@ -201,7 +209,8 @@ public class AuditCaseService {
                     if(attempt>0&&!CaseFactPolicy.needsSupplement(doc))break;
                     docs.set(i,doc.state("CALLING",null));running=checkpoint(running,docs,user);
                     String extractionId=attempt==0?doc.id().toString():UUID.nameUUIDFromBytes((doc.id()+"/missing-fields-v1").getBytes(StandardCharsets.UTF_8)).toString();
-                    var result=ai.extract("PROCUREMENT_AUTO",extractionId,doc.sha256(),doc.segments());
+                    activeExtractionId=extractionId;activeSource=doc.segments();activeWindow=-1;
+                    var result=ai.extractWithContext("PROCUREMENT_AUTO",extractionId,doc.sha256(),doc.segments(),ProcurementMaterialSemantics.context(doc,doc.segments()));
                     var merged=new LinkedHashSet<>(doc.facts());merged.addAll(CaseFactPolicy.validate(doc,result));
                     doc=doc.extracted(List.copyOf(merged),attempt+1);docs.set(i,doc);running=checkpoint(running,docs,user);
                 }
@@ -220,9 +229,24 @@ public class AuditCaseService {
                 var persisted=repository.find(id).orElseThrow();
                 if(failure instanceof org.springframework.dao.DataAccessException || failure instanceof CheckpointLost
                         ||persisted.version()!=running.version()||!Objects.equals(persisted.leaseToken(),running.leaseToken()))throw failure;
+                if(activeExtractionId!=null) {
+                    try {
+                        var acknowledged=ai.acknowledgedResult("PROCUREMENT_AUTO",activeExtractionId,doc.sha256(),activeSource);
+                        if(acknowledged!=null&&acknowledged.isPresent()) {
+                            var merged=new LinkedHashSet<>(doc.facts());
+                            for(var fact:CaseFactPolicy.validate(doc,acknowledged.get()))merged.add(activeWindow<0?fact:new Fact(
+                                    "window"+activeWindow+":"+fact.row(),fact.type(),fact.value(),fact.dataType(),fact.locator(),fact.excerpt(),
+                                    fact.verification(),fact.model(),fact.extractionVersion(),fact.subjectScope(),fact.amountScope()));
+                            // Preserve incomplete status and completed-window counter. No failed unit is replayed.
+                            doc=new Document(doc.id(),doc.name(),doc.size(),doc.sha256(),doc.storageKey(),doc.status(),doc.segments(),
+                                    List.copyOf(merged),doc.parseMethod(),doc.errorCode(),doc.calls(),doc.readCheckpoint());
+                        }
+                    } catch(RuntimeException unproven){logFailure(doc.id(),"ACKNOWLEDGED_FACT_READ",unproven);}
+                }
                 docs.set(i,doc.state("UNKNOWN",stage.equals("DOCUMENT_READ")?"READ_OUTCOME_UNPROVEN":"EXTRACTION_OUTCOME_UNPROVEN"));running=checkpoint(running,docs,user);
             }
         }
+        if(visualQuality!=null){docs.replaceAll(visualQuality::filter);running=checkpoint(running,docs,user);}
         var report=CaseFactPolicy.report(id,docs);
         if(running.report()!=null)for(var entry:running.report().reviews().entrySet())report=report.review(entry.getKey(),entry.getValue());
         if(blacklist!=null && !report.reviews().containsKey("BLACKLIST")) {
@@ -261,7 +285,8 @@ public class AuditCaseService {
                 }
                 var active=reviews.running(review);report=report.review(module,active);
                 running=checkpointReport(running,docs,report,user); // Commit call claim before external work.
-                report=report.review(module,reviews.execute(request,active));
+                var reviewed=reviews.execute(request,active);
+                report=report.review(module,visualQuality==null?reviewed:visualQuality.project(reviewed,docs));
                 running=checkpointReport(running,docs,report,user);
                 if(Thread.currentThread().isInterrupted())return;
             }

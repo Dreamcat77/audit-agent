@@ -9,6 +9,18 @@ import static org.assertj.core.api.Assertions.*;
 import static com.fuquan.audit.contract.application.analysis.ContractAnalysisCase.*;
 
 class ContractAnalysisRulesTest {
+    @Test void incorporatedBusinessDocumentIsShownWithoutClaimingItWasNotUploaded(){
+        String text="合同名称：档案维护服务合同\n服务范围以《交付要求说明书》为准。满足《交付要求说明书》的要求。按照《中华人民共和国民法典》履行。";
+        var s=ContractAnalysisEvidenceTest.source(text);
+        var file=new com.fuquan.audit.contract.domain.project.ProjectFile(s.fileId(),UUID.randomUUID(),null,"合同.docx","合同.docx","application/octet-stream",com.fuquan.audit.contract.domain.project.ProjectFileCategory.CONTRACT_BODY,
+            com.fuquan.audit.contract.domain.project.ProjectFileIngestionStatus.AVAILABLE,com.fuquan.audit.contract.domain.project.ProjectFileParseStatus.PARSED,s.sha256(),s.sha256(),100,text,null,Instant.now(),Instant.now());
+        var result=rules.recall(file,s,text);
+        assertThat(result.clauses()).singleElement().satisfies(c->{
+            assertThat(c.topic()).isEqualTo("ATTACHMENT");assertThat(c.summary()).contains("交付要求说明书").doesNotContain("未上传","缺失");
+            assertThat(text.substring(c.evidence().get(0).start(),c.evidence().get(0).end())).isEqualTo(c.evidence().get(0).excerpt());
+        });
+        assertThat(result.findings()).isEmpty();
+    }
     final ContractAnalysisRules rules=new ContractAnalysisRules(new ProjectFactExtractor(Clock.systemUTC()),new ContractAnalysisEvidence());
     static Fact fact(Source s,String text,String type,String value){return new Fact(type,value,"SYNTHETIC_TEST",List.of(new Evidence(s.fileId(),s.sha256(),s.parseResultId(),1,s.textSha256(),0,text.length(),text)));}
     static Output output(List<Fact> facts){return new Output("CONTRACT","PROCUREMENT",true,facts,List.of(),List.of(),List.of(),0,"synthetic", "test-v1");}
@@ -43,6 +55,13 @@ class ContractAnalysisRulesTest {
         assertThat(facts.stream().filter(f->f.type().equals("CONTRACT_REFERENCE"))).extracting(Fact::value).containsExactly("MAIN-2026-01");
         assertThat(facts.stream().filter(f->f.type().equals("CONTRACT_NO"))).extracting(Fact::value).containsExactly("SUP-2026-02");
     }
+    @Test void explicitTitleWithBookBracketsAndTrailingPunctuationIsNotRejectedByRecall(){
+        String text="合同名称：《青禾平台（二期）服务合同》；\n甲方：青禾大学\n乙方：澄川技术有限公司";
+        var s=ContractAnalysisEvidenceTest.source(text);
+        var file=new com.fuquan.audit.contract.domain.project.ProjectFile(s.fileId(),UUID.randomUUID(),null,"合同书.docx","合同书.docx","application/octet-stream",com.fuquan.audit.contract.domain.project.ProjectFileCategory.CONTRACT_BODY,
+            com.fuquan.audit.contract.domain.project.ProjectFileIngestionStatus.AVAILABLE,com.fuquan.audit.contract.domain.project.ProjectFileParseStatus.PARSED,s.sha256(),s.sha256(),100,text,null,Instant.now(),Instant.now());
+        assertThat(rules.recall(file,s,text).facts().stream().filter(f->f.type().equals("CONTRACT_NAME"))).extracting(Fact::value).containsExactly("青禾平台（二期）服务合同");
+    }
     @Test void intactPhysicalRowsRemainDistinctEvenWithSameName(){
         String text="合同价款明细\n名称\t数量\t单价\t金额\n相同名称\t2\t10\t20\n相同名称\t3\t10\t30\n合计\t\t\t50\n";
         var s=ContractAnalysisEvidenceTest.source(text);var out=rules.evaluate(s,List.of(output(List.of(fact(s,text,"TOTAL_AMOUNT","50")))),text);
@@ -70,4 +89,26 @@ class ContractAnalysisRulesTest {
         assertThat(steps.stream().filter(t->t.kind().equals("FRAGMENT"))).hasSize(6);
         assertThat(plan.fullCoverage(s,steps,12000)).isFalse();
     }
+    @Test void bidRecallKeepsJiaoFenAndRejectsPartialMonetarySuffix(){
+        for(String amount:List.of("贰仟元伍角", "贰仟元伍角陆分", "贰仟元零陆分", "2000元5角6分", "贰仟元伍角陆")){
+            String text="投标文件\n投标报价："+amount+"。";
+            var source=new Source(UUID.randomUUID(),"投标文件.pdf","a".repeat(64),100,SourceState.READY,UUID.randomUUID(),1,sha256(text),null);
+            var file=new com.fuquan.audit.contract.domain.project.ProjectFile(source.fileId(),UUID.randomUUID(),null,source.name(),source.name(),"application/pdf",com.fuquan.audit.contract.domain.project.ProjectFileCategory.BID_RESPONSE,
+                com.fuquan.audit.contract.domain.project.ProjectFileIngestionStatus.AVAILABLE,com.fuquan.audit.contract.domain.project.ProjectFileParseStatus.PARSED,source.sha256(),source.sha256(),100,text,null,Instant.now(),Instant.now());
+            var bids=rules.recall(file,source,text).facts().stream().filter(f->f.type().equals("BID_AMOUNT")).toList();
+            if(amount.endsWith("角陆"))assertThat(bids).isEmpty();
+            else assertThat(bids).extracting(Fact::value).containsExactly(amount);
+        }
+    }
+    @Test void explicitAnnualBidPriceSurvivesReformattedModelQuotesAndHistoricalPriceIsExcluded(){
+        String text="投标文件\n我方的投标总价为：（大写）贰佰贰拾万元人民币/年。\n第三章 历史业绩\n投标报价：80万元";
+        var s=new Source(UUID.randomUUID(),"投标文件.pdf","a".repeat(64),100,SourceState.READY,UUID.randomUUID(),1,sha256(text),null);
+        var file=new com.fuquan.audit.contract.domain.project.ProjectFile(s.fileId(),UUID.randomUUID(),null,s.name(),s.name(),"application/pdf",com.fuquan.audit.contract.domain.project.ProjectFileCategory.BID_RESPONSE,
+            com.fuquan.audit.contract.domain.project.ProjectFileIngestionStatus.AVAILABLE,com.fuquan.audit.contract.domain.project.ProjectFileParseStatus.PARSED,s.sha256(),s.sha256(),100,text,null,Instant.now(),Instant.now());
+        var actual=rules.recall(file,s,text);
+        assertThat(actual.facts().stream().filter(f->f.type().equals("BID_AMOUNT"))).singleElement().satisfies(f->{
+            assertThat(f.value()).isEqualTo("贰佰贰拾万元人民币/年");assertThat(text.substring(f.evidence().get(0).start(),f.evidence().get(0).end())).isEqualTo(f.evidence().get(0).excerpt());});
+        assertThat(actual.facts()).noneMatch(f->f.type().equals("TOTAL_AMOUNT"));
+    }
+
 }

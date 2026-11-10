@@ -1,0 +1,653 @@
+{
+  "stages": {
+    "REQUEST": 5407,
+    "STORAGE_STAGE": 26,
+    "DB_UPLOAD_START_COMMIT": 25,
+    "STORAGE_PROMOTE": 25,
+    "DB_UPLOAD_COMPLETE_COMMIT": 25,
+    "PDF_PAGE_TEXT": 37,
+    "OFFICE_TEXT": 25,
+    "DOCUMENT_PARSE": 25,
+    "PARSED_TEXT_READY": 25,
+    "OCR_PAGE_CAPACITY": 16,
+    "OCR_CALL": 16,
+    "OCR_PAGE_TEXT": 16,
+    "HTTP_EXCEPTION": 3,
+    "DOWNSTREAM_HTTP": 33
+  },
+  "pageCapacity": [
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    },
+    {
+      "stage": "OCR_PAGE_CAPACITY",
+      "outcome": "SUCCESS",
+      "durationMs": 0,
+      "queueWaitMs": 0
+    }
+  ],
+  "pageProcessing": [
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 284
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 10
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 9
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 14
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 15
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 14
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 11
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 11
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 6
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 10
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 5
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 9
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 13225,
+      "outputChars": 126
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 16406,
+      "outputChars": 216
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 16486,
+      "outputChars": 201
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 27808,
+      "outputChars": 94
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 27828
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 9663,
+      "outputChars": 126
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 13782,
+      "outputChars": 201
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 14259,
+      "outputChars": 216
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 25875,
+      "outputChars": 94
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 24238,
+      "outputChars": 93
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 23502,
+      "outputChars": 93
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 24023,
+      "outputChars": 93
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 23974,
+      "outputChars": 93
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 25051,
+      "outputChars": 93
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 23684,
+      "outputChars": 93
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 24203,
+      "outputChars": 93
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "OCR_CALL",
+      "outcome": "SUCCESS",
+      "durationMs": 22487,
+      "outputChars": 93
+    },
+    {
+      "stage": "OCR_PAGE_TEXT",
+      "outcome": "TEXT_RETURNED",
+      "durationMs": 0
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 72360
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 8
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 456
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 15
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 9
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 8
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 11
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 242
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 19
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 23
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 236
+    },
+    {
+      "stage": "DOCUMENT_PARSE",
+      "outcome": "SUCCESS",
+      "durationMs": 11
+    }
+  ],
+  "modelGrounding": [
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 8,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 7,
+      "acceptedCount": 7,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 9,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 8,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 8,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 10,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 6,
+      "acceptedCount": 6,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 9,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 10,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 10,
+      "acceptedCount": 9,
+      "evidenceRejectedCount": 1,
+      "clauseCount": 10,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 8,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 1,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 9,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 8,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 4,
+      "acceptedCount": 4,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 3,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 6,
+      "acceptedCount": 3,
+      "evidenceRejectedCount": 3,
+      "clauseCount": 4,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 11,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 11,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 4,
+      "acceptedCount": 4,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 0,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 10,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 4,
+      "acceptedCount": 4,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 2,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 5,
+      "acceptedCount": 3,
+      "evidenceRejectedCount": 2,
+      "clauseCount": 5,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 4,
+      "acceptedCount": 4,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 0,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 5,
+      "acceptedCount": 4,
+      "evidenceRejectedCount": 1,
+      "clauseCount": 1,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 4,
+      "acceptedCount": 0,
+      "evidenceRejectedCount": 5,
+      "clauseCount": 6,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 0,
+      "acceptedCount": 0,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 2,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 0,
+      "acceptedCount": 0,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 2,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 0,
+      "acceptedCount": 0,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 3,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 0,
+      "acceptedCount": 0,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 2,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 10,
+      "acceptedCount": 9,
+      "evidenceRejectedCount": 1,
+      "clauseCount": 9,
+      "findingCount": 1
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 8,
+      "findingCount": 2
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 1,
+      "clauseCount": 10,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 8,
+      "acceptedCount": 8,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 10,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 5,
+      "acceptedCount": 5,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 1,
+      "findingCount": 0
+    },
+    {
+      "candidateCount": 0,
+      "acceptedCount": 0,
+      "evidenceRejectedCount": 0,
+      "clauseCount": 2,
+      "findingCount": 0
+    }
+  ],
+  "peakConcurrentOcrCalls": 4
+}

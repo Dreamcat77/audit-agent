@@ -1,0 +1,21 @@
+{
+  "browser": "109.0.5412.0",
+  "results": [
+    {
+      "module": "procurement",
+      "id": "0f45236f-dbb4-3af0-909b-e2bf0cd2fce6",
+      "uploadFromPage": true,
+      "noManualFields": true,
+      "automaticReport": true,
+      "noFabricatedMoney": true
+    },
+    {
+      "module": "contract",
+      "caseId": "a7ceb1fc-a768-3335-89f6-c220000d5438",
+      "uploadFromPage": true,
+      "noManualClassification": true,
+      "automaticEightCategoryReport": true
+    }
+  ],
+  "runtimeErrors": []
+}

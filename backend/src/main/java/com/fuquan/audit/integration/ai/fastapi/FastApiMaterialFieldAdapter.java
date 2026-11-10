@@ -40,9 +40,12 @@ public class FastApiMaterialFieldAdapter implements MaterialFieldAiPort, Materia
         this.client = client.mutate().requestFactory(factory).build();
     }
     @Override public Result extract(String kind, String id, String sha, List<Segment> segments) {
-        try(var slot=admit()){return extractLegacy(kind,id,sha,segments);}
+        try(var slot=admit()){return extractLegacy(kind,id,sha,segments,null);}
     }
-    private Result extractLegacy(String kind, String id, String sha, List<Segment> segments) {
+    @Override public Result extractWithContext(String kind,String id,String sha,List<Segment> segments,Context context) {
+        try(var slot=admit()){return extractLegacy(kind,id,sha,segments,context);}
+    }
+    private Result extractLegacy(String kind, String id, String sha, List<Segment> segments,Context context) {
         segments = List.copyOf(segments);
         try (var span = PipelineDiagnostics.start("BUDGET".equals(kind)?"BUDGET":"PROCUREMENT", "AI_EXTRACTION", PipelineDiagnostics.resourceId(id),
                 Map.of("inputChars", segments.stream().mapToLong(s -> s.text().length()).sum(),
@@ -51,7 +54,9 @@ public class FastApiMaterialFieldAdapter implements MaterialFieldAiPort, Materia
             long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(965);
             Envelope envelope = null;
             // Capture identity and source once so transport recovery cannot change them.
-            var body = Map.of("businessType", kind, "materialId", id, "sha256", sha, "segments", segments);
+            var body = new LinkedHashMap<String,Object>();
+            body.put("businessType",kind);body.put("materialId",id);body.put("sha256",sha);body.put("segments",segments);
+            if(context!=null)body.put("context",context);
             for (int attempt = 1; attempt <= 2; attempt++) {
                 var factory = new org.springframework.http.client.SimpleClientHttpRequestFactory();
                 factory.setConnectTimeout(java.time.Duration.ofSeconds(5));

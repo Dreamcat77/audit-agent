@@ -2,8 +2,10 @@ import type { BudgetMaterialReference } from "../../api/types";
 
 export function mergeBudgetMaterialReferences(references: readonly BudgetMaterialReference[]) {
   if (!references.length) return null;
+  const projectName=references.find(r=>r.projectName&&r.projectName!=='预算材料分析')?.projectName??null;
   const lines = new Map<string, BudgetMaterialReference["lines"][number]>();
-  for (const line of references.flatMap(reference => reference.lines)) {
+  for (const raw of references.flatMap(reference => reference.lines)) {
+    const line=projectName?{...raw,project:projectName}:raw;
     const sourceKey = line.sources.map(source =>
       JSON.stringify([source.taskId, source.field, source.locator, source.value]))
       .sort();
@@ -12,12 +14,15 @@ export function mergeBudgetMaterialReferences(references: readonly BudgetMateria
     if (!lines.has(key)) lines.set(key, line);
   }
   return {
+    projectName,
+    analysisCoverage:references.some(r=>r.analysisCoverage==='PARTIAL')?'PARTIAL' as const:references.every(r=>r.analysisCoverage==='COMPLETE')?'COMPLETE' as const:null,
+    totals:[...new Map(references.flatMap(r=>r.totals??[]).map(t=>[JSON.stringify(t),t])).values()],
     status: references.some(reference => reference.status === "PENDING") ? "PENDING" as const : "COMPLETED" as const,
     coverage: references.some(reference => reference.coverage === "PARTIAL") ? "PARTIAL" as const
       : references.every(reference => reference.coverage === "COMPLETE") ? "COMPLETE" as const : null,
     summary: [...new Set(references.map(reference => reference.summary).filter(Boolean))].join("；"),
     assessments: [...new Map(references.flatMap(reference => reference.assessments ?? [])
-      .map(item => [JSON.stringify([item.code,item.explanation,item.sources]),item])).values()],
+      .map(item => [JSON.stringify([item.code,item.title,item.sources.map(s=>[s.taskId,s.locator,s.excerpt]).sort()]),item])).values()],
     lines: [...lines.values()],
   };
 }

@@ -1,0 +1,129 @@
+[
+  {
+    "fixture": "dense-2page.pdf",
+    "pages": 2,
+    "chars": 1363,
+    "seconds": 41.192,
+    "budgetPresent": true,
+    "titlePresent": false,
+    "sha256": "54f0f6c425f61785e84c77e8ac5f545533d1fde7f71795d0b20ac0e9d28818a1",
+    "classifierLoaded": true,
+    "orientationStages": [
+      {
+        "stage": "OCR",
+        "outcome": "SUCCESS",
+        "page_count": 1,
+        "rotation_degrees": 0,
+        "deskew_millidegrees": 0,
+        "input_chars": 681,
+        "orientation_candidates": 1,
+        "duration_ms": 18894,
+        "orientation_quality_milli": 654449,
+        "classifier_confidence_milli": 922,
+        "ocr_page_count": 1
+      },
+      {
+        "stage": "OCR",
+        "outcome": "SUCCESS",
+        "page_count": 2,
+        "rotation_degrees": 180,
+        "deskew_millidegrees": 0,
+        "input_chars": 681,
+        "orientation_candidates": 1,
+        "duration_ms": 18875,
+        "orientation_quality_milli": 653899,
+        "classifier_confidence_milli": 912,
+        "ocr_page_count": 2
+      }
+    ]
+  },
+  {
+    "fixture": "short-title.pdf",
+    "pages": 1,
+    "chars": 3,
+    "seconds": 8.702,
+    "budgetPresent": false,
+    "titlePresent": true,
+    "sha256": "81b7c87bdc2adca4f255d1279488b65c5d511b00f6289a06f1e5e43926cf6eef",
+    "classifierLoaded": true,
+    "orientationStages": [
+      {
+        "stage": "OCR",
+        "outcome": "SUCCESS",
+        "page_count": 1,
+        "rotation_degrees": 180,
+        "deskew_millidegrees": 0,
+        "input_chars": 3,
+        "orientation_candidates": 5,
+        "duration_ms": 8600,
+        "orientation_quality_milli": 2999,
+        "classifier_confidence_milli": 708,
+        "ocr_page_count": 1
+      }
+    ]
+  },
+  {
+    "fixture": "varied-4page.pdf",
+    "pages": 4,
+    "chars": 1001,
+    "seconds": 41.358,
+    "budgetPresent": true,
+    "titlePresent": true,
+    "sha256": "fa0938b46c4238cf584f1e6be7d720b8cea1c5108d316ace071fc7978769a3fe",
+    "classifierLoaded": true,
+    "orientationStages": [
+      {
+        "stage": "OCR",
+        "outcome": "SUCCESS",
+        "page_count": 1,
+        "rotation_degrees": 0,
+        "deskew_millidegrees": 0,
+        "input_chars": 248,
+        "orientation_candidates": 1,
+        "duration_ms": 10361,
+        "orientation_quality_milli": 225296,
+        "classifier_confidence_milli": 923,
+        "ocr_page_count": 1
+      },
+      {
+        "stage": "OCR",
+        "outcome": "SUCCESS",
+        "page_count": 2,
+        "rotation_degrees": 270,
+        "deskew_millidegrees": 0,
+        "input_chars": 250,
+        "orientation_candidates": 1,
+        "duration_ms": 10164,
+        "orientation_quality_milli": 227976,
+        "classifier_confidence_milli": 927,
+        "ocr_page_count": 2
+      },
+      {
+        "stage": "OCR",
+        "outcome": "SUCCESS",
+        "page_count": 3,
+        "rotation_degrees": 180,
+        "deskew_millidegrees": 0,
+        "input_chars": 244,
+        "orientation_candidates": 1,
+        "duration_ms": 10281,
+        "orientation_quality_milli": 220790,
+        "classifier_confidence_milli": 922,
+        "ocr_page_count": 3
+      },
+      {
+        "stage": "OCR",
+        "outcome": "SUCCESS",
+        "page_count": 4,
+        "rotation_degrees": 90,
+        "deskew_millidegrees": 0,
+        "input_chars": 256,
+        "orientation_candidates": 1,
+        "duration_ms": 10143,
+        "orientation_quality_milli": 232353,
+        "classifier_confidence_milli": 921,
+        "ocr_page_count": 4
+      }
+    ]
+  }
+]
