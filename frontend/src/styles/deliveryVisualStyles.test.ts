@@ -6,3 +6,23 @@ test("the authenticated portal stylesheet is included by the global style entry"
   const styles = await readFile(new URL("./index.css", import.meta.url), "utf8");
   assert.match(styles, /@import ['"]\.\/delivery-visual-v2\.css['"]/);
 });
+
+test("authenticated pages share 40px form and action control heights", async () => {
+  const deliveryStyles = await readFile(new URL("./delivery-visual-v2.css", import.meta.url), "utf8");
+  const historyStyles = await readFile(new URL("./history-results.css", import.meta.url), "utf8");
+
+  assert.match(deliveryStyles, /\.portal-main input[^\{]*,\s*\.portal-main select\s*\{[^}]*height:\s*40px/s);
+  assert.match(deliveryStyles, /\.portal-main button\.inline-flex\.items-center[^\{]*,\s*\.portal-main a\.inline-flex\.items-center\s*\{[^}]*height:\s*40px/s);
+  assert.match(deliveryStyles, /\.delivery-primary-action,[\s\S]*?\.delivery-secondary-action\s*\{[^}]*height:\s*40px/s);
+  assert.match(historyStyles, /\.history-button\s*\{[^}]*height:40px/s);
+});
+
+test("work and history pages share desktop and responsive content geometry", async () => {
+  const deliveryStyles = await readFile(new URL("./delivery-visual-v2.css", import.meta.url), "utf8");
+  const historyStyles = await readFile(new URL("./history-results.css", import.meta.url), "utf8");
+
+  assert.match(deliveryStyles, /\.delivery-page\s*\{[^}]*max-width:\s*1440px;[^}]*padding:\s*24px/s);
+  assert.match(historyStyles, /\.history-page\s*\{[^}]*max-width:1440px;[^}]*padding:24px/s);
+  assert.match(deliveryStyles, /@media\s*\(max-width:\s*900px\)[\s\S]*?\.delivery-page\s*\{[^}]*padding:\s*20px/s);
+  assert.match(historyStyles, /@media\(max-width:900px\)\s*\{\.history-page\s*\{padding:20px/s);
+});
