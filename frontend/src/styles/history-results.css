@@ -1,5 +1,6 @@
 .history-page-canvas {min-height:100%;background:#f5f5f7}
 .procurement-page-shell:has(> .history-page) {padding:0}
+.procurement-page-shell:has(> .delivery-page) {padding:0}
 .history-page {box-sizing:border-box;width:100%;max-width:1440px;margin:0 auto;padding:24px;background:#f5f5f7;color:#263449;min-width:0}
 .history-page-header {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;min-height:40px}
 .history-page-title {margin:0;font-size:20px;line-height:28px;font-weight:650;color:#17283c}

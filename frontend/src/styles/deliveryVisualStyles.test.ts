@@ -34,6 +34,7 @@ test("work and history pages share desktop and responsive content geometry", asy
 
   assert.match(deliveryStyles, /\.delivery-page\s*\{[^}]*max-width:\s*1440px;[^}]*padding:\s*24px/s);
   assert.match(historyStyles, /\.history-page\s*\{[^}]*max-width:1440px;[^}]*padding:24px/s);
+  assert.match(historyStyles, /\.procurement-page-shell:has\(> \.delivery-page\)\s*\{padding:0\}/);
   assert.match(deliveryStyles, /@media\s*\(max-width:\s*900px\)[\s\S]*?\.delivery-page\s*\{[^}]*padding:\s*20px/s);
   assert.match(historyStyles, /@media\(max-width:900px\)\s*\{\.history-page\s*\{padding:20px/s);
 });
