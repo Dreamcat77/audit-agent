@@ -125,6 +125,8 @@
 .portal-notification-count { position: absolute; top: -5px; right: -5px; min-width: 17px; border-radius: 999px; background: #dc2626; padding: 1px 4px; color: white; font-size: 9px; line-height: 15px; }
 .portal-notification-panel { position: absolute; top: 42px; right: 0; z-index: 50; width: min(24rem, calc(100vw - 2rem)); overflow: hidden; border: 1px solid #e7e5e4; border-radius: 12px; background: white; box-shadow: 0 18px 42px rgba(41, 37, 36, .16); }
 .portal-main { min-width: 0; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.workbench-tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 12px; }
+
 
 .contract-portal-tabs {
   display: flex;

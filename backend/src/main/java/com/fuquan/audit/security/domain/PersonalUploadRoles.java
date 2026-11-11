@@ -20,6 +20,7 @@ public final class PersonalUploadRoles {
             case "budget" -> actor.roles().contains(BUDGET);
             case "procurement" -> actor.roles().contains(PROCUREMENT);
             case "contract" -> actor.roles().contains(CONTRACT);
+            case "blacklist" -> actor.roles().stream().anyMatch(CODES::contains);
             default -> false;
         };
     }

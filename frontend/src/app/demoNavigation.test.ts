@@ -57,5 +57,5 @@ test("dashboard contains no unsupported accuracy metric or timer-driven AI activ
   assert.doesNotMatch(dashboard, /项目管理|onOpenProjects/);
   assert.doesNotMatch(dashboard, /平均准确率|97\.7%|accuracy|准确率/);
   assert.doesNotMatch(dashboard, /agentTaskPool|setInterval|setTimeout|智能体实时运行状态/);
-  assert.doesNotMatch(dashboard, /\b47\b|\b16\b|\b1284\b/);
+  assert.doesNotMatch(dashboard.replaceAll("size={16}", ""), /\b47\b|\b16\b|\b1284\b/);
 });

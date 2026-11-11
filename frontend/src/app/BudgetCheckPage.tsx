@@ -47,6 +47,7 @@ import { OFFICE_MATERIAL_ACCEPT } from '../features/procurement/materials/office
 import { BudgetHistoryResults } from '../features/budget/BudgetHistoryResults';
 import type { BudgetMaterialBatchHistoryRecord } from '../api';
 import { BudgetFileResults } from '../features/budget/BudgetFileResults';
+import { budgetBatchResultState } from '../features/budget/budgetResultState';
 import { sameMaterialFile } from '../features/procurement/materials/procurementMaterialOperation';
 import { collectProcurementDrop } from '../features/procurement/materials/procurementFolderDrop';
 
@@ -237,26 +238,27 @@ export function BudgetCheckPage({
     if(!submittedBatch || submittedBatch.epoch!==viewEpoch.current)return;
     const rows=snapshot.entries.filter(row=>submittedBatch.keys.includes(row.operation.key));
     if(!rows.length)return;
-    if(rows.some(row=>row.phase==='WAITING_UPLOAD'||row.phase==='UPLOADING')){
-      setUploadNotice('正在上传材料，请稍候。');return;
-    }
-    if(rows.some(row=>row.phase==='QUEUED'||row.phase==='PROCESSING')){
-      setUploadNotice('材料已上传，正在解析与分析，可离开本页，结果会自动保存。');return;
-    }
+    const {processing,results}=budgetBatchResultState(rows);
     const hasUnknown=rows.some(row=>row.phase==='UNKNOWN');
+    if(results.length){
+      setCompletedResults(results);
+      if(!currentResultId)setCurrentResultId(results[0].id);
+      setHistoryOpen(false);setActiveStep(1);
+    }
+    if(processing){
+      setUploadNotice(results.length?'已先展示当前可用结果，其余材料仍在处理中。'
+        :snapshot.uploading?'正在上传本批材料，请稍候。':'材料已上传，正在解析与分析，可离开本页，结果会自动保存。');
+      return;
+    }
     if(snapshot.uploading)return;
-    // Open an available result first when only part of a batch failed. Keep the
-    // ended files accessible too, without presenting their explanation as success.
-    const results=[...rows.filter(row=>row.phase==='PARSED'&&row.result),
-      ...rows.filter(row=>['FAILED','UNKNOWN'].includes(row.phase)&&row.result)]
-      .map(row=>({id:row.result!.task.taskId,name:row.result!.fileName}));
     if(!results.length){
       if(hasUnknown){setUploadNotice('部分材料的上传或处理结果暂时无法读取，请在历史结果中核实记录，避免重复上传。');return;}
       setSubmittedBatch(null);
       setUploadNotice(null);setError('本批材料未能完成解析，请核对文件格式或联系管理员查看日志。');return;
     }
     setSubmittedBatch(null);
-    setCompletedResults(results);setCurrentResultId(results[0].id);
+    setCompletedResults(results);
+    if(!currentResultId)setCurrentResultId(results[0].id);
     const analyzedIds=rows.filter(row=>row.phase==='PARSED'&&row.result).map(row=>row.result!.task.taskId);
     setRiskFocus(analyzedIds.length?{token:submittedBatch.keys.join(','),taskIds:analyzedIds}:null);
     setUploadNotice(rows.some(row=>row.phase==='UNKNOWN'&&!row.result)

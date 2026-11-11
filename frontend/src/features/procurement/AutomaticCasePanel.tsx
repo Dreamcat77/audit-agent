@@ -249,8 +249,8 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
     {current && <>
       <ResultProjectHeader kind="采购审查结果" name={current.projectName || report?.projectName || '采购材料分析'} metadata={<>{current.documents.length} 份材料{current.createdAt ? ` · ${new Date(current.createdAt).toLocaleString('zh-CN')}` : ''}</>}
         actions={caseProcessing?<ProcessingStatusCard variant="compact" title={current.status==='UPLOADING'?'正在上传材料':current.status==='QUEUED'?'正在准备审查':'正在分析材料'}
-          description={current.status==='UPLOADING'?(uploadProgress&&uploadProgress.total>0?`已上传 ${Math.min(100,Math.floor(uploadProgress.loaded/uploadProgress.total*100))}%，请稍候。`:'请稍候，文件上传后将自动开始审查。'):'系统正在处理材料，完成后将自动展示结果。'} />:undefined}/>
-      {!caseProcessing&&report && <section key={current.id} aria-label="本批采购审查结果" className="space-y-5">
+          description={current.status==='UPLOADING'?(uploadProgress&&uploadProgress.total>0?`已上传 ${Math.min(100,Math.floor(uploadProgress.loaded/uploadProgress.total*100))}%，请稍候。`:'请稍候，文件上传后将自动开始审查。'):'已生成的结果会逐项显示，其余材料继续处理。'} />:undefined}/>
+      {report && <section key={current.id} aria-label="本批采购审查结果" className="space-y-5">
         <ResultSection title="优先关注" number="01" tone={findings.length||report.quoteComparisons?.some(c=>c.status==='OVER_BUDGET')||report.ceilingComparisons?.some(c=>c.status==='OVER_CEILING')?'attention':'default'} actions={<>
           {findings.length > 0 && <button type="button" onClick={() => void copy('all',reportText)} className="delivery-secondary-action">{copied === 'all' ? '已复制' : '复制问题清单'}</button>}
           <a href={apiUrl(`${path}/${current.id}/report.html`)} className="delivery-secondary-action" download>导出完整报告</a></>}>
@@ -296,6 +296,6 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
       </section>}
       {!caseProcessing&&<details className="rounded-xl border border-slate-200 bg-white p-5 text-sm"><summary className="cursor-pointer font-medium text-slate-700">本批材料（{current.documents.length} 份）</summary><ul className="mt-3 divide-y divide-slate-100">{current.documents.map(d => <li key={d.id} className="flex flex-wrap items-center justify-between gap-3 py-3"><span>{d.name}</span><div className="flex gap-3 text-xs"><button type="button" className="text-blue-700" onClick={() => void showEvidence(d.id)}>查看提取内容</button><a className="text-blue-700" href={apiUrl(`${path}/${current.id}/files/${d.id}/original`)}>原文件</a></div></li>)}</ul></details>}
     </>}
-    {!caseProcessing&&evidence&&<ProcurementEvidenceDialog focusText={evidenceFocus} key={current?.id} evidence={evidence} loadSource={loadSource} visualBase={fileId=>`${path}/${current?.id}/files/${encodeURIComponent(fileId)}`} onClose={()=>setEvidence(null)}/>}
+    {evidence&&<ProcurementEvidenceDialog focusText={evidenceFocus} key={current?.id} evidence={evidence} loadSource={loadSource} visualBase={fileId=>`${path}/${current?.id}/files/${encodeURIComponent(fileId)}`} onClose={()=>setEvidence(null)}/>}
   </section>;
 }

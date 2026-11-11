@@ -27,11 +27,11 @@ public class PersonalUploadAccessInterceptor implements HandlerInterceptor {
         var vars=variables==null?Map.<String,String>of():variables;
         String actor=user.userId();
         requireAllowedModule(route, vars, user);
+        // Blacklist data is organization-wide; module upload ownership does not apply.
+        if(under(route,"/api/v1/blacklist"))return true;
         // These endpoints scope task lists, counts and alarms in their query services.
         if(under(route,"/api/v1/contract-audit-tasks")
-                ||under(route,"/api/v1/blacklist/alerts")
-                ||under(route,"/api/v1/blacklist/entries")
-                ||under(route,"/api/v1/blacklist/rules"))return true;
+                )return true;
         if(vars.containsKey("projectId")) {
             UUID project=uuid(vars.get("projectId"));
             require(ownership.ownsProject(project,actor));
@@ -65,7 +65,11 @@ public class PersonalUploadAccessInterceptor implements HandlerInterceptor {
             requireModule(PersonalUploadRoles.allowsModule(actor, "budget"));
             return;
         }
-        if (under(route,"/api/v1/procurement") || under(route,"/api/v1/blacklist")) {
+        if (under(route,"/api/v1/blacklist")) {
+            requireModule(PersonalUploadRoles.allowsModule(actor, "blacklist"));
+            return;
+        }
+        if (under(route,"/api/v1/procurement")) {
             requireModule(PersonalUploadRoles.allowsModule(actor, "procurement"));
             return;
         }

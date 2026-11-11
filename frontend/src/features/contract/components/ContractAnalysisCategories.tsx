@@ -9,16 +9,18 @@ export type AnalysisCategory={id:string;order:number;title:string;status:string;
 const headings=[['QUANTITATIVE','合同条款量化一致性审查'],['DRAFT_STRUCTURE','合同草本结构对标审查'],['BREACH','违约责任条款量化审查'],['TERM','合同期限与终止条件格式审查'],['PARTY_QUALIFICATION','合同主体资格审查'],['ATTACHMENT_COMPLETENESS','附件清单完整性审查'],['EFFECTIVENESS_COPIES','合同生效条件与份数审查'],['CLAUSE_RISK','合同条款风险提示']];
 
 /** One batch, eight stable headings; only source-backed content is displayed. */
-export function ContractAnalysisCategories({categories,documents,copied,onCopy,evidenceButtons}:{
+export function ContractAnalysisCategories({categories,documents,copied,processing,onCopy,evidenceButtons}:{
   categories:AnalysisCategory[];documents:{fileId:string;name:string}[];copied:string|null;
+  processing:boolean;
   onCopy:(key:string,text:string)=>void;evidenceButtons:(evidence:AnalysisCategoryEvidence[],focus?:string)=>ReactNode;
 }) {
   const names=new Map(documents.map(document=>[document.fileId,document.name]));
-  const modules=headings.map(([id,title],index)=>categories.find(category=>category.id===id)??{id,title,order:index+1,status:'DATA_INSUFFICIENT',summary:'材料不足，未生成',items:[]});
+  const waitingSummary=processing?'正在整理，结果将逐项显示':'材料不足，未生成';
+  const modules=headings.map(([id,title],index)=>categories.find(category=>category.id===id)??{id,title,order:index+1,status:processing?'PENDING':'DATA_INSUFFICIENT',summary:waitingSummary,items:[]});
   return <ResultSection label="合同八大项分析" title="八大项审查结果" number="02" collapsible={false}>
     <div className="result-module-grid">{modules.map(category=><details key={category.id} data-result-module={category.id} className="result-module" open={category.status==='ATTENTION'}>
-      <summary><div className="result-module-top"><span className="result-module-title"><span className="result-module-number">{String(category.order).padStart(2,'0')}</span>{category.title}</span><span className={`result-module-status${category.status==="ATTENTION"?' result-module-status-attention':''}`}>{category.status==="ATTENTION"?"需关注":category.items.length?`${category.items.length} 项内容`:"暂无内容"}</span></div><p className="result-module-preview">{category.items[0]?.summary??'材料不足，未生成'}</p><span className="result-module-toggle"/></summary>
-      <div className="result-module-content space-y-3">{category.items.length===0?<p className="py-3 text-sm text-slate-500">材料不足，未生成</p>:category.items.map((item,index)=>{
+      <summary><div className="result-module-top"><span className="result-module-title"><span className="result-module-number">{String(category.order).padStart(2,'0')}</span>{category.title}</span><span className={`result-module-status${category.status==="ATTENTION"?' result-module-status-attention':''}`}>{category.status==="ATTENTION"?"需关注":category.items.length?`${category.items.length} 项内容`:processing?"处理中":"暂无内容"}</span></div><p className="result-module-preview">{category.items[0]?.summary??waitingSummary}</p><span className="result-module-toggle"/></summary>
+      <div className="result-module-content space-y-3">{category.items.length===0?<p className="py-3 text-sm text-slate-500">{waitingSummary}</p>:category.items.map((item,index)=>{
         const sourceNames=Array.from(new Set(item.evidence.map(e=>names.get(e.fileId)).filter(Boolean)));
         const key=`category-${category.id}-${index}`;
         return <ResultItem key={key} title={item.title} tone={item.level==='WARNING'?'attention':'default'} label={item.level==='WARNING'?'需关注':undefined}>

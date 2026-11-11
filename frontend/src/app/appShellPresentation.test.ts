@@ -19,14 +19,20 @@ test("personal roles show job names and remain personal when combined with older
   assert.equal(usesPersonalUploads(["AUDITOR"]),false);
 });
 
-test("module users see only their own workspace and start there",()=>{
+test("all module users can open the shared workbench while keeping module page access isolated",()=>{
   const pages=["dashboard","project","procurement","procurement-tasks","budget-check","bidding","contract","risk","blacklist"];
-  assert.deepEqual(visibleNavigationItems(["BUDGET_USER"],pages.map(id=>({id}))).map(x=>x.id),["budget-check"]);
-  assert.deepEqual(visibleNavigationItems(["PROCUREMENT_USER"],pages.map(id=>({id}))).map(x=>x.id),["procurement","procurement-tasks","bidding","blacklist"]);
-  assert.deepEqual(visibleNavigationItems(["CONTRACT_USER"],pages.map(id=>({id}))).map(x=>x.id),["project","contract"]);
-  assert.equal(defaultPageForRoles(["BUDGET_USER"]),"budget-check");
-  assert.equal(defaultPageForRoles(["PROCUREMENT_USER"]),"procurement");
-  assert.equal(defaultPageForRoles(["CONTRACT_USER"]),"contract");
+  assert.deepEqual(visibleNavigationItems(["BUDGET_USER"],pages.map(id=>({id}))).map(x=>x.id),["dashboard","budget-check","blacklist"]);
+  assert.deepEqual(visibleNavigationItems(["PROCUREMENT_USER"],pages.map(id=>({id}))).map(x=>x.id),["dashboard","procurement","procurement-tasks","bidding","blacklist"]);
+  assert.deepEqual(visibleNavigationItems(["CONTRACT_USER"],pages.map(id=>({id}))).map(x=>x.id),["dashboard","project","contract","blacklist"]);
+  assert.equal(defaultPageForRoles(["BUDGET_USER"]),"dashboard");
+  assert.equal(defaultPageForRoles(["PROCUREMENT_USER"]),"dashboard");
+  assert.equal(defaultPageForRoles(["CONTRACT_USER"]),"dashboard");
+  assert.equal(canAccessPage(["BUDGET_USER"],"procurement"),false);
+  assert.equal(canAccessPage(["BUDGET_USER"],"contract"),false);
+  assert.equal(canAccessPage(["BUDGET_USER"],"dashboard"),true);
+  assert.equal(canAccessPage(["PROCUREMENT_USER"],"blacklist"),true);
+  assert.equal(canAccessPage(["CONTRACT_USER"],"blacklist"),true);
+  assert.equal(canAccessPage(["SYSTEM_ADMIN"],"blacklist"),true);
   assert.equal(canAccessPage(["SYSTEM_ADMIN","BUDGET_USER"],"dashboard"),true);
   assert.equal(canAccessPage(["BUDGET_USER","CONTRACT_USER"],"contract"),true);
 });

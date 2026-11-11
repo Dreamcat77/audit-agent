@@ -459,3 +459,40 @@
 - 26默认80 Chrome109真实历史/结果页面回归：预算、采购、合同筛选/重置/分页控件/结果打开，四个分辨率无横溢；结果页上传框隐藏、状态文案正确，合同八大项保留。三模块原文证据和跨账号404复测通过。
 - 本轮无产品缺陷复现，无代码发布或后端重启；不为测试而改逻辑。采购真实历史共10条，因此本轮未验证真实跨页结果；前端分页交互由此前专项夹具覆盖。既有测试Excel的采购状态DATA_INSUFFICIENT、预算REVIEWED；状态差异不影响报告打开，也不代表采购审查结论充分。
 - 证据见docs/qa-26/office-evidence-20261109.md的2026-11-10节、`.runtime/history-polish-20261109/live-history.json`、`result-workflow.json`。本轮不重跑模型、不清理数据、不做客户包；甲方实机NOT VERIFIED。
+
+## 2026-11-10 账号角色访问更新部署到26
+
+- 26 默认入口现为 `/opt/audit-agent/releases/role-access-20261110-r1`，前序版本 `/opt/audit-agent/releases/office-evidence-20261109-r1` 保留。载荷SHA256 `0cd663c7e7f315a217a4f41d43b61f20280bb4d8f71b79a67af0abae4a410e45`，后端JAR SHA256 `ad7853269421ea090f0ff1b58b4cd1b7b026715d639b540e78803dc847be90ae`，默认入口SHA256 `b7657ac2ee2b3987c9e2759250b1b204f6cde1d4f748daf5a9f6da386bc6d7a2`。源码提交标记 `02a0dea7e28a710225fcabd330363133fbb0910e`。
+- 上传清单76项逐项SHA校验通过。部署前及后端停服后使用26现有DM8只读静默探针检查；没有数据库结构或业务数据变更。后端切换并重启，AI源码哈希未变、AI未重启，DB/AI/Nginx配置哈希保持，Nginx未重启。AI 8001、后端8080、前端80均HTTP 200；9个前端静态资源HTTP哈希通过，后端进程工作目录与新release一致。
+- 本次仅完成部署烟测，没有使用业务账号重新执行跨角色读写隔离验收；需在26继续检查管理员与预算/采购/合同角色的菜单可见性及仅本人数据范围。甲方环境NOT VERIFIED。完整脱敏部署证明位于26 `/home/admin/deploy-role-access-20261110/verification.json`；载荷及临时安装脚本保留在该目录供排查。
+- 分支 `integrate/github-latest-20261105` 当前本地领先远端1个提交：`02a0dea7` 为Windows OCR子进程关闭测试等待修正；角色访问功能提交 `b70aa62e` 已推送。此前GitHub 443推送失败未在本次重试，本次部署不代表该单测提交已推送。
+
+## 2026-11-10 临时登录后功能导航首页（已被下方工作台更新取代）
+
+- 26静态更新 `navigation-home-20261110-r1`，入口仍使用release `/opt/audit-agent/releases/role-access-20261110-r1`。仅新增首页及8个哈希静态资源，旧资源保留，`index.html` 原子替换；未重启后端、AI或Nginx，未改数据库、业务数据及账号权限。部署前旧入口SHA256 `b7657ac2ee2b3987c9e2759250b1b204f6cde1d4f748daf5a9f6da386bc6d7a2`，新入口SHA256 `881753d39f915f655df6e6feab27701339ae917c8e5f55bcd72eb95c13f4ac89`。26外部HTTP首页/后端健康均200，8个资源哈希核验通过。部署证明在 `/home/admin/deploy-navigation-20261110/verification.json`。
+- 登录默认进入“功能导航”，以现有账号可见菜单生成入口；个人预算/采购/合同角色仅看到其原有获准页面，不因此获得其他模块权限。工作台仍作为单独入口可进入。当前26浏览器需刷新后查看。
+- 两个导航权限/入口回归文件7项全通过；Vite生产构建及Chrome109颜色兼容处理通过。完整 `node --test "src/**/*.test.ts"` 仍有既存Office证据集成测试因esbuild未配置`.woff2?url` loader而失败，其余导航相关测试通过；失败不由本次导航代码触发。未做真实角色账号登录验收；新导航提交尚未提交/推送GitHub，甲方环境NOT VERIFIED。
+
+## 2026-11-10 复用工作台作为各角色导航入口
+
+- 按用户纠正，撤回重复的独立 `home/功能导航` 页，保留原“工作台”作为共享导航页及各角色默认入口；管理员保留预算、采购、合同、黑名单、风险预估入口。个人角色工作台仅渲染当前允许访问的模块，采购角色保留黑名单，预算/合同不显示无权限模块。预算/采购角色不请求合同统计数据，避免以合同接口失败污染首页。
+- 单一模块角色卡片使用整行布局，避免旧独立导航页只显示一张窄卡片导致画面空荡。实际Chrome浏览器登录26的 `yusuan`、`caigou`、`hetong` 三账号均落在工作台；预算只见预算，采购只见采购和黑名单，合同只见合同；导航文本与卡片权限一致，浏览器pageerror为0。管理员的所有卡片由角色组件回归覆盖。
+- 部署版本 `workbench-navigation-20261110-r1`，release仍为 `/opt/audit-agent/releases/role-access-20261110-r1`；仅原子更新首页及8个静态资源，前端入口SHA256 `f96c8fa548d066e2703e0050fcce13474b1442a0d34697fba1a4c0dad7ab6474`。后端、AI、Nginx、数据库均未变更或重启；8个静态资源HTTP哈希验证通过。
+- 角色权限、导航及工作台React渲染回归13项通过；Vite生产构建和Chrome109兼容转换通过。`deliveryNavigation.test.ts` 中与旧Office Evidence import相关的测试仍受esbuild缺少`.woff2?url` loader影响，不代表本次导航回归失败。甲方实机NOT VERIFIED；此次更改尚未提交或推送GitHub。
+
+## 2026-11-10 黑名单作为单位共享能力
+
+- 业务边界：预算、采购、合同角色都能进入同一单位黑名单，名单、规则、报警及核验/导入导出接口不按上传账号隔离。采购项目流程内的黑名单检查仍属采购模块。三类账号之间预算、采购、合同各自上传数据继续隔离，管理员保留全模块权限。
+- 修复点：`PersonalUploadRoles` 将 blacklist 定义为三类业务角色共享；`PersonalUploadAccessInterceptor` 对完整 `/api/v1/blacklist/**` 和旧 `/api/blacklist/**` 路由执行共享访问后，不再套用个人上传归属检查；增加三角色全黑名单路由及跨模块拒绝回归。
+- 26默认入口现为 `/opt/audit-agent/releases/shared-blacklist-20261110-r1`，前序 `/opt/audit-agent/releases/role-access-20261110-r1` 保留。载荷 SHA256 `a334de651ac334ef9d8d4dc67a33e2fa8b8cb1d10e3b0422f11723b14059406a`，后端 JAR SHA256 `6e770d935f944c62d61214845678849a0dc9a0c8d8d7d6d8fa880ffcaddb07ee`，入口 SHA256 `8f55f674136af696a3dca8bc511a1acdf9612e75545b7720e0a539c0359e13dd`。载荷 76 项，含 9 个前端资源；无 schema/DDL、业务数据、AI 服务、Nginx 或配置改动。DM8 静默探针通过后切换；AI、后端、前端健康分别 200，静态资源哈希全部通过，旧 release 保留。
+- 26 Chrome109 使用 `yusuan`、`caigou`、`hetong` 实际登录验收：各账号工作台均有自己的模块和黑名单，不显示另外两个模块；黑名单 entries/rules/alerts 均 HTTP 200；自己的模块接口 HTTP 200，另外两模块接口均非 200；浏览器脚本错误 0。管理员全入口由工作台权限回归覆盖。本轮未写入/修改黑名单业务数据。
+- Java17 `mvnw clean verify`：3651 项，0 failures、0 errors、24 skipped；针对共享路由改动再跑 `PersonalUploadAccessInterceptorTest`：17/17 通过。前端角色/工作台定向测试 9/9，`npm run build:customer` 与 Chrome109 颜色适配通过。全量前端 876 项中 870 通过、6 失败；失败均为测试环境 esbuild 没有 `.woff2?url` loader，涉及既有 Office 证据组件导入，不影响生产构建或本次定向测试。
+- 部署证明在26 `/home/admin/deploy-shared-blacklist-20261110/verification.json`，本机仅脱敏验收脚本留在忽略目录 `.runtime/`。甲方现场 NOT VERIFIED；本轮不提交 Git、不制作客户包。
+
+## 2026-11-10 黑名单与风险预估页面简化
+
+- 黑名单页移除依赖当前分页结果计算的五块统计卡，删除会误导用户以为正在同步外部名单的“同步数据源”，改为只刷新当前列表；保留告警/名单/规则三项操作、必要搜索、导出及新增名单入口，搜索在窄屏显示。风险预估来源改为每份合同最新任务中的已完成记录：不再传 `includeHistory=true`，并加 `status=COMPLETED`，避免把历史/处理中条目混入；未删除历史数据。
+- 26默认入口 release 仍为 `/opt/audit-agent/releases/shared-blacklist-20261110-r1`；静态修订 `blacklist-risk-cleanup-20261110-r1`，入口 SHA256 `fdd330e85eb641a842303a2cd3ff6807d7666a9b96928399a3ce60466c805a6f`，旧入口SHA `8f55f674136af696a3dca8bc511a1acdf9612e75545b7720e0a539c0359e13dd`。8个静态资源哈希通过；后端、AI、Nginx、DB均未重启或修改。
+- 风险投影与页面、角色/工作台定向回归14/14通过，Chrome109生产构建及颜色适配通过。26使用三个业务账号实际打开黑名单页，旧统计与同步文案已消失，黑名单名单接口均200、pageerror为0；合同账号对风险查询接口进行`risk=REVIEW&status=COMPLETED`只读核对，HTTP200、返回0条且不存在未完成任务混入。没有改写或清理数据库记录。甲方现场NOT VERIFIED。
+- 截图中发现告警筛选器被通用`w-full`样式撑成纵向堆叠，已用响应式网格调整为桌面单行、手机纵向。最终静态修订为 `blacklist-risk-cleanup-20261110-r2`，入口 SHA256 `35d5521dd8fc6af126dbe2bcff980cc3023f12c3db527d46285ef0a7cb92b8cc`，从r1增量替换，8个资源哈希通过；服务和数据库仍未重启/变更。三个角色在Chrome109桌面与390px视口复测无横向溢出、pageerror为0。合同账号两类风险筛选（REVIEW、INSUFFICIENT）均HTTP200，当前各返回0条，范围已过滤完成任务与历史数据；没有清库。
+- 后续按用户要求复查风险来源：26 DM8 只读统计 F02 合同审核 `AUDIT_TASK` 共16条、9个合同来源，全部为 `DONE`；2个来源有重复审核历史，共7条早期任务；超过一天未收口0；按 `CREATED_BY` 测试/QA/fixture 特征匹配0。未发现有证据可判定为垃圾或可删除的数据。合同账号自身范围该两类风险任务均为0；数据现在由页面限定最新已完成任务展示。根据 ADR-006，审计保留期须由业务方明确，不能按“重复”直接删除 durable audit facts；因此没有执行数据库DELETE。诊断Java/Python临时文件已从26移除。

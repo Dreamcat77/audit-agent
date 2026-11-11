@@ -197,6 +197,43 @@ test("delivery workbench renders explicit empty and error states", async () => {
   assert.match(failed, /重新读取/);
 });
 
+test("shared workbench shows only each role's permitted module links and retains procurement blacklist", async () => {
+  const { render } = await loadWorkbenchHarness();
+  const view = workbenchPresentation(null, [], null);
+  const renderRole = (roles: string[]) => render({
+    view,
+    loading: false,
+    error: null,
+    roles,
+    onOpenContract() {},
+    onOpenProcurement() {},
+    onOpenBudget() {},
+    onOpenBlacklist() {},
+    onOpenRisk() {},
+  });
+
+  const budget = renderRole(["BUDGET_USER"]);
+  assert.match(budget, /预算审查/);
+  assert.match(budget, /黑名单/);
+  assert.doesNotMatch(budget, /采购审查|合同审核|风险预估|合同审核数据概览/);
+
+  const procurement = renderRole(["PROCUREMENT_USER"]);
+  assert.match(procurement, /采购审查/);
+  assert.match(procurement, /黑名单/);
+  assert.doesNotMatch(procurement, /预算审查|合同审核|风险预估|合同审核数据概览/);
+
+  const contract = renderRole(["CONTRACT_USER"]);
+  assert.match(contract, /合同审核/);
+  assert.match(contract, /黑名单/);
+  assert.match(contract, /合同审核数据概览/);
+  assert.doesNotMatch(contract, /预算审查|采购审查|风险预估/);
+
+  const admin = renderRole(["SYSTEM_ADMIN"]);
+  for (const label of ["预算审查", "采购审查", "合同审核", "黑名单", "风险预估"]) {
+    assert.match(admin, new RegExp(label));
+  }
+});
+
 test("workbench scopes selections and empty claims when global pending and review totals are positive", async () => {
   const { render } = await loadWorkbenchHarness();
   const view = workbenchPresentation(

@@ -15,21 +15,17 @@ export function usesPersonalUploads(roles: readonly string[]): boolean {
 
 const ROLE_PAGES: Readonly<Record<string, readonly string[]>> = {
   PROCUREMENT_USER: ["procurement", "procurement-tasks", "bidding", "blacklist"],
-  BUDGET_USER: ["budget-check"],
-  CONTRACT_USER: ["contract", "project"],
+  BUDGET_USER: ["budget-check", "blacklist"],
+  CONTRACT_USER: ["contract", "project", "blacklist"],
 };
 
 export function canAccessPage(roles: readonly string[], page: string): boolean {
+  if (page === "dashboard") return true;
   if (!usesPersonalUploads(roles)) return true;
   return roles.some(role => ROLE_PAGES[role]?.includes(page) ?? false);
 }
 
-export function defaultPageForRoles(roles: readonly string[]): string {
-  if (!usesPersonalUploads(roles)) return "dashboard";
-  for (const role of roles) {
-    const firstPage = ROLE_PAGES[role]?.[0];
-    if (firstPage) return firstPage;
-  }
+export function defaultPageForRoles(_roles: readonly string[]): string {
   return "dashboard";
 }
 

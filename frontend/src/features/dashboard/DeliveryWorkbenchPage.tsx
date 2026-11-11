@@ -2,6 +2,7 @@ import { AlertTriangle, ArrowRight, BarChart3, FileSearch, Scale, ShoppingCart, 
 import { useEffect, useMemo, useState } from "react";
 import { userFacingError } from "../../api/userFacingError";
 import { useAuth } from "../../auth/AuthProvider";
+import { canAccessPage } from "../../app/appShellPresentation";
 import type { ContractAuditTaskDataSource, ContractAuditTaskItem, ContractAuditTaskSummary } from "../contract/data/contractAuditTaskDataSource";
 import { contractAuditTaskDataSource } from "../contract/data/contractAuditTaskDataSource";
 import { workbenchPresentation } from "./workbenchPresentation";
@@ -48,7 +49,7 @@ export async function loadDeliveryWorkbench(
 
 export function DeliveryWorkbenchContent({
   view, loading, error, onRetry, onOpenBudget, onOpenProcurement, onOpenContract,
-  onOpenBlacklist, onOpenRisk,
+  onOpenBlacklist, onOpenRisk, roles = [],
   userName, lastUpdatedLabel,
 }: DeliveryWorkbenchCallbacks & {
   view: ReturnType<typeof workbenchPresentation>;
@@ -57,21 +58,25 @@ export function DeliveryWorkbenchContent({
   onRetry?: () => void;
   userName?: string;
   lastUpdatedLabel?: string;
+  roles?: readonly string[];
 }) {
   const tools = [
     { key: "budget", title: "预算审查", description: "核对采购预算与已配置标准，形成可追溯的审查结果。", icon: <FileSearch size={21}/>, onOpen: onOpenBudget },
     { key: "procurement", title: "采购审查", description: "进入采购需求辅助审查，查看既有采购业务能力。", icon: <ShoppingCart size={21}/>, onOpen: onOpenProcurement },
     { key: "contract", title: "合同审核", description: "集中核验材料，发起审核并按八大项查看本次结果。", icon: <Scale size={21}/>, onOpen: onOpenContract },
-  ] as const;
+  ].filter((tool) => canAccessPage(roles, tool.key === "budget" ? "budget-check" : tool.key));
+  const auxiliaryTools = [
+    { key: "blacklist", title: "黑名单", description: "查询已配置的供应商黑名单与报警记录。", icon: <Ban size={20}/>, onOpen: onOpenBlacklist },
+    { key: "risk", title: "风险预估", description: "查看现有审核记录中的风险信息。", icon: <ShieldAlert size={20}/>, onOpen: onOpenRisk },
+  ].filter((tool) => canAccessPage(roles, tool.key));
+  const showContractStatistics = canAccessPage(roles, "contract");
 
   return <>
     <header className="delivery-page-header">
       <div>
-        <h1 className="delivery-page-title">工作台</h1>
+          <h1 className="delivery-page-title">工作台</h1>
         <p className="delivery-page-subtitle">
           {userName ? `你好，${userName}` : "内审辅助工具"}
-          <span className="mx-2 text-stone-300">·</span>
-          最后更新时间：{lastUpdatedLabel ?? (loading ? "正在更新" : "本次加载")}
         </p>
       </div>
     </header>
@@ -81,36 +86,33 @@ export function DeliveryWorkbenchContent({
       <button type="button" onClick={onRetry} className="delivery-secondary-action">重新读取</button>
     </div>}
 
-    <section aria-labelledby="business-tools-heading">
-      <div className="mb-4">
+    {tools.length > 0 && <section aria-labelledby="business-tools-heading">
+      <div className="mb-3">
         <h2 id="business-tools-heading" className="text-base font-semibold text-stone-800">业务工具</h2>
-        <p className="mt-1 text-sm text-stone-500">选择本次需要使用的内审辅助工具</p>
       </div>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="workbench-tool-grid">
         {tools.map((tool) => <button key={tool.key} type="button" onClick={tool.onOpen}
-          className="delivery-surface group flex min-h-44 flex-col items-start p-5 text-left transition hover:border-orange-200 hover:shadow-sm">
+          className="delivery-surface group flex min-h-32 items-center gap-4 p-4 text-left transition hover:border-orange-200 hover:shadow-sm">
           <span className="delivery-icon-chip text-orange-600">{tool.icon}</span>
-          <strong className="mt-5 text-base text-stone-800">{tool.title}</strong>
-          <span className="mt-2 flex-1 text-sm leading-6 text-stone-500">{tool.description}</span>
-          <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-orange-700">进入工具<ArrowRight size={15}/></span>
+          <span className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <strong className="text-sm text-stone-800">{tool.title}</strong>
+            <span className="text-xs leading-5 text-stone-500">{tool.description}</span>
+          </span>
+          <ArrowRight size={16} className="shrink-0 text-stone-400 group-hover:text-orange-700"/>
         </button>)}
       </div>
-    </section>
+    </section>}
 
-    <section className="grid gap-4 md:grid-cols-2" aria-label="辅助工具">
-      <button type="button" onClick={onOpenBlacklist} className="delivery-surface flex items-center gap-4 p-5 text-left transition hover:border-orange-200 hover:shadow-sm">
-        <span className="delivery-icon-chip text-stone-600"><Ban size={20}/></span>
-        <span className="flex-1"><strong className="block text-sm text-stone-800">黑名单</strong><span className="mt-1 block text-xs leading-5 text-stone-500">查询已配置的供应商黑名单与持久化报警。</span></span>
+    {auxiliaryTools.length > 0 && <section aria-label="辅助工具" className="workbench-tool-grid">
+      {auxiliaryTools.map((tool) => <button key={tool.key} type="button" onClick={tool.onOpen}
+        className="delivery-surface flex min-h-20 items-center gap-4 p-4 text-left transition hover:border-orange-200 hover:shadow-sm">
+        <span className="delivery-icon-chip text-stone-600">{tool.icon}</span>
+        <span className="flex-1"><strong className="block text-sm text-stone-800">{tool.title}</strong><span className="mt-1 block text-xs leading-5 text-stone-500">{tool.description}</span></span>
         <ArrowRight size={15} className="text-stone-400"/>
-      </button>
-      <button type="button" onClick={onOpenRisk} className="delivery-surface flex items-center gap-4 p-5 text-left transition hover:border-orange-200 hover:shadow-sm">
-        <span className="delivery-icon-chip text-stone-600"><ShieldAlert size={20}/></span>
-        <span className="flex-1"><strong className="block text-sm text-stone-800">风险预估</strong><span className="mt-1 block text-xs leading-5 text-stone-500">查看已有审核记录中的风险与未覆盖范围。</span></span>
-        <ArrowRight size={15} className="text-stone-400"/>
-      </button>
-    </section>
+      </button>)}
+    </section>}
 
-    <section className="delivery-surface p-5" aria-labelledby="workbench-statistics-heading">
+    {showContractStatistics && <section className="delivery-surface p-4" aria-labelledby="workbench-statistics-heading">
       <div className="flex items-center gap-3">
         <span className="delivery-icon-chip"><BarChart3 size={18}/></span>
         <div><h2 id="workbench-statistics-heading" className="font-semibold text-stone-800">合同审核数据概览</h2><p className="mt-1 text-xs text-stone-500">当前已持久化合同审核任务的只读统计</p></div>
@@ -121,12 +123,14 @@ export function DeliveryWorkbenchContent({
           <dd className="mt-2 text-xl font-semibold tabular-nums text-stone-800">{loading ? "--" : item.value ?? "--"}</dd>
         </div>)}
       </dl>
-    </section>
+    </section>}
   </>;
 }
 
 export function DeliveryWorkbenchPage({ dataSource = contractAuditTaskDataSource, onOpenBudget, onOpenProcurement, onOpenContract, onOpenBlacklist, onOpenRisk }: DeliveryWorkbenchPageProps) {
   const { user } = useAuth();
+  const roles = user?.roles ?? [];
+  const showContractStatistics = canAccessPage(roles, "contract");
   const [summary, setSummary] = useState<ContractAuditTaskSummary | null>(null);
   const [recentTasks, setRecentTasks] = useState<ContractAuditTaskItem[]>([]);
   const [todayTotal, setTodayTotal] = useState<number | null>(null);
@@ -137,6 +141,14 @@ export function DeliveryWorkbenchPage({ dataSource = contractAuditTaskDataSource
 
   useEffect(() => {
     const controller = new AbortController();
+    if (!showContractStatistics) {
+      setSummary(null);
+      setRecentTasks([]);
+      setTodayTotal(null);
+      setError(null);
+      setLoading(false);
+      return () => controller.abort();
+    }
     setLoading(true);
     setError(null);
     void loadDeliveryWorkbench(dataSource, new Date(), controller.signal).then((loaded) => {
@@ -156,7 +168,7 @@ export function DeliveryWorkbenchPage({ dataSource = contractAuditTaskDataSource
       if (!controller.signal.aborted) setLoading(false);
     });
     return () => controller.abort();
-  }, [dataSource, nonce, user?.userId]);
+  }, [dataSource, nonce, showContractStatistics, user?.userId]);
 
   const view = useMemo(() => workbenchPresentation(summary, recentTasks, todayTotal), [summary, recentTasks, todayTotal]);
   return <section className="delivery-page space-y-6">
@@ -164,6 +176,7 @@ export function DeliveryWorkbenchPage({ dataSource = contractAuditTaskDataSource
       onRetry={() => setNonce((value) => value + 1)}
       onOpenBudget={onOpenBudget} onOpenProcurement={onOpenProcurement} onOpenContract={onOpenContract}
       onOpenBlacklist={onOpenBlacklist} onOpenRisk={onOpenRisk}
+      roles={roles}
       userName={user?.realName || user?.username || "已登录用户"}
       lastUpdatedLabel={lastUpdatedAt?.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}/>
   </section>;

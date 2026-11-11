@@ -171,10 +171,6 @@ export function BudgetFileResults({ taskId, batchId, onComplete,initialName,init
   };
   const projectNames=[...new Set(referenceGroups.map(group=>group.project).filter(Boolean))];
   const reportName=projectNames.length?projectNames.slice(0,2).join('、')+(projectNames.length>2?` 等${projectNames.length}个项目`:''):initialName||'预算材料分析';
-  if(pending)return <section aria-label="预算文件结果" className="budget-results-panel result-workspace space-y-5">
-    <ResultProjectHeader kind="预算审查结果" name={reportName} metadata={(batchFiles.length||initialFileCount)?`${batchFiles.length||initialFileCount} 份材料`:undefined}
-      actions={<ProcessingStatusCard variant="compact" title={state.loading?'正在读取结果':'正在分析'} description={state.loading?`正在读取已保存的结果${readProgress.total?`（${readProgress.done}/${readProgress.total}）`:''}，请稍候。`:'正在提取文件内容并核对预算信息，请稍候。'} />} />
-  </section>;
   if(reference)return <BudgetBatchReport reference={reference} fileCount={batchFiles.length} createdAt={state.batch?.createdAt} pending={pending} unavailable={state.unavailable} exportReport={exportReference}/>;
   if(groups.length===0)return <section aria-label="预算文件结果" className="budget-results-panel result-workspace space-y-5">
     <ResultProjectHeader kind="预算审查结果" name="预算材料分析" metadata={state.batch?`${batchFiles.length} 份材料`:undefined}/>
@@ -187,6 +183,7 @@ export function BudgetFileResults({ taskId, batchId, onComplete,initialName,init
       <div className="budget-results-panel-title"><span className="budget-results-file-icon"><FileText size={20} aria-hidden="true" /></span><div><h2 className="break-words text-lg font-bold text-slate-800">本批预算材料参考结果</h2><p className="mt-1 break-words text-xs text-slate-500">{batchFiles.length || batchFileNames.length ? `${batchFiles.length || batchFileNames.length} 份材料：${batchFileNames.slice(0, 4).join('、')}${batchFileNames.length > 4 ? ` 等 ${batchFileNames.length} 份` : ''}` : state.loading ? '正在读取材料清单…' : state.unavailable ? '批次材料暂时不可读取' : '暂无材料信息'}</p></div></div>
       {!state.loading && groups.length > 0 && <button type="button" onClick={exportResult} className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600">导出</button>}
     </div>
+    {pending&&<p role="status" className="text-sm text-slate-600">{groups.length?'当前已展示可用结果，其余材料仍在处理中。':'正在整理预算结果，已生成内容会逐项显示。'}</p>}
     <BatchOverview batch={state.batch} lineCount={0} differenceCount={0} uncertainCount={0} showMetrics={false} />
     {state.loading ? <ResultMessage title={messageTitle} description="正在整理预算结果，请稍候。" pending /> : groups.length === 0 ? <ResultMessage title={messageTitle}
       description={state.unavailable ? '暂时无法读取完整结果，请稍后重新打开。'

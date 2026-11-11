@@ -28,9 +28,9 @@ class PersonalUploadAccessInterceptorTest {
     @ParameterizedTest @ValueSource(strings={"PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER"})
     void eachPersonalRoleCanOnlyUseItsOwnModuleAndSharedAccountEndpoints(String role)throws Exception {
         var allowed = switch (role) {
-            case "BUDGET_USER" -> List.of("/api/v1/budget/material-uploads/batches", "/api/v1/material-transfers/{kind}/{operation}");
+            case "BUDGET_USER" -> List.of("/api/v1/budget/material-uploads/batches", "/api/v1/material-transfers/{kind}/{operation}", "/api/v1/blacklist/alerts");
             case "PROCUREMENT_USER" -> List.of("/api/v1/procurement/cases/history", "/api/v1/blacklist/alerts", "/api/blacklist/alerts");
-            default -> List.of("/api/v1/contract-analysis-cases", "/api/v1/contract-audit-tasks", "/api/v1/contract-audit-tasks/summary");
+            default -> List.of("/api/v1/contract-analysis-cases", "/api/v1/contract-audit-tasks", "/api/v1/contract-audit-tasks/summary", "/api/v1/blacklist/alerts");
         };
         for(String route:allowed) {
             var vars=route.contains("{kind}")?Map.of("kind","budget"):Map.<String,String>of();
@@ -46,6 +46,31 @@ class PersonalUploadAccessInterceptorTest {
             };
             if(!own) assertThatThrownBy(()->access(role).preHandle(request(route,Map.of()),new MockHttpServletResponse(),this))
                     .isInstanceOf(BusinessException.class);
+        }
+        verifyNoInteractions(ownership);
+    }
+    @ParameterizedTest @ValueSource(strings={"PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER"})
+    void allOrganizationBlacklistOperationsAreSharedAcrossModuleRoles(String role)throws Exception {
+        for(String route:List.of(
+                "/api/v1/blacklist/check",
+                "/api/v1/blacklist/check-batch",
+                "/api/v1/blacklist/check-batch/headers/preview",
+                "/api/v1/blacklist/check-batch-upload",
+                "/api/v1/blacklist/alerts",
+                "/api/v1/blacklist/alerts/{id}",
+                "/api/v1/blacklist/alerts/{id}/handle",
+                "/api/v1/blacklist/entries",
+                "/api/v1/blacklist/entries/query",
+                "/api/v1/blacklist/entries/{id}",
+                "/api/v1/blacklist/entries/import",
+                "/api/v1/blacklist/entries/export",
+                "/api/v1/blacklist/rules",
+                "/api/v1/blacklist/rules/{id}",
+                "/api/blacklist/check",
+                "/api/blacklist/entries",
+                "/api/blacklist/rules")) {
+            assertThat(access(role).preHandle(request(route,Map.of()),new MockHttpServletResponse(),this))
+                    .as("%s can use %s",role,route).isTrue();
         }
         verifyNoInteractions(ownership);
     }

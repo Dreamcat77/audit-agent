@@ -17,6 +17,16 @@ export function budgetResultPending(status: string): boolean {
   return ['OPEN', 'WAITING_UPLOAD', 'UPLOADED', 'QUEUED', 'PROCESSING', 'PARSED'].includes(status);
 }
 
+export function budgetBatchResultState<T extends { fileName: string; task: { taskId: string } }>(
+  entries: readonly { phase: string; result: T | null }[],
+) {
+  const processing = entries.some(entry => ['WAITING_UPLOAD', 'UPLOADING', 'QUEUED', 'PROCESSING'].includes(entry.phase));
+  const results = entries.flatMap(entry => entry.result
+    ? [{ id: entry.result.task.taskId, name: entry.result.fileName }]
+    : []);
+  return { processing, results };
+}
+
 // "Complete" describes the checked extraction, never proof of exhaustive source coverage.
 export function budgetCoverageLabel(coverage?: string | null): string {
   if (coverage === 'PARTIAL') return '部分信息待核对';

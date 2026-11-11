@@ -28,7 +28,7 @@ const task = {
   reviewRun: { runId: "run-exact-risk", status: "PARTIALLY_COMPLETED" },
 };
 const assessment = {
-  scopeLabel: "当前用户可访问的持久化合同审核记录",
+  scopeLabel: "当前账号已完成的最新合同审核结果",
   reviewRequiredCount: 1,
   materialInsufficientCount: 0,
   items: [{ task, coverage: { label: "已覆盖 4/5 项", unassessed: true } }],
@@ -39,7 +39,7 @@ test("renders persisted facts, coverage and no fabricated score", () => {
     loading: false, error: null, assessment, onRetry() {}, onOpenTask() {},
   }));
 
-  assert.match(html, /当前用户可访问的持久化合同审核记录/);
+  assert.match(html, /当前账号已完成的最新合同审核结果/);
   assert.match(html, /风险项目/);
   assert.match(html, /风险合同/);
   assert.match(html, /已覆盖 4\/5 项/);

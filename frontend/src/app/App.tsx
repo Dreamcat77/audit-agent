@@ -6058,6 +6058,8 @@ export default function App() {
     setPage("project");
   };
 
+  const portalNavigationItems = demoVisibleNavigationItems(visibleNavigationItems(roles, NAV_ITEMS));
+
   const pageComponents: Record<Page, React.ReactNode> = {
     dashboard: <DeliveryWorkbenchPage
       onOpenContract={() => {
@@ -6134,7 +6136,7 @@ export default function App() {
 
   return (
     <PortalShell
-      items={demoVisibleNavigationItems(visibleNavigationItems(roles, NAV_ITEMS))}
+      items={portalNavigationItems}
       activePage={activePortalPage}
       onNavigate={setPage}
       user={user}

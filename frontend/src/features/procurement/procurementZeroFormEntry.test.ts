@@ -31,4 +31,5 @@ test("procurement page defaults to automatic batch upload and keeps formal manag
   assert.match(panel, /onChange=\{e => \{ const selected = Array\.from\(e\.target\.files \|\| \[\]\); e\.target\.value = ''; void upload\(selected\); \}\}/);
   assert.match(panel, /body\.append\('files', f\)/);
   assert.match(panel, /\/history/);
+  assert.doesNotMatch(panel, /\{!caseProcessing&&report && <section/);
 });

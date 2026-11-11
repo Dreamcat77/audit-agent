@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { groupBudgetMaterialLines, mergeBudgetMaterialReferences } from "./budgetBatchResult.ts";
+import { budgetBatchResultState } from "./budgetResultState.ts";
 
 test('batch semantic projection keeps project name, deduplicates totals and never upgrades partial analysis',()=>{
   const total={role:'projectBudgetAmount',scope:'TOTAL',year:'2026',amount:1000000,sources:[]};
@@ -50,6 +52,19 @@ test('missing coverage remains unverified and pending members prevent a complete
   ]);
   assert.equal(result?.status, 'PENDING');
   assert.equal(result?.coverage, null);
+});
+
+test('an available batch file result can be shown while sibling files are still processing', async () => {
+  const state = budgetBatchResultState([
+    { phase: 'PARSED', result: { task: { taskId: 'task-1' }, fileName: '预算表.xlsx' } },
+    { phase: 'PROCESSING', result: null },
+  ]);
+
+  assert.equal(state.processing, true);
+  assert.deepEqual(state.results, [{ id: 'task-1', name: '预算表.xlsx' }]);
+  const page = await readFile(new URL('../../app/BudgetCheckPage.tsx', import.meta.url), 'utf8');
+  assert.match(page, /budgetBatchResultState\(rows\)/);
+  assert.match(page, /if\(!currentResultId\)setCurrentResultId\(results\[0\]\.id\)/);
 });
 
 test('projects, years and departments remain separate while differences come first in each group', () => {

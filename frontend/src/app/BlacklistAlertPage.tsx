@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  AlertTriangle, Ban, Bell, CheckCircle2, ChevronDown, ChevronRight, CircleAlert,
+  AlertTriangle, Ban, Bell, CheckCircle2, ChevronDown, ChevronRight,
   Database, Download, Edit3, FileUp, Loader2, Plus, RefreshCw, Search, Settings2,
   ShieldAlert, Trash2, Users, X, Zap,
 } from 'lucide-react';
@@ -100,27 +100,6 @@ function LevelBadge({ value }: { value: string }) {
   </span>;
 }
 
-function StatCard({ label, value, unit, tone = 'neutral', icon }: {
-  label: string;
-  value: number;
-  unit: string;
-  tone?: 'neutral' | 'red' | 'yellow';
-  icon: ReactNode;
-}) {
-  const styles = {
-    neutral: 'border-slate-200 bg-white text-slate-900',
-    red: 'border-red-200 bg-red-50/70 text-red-600',
-    yellow: 'border-amber-200 bg-amber-50/70 text-amber-600',
-  }[tone];
-  return <div className={`flex min-h-[92px] items-center justify-between rounded-lg border px-5 py-4 ${styles}`}>
-    <div>
-      <p className="text-xs font-medium text-slate-500">{label}</p>
-      <p className="mt-2 text-2xl font-semibold leading-none">{value}<span className="ml-1 text-sm font-normal text-slate-500">{unit}</span></p>
-    </div>
-    <span className="flex size-9 items-center justify-center rounded-lg bg-white/70 text-slate-400">{icon}</span>
-  </div>;
-}
-
 export function BlacklistAlertPage() {
   const [tab, setTab] = useState<Tab>('alerts');
   const [alerts, setAlerts] = useState<BlacklistAlertItem[]>([]);
@@ -194,67 +173,41 @@ export function BlacklistAlertPage() {
     }
   };
 
-  const pendingCount = alerts.filter(item => item.status === 'PENDING').length;
-  const criticalCount = new Set(alerts.filter(item => item.alertLevel === 'CRITICAL').map(item => item.blacklistId)).size;
-  const currentMonth = new Date().toISOString().slice(0, 7);
-  const monthlyHits = alerts.filter(item => item.createdTime?.slice(0, 7) === currentMonth).length;
-  const blockedApprovals = alerts.filter(item => item.alertLevel === 'CRITICAL' && ['RESOLVED', 'PROCESSED'].includes(item.status)).length;
-
-  const tabs: { id: Tab; label: string; count?: number }[] = [
-    { id: 'alerts', label: '命中告警记录', count: alerts.length },
-    { id: 'entries', label: '黑名单数据库', count: entries.length },
+  const tabs: { id: Tab; label: string }[] = [
+    { id: 'alerts', label: '命中告警' },
+    { id: 'entries', label: '黑名单名单' },
     { id: 'rules', label: '规则配置' },
   ];
 
   return <div className="min-h-full bg-[#f6f8fb]">
-    <section className="border-b border-slate-200 bg-[#f6f8fb] px-6 pb-5 pt-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <span className="flex size-7 items-center justify-center rounded-full text-red-500"><Ban size={24} strokeWidth={2} /></span>
-            <h1 className="text-xl font-semibold tracking-tight text-slate-900">供应商黑名单管理</h1>
-          </div>
-          <p className="mt-1 pl-10 text-sm text-slate-500">对接省市黑名单数据源，采购各环节自动查询并实时拦截</p>
+    <section className="border-b border-slate-200 bg-white px-6 pt-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <Ban size={19} className="text-red-600" />
+          <h1 className="text-lg font-semibold text-slate-900">供应商黑名单</h1>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button onClick={() => { setTab('alerts'); setAlertStatus('PENDING'); }} className="inline-flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700 hover:bg-amber-100">
-            <Bell size={14} />{pendingCount} 条待处理
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={() => void load()} title="刷新当前列表" aria-label="刷新当前列表" className="inline-flex size-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:text-blue-700">
+            <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
           </button>
-          <button onClick={() => void load()} className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-blue-300 hover:text-blue-700">
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />同步数据源
-          </button>
-          <button onClick={() => { setTab('entries'); setEntryEditor('new'); }} className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-xs font-medium text-white shadow-sm hover:bg-blue-700">
-            <Plus size={15} />手工录入
+          <button onClick={() => { setTab('entries'); setEntryEditor('new'); }} className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-2 text-xs font-medium text-white hover:bg-blue-700">
+            <Plus size={14} />新增名单
           </button>
         </div>
       </div>
-    </section>
-
-    <section className="border-b border-slate-200 px-6 py-5">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <StatCard label="黑名单总量" value={entries.length} unit="家" icon={<Database size={18} />} />
-        <StatCard label="红色拦截条目" value={criticalCount} unit="家" tone="red" icon={<ShieldAlert size={18} />} />
-        <StatCard label="本月命中次数" value={monthlyHits} unit="次" tone="red" icon={<CircleAlert size={18} />} />
-        <StatCard label="已拦截审批" value={blockedApprovals} unit="个" tone="yellow" icon={<Ban size={18} />} />
-        <StatCard label="待处理告警" value={pendingCount} unit="条" tone="yellow" icon={<Bell size={18} />} />
-      </div>
-    </section>
-
-    <section className="border-b border-slate-200 px-6">
       <div className="flex flex-wrap items-center gap-1">
         <div className="flex items-center gap-1">
           {tabs.map(item => <button key={item.id} onClick={() => setTab(item.id)} className={`relative px-4 py-4 text-sm font-medium transition ${tab === item.id ? 'text-blue-600' : 'text-slate-500 hover:text-slate-800'}`}>
             {item.label}
-            {item.count !== undefined && <span className={`ml-2 inline-flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] ${tab === item.id ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-500'}`}>{item.count}</span>}
             {tab === item.id && <span className="absolute inset-x-2 bottom-0 h-0.5 bg-blue-600" />}
           </button>)}
         </div>
         <div className="ml-auto flex items-center gap-2 py-2">
-          {tab === 'alerts' && <div className="relative hidden sm:block">
+          {tab === 'alerts' && <div className="relative">
             <Search size={15} className="absolute left-3 top-2.5 text-slate-400" />
             <input value={supplierSearch} onChange={e => setSupplierSearch(e.target.value)} placeholder="搜索供应商或项目..." className={`${inputClass} w-60 pl-9`} />
           </div>}
-          {tab === 'entries' && <div className="relative hidden sm:block">
+          {tab === 'entries' && <div className="relative">
             <Search size={15} className="absolute left-3 top-2.5 text-slate-400" />
             <input value={entrySearch} onChange={e => setEntrySearch(e.target.value)} placeholder="搜索供应商或统一社会信用代码..." className={`${inputClass} w-72 pl-9`} />
           </div>}
@@ -265,7 +218,7 @@ export function BlacklistAlertPage() {
       </div>
     </section>
 
-    <main className="space-y-4 px-6 py-5">
+    <main className="space-y-4 px-6 py-4">
       {notice && <div className="flex items-center justify-between rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">{notice}<button onClick={() => setNotice(null)} title="关闭"><X size={14} /></button></div>}
       {error && <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"><AlertTriangle size={14} />{error}<button className="ml-auto" onClick={() => setError(null)} title="关闭"><X size={14} /></button></div>}
 
@@ -342,15 +295,15 @@ function AlertsView(props: {
 }) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   return <section className="space-y-3">
-    <div className="flex flex-wrap items-center gap-2">
-      <input value={props.batchId} onChange={e => props.onBatchId(e.target.value)} placeholder="批次ID" className={`${inputClass} w-44`} />
-      <select value={props.level} onChange={e => props.onLevel(e.target.value as AlertLevel)} className={`${inputClass} w-32`}>
+    <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-[minmax(180px,1fr)_140px_140px_auto]">
+      <input value={props.batchId} onChange={e => props.onBatchId(e.target.value)} placeholder="批次ID" className={inputClass} />
+      <select value={props.level} onChange={e => props.onLevel(e.target.value as AlertLevel)} className={inputClass}>
         <option value="ALL">全部级别</option><option value="CRITICAL">严重</option><option value="WARNING">警告</option><option value="INFO">正常</option>
       </select>
-      <select value={props.status} onChange={e => props.onStatus(e.target.value as AlertStatus)} className={`${inputClass} w-32`}>
+      <select value={props.status} onChange={e => props.onStatus(e.target.value as AlertStatus)} className={inputClass}>
         <option value="ALL">全部状态</option><option value="PENDING">待处理</option><option value="RESOLVED">已处理</option><option value="IGNORED">已忽略</option><option value="FALSE_POSITIVE">误报</option>
       </select>
-      <span className="ml-auto text-xs text-slate-400">共 {props.alerts.length} 条告警</span>
+      <span className="text-xs text-slate-400 sm:justify-self-end">共 {props.alerts.length} 条告警</span>
     </div>
     {props.loading && props.alerts.length === 0 && <EmptyState loading />}
     {!props.loading && props.alerts.length === 0 && <EmptyState title="暂无命中告警" description="当前筛选条件下没有匹配的黑名单告警记录" />}

@@ -58,3 +58,12 @@ test("contract analysis summary is consolidated while formal eight-category revi
   assert.match(analysis, /复制问题项/);
   assert.match(formalReview, /<EightCategoryReviewPanel/);
 });
+
+test("contract analysis renders persisted findings and eight categories while later steps are running", async () => {
+  const analysis = await readFile(new URL("./components/ContractAnalysisWorkspace.tsx", import.meta.url), "utf8");
+  const categories = await readFile(new URL("./components/ContractAnalysisCategories.tsx", import.meta.url), "utf8");
+
+  assert.doesNotMatch(analysis, /\{!analysisBusy\(report\.status\)&&<div className="space-y-5">/);
+  assert.match(analysis, /processing=\{analysisBusy\(report\.status\)\}/);
+  assert.match(categories, /正在整理，结果将逐项显示/);
+});

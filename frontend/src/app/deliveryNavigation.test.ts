@@ -58,7 +58,7 @@ const require = createRequire(import.meta.url);
 async function compile(contents: string, plugins: any[] = []) {
   const result = await build({
     bundle: true, write: false, platform: "node", format: "cjs", jsx: "automatic",
-    loader: { ".css": "empty" },
+    loader: { ".css": "empty", ".woff2": "dataurl" },
     external: ["react", "react-dom", "react-dom/client", "react/jsx-runtime", "lucide-react", "recharts"],
     define: { "import.meta.env": '{"DEV":false,"VITE_CONTRACT_DATA_SOURCE":"http"}' },
     stdin: { contents, loader: "tsx", resolveDir: process.cwd() }, plugins,
