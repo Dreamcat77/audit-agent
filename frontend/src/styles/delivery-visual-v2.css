@@ -564,3 +564,14 @@
   padding-bottom: 0;
   line-height: 20px;
 }
+
+.portal-main button:not([aria-label]):not([title]):not([class~="text-left"]):not([class~="sr-only"]):not([class~="result-source-action"]):not([class~="history-link-button"]) {
+  box-sizing: border-box;
+  height: 40px;
+  min-height: 40px;
+  padding-top: 0;
+  padding-right: 14px;
+  padding-bottom: 0;
+  padding-left: 14px;
+  line-height: 20px;
+}

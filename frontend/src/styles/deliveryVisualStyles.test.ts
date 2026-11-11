@@ -13,8 +13,19 @@ test("authenticated pages share 40px form and action control heights", async () 
 
   assert.match(deliveryStyles, /\.portal-main input[^\{]*,\s*\.portal-main select\s*\{[^}]*height:\s*40px/s);
   assert.match(deliveryStyles, /\.portal-main button\.inline-flex\.items-center[^\{]*,\s*\.portal-main a\.inline-flex\.items-center\s*\{[^}]*height:\s*40px/s);
+  assert.match(deliveryStyles, /\.portal-main button:not\(\[aria-label\]\):not\(\[title\]\):not\(\[class~="text-left"\]\)[^\{]*\{[^}]*height:\s*40px/s);
   assert.match(deliveryStyles, /\.delivery-primary-action,[\s\S]*?\.delivery-secondary-action\s*\{[^}]*height:\s*40px/s);
   assert.match(historyStyles, /\.history-button\s*\{[^}]*height:40px/s);
+});
+
+test("budget and procurement workspaces use the shared page header and width", async () => {
+  const budgetPage = await readFile(new URL("../app/BudgetCheckPage.tsx", import.meta.url), "utf8");
+  const procurementPage = await readFile(new URL("../features/procurement/AutomaticCasePanel.tsx", import.meta.url), "utf8");
+
+  assert.match(budgetPage, /historyOpen\?"history-page":"delivery-page"/);
+  assert.match(budgetPage, /historyOpen\?"history-page-header":"delivery-page-header"/);
+  assert.match(procurementPage, /"delivery-page result-workspace procurement-results space-y-5"/);
+  assert.match(procurementPage, /"delivery-page-header"/);
 });
 
 test("work and history pages share desktop and responsive content geometry", async () => {

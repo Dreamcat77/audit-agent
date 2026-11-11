@@ -479,17 +479,17 @@ export function BudgetCheckPage({
   };
 
   return (
-    <div className={historyOpen?"history-page-canvas":"min-h-full bg-[#f5f5f7] px-3 py-3 sm:px-5 sm:py-5"}>
-      <div className={historyOpen?"history-page":"mx-auto max-w-[1440px] rounded-[28px] bg-[#f5f5f7] px-3 py-5 sm:px-6 sm:py-7 lg:px-8"}>
-        <header className={historyOpen?"history-page-header":"flex flex-wrap items-start justify-between gap-5"}>
+    <div className={historyOpen?"history-page-canvas":"min-h-full bg-[#f5f5f7]"}>
+      <div className={historyOpen?"history-page":"delivery-page"}>
+        <header className={historyOpen?"history-page-header":"delivery-page-header"}>
           {historyOpen&&!historyEntry&&<h1 className="history-page-title">历史结果</h1>}
           {!historyOpen && <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">预算审查</h1>
+            <h1 className="delivery-page-title">预算审查</h1>
             <p className="mt-1.5 text-sm text-slate-400">上传同一项目的预算和批复材料，集中查看差异与审查结果</p>
           </div>}
           <div className="ml-auto flex flex-wrap items-center gap-3">
-          {(activeStep===1||historyOpen) && <button type="button" onClick={returnOneLevel} className={historyOpen?"history-button":"inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50"}><ArrowRight size={16} className="rotate-180" />返回</button>}
-          {!historyOpen && <button type="button" onClick={openHistory} className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50">历史结果</button>}
+          {(activeStep===1||historyOpen) && <button type="button" onClick={returnOneLevel} className={historyOpen?"history-button":"delivery-secondary-action"}><ArrowRight size={16} className="rotate-180" />返回</button>}
+          {!historyOpen && <button type="button" onClick={openHistory} className="delivery-secondary-action">历史结果</button>}
           </div>
         </header>
 

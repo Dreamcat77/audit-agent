@@ -208,12 +208,12 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
   }
   const visibleCases = cases;
   const reportText = findings.map(f => `${f.title}\n${f.explanation}\n建议：${f.suggestion}\n涉及材料：${[...new Set(f.evidence.map(e => e.fileName))].join('、')}`).join('\n\n');
-  return <section className={!current&&historyOpen?"history-page":"result-workspace procurement-results mx-auto max-w-[1440px] space-y-5 p-4 sm:p-6"} aria-label="采购材料批次自动审查">
-    <header className={!current&&historyOpen?"history-page-header":"flex flex-wrap items-center justify-between gap-3"}>
-      <div><h1 className={!current&&historyOpen?"history-page-title":"text-xl font-semibold text-slate-900"}>{!current&&historyOpen?"历史结果":"采购审查"}</h1></div>
+  return <section className={!current&&historyOpen?"history-page":"delivery-page result-workspace procurement-results space-y-5"} aria-label="采购材料批次自动审查">
+    <header className={!current&&historyOpen?"history-page-header":"delivery-page-header"}>
+      <div><h1 className={!current&&historyOpen?"history-page-title":"delivery-page-title"}>{!current&&historyOpen?"历史结果":"采购审查"}</h1></div>
       <div className="flex gap-2">
-        {current ? <button type="button" className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm" onClick={() => { setCurrent(null); setEvidence(null); setError(''); }}>返回{historyOpen ? '历史结果' : '采购首页'}</button>
-          : <button type="button" className={historyOpen?"history-button":"rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm"} onClick={() => { setHistoryOpen(!historyOpen); setError(''); }}>{historyOpen ? '返回采购首页' : '历史结果'}</button>}
+        {current ? <button type="button" className="delivery-secondary-action" onClick={() => { setCurrent(null); setEvidence(null); setError(''); }}>返回{historyOpen ? '历史结果' : '采购首页'}</button>
+          : <button type="button" className={historyOpen?"history-button":"delivery-secondary-action"} onClick={() => { setHistoryOpen(!historyOpen); setError(''); }}>{historyOpen ? '返回采购首页' : '历史结果'}</button>}
       </div>
     </header>
     {error && <p role="alert" className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</p>}
