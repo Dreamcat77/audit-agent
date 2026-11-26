@@ -1,4 +1,8 @@
 * text=auto
+*.pdf binary
+*.doc binary
+*.docx binary
+*.xlsx binary
 .env.example text eol=lf
 backend/mvnw text eol=lf
 *.sh text eol=lf

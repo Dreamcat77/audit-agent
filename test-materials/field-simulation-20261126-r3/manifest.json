@@ -1,0 +1,180 @@
+{
+  "version": "field-simulation-holdout-v1",
+  "synthetic": true,
+  "frozenBeforeUpload": true,
+  "basedOn": "docs/field-material-patterns-and-adaptation-20261123.md; no customer source material",
+  "batches": [
+    {
+      "id": "F26B44",
+      "module": "budget",
+      "projectName": "松浦执法记录及回传能力提升项目",
+      "truth": {
+        "projectCode": "GA-IT-2027-118",
+        "declaredTotal": 490000,
+        "thirdPartyReviewedTotal": 476000,
+        "releasedTotal": 464000,
+        "rows": [
+          {
+            "subject": "移动记录设备",
+            "declared": 250000,
+            "reviewed": 242000,
+            "released": 240000
+          },
+          {
+            "subject": "数据回传升级",
+            "declared": 110000,
+            "reviewed": 105000,
+            "released": 100000
+          },
+          {
+            "subject": "现场培训服务",
+            "declared": 40000,
+            "reviewed": 39000,
+            "released": 39000
+          },
+          {
+            "subject": "设备巡检服务",
+            "declared": 90000,
+            "reviewed": 90000,
+            "released": 85000
+          }
+        ],
+        "annualUnitEnvelope": 86000000,
+        "shouldNotUseAnnualEnvelopeAsProjectTotal": true,
+        "crossFileLink": "project code plus year/unit, not repeated full title in every source",
+        "knownIssues": [
+          "项目申报总额高于下达合计26000元",
+          "终端/回传分项的申报与下达差异",
+          "复函用途仅覆盖明细范围"
+        ],
+        "forbidden": [
+          "年度单位总额作为项目总额",
+          "第三方审定额替代下达额",
+          "同财政分类代码合并为一个科目"
+        ]
+      },
+      "expected": {
+        "total": 490000,
+        "forbiddenProjectTotals": [
+          86000000
+        ],
+        "expectedSubjectAmounts": {
+          "移动记录设备": 250000,
+          "数据回传升级": 110000,
+          "现场培训服务": 40000,
+          "设备巡检服务": 90000
+        }
+      },
+      "folder": "F26B44",
+      "files": [
+        "关于执法终端及回传能力建设的请示.docx",
+        "年度财政支出预算预通知书.pdf",
+        "松浦信息化项目经费复函.pdf",
+        "项目明细表.xlsx"
+      ],
+      "sha256": {
+        "关于执法终端及回传能力建设的请示.docx": "3b3d33a1a3321c62d7a2f44e1778f8f9dc9661021af19c5a82b919f8289b20cd",
+        "年度财政支出预算预通知书.pdf": "489d2b197461659353c72e7134ac29f420966f68e2acbad8ede3dcc9acf76bc9",
+        "松浦信息化项目经费复函.pdf": "a480c4e06417d1a9f133c2dacf04d2c4f8bfdda8bfc1034789c12e1ac1825286",
+        "项目明细表.xlsx": "91294e58d33e5d9bb659519f59a63dcb26b48fff1a3dca11300551e739552d70"
+      }
+    },
+    {
+      "id": "F26P24",
+      "module": "procurement",
+      "projectName": "前滩综合保障设备巡检服务项目",
+      "truth": {
+        "projectCode": "GA-CG-2027-214",
+        "budget": 2200000,
+        "treasury": 1800000,
+        "selfFund": 400000,
+        "ceiling": 2100000,
+        "offers": [
+          2040000,
+          2080000,
+          2160000
+        ],
+        "overCeilingSupplier": "华澄智能设备有限公司",
+        "effectiveAmendment": "删除本市注册满三年限制",
+        "agentIsNotSupplier": "前川采购咨询有限公司",
+        "knownIssues": [
+          "报价216万元超过210万元最高限价60000元",
+          "该报价未含耗材及备件，响应范围不完整"
+        ],
+        "forbidden": [
+          "更正前地域限制仍生效",
+          "代理机构作为供应商",
+          "把预算220万元当最高限价210万元"
+        ]
+      },
+      "expected": {
+        "budget": 2200000,
+        "ceiling": 2100000,
+        "offer": 2160000,
+        "treasury": 1800000,
+        "selfFund": 400000,
+        "allFilesExtracted": true,
+        "forbiddenCurrentValues": [
+          "前川采购咨询有限公司"
+        ]
+      },
+      "folder": "F26P24",
+      "files": [
+        "供应商报价及范围响应.xlsx",
+        "前滩设备巡检竞争性磋商文件.docx",
+        "采购代理委托协议.docx",
+        "采购文件更正公告.pdf"
+      ],
+      "sha256": {
+        "供应商报价及范围响应.xlsx": "220251575cff406a82daf5ff7977f04b5231df2a7acada9a8041a216905bd1fe",
+        "前滩设备巡检竞争性磋商文件.docx": "e85d3a5c59c1c395f470c071dc2e44f36287036a23127e62e94bf426b7074aac",
+        "采购代理委托协议.docx": "5bdb73257553b91e78ad0f5002f5fdaaeb84dc4d849f0c774a794a03edde7c92",
+        "采购文件更正公告.pdf": "6323c7d6fdae4ee275b185cf91461daf296e2b6ea9428f459d790057858b9234"
+      }
+    },
+    {
+      "id": "F26C24",
+      "module": "contract",
+      "projectName": "北苑执法记录设备更新采购项目",
+      "truth": {
+        "projectCode": "GA-CG-2027-315",
+        "contractNumber": "HT-GA-2027-315",
+        "partyA": "上海市公安局警务保障处",
+        "partyB": "华澄智能设备有限公司",
+        "contractAmount": 2100000,
+        "uppercaseAmount": 2090000,
+        "awardAmount": 2060000,
+        "lineSum": 2050000,
+        "categories": 8,
+        "knownIssues": [
+          "合同大小写金额相差10000元",
+          "合同金额高于中标金额40000元",
+          "价款附件合计低于合同金额50000元"
+        ],
+        "forbidden": [
+          "把采购代理机构当乙方",
+          "把旧项目价格混入现项目",
+          "仅有附件二标题就判断缺失"
+        ]
+      },
+      "expected": {
+        "categories": 8,
+        "total": 2100000,
+        "partyB": "华澄智能设备有限公司"
+      },
+      "folder": "F26C24",
+      "files": [
+        "中标通知书.pdf",
+        "合同书.docx",
+        "合同价款明细表.xlsx",
+        "廉洁保密协议.pdf"
+      ],
+      "sha256": {
+        "中标通知书.pdf": "0226d54ee12bc3a648c442c303c98e4295e65bdf90bcb6c8b03504c2ded50905",
+        "合同书.docx": "e7ef6addb6569d0fe83052c65126cb6116815fa4a2c0249ddb534191249ec7db",
+        "合同价款明细表.xlsx": "6e33818f0bce5e35368ec2998100e7547c96af03601c45ba9b94e9f58df27fe7",
+        "廉洁保密协议.pdf": "fe3bf312b0230e66e6a303e7eeaace5e88f9d4ed0a411282b0f9bf5fea4223f7"
+      }
+    }
+  ]
+}
