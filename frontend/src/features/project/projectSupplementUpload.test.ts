@@ -22,10 +22,10 @@ function namedFile(name: string): File {
 test("ordinary supplement selection accepts supported documents and images but never ZIP", () => {
   const selection = acceptedSupplementFiles([
     namedFile("合同.pdf"), namedFile("清单.docx"), namedFile("旧版.DOC"), namedFile("扫描件.PNG"),
-    namedFile("照片.jpeg"), namedFile("资料.zip"), namedFile("脚本.exe"),
+    namedFile("照片.jpeg"), namedFile("费用明细.xlsx"), namedFile("清单.xls"), namedFile("资料.zip"), namedFile("脚本.exe"),
   ]);
   assert.deepEqual(selection.accepted.map((file) => file.name),
-    ["合同.pdf", "清单.docx", "旧版.DOC", "扫描件.PNG", "照片.jpeg"]);
+    ["合同.pdf", "清单.docx", "旧版.DOC", "扫描件.PNG", "照片.jpeg", "费用明细.xlsx", "清单.xls"]);
   assert.deepEqual(selection.rejected.map((file) => file.name), ["资料.zip", "脚本.exe"]);
 });
 

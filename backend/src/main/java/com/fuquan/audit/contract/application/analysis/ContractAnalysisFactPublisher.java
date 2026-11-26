@@ -15,6 +15,8 @@ import static com.fuquan.audit.contract.application.analysis.ContractAnalysisCas
 /** Publish only same-file facts from the immutable analysis tuple into existing evidence storage. */
 @Service
 public class ContractAnalysisFactPublisher {
+    private ContractAnalysisRepository cases;
+    @org.springframework.beans.factory.annotation.Autowired public void setCases(ContractAnalysisRepository value){cases=value;}
     private final ContractAnalysisSources sources;
     private final ProjectFileRepository files;
     private final ProjectFileParseResultRepository parses;
@@ -29,6 +31,8 @@ public class ContractAnalysisFactPublisher {
     }
     @Transactional
     public void publish(ContractAnalysisCase c,Source s,List<Step> work,CurrentUser actor){
+        if(cases!=null&&cases.findForUpdate(c.id()).filter(v->"USER_CANCELLED".equals(v.reasonCode())).isPresent())
+            throw new IllegalStateException("ANALYSIS_CANCELLED");
         if(!c.owner().equals(actor.userId()))throw new IllegalStateException("ANALYSIS_OWNER_UNPROVEN");
         files.withFileAuthorityFence(c.projectId(),s.fileId(),()->{
             var parse=sources.load(c.projectId(),s);var file=sources.file(c.projectId(),s);
@@ -38,23 +42,31 @@ public class ContractAnalysisFactPublisher {
             for(String line:parse.canonicalText().split("\n",-1)){
                 segments.add(new ParsedProjectDocument.Segment("analysis/offset:"+offset,line));offset+=line.length()+1;
             }
-            for(var fact:extractor.extractPotential(file,new ParsedProjectDocument(segments),s.parseResultId()))facts.insertIfAbsent(fact);
+            var grounding=new ContractAnalysisEvidence();
+            var scope=new ContractAnalysisEvidence.Scope(s,parse.canonicalText(),0,parse.canonicalText().length());
+            for(var candidate:extractor.extractPotential(file,new ParsedProjectDocument(segments),s.parseResultId())){
+                String type=switch(candidate.factType()){case "AMOUNT_NUMERIC"->"TOTAL_AMOUNT";case "AMOUNT_UPPERCASE"->"AMOUNT_WORDS";default->candidate.factType();};
+                var located=grounding.locate(scope,candidate.sourceText());
+                if(located.isEmpty())continue;
+                var checked=ContractAnalysisSemantics.fact(new Fact(type,candidate.valueText(),"RULE_RECALL_SOURCE_VERIFIED",List.of(located.get())),s,parse.canonicalText());
+                if(checked.isPresent()&&checked.get().type().equals(type)&&checked.get().value().equals(candidate.valueText()))facts.insertIfAbsent(candidate);
+            }
             int published=0;
             for(var step:work)if(s.fileId().equals(step.fileId())&&step.output()!=null&&!step.kind().startsWith("CROSS")){
-                for(var fact:step.output().facts()){
+                for(var fact:ContractAnalysisSemantics.facts(step.output().facts(),s,parse.canonicalText())){
                     String type=switch(fact.type()){
                         case "TOTAL_AMOUNT"->"AMOUNT_NUMERIC";case "AMOUNT_WORDS"->"AMOUNT_UPPERCASE";
                         case "CONTRACT_NO","CONTRACT_NAME","CONTRACT_TYPE","PROJECT_NAME","PROJECT_NO","PARTY_A","PARTY_B","AWARD_AMOUNT","AWARD_SUPPLIER"->fact.type();
                         default->null;
                     };
-                    if(type==null||fact.value().length()>200)continue;
+                    if(type==null||fact.value().length()>200||!ContractAnalysisEvidence.usableFact(fact.type(),fact.value()))continue;
                     // Evidence cannot migrate across a source or be clipped into a new meaning.
                     var evidence=fact.evidence().stream().filter(e->e.fileId().equals(s.fileId())
                         &&e.parseResultId().equals(s.parseResultId())&&e.parseVersion()==s.parseVersion()
                         &&e.fileSha256().equals(s.sha256())&&e.textSha256().equals(s.textSha256())
                         &&e.end()<=parse.canonicalText().length()
                         &&parse.canonicalText().substring(e.start(),e.end()).equals(e.excerpt())
-                        &&ContractAnalysisEvidence.compact(e.excerpt()).contains(ContractAnalysisEvidence.compact(fact.value())))
+                        &&ContractAnalysisEvidence.containsValue(fact.type(),fact.value(),e.excerpt()))
                         .map(e->shortEvidence(e,fact.value())).filter(Objects::nonNull).findFirst();
                     if(evidence.isEmpty())continue;
                     var e=evidence.get();

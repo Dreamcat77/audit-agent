@@ -26,6 +26,7 @@ public class BudgetMaterialTransactions {
     }
     @Transactional(propagation=Propagation.REQUIRES_NEW)
     public void startInBatch(BudgetMaterialJob job,BudgetReviewTask task,UUID batchId,CurrentUser user) {
+        batches.requireAcceptingUploads(batchId);
         tasks.save(task);jobs.insert(job);batches.attach(new BudgetMaterialBatch.Source(task.id(),batchId,null,null));
         audit.success("BUDGET_MATERIAL_QUEUED",user,"BUDGET_REVIEW_TASK",task.id().toString(),null,null,Map.of("batchId",batchId),"预算材料已保存，等待后台处理");
     }
@@ -68,6 +69,15 @@ public class BudgetMaterialTransactions {
         if(!jobs.complete(id,token,"FAILED",Instant.now()))throw new IllegalStateException("budget lease lost");
         tasks.save(task.withStatus("FAILED",0,reason));
         audit.success("BUDGET_MATERIAL_TERMINATED",user,"BUDGET_REVIEW_TASK",id.toString(),null,null,Map.of("reasonCode",reason),"材料处理超时，未生成结果");
+    }
+    @Transactional(propagation=Propagation.REQUIRES_NEW)
+    public boolean cancel(UUID id,CurrentUser user) {
+        var task=tasks.findById(id).orElseThrow();
+        if(!jobs.cancel(id,Instant.now()))return false;
+        tasks.save(task.cancelled());
+        audit.success("BUDGET_MATERIAL_CANCELLED",user,"BUDGET_REVIEW_TASK",id.toString(),null,null,
+                Map.of("status","CANCELLED"),"用户取消预算材料处理");
+        return true;
     }
     @Transactional(propagation=Propagation.REQUIRES_NEW)
     public void cleaned(UUID id,String reference) {

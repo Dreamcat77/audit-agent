@@ -54,6 +54,29 @@ class ProcurementMaterialBatchServiceTest {
         assertThat(ProcurementMaterialBatchService.amountRoleConsistent(wrongOrganizationFromNearbyLabel)).isFalse();
     }
 
+    @Test void negotiationBudgetSourcesRemainDistinctFromTotalBudgetAndQuote() {
+        var treasury=new com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Fact(
+                "treasuryFundAmount","800000元","page:1","国库资金：800000元；自筹资金：200000元");
+        var self=new com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Fact(
+                "selfFundAmount","200000元","page:1","国库资金：800000元；自筹资金：200000元");
+        var mislabeled=new com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Fact(
+                "treasuryFundAmount","200000元","page:1","国库资金：800000元；自筹资金：200000元");
+        assertThat(ProcurementMaterialBatchService.amountRoleConsistent(treasury)).isTrue();
+        assertThat(ProcurementMaterialBatchService.amountRoleConsistent(self)).isTrue();
+        assertThat(ProcurementMaterialBatchService.amountRoleConsistent(mislabeled)).isFalse();
+    }
+
+    @Test void labelledFundingAmountsAreRecoveredFromSourceTextWhenModelUsesDifferentFormatting() {
+        var segments = List.of(new com.fuquan.audit.procurement.domain.ProcurementTenderParseResult.Segment(
+                "page:1", "预算金额：220万元（国库资金：180万元，自筹资金：40万元）", 1, 1.0));
+        var facts = ProcurementMaterialBatchService.deterministicFundingFacts(segments);
+        assertThat(facts).extracting(com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Fact::field)
+                .containsExactly("treasuryFundAmount", "selfFundAmount");
+        assertThat(facts).extracting(com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Fact::value)
+                .containsExactly("180万元", "40万元");
+        assertThat(facts).allMatch(ProcurementMaterialBatchService::amountRoleConsistent);
+    }
+
     com.fuquan.audit.common.material.domain.MaterialIntake intake(String filename) {
         return new com.fuquan.audit.common.material.domain.MaterialIntake(UUID.randomUUID(),"actor","operation",filename,
             null,3,"hash","b".repeat(64),"PARSED",null,Instant.EPOCH,null,null,null,Instant.EPOCH,Instant.EPOCH);

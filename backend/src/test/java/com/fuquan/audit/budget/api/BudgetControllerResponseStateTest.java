@@ -61,6 +61,19 @@ class BudgetControllerResponseStateTest {
         assertThat(response.checks().get(8).status()).isEqualTo("FAILED");
     }
 
+    @Test void uploadedReferenceDoesNotInventPassedChecksForUnexecutedRules() {
+        UUID taskId=UUID.randomUUID();Instant now=Instant.now();
+        var task=new BudgetReviewTask(taskId,"预算.docx","application/octet-stream",1,null,"REVIEWED",1,null,null,null,1,null,null,null,now,now);
+        var item=new BudgetReviewItem(UUID.randomUUID(),taskId,1,null,"服务",null,null,null,
+                null,null,null,null,"UNMATCHED","UPLOADED_MATERIAL",null,"NOT_CHECKED",null,null,null,"NONE",null,null,null,
+                "NOT_CHECKED","NOT_CHECKED","NOT_CHECKED",null,"NOT_CHECKED","NOT_CHECKED","NOT_CHECKED",List.of(),now);
+        var response=BudgetController.ReviewItemResponse.from(task,item);
+        assertThat(response.checks()).hasSize(10).allSatisfy(c->{
+            assertThat(c.status()).isEqualTo("NOT_CHECKED");assertThat(c.passed()).isFalse();
+            assertThat(c.errorDetail()).isEqualTo("本项未核对");
+        });
+    }
+
     private static BudgetReviewTask waitingTask(
             UUID taskId, int pendingRowNumber, String pendingStep) {
         Instant now = Instant.now();

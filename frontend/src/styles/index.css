@@ -5,6 +5,7 @@
 @import './procurement-table-header.css';
 @import './budget-results.css';
 @import './result-layout.css';
+@import './processing-status.css';
 
 @keyframes f01-row-fade-in {
   from {

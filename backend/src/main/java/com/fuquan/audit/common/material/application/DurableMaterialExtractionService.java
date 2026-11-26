@@ -33,6 +33,28 @@ public class DurableMaterialExtractionService implements MaterialFieldAiPort {
     @Override public Result extract(String kind,String materialId,String sha,List<Segment> source) {
         try(var admission=gateway.admit()){return extractAdmitted(kind,materialId,sha,source);}
     }
+    @Override public Optional<Result> acknowledgedResult(String kind,String materialId,String sha,List<Segment> source) {
+        // Procurement can publish individually proven facts while the document remains
+        // incomplete. Other consumers retain their existing all-or-nothing contract.
+        if(!"PROCUREMENT_AUTO".equals(kind))return Optional.empty();
+        if(materialId==null||materialId.isBlank()||materialId.length()>36||sha==null||!sha.matches("[a-f0-9]{64}")
+                ||source==null||source.isEmpty()||source.size()>10000
+                ||source.stream().mapToLong(s->s.text().codePointCount(0,s.text().length())).sum()>192000
+                ||source.stream().map(Segment::locator).distinct().count()!=source.size())throw failure("INVALID_SOURCE");
+        var plan=plan(List.copyOf(source));
+        if(plan.isEmpty()||plan.size()>512)throw failure("UNIT_LIMIT");
+        UUID id=UUID.nameUUIDFromBytes(("material-extraction/"+kind+"/"+materialId).getBytes(StandardCharsets.UTF_8));
+        var entry=ledger.find(id).orElse(null);
+        if(entry==null)return Optional.empty();
+        if(!hash(encode(List.of(STRATEGY,kind,materialId,sha,source))).equals(entry.sourceHash())||entry.unitCount()!=plan.size())throw failure("SOURCE_DRIFT");
+        // Timeout termination deliberately purges unpublished candidates. Neither an
+        // active executor nor a missing/unknown commit is evidence of acknowledgement.
+        if(!"UNKNOWN".equals(entry.status())||!Set.of("UNACKNOWLEDGED_CALL","EXECUTOR_LOST").contains(Objects.toString(entry.reasonCode(),"")))return Optional.empty();
+        var results=decode(entry.resultsJson());
+        if(entry.nextUnit()!=results.size()||entry.nextUnit()>plan.size())throw failure("CHECKPOINT_INVALID");
+        for(int i=0;i<results.size();i++)results.set(i,validate(results.get(i),plan.get(i),i));
+        return results.isEmpty()?Optional.empty():Optional.of(finalResult(kind,results));
+    }
     private Result extractAdmitted(String kind,String materialId,String sha,List<Segment> source) {
         if(!Set.of("BUDGET","PROCUREMENT","PROCUREMENT_REVIEW","PROCUREMENT_AUTO").contains(kind)||materialId==null||materialId.isBlank()||materialId.length()>36
                 ||sha==null||!sha.matches("[a-f0-9]{64}"))throw failure("INVALID_SOURCE");
@@ -87,6 +109,10 @@ public class DurableMaterialExtractionService implements MaterialFieldAiPort {
         ledger.startDeadline(id,clock.instant().plusMillis(Math.max(0,900000-entry.usedMillis())));
         entry=ledger.find(id).orElseThrow(()->failure("LEDGER_UNKNOWN"));
         for(int index=entry.nextUnit();index<plan.size();index++) {
+            if(Thread.currentThread().isInterrupted()) {
+                ledger.terminate(id,null,"USER_CANCELLED",clock.instant());
+                throw failure("USER_CANCELLED");
+            }
             long remaining=Math.min(900000-entry.usedMillis(),java.time.Duration.between(clock.instant(),entry.deadlineAt()).toMillis());
             if(remaining<=0) {
                 if(!ledger.terminate(id,null,"MATERIAL_TIME_LIMIT",clock.instant()))throw failure("TERMINATION_FENCE_LOST");
@@ -103,6 +129,10 @@ public class DurableMaterialExtractionService implements MaterialFieldAiPort {
                 var unit=plan.get(index);
                 var reply=gateway.extractUnit(kind,materialId,sha,unit.stream().map(Piece::segment).toList(),
                         entry.policyHash(),512-entry.calls(),remaining);
+                if(Thread.currentThread().isInterrupted()) {
+                    ledger.terminate(id,token,"USER_CANCELLED",clock.instant());
+                    throw failure("USER_CANCELLED");
+                }
                 if(!clock.instant().isBefore(entry.deadlineAt()))throw new MaterialExtractionTerminated("MATERIAL_TIME_LIMIT");
                 if(reply==null||reply.result()==null||reply.callCount()<0||reply.callCount()>512-entry.calls())throw failure("INVALID_UNIT_RESPONSE");
                 var validated=validate(reply.result(),unit,index);
@@ -120,6 +150,10 @@ public class DurableMaterialExtractionService implements MaterialFieldAiPort {
                         id,index+1,reply.callCount(),elapsed);
                 entry=ledger.find(id).orElseThrow(()->failure("LEDGER_UNKNOWN"));
             } catch(RuntimeException failure) {
+                if(Thread.currentThread().isInterrupted()) {
+                    ledger.terminate(id,token,"USER_CANCELLED",clock.instant());
+                    throw failure;
+                }
                 if(failure instanceof MaterialExtractionTerminated ended) {
                     if(!ledger.terminate(id,token,ended.reasonCode(),clock.instant()))throw failure("TERMINATION_FENCE_LOST");
                     org.slf4j.LoggerFactory.getLogger(getClass()).warn(
@@ -166,7 +200,7 @@ public class DurableMaterialExtractionService implements MaterialFieldAiPort {
                 if(at<0)throw failure("UNGROUNDED_UNIT");
                 boolean core=false;
                 for(;at>=0;at=text.indexOf(fact.excerpt(),at+1))if(at<piece.coreEnd()&&at+fact.excerpt().length()>piece.coreStart())core=true;
-                if(core)facts.add(fact);
+                if(core&&com.fuquan.audit.common.material.SourceIdentityPolicy.plausible(fact.field(),fact.value()))facts.add(fact);
             }
             if(!facts.isEmpty())rows.add(new Row(index+":"+rows.size(),List.copyOf(facts)));
         }

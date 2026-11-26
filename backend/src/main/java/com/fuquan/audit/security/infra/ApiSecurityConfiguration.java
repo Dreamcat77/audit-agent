@@ -1,10 +1,12 @@
 package com.fuquan.audit.security.infra;
 
 import com.fuquan.audit.common.web.RequestIdFilter;
+import com.fuquan.audit.security.application.port.UserAccountRepository;
 import com.fuquan.audit.security.config.CorsProperties;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,7 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.csrf.CsrfAuthenticationStrategy;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
@@ -74,7 +77,9 @@ public class ApiSecurityConfiguration {
             HttpSecurity http,
             CsrfTokenRepository csrfTokenRepository,
             SecurityContextRepository securityContextRepository,
-            CorsConfigurationSource corsConfigurationSource) throws Exception {
+            CorsConfigurationSource corsConfigurationSource,
+            UserAccountRepository userAccounts,
+            Environment environment) throws Exception {
         return http
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(csrfTokenRepository)
@@ -104,6 +109,8 @@ public class ApiSecurityConfiguration {
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .addFilterBefore(new AccountSessionFilter(userAccounts, authenticationEntryPoint,
+                        !environment.matchesProfiles("local")), CsrfFilter.class)
                 .addFilterAfter(new AuthenticatedUserMdcFilter(), AnonymousAuthenticationFilter.class)
                 .build();
     }

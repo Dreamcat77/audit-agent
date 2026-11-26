@@ -9,6 +9,167 @@ import java.util.*;
 import org.junit.jupiter.api.Test;
 
 class BudgetUploadedMaterialReaderTest {
+    @Test void referenceToProjectAllocationListIsNotAnotherBudgetSubjectEvenWithACroppedModelQuote() throws Exception {
+        String name="望川公共设施维护项目";
+        String reference=name+"的资金安排按项目清单中的下达金额列执行。";
+        for(String quote:List.of(reference,name)){
+            when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(new Row("model",List.of(
+                    new Fact("subjectName",name,"p1",quote)))),"m","v"));
+            var snapshot=reader.extract(text(new Segment("p1","年度财政支出预算通知书\n申报单位：综合保障处\n"+reference)),"allocation-reference");
+            assertThat(snapshot.rows().stream().flatMap(r->r.facts().stream())).noneMatch(f->f.field().equals("subjectName"));
+            assertThat(snapshot.rows().stream().flatMap(r->r.facts().stream())).anyMatch(f->f.field().equals("departmentName")&&f.value().equals("综合保障处"));
+        }
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(),"m","v"));
+        var actual=reader.extract(text(new Segment("p1","预算科目："+name+"；申报金额：120000元；批复金额：120000元")),"actual-subject");
+        assertThat(actual.rows().stream().flatMap(r->r.facts().stream())).anyMatch(f->f.field().equals("subjectName")&&f.value().equals(name));
+    }
+    @Test void purposeFactsDoNotRejoinAlreadyGroundedProseAmountsIntoAConflictingRow() throws Exception {
+        String locator="docx/body/node:5/part:5";
+        String total="本项目申请预算合计120000元", equipment="用于设备改造90000元", meal="和接待宴请30000元";
+        var modelRow=new Row("model",List.of(
+                new Fact("declaredTotalAmount","120000元",locator,total,"CURRENT_PROJECT","TOTAL"),
+                new Fact("spendingPurpose","设备改造",locator,equipment),
+                new Fact("spendingPurpose","接待宴请",locator,meal),
+                new Fact("declaredAmount","90000",locator,equipment,"CURRENT_PROJECT","TOTAL"),
+                new Fact("declaredAmount","30000",locator,meal,"UNKNOWN","UNIT")));
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(modelRow),"m","v"));
+        var snapshot=reader.extract(text(new Segment("docx/body/node:2/part:2","项目名称：望川公共设施维护项目"),
+                new Segment(locator,total+"，"+equipment+meal+"。")),"purpose");
+        var task=new BudgetUploadedFacts.Input(UUID.randomUUID(),"预算申请.docx","PARSED",snapshot);
+        var lines=new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(task)).get(task.taskId()).lines();
+        assertThat(lines).extracting(BudgetUploadedFacts.Line::subject).containsExactlyInAnyOrder("设备改造","接待宴请");
+        assertThat(lines).noneMatch(line->line.status().equals("CONFLICT"));
+        assertThat(snapshot.rows().stream().flatMap(row->row.facts().stream()).filter(fact->fact.field().equals("spendingPurpose"))).hasSize(2);
+    }
+    @Test void separatelyQuotedInlineSubjectsDoNotBecomeOneConflictingBudgetRow() throws Exception {
+        String source="项目名称：松林经费项目\r\n本项目申报预算合计180000元，用于设备购置150000元、接待餐费30000元。\r\n申请支出用途：拟支付接待餐费。";
+        String equipment="用于设备购置150000元",meal="接待餐费30000元";
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(new Row("model",List.of(
+                new Fact("subjectName","设备购置","text/body",equipment),new Fact("declaredAmount","150000元","text/body",equipment),
+                new Fact("subjectName","接待餐费","text/body",meal),new Fact("declaredAmount","30000元","text/body",meal)))),"m","v"));
+        var snapshot=reader.extract(text(new Segment("text/body",source)),"inline");
+        var results=new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(new BudgetUploadedFacts.Input(UUID.randomUUID(),"申请.txt","PARSED",snapshot)));
+        var lines=results.values().stream().flatMap(r->r.lines().stream()).toList();
+        assertThat(lines).extracting(BudgetUploadedFacts.Line::subject).containsExactlyInAnyOrder("设备购置","接待餐费");
+        assertThat(lines).noneMatch(l->l.status().equals("CONFLICT"));
+    }
+    @Test void physicalLineQuotesKeepActualCrLfCrAndUnicodeBreakWidths() throws Exception {
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(),"m","v"));
+        for(String newline:List.of("\n","\r\n","\r","\u2028")) {
+            String source=String.join(newline,"预算申报说明","项目名称：松林保障经费项目","申报单位：综合管理处","申报年度：2027年","项目预算金额：180000元");
+            var snapshot=reader.extract(text(new Segment("text/body",source)),"line-width");
+            var facts=snapshot.rows().stream().flatMap(r->r.facts().stream()).toList();
+            assertThat(facts).extracting(Fact::field).contains("projectName","departmentName","budgetYear","projectBudgetAmount");
+            for(var fact:facts) {
+                assertThat(fact.excerpt()).contains(fact.value());
+                var located=BudgetSourceText.locate(new BudgetUploadedFacts.Evidence(UUID.randomUUID(),"说明.txt",fact.field(),fact.value(),fact.locator(),fact.excerpt()),snapshot);
+                assertThat(located.start()).isNotNull();
+                assertThat(source.substring(located.start(),located.end())).isEqualTo(fact.excerpt());
+            }
+        }
+    }
+    @Test void aSharedFiscalClassificationDoesNotMergeDifferentBudgetItems() throws Exception {
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(),"m","v"));
+        var snapshot=reader.extract(text(
+            new Segment("excel/sheet:1/row:1","一级名称 | 二级名称 | 三级名称 | 支出功能分类代码 | 申报金额 | 第三方审定金额 | 下达金额 | 单位"),
+            new Segment("excel/sheet:1/row:2","设施保障 | 设备更新 | 终端更新 | F02 | 100 | 110 | 100 | 元"),
+            new Segment("excel/sheet:1/row:3","设施保障 | 日常维护 | 网络维护 | F02 | 200 | 210 | 190 | 元")),"template");
+        var input=new BudgetUploadedFacts.Input(UUID.randomUUID(),"项目明细.xlsx","PARSED",snapshot);
+        var lines=new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(input)).get(input.taskId()).lines();
+        assertThat(lines).hasSize(2).anySatisfy(line->{assertThat(line.subject()).isEqualTo("终端更新");assertThat(line.status()).isEqualTo("WITHIN_APPROVAL");})
+            .anySatisfy(line->{assertThat(line.subject()).isEqualTo("网络维护");assertThat(line.status()).isEqualTo("OVER_APPROVAL");assertThat(line.approvalAmount()).isEqualByComparingTo("190");});
+        assertThat(lines).allSatisfy(line->assertThat(line.subjectCode()).isNull());
+    }
+    @Test void fieldOfficeBudgetTemplateKeepsSubjectTiersProcurementNumberAndApprovalRolesSeparate() throws Exception {
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(),"m","v"));
+        var snapshot=reader.extract(text(
+                new Segment("excel/sheet:1/row:1","序号 | 一级名称 | 二级名称 | 三级名称 | 政府采购编号 | 支出功能分类代码 | 支出功能分类名称 | 申报金额 | 第三方审定金额 | 下达金额 | 备注 | 单位"),
+                new Segment("excel/sheet:1/row:2","1 | 信息化建设 | 设备购置 | 终端更新 | CG-2026-01 | F02 | 信息设备支出 | 2200000 | 2100000 | 2050000 | 本项目支出 | 元")),"template");
+        var facts=snapshot.rows().stream().flatMap(row->row.facts().stream()).toList();
+        assertThat(facts).filteredOn(f->f.field().equals("subjectName")).extracting(Fact::value)
+                .containsExactly("终端更新");
+        assertThat(facts).anySatisfy(f->{assertThat(f.field()).isEqualTo("subjectLevel1Name");assertThat(f.value()).isEqualTo("信息化建设");});
+        assertThat(facts).anySatisfy(f->{assertThat(f.field()).isEqualTo("subjectLevel2Name");assertThat(f.value()).isEqualTo("设备购置");});
+        assertThat(facts).anySatisfy(f->{assertThat(f.field()).isEqualTo("functionalClassificationCode");assertThat(f.value()).isEqualTo("F02");});
+        assertThat(facts).anySatisfy(f->{assertThat(f.field()).isEqualTo("applicationNo");assertThat(f.value()).isEqualTo("CG-2026-01");});
+        assertThat(facts).noneMatch(f->f.field().equals("projectCode")&&f.value().equals("CG-2026-01"));
+        assertThat(facts).anySatisfy(f->{assertThat(f.field()).isEqualTo("declaredAmount");assertThat(f.value()).isEqualTo("2200000元");});
+        assertThat(facts).filteredOn(f->f.field().equals("approvalAmount")).extracting(Fact::value)
+                .containsExactly("2050000元");
+        assertThat(facts).anySatisfy(f->{assertThat(f.field()).isEqualTo("thirdPartyReviewAmount");assertThat(f.value()).isEqualTo("2100000元");});
+        assertThat(snapshot.issues()).isEmpty();
+        verifyNoInteractions(ai);
+        var input=new BudgetUploadedFacts.Input(UUID.randomUUID(),"项目明细.xlsx","PARSED",snapshot);
+        assertThat(new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(input)).get(input.taskId()).lines())
+                .singleElement().satisfies(line->{assertThat(line.subject()).isEqualTo("终端更新");assertThat(line.status()).isEqualTo("OVER_APPROVAL");
+                    assertThat(line.declaredAmount()).isEqualByComparingTo("2200000");assertThat(line.approvalAmount()).isEqualByComparingTo("2050000");});
+    }
+
+    @Test void adjacentApplicantAndDepartmentLabelsKeepBothExactValuesWithoutReadingPreparerAsApplicant() throws Exception {
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(),"m","v"));
+        var snapshot=reader.extract(text(new Segment("p1","申报单位：明远市事务局综合保障处　部门：综合保障处\n经办部门：财务科\n项目名称：设施维护项目\n预算科目：设备；申报金额：100元；批复金额：100元")),"id");
+        assertThat(snapshot.rows().stream().flatMap(r->r.facts().stream()).filter(f->f.field().equals("departmentName")))
+            .extracting(Fact::value).containsExactly("明远市事务局综合保障处","综合保障处");
+        var input=new BudgetUploadedFacts.Input(UUID.randomUUID(),"预算.pdf","PARSED",snapshot);
+        assertThat(new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(input)).get(input.taskId()).lines())
+            .singleElement().satisfies(l->{assertThat(l.status()).isEqualTo("WITHIN_APPROVAL");assertThat(l.project()).isEqualTo("设施维护项目");});
+    }
+    @Test void croppedModelQuoteCannotTurnBudgetSubjectIntoProjectName() throws Exception {
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(new Row("model",List.of(
+            new Fact("projectName","设备更新","p1","设备更新")))),"m","v"));
+        var snapshot=reader.extract(text(new Segment("p1","预算科目：设备更新\n本项用于办公。")),"id");
+        assertThat(snapshot.rows().stream().flatMap(r->r.facts().stream())).noneMatch(f->f.field().equals("projectName"));
+        assertThat(snapshot.rows().stream().flatMap(r->r.facts().stream())).anyMatch(f->f.field().equals("subjectName")&&f.value().equals("设备更新"));
+    }
+
+    @Test void wordTablesInheritTheirOwnHeaderUnitsAndKeepPhysicalEvidence() throws Exception {
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(new Row("model",List.of(
+                new Fact("approvalAmount","110.00万元","docx/body/node:7/part:7","110.00")))),"m","v",
+                List.of(new ExtractionIssue("approvalAmount","docx/body/node:7/part:7","EVIDENCE_UNVERIFIED"))));
+        var document=text(
+                new Segment("docx/body/node:1/part:1","项目编号：MY-2026-FW-017    申报年度：2026年"),
+                new Segment("docx/body/node:2/part:2","序号\t支出项目\t测算依据\t申报金额\u2028万元"),
+                new Segment("docx/body/node:3/part:3","1\t驻场运维服务\t年度服务\t120.00"),
+                new Segment("docx/body/node:4/part:4","\t合计\t\t198.00"),
+                new Segment("docx/body/node:5/part:5","项目预算批复"),
+                new Segment("docx/body/node:6/part:6","序号\t支出项目\t批复金额\u2028万元\t支出范围"),
+                new Segment("docx/body/node:7/part:7","1\t驻场运维服务\t110.00\t日常服务"),
+                new Segment("docx/body/node:8/part:8","\t合计\t180.00\t"));
+        var tables=new ArrayList<MaterialParsePort.Table>();
+        for(int[] bounds:List.of(new int[]{1,3},new int[]{5,7})) {
+            var cells=new ArrayList<MaterialParsePort.Cell>();
+            for(int r=bounds[0];r<=bounds[1];r++) {
+                var values=document.segments().get(r).text().split("\\t",-1);
+                for(int c=0;c<values.length;c++)cells.add(new MaterialParsePort.Cell("cell",r-bounds[0]+1,c+1,values[c],"TEXT",null));
+            }
+            tables.add(new MaterialParsePort.Table("docx/table:"+tables.size(),cells,false));
+        }
+        var snapshot=reader.extract(new DocumentTextPort.Result(document.segments(),"OFFICE_TEXT","sha",tables,List.of()),"id");
+        assertThat(snapshot.issues()).isEmpty();
+        var facts=snapshot.rows().stream().flatMap(r->r.facts().stream()).toList();
+        assertThat(facts).anyMatch(f->f.field().equals("projectCode")&&f.value().equals("MY-2026-FW-017"));
+        assertThat(facts).anyMatch(f->f.field().equals("declaredAmount")&&f.value().equals("120.00万元")&&f.excerpt().contains("120.00"));
+        assertThat(facts).anyMatch(f->f.field().equals("approvalAmount")&&f.value().equals("110.00万元"));
+        assertThat(facts).anyMatch(f->f.field().equals("approvedTotalAmount")&&f.value().equals("180.00万元"));
+        var input=new BudgetUploadedFacts.Input(UUID.randomUUID(),"预算.docx","PARSED",snapshot);
+        var totals=BudgetBatchAmounts.totals(List.of(input));
+        assertThat(BudgetBatchAmounts.checks(totals)).anyMatch(a->a.code().equals("TOTAL_VS_APPROVAL")&&a.explanation().contains("180000"));
+        var wrongRole=new ExtractionIssue("approvalAmount","docx/body/node:3/part:3","EVIDENCE_UNVERIFIED");
+        var wrongLocation=new ExtractionIssue("approvalAmount","unrelated/page:1","EVIDENCE_UNVERIFIED");
+        var unresolved=new ExtractionIssue("approvalAmount","docx/body/node:7/part:7","ROW_UNRESOLVED");
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(),"m","v",List.of(wrongRole,wrongLocation,unresolved)));
+        var guarded=reader.extract(new DocumentTextPort.Result(document.segments(),"OFFICE_TEXT","sha",tables,List.of()),"id");
+        assertThat(guarded.issues()).containsExactly(wrongRole,wrongLocation,unresolved);
+    }
+    @Test void serviceDatesAndApprovalDepartmentCannotPolluteBudgetIdentity() throws Exception {
+        String source="申报部门：综合保障部    项目类别：服务类\n服务期限2026年6月至2027年5月\n经办部门：信息管理科";
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(new Row("model",List.of(
+                new Fact("budgetYear","2026年6月至2027年5月","p1","服务期限2026年6月至2027年5月"),
+                new Fact("departmentName","信息管理科","p1","经办部门：信息管理科")))),"m","v"));
+        var facts=reader.extract(text(new Segment("p1",source)),"id").rows().stream().flatMap(r->r.facts().stream()).toList();
+        assertThat(facts).filteredOn(f->f.field().equals("departmentName")).extracting(Fact::value).containsExactly("综合保障部");
+        assertThat(facts).noneMatch(f->f.field().equals("budgetYear"));
+    }
     @Test void aPersonCandidateCannotInvalidateTheExplicitDepartmentAndBudget() throws Exception {
         when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(new Row("model",List.of(
                 new Fact("departmentName","合成经办人","excel/sheet:1/row:4","申请人：合成经办人")))),"m","v"));
@@ -191,6 +352,21 @@ class BudgetUploadedMaterialReaderTest {
         assertThat(result.values()).allSatisfy(file->assertThat(file.lines()).hasSize(2).allSatisfy(line->assertThat(line.status()).isEqualTo("INSUFFICIENT")));
         assertThat(snapshot.rows().get(0).facts()).anySatisfy(f->{assertThat(f.field()).isEqualTo("declaredAmount");assertThat(f.value()).isEqualTo("100.01元");});
     }
+    @Test void verticalSheetHeadingsDoNotBecomeProjectValuesOrHideOverspending() throws Exception {
+        var result=reader.extract(text(new Segment("excel/sheet:1/row:1","项目名称 | 明辉信息平台运维采购项目"),
+            new Segment("excel/sheet:1/row:2","申报单位 | 明辉市公共服务中心"),
+            new Segment("excel/sheet:1/row:3","预算科目 | 申报金额（元） | 批复金额（元）"),
+            new Segment("excel/sheet:1/row:4","信息平台维护费 | 730000 | 700000")),"id");
+        assertThat(result.rows().stream().flatMap(r->r.facts().stream()))
+            .noneMatch(f->f.field().equals("projectName")&&f.value().equals("申报单位"));
+        var input=new BudgetUploadedFacts.Input(UUID.randomUUID(),"预算.xlsx","PARSED",result);
+        assertThat(new BudgetUploadedMaterialAnalyzer().analyze(List.of(input)).get(input.taskId()).lines())
+            .singleElement().satisfies(line->{assertThat(line.project()).isEqualTo("明辉信息平台运维采购项目");
+                assertThat(line.declaredAmount()).isEqualByComparingTo("730000");
+                assertThat(line.approvalAmount()).isEqualByComparingTo("700000");
+                assertThat(line.status()).isEqualTo("OVER_APPROVAL");});
+        verifyNoInteractions(ai);
+    }
     @Test void sheetUnitAndAmountHeaderAliasesAreReadWithoutCallingTheModel() throws Exception {
         var result=reader.extract(text(new Segment("excel/sheet:1/row:1","单位：万元"),
             new Segment("excel/sheet:1/row:2","科目名称 | 本次申报金额 | 批复参考额度"),
@@ -266,6 +442,72 @@ class BudgetUploadedMaterialReaderTest {
             .thenReturn(new Result(List.of(),"m","v7"));
         reader.extract(text(header,row),"id");
         verify(ai).extract(eq("BUDGET"),eq("id"),any(),eq(List.of(header,row)));
+    }
+    @Test void projectDetailRemarksDoNotResubmitNativeAmountsButKeepSubstantiveExceptions() throws Exception {
+        var header=new Segment("excel/sheet:1/row:1","科目名称 | 申报金额（元） | 批复金额（元） | 备注");
+        var rows=new ArrayList<Segment>();
+        rows.add(header);
+        for(int i=1;i<=120;i++) {
+            String remark=i%2==0?"已列入本项目预算明细表。":"纳入项目明细";
+            rows.add(new Segment("excel/sheet:1/row:"+(i+1),"设备"+i+" | 120 | 110 | "+remark));
+        }
+        var exception=new Segment("excel/sheet:1/row:122","培训 | 120 | 110 | 列入本项目预算明细表，但须补办审批");
+        var missingAmount=new Segment("excel/sheet:1/row:123","运输 | | | 纳入项目明细");
+        rows.add(exception);
+        rows.add(missingAmount);
+        when(ai.extract(eq("BUDGET"),eq("id"),any(),any())).thenReturn(new Result(List.of(),"m","v7"));
+        var snapshot=reader.extract(text(rows.toArray(Segment[]::new)),"id");
+        verify(ai).extract(eq("BUDGET"),eq("id"),any(),eq(List.of(header,exception,missingAmount)));
+        assertThat(snapshot.rows()).hasSize(122);
+        assertThat(snapshot.rows().get(119).facts()).anySatisfy(f->{
+            assertThat(f.value()).isEqualTo("110元");
+            assertThat(f.locator()).isEqualTo("excel/sheet:1/row:121/col:3");
+        });
+    }
+    @Test void spreadsheetGrandTotalIsASeparateTotalAndNeverAnUnnamedExpense() throws Exception {
+        var snapshot=reader.extract(text(
+            new Segment("excel/sheet:1/row:1","序号 | 一级名称 | 三级名称 | 申报金额 | 第三方审定金额 | 下达金额 | 单位"),
+            new Segment("excel/sheet:1/row:2","1 | 设施项目 | 电气维修 | 120 | 115 | 110 | 元"),
+            new Segment("excel/sheet:1/row:3","合计 | | | 120 | 115 | 110 | 元")),"grand-total");
+        verifyNoInteractions(ai);
+        var input=new BudgetUploadedFacts.Input(UUID.randomUUID(),"明细表.xlsx","PARSED",snapshot);
+        var result=new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(input)).get(input.taskId());
+        assertThat(result.lines()).singleElement().satisfies(l->assertThat(l.subject()).isEqualTo("电气维修"));
+        assertThat(BudgetBatchAmounts.totals(List.of(input)))
+            .anySatisfy(t->{assertThat(t.role()).isEqualTo("declaredTotalAmount");assertThat(t.amount()).isEqualByComparingTo("120");})
+            .anySatisfy(t->{assertThat(t.role()).isEqualTo("approvedTotalAmount");assertThat(t.amount()).isEqualByComparingTo("110");});
+    }
+    @Test void aLabelledExpenseBesideATotalMarkerIsNotReinterpretedAsGrandTotal() throws Exception {
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(),"m","v"));
+        var snapshot=reader.extract(text(
+            new Segment("excel/sheet:1/row:1","备注 | 科目名称 | 申报金额 | 下达金额 | 单位"),
+            new Segment("excel/sheet:1/row:2","合计 | 电气维修 | 120 | 110 | 元")),"named-total");
+        var input=new BudgetUploadedFacts.Input(UUID.randomUUID(),"明细.xlsx","PARSED",snapshot);
+        assertThat(new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(input)).get(input.taskId()).lines())
+            .singleElement().satisfies(l->{assertThat(l.subject()).isEqualTo("电气维修");assertThat(l.declaredAmount()).isEqualByComparingTo("120");});
+    }
+    @Test void workloadEstimateRemarksKeepAllNativeRowsWithoutRepeatedExtraction() throws Exception {
+        var segments=new ArrayList<Segment>();
+        segments.add(new Segment("excel/sheet:1/row:1","一级名称 | 三级名称 | 申报金额 | 第三方审定金额 | 下达金额 | 备注 | 单位"));
+        var remarks=List.of("按工作量核定","按工程量测算。","依据清单估算","按定额核算");
+        for(int i=0;i<48;i++)segments.add(new Segment("excel/sheet:1/row:"+(i+2),"设施维护 | 维护子项"+i+" | 120 | 115 | 110 | "+remarks.get(i%4)+" | 元"));
+        var snapshot=reader.extract(text(segments.toArray(Segment[]::new)),"native-estimates");
+        verifyNoInteractions(ai);
+        assertThat(snapshot.rows()).hasSize(48);
+        assertThat(snapshot.segments()).containsAll(segments);
+        for(var row:snapshot.rows())assertThat(row.facts()).anySatisfy(f->{
+            assertThat(f.field()).isEqualTo("approvalAmount");assertThat(f.value()).isEqualTo("110元");
+        });
+    }
+    @Test void workloadRemarksWithAmountsConditionsOrMissingAmountsStillNeedInterpretation() throws Exception {
+        var header=new Segment("excel/sheet:1/row:1","科目名称 | 申报金额 | 下达金额 | 备注 | 单位");
+        var values=List.of("按工作量核定，但须先完成审批","按工程量测算，另加120元","依据清单估算，未获批准","按工作量核定为暂定价");
+        var segments=new ArrayList<Segment>();segments.add(header);
+        for(int i=0;i<values.size();i++)segments.add(new Segment("excel/sheet:1/row:"+(i+2),"维护子项"+i+" | 120 | 110 | "+values.get(i)+" | 元"));
+        segments.add(new Segment("excel/sheet:1/row:6","运输 | | | 按工作量核定 | 元"));
+        when(ai.extract(any(),any(),any(),any())).thenReturn(new Result(List.of(),"m","v"));
+        reader.extract(text(segments.toArray(Segment[]::new)),"estimate-exceptions");
+        verify(ai).extract(eq("BUDGET"),eq("estimate-exceptions"),any(),eq(segments));
     }
     @Test void excelBothAmountsColumnUnitsAndEveryRowAreReadWithoutAi() throws Exception {
         var document=text(new Segment("excel/sheet:1/row:1","科目名称 | 申报金额 | 批复参考金额（万元） | 项目编号"),

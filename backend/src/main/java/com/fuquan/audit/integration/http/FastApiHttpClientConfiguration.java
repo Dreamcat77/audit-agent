@@ -74,8 +74,19 @@ public class FastApiHttpClientConfiguration {
                 .requestFactory(requestFactory);
         // Multipart OCR stays streaming: a body-byte interceptor would buffer
         // the entire uploaded document. OCR adapter spans already record sizes.
-        if ("OCR".equals(adapterName)) return clientBuilder.build();
-        return clientBuilder
+        if ("OCR".equals(adapterName)) {
+            // JDK's request future is cancelled when its caller is interrupted.
+            // HttpURLConnection's blocking read could otherwise run for 1900s
+            // after the owner had already cancelled its task.
+            var http=java.net.http.HttpClient.newBuilder().connectTimeout(Duration.ofMillis(connectTimeoutMs)).build();
+            var interruptible=new org.springframework.http.client.JdkClientHttpRequestFactory(http);
+            interruptible.setReadTimeout(Duration.ofMillis(readTimeoutMs));
+            return clientBuilder.requestFactory(interruptible).build();
+        }
+        var modelHttp=java.net.http.HttpClient.newBuilder().connectTimeout(Duration.ofMillis(connectTimeoutMs)).build();
+        var modelFactory=new org.springframework.http.client.JdkClientHttpRequestFactory(modelHttp);
+        modelFactory.setReadTimeout(Duration.ofMillis(readTimeoutMs));
+        return clientBuilder.requestFactory(modelFactory)
                 .requestInterceptor((request, body, execution) -> {
                     String requestId = MDC.get(RequestIdFilter.MDC_KEY);
                     if (requestId != null && requestId.matches("[A-Za-z0-9._-]{1,128}"))

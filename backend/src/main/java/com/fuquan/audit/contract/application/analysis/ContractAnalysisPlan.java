@@ -21,7 +21,7 @@ public class ContractAnalysisPlan {
                 // Preserve every previously frozen range, including jobs admitted by older code.
                 if(work.stream().anyMatch(s->s.fileId()!=null&&s.fileId().equals(source.fileId())
                     &&Set.of("FILE","FRAGMENT").contains(s.kind())&&s.start()<=proposedStart&&s.end()>=Math.min(proposedStart+CHUNK,text.length())))continue;
-                int end=Math.min(start+CHUNK,text.length());if(end<text.length()&&Character.isHighSurrogate(text.charAt(end-1)))end--;
+                int end=fragmentEnd(text,start);if(end<text.length()&&Character.isHighSurrogate(text.charAt(end-1)))end--;
                 if(start>0&&Character.isLowSurrogate(text.charAt(start)))start--;
                 String id="analyze-v2/"+source.fileId()+"/"+proposedStart;if(has(work,id))continue;
                 if(calls>=budget)break;
@@ -30,6 +30,15 @@ public class ContractAnalysisPlan {
             if(!more)break;
         }
         return List.copyOf(work);
+    }
+    static int fragmentEnd(String text,int start){
+        int end=Math.min(start+CHUNK,text.length());
+        if(end==text.length())return end;
+        // Move only within the existing overlap: no source gap and no oversized call.
+        // Keep dates/amounts and sentences together where a nearby boundary exists.
+        for(int i=end-1;i>=Math.max(start+1,end-OVERLAP+1);i--)
+            if("\n\r\u2028\u2029。；;！？".indexOf(text.charAt(i))>=0)return i+1;
+        return end;
     }
     /** Budget grows with the frozen inputs, with a hard deployment-wide ceiling. */
     public int callBudget(ContractAnalysisCase value,Map<UUID,String> texts){

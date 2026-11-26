@@ -94,7 +94,7 @@ public class BudgetSplitRiskService {
         try {
             BudgetSplitRiskEvaluator.Evaluation result;
             try {
-                result = evaluator.evaluate(demands, ruleRepository.findActive());
+                result = evaluator.evaluate(demands, ruleRepository.findActive().stream().filter(r->BudgetAmountThresholdPolicy.activeRule(r.ruleCode())).toList());
             } catch (IllegalArgumentException invalid) {
                 throw new BusinessException(BusinessErrorCode.INVALID_ARGUMENT, invalid.getMessage(), invalid);
             }

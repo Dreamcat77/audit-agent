@@ -23,6 +23,20 @@ public class InMemoryBudgetMaterialBatchRepository implements BudgetMaterialBatc
     public synchronized List<BudgetMaterialBatchRepository.HistoryReference> findHistoryPage(String actorId, BudgetHistoryFilter filter, int offset, int limit) {
         return filtered(actorId, filter).stream().skip(offset).limit(limit).toList();
     }
+    public synchronized List<BudgetMaterialBatchRepository.HistoryReference> findProjectNameCandidates(String actorId, BudgetHistoryFilter filter) {
+        String keyword = filter.projectName().toLowerCase(Locale.ROOT);
+        return batches.values().stream()
+                .filter(batch -> !"USER_CANCELLED".equals(batch.leaseToken()))
+                .filter(batch -> (actorId==null || batch.actorId().equals(actorId)))
+                .filter(batch -> filter.createdFrom() == null || !batch.createdAt().isBefore(filter.createdFrom()))
+                .filter(batch -> filter.createdBefore() == null || batch.createdAt().isBefore(filter.createdBefore()))
+                .filter(batch -> sources(batch.id()).stream().anyMatch(source ->
+                        containsIgnoreCase(source.factsJson(), keyword) || containsIgnoreCase(source.resultJson(), keyword)))
+                .map(batch -> BudgetMaterialBatchRepository.HistoryReference.batch(batch.id(), batch.createdAt()))
+                .sorted(Comparator.comparing(BudgetMaterialBatchRepository.HistoryReference::createdAt).reversed()
+                        .thenComparing(reference -> reference.resourceId().toString(), Comparator.reverseOrder()))
+                .toList();
+    }
     public synchronized long countHistory(String actorId, BudgetHistoryFilter filter) {
         return filtered(actorId, filter).size();
     }
@@ -30,7 +44,8 @@ public class InMemoryBudgetMaterialBatchRepository implements BudgetMaterialBatc
         String keyword = filter.fileName() == null ? null : filter.fileName().toLowerCase(Locale.ROOT);
         var references = new ArrayList<BudgetMaterialBatchRepository.HistoryReference>();
         batches.values().stream()
-                .filter(batch -> batch.actorId().equals(actorId))
+                .filter(batch -> !"USER_CANCELLED".equals(batch.leaseToken()))
+                .filter(batch -> (actorId==null || batch.actorId().equals(actorId)))
                 .filter(batch -> keyword == null || sources(batch.id()).stream()
                         .map(source -> tasks.findById(source.taskId()).map(task -> task.fileName()).orElse(""))
                         .anyMatch(name -> name.toLowerCase(Locale.ROOT).contains(keyword)))
@@ -39,10 +54,13 @@ public class InMemoryBudgetMaterialBatchRepository implements BudgetMaterialBatc
                 .forEach(batch -> references.add(BudgetMaterialBatchRepository.HistoryReference.batch(batch.id(), batch.createdAt())));
         tasks.findHistoryPage(null, null, null, filter, 0, Integer.MAX_VALUE).stream()
                 .filter(task -> !sources.containsKey(task.id()))
-                .filter(task -> jobs.find(task.id()).map(job -> job.actorId().equals(actorId)).orElse(false))
+                .filter(task -> jobs.find(task.id()).map(job -> (actorId==null || job.actorId().equals(actorId))).orElse(false))
                 .forEach(task -> references.add(BudgetMaterialBatchRepository.HistoryReference.task(task.id(), task.createdTime())));
         return references.stream().sorted(Comparator.comparing(BudgetMaterialBatchRepository.HistoryReference::createdAt).reversed()
                 .thenComparing(reference -> reference.resourceId().toString(), Comparator.reverseOrder())).toList();
+    }
+    private static boolean containsIgnoreCase(String value, String keyword) {
+        return value != null && value.toLowerCase(Locale.ROOT).contains(keyword);
     }
     public synchronized void insert(BudgetMaterialBatch b) {
         if(batches.putIfAbsent(b.id(),b)!=null) throw new DuplicateKeyException("duplicate budget batch");
@@ -66,6 +84,20 @@ public class InMemoryBudgetMaterialBatchRepository implements BudgetMaterialBatc
     public synchronized void complete(UUID id,String token) {
         requireLease(id,token);var b=batches.get(id);
         batches.put(id,new BudgetMaterialBatch(id,b.actorId(),b.budgetYear(),b.departmentCode(),b.members(),"REVIEWED",token,null,b.createdAt()));
+    }
+    public synchronized boolean cancel(UUID id) {
+        var b=batches.get(id);
+        if(b==null||b.status().equals("REVIEWED"))return false;
+        batches.put(id,new BudgetMaterialBatch(id,b.actorId(),b.budgetYear(),b.departmentCode(),b.members(),"REVIEWED","USER_CANCELLED",null,b.createdAt()));
+        return true;
+    }
+    public synchronized void clearCancelledSources(UUID id) {
+        if(!"USER_CANCELLED".equals(batches.get(id).leaseToken()))throw new IllegalStateException("batch not cancelled");
+        for(var s:sources(id))sources.put(s.taskId(),new Source(s.taskId(),id,null,null));
+    }
+    public synchronized void requireAcceptingUploads(UUID id) {
+        var b=batches.get(id);
+        if(b==null||!b.status().equals("OPEN"))throw new IllegalStateException("budget batch closed");
     }
     public synchronized void attach(Source s) {
         if(sources.putIfAbsent(s.taskId(),s)!=null) throw new DuplicateKeyException("duplicate budget source");

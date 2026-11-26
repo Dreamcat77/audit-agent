@@ -27,7 +27,9 @@ def authority():
 def make(tmp_path):
     m=replay_module();a=authority()
     # Root is inside the actual ignored worktree, never the pytest system temp.
-    workspace=next(p for p in Path(__file__).resolve().parents if (p/'.git').exists())
+    workspace=next((p for p in Path(__file__).resolve().parents if (p/'.git').exists()),None)
+    if workspace is None:
+        pytest.skip('restricted replay needs a Git checkout to prove ignored storage; source snapshot has no Git metadata')
     root=workspace/'.runtime/contract-repair-test/synthetic-replay-tests'/uuid4().hex
     try:
         store=m.SyntheticReplayStore(root,a,workspace=workspace)
@@ -138,7 +140,10 @@ def test_generic_worker_refuses_unproven_run_parse_identity_before_send(tmp_path
     service=ContractSemanticWorkService(settings,BadBusiness('FINAL',invalid=False,money=False));plan=service.plan(request)
     m=replay_module();a=authority();a.update(projectId=request.project_id,policyFingerprint=plan['policyFingerprint'],
         frozenInputFingerprint=plan['inputFingerprint'],files=[{'fileId':v.file_id,'parseResultId':str(uuid4()),'sha256':hashlib.sha256(v.text.encode()).hexdigest()} for v in request.materials])
-    workspace=next(p for p in Path(__file__).resolve().parents if (p/'.git').exists());root=workspace/'.runtime/contract-repair-test/synthetic-replay-tests'/uuid4().hex
+    workspace=next((p for p in Path(__file__).resolve().parents if (p/'.git').exists()),None)
+    if workspace is None:
+        pytest.skip('restricted replay needs a Git checkout to prove ignored storage; source snapshot has no Git metadata')
+    root=workspace/'.runtime/contract-repair-test/synthetic-replay-tests'/uuid4().hex
     config={'workspace':str(workspace),'root':str(root),'authority':a,'inputReferences':[{'path':'explicit-frozen-synthetic-test','sha256':'e'*64}]}
     config_path=tmp_path/'capture-config.json';config_path.write_text(json.dumps(config),encoding='utf-8')
     monkeypatch.setenv('AUDIT_CONTRACT_SYNTHETIC_REPLAY_CONFIG',str(config_path))

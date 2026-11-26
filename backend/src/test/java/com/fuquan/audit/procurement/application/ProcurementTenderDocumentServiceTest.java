@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,6 +37,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -82,6 +84,27 @@ class ProcurementTenderDocumentServiceTest {
         assertThat(result.parseMethod()).isEqualTo("DOCX_TEXT");
         assertThat(result.parseResult().segments()).singleElement()
                 .extracting(segment -> segment.sourceLocator()).isEqualTo("docx/body/paragraph:18");
+    }
+
+    @Test
+    void originalMaterialCanBeOpenedOnlyThroughItsOwningProject() throws Exception {
+        var persisted=new AtomicReference<ProcurementTenderDocument>();
+        doAnswer(call->{persisted.set(call.getArgument(0));return null;}).when(repository).save(any());
+        doAnswer(call->{persisted.set(call.getArgument(0));return null;}).when(repository).update(any());
+        when(repository.findById(any())).thenAnswer(call->Optional.ofNullable(persisted.get())
+                .filter(document->document.id().equals(call.getArgument(0))));
+        when(docxParser.parse(any(), any())).thenReturn(new ParsedProjectDocument(
+                java.util.List.of(new ParsedProjectDocument.Segment("docx/body/paragraph:1", "采购文件", null, 1))));
+        byte[] source=bytes("PK\u0003\u0004synthetic-office-file");
+        var result=service.upload(projectId,"磋商文件.docx",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                new ByteArrayInputStream(source),false,"user-1");
+
+        var content=service.openMaterial(projectId,result.id());
+        assertThat(content.size()).isEqualTo(source.length);
+        assertThat(content.inputStream().readAllBytes()).containsExactly(source);
+        assertThatThrownBy(()->service.openMaterial(UUID.randomUUID(),result.id()))
+                .isInstanceOf(com.fuquan.audit.common.exception.BusinessException.class);
     }
 
     @Test
@@ -164,16 +187,20 @@ class ProcurementTenderDocumentServiceTest {
                     name.endsWith(".doc")?new byte[]{(byte)0xd0,(byte)0xcf,0x11,(byte)0xe0,(byte)0xa1,(byte)0xb1,0x1a,(byte)0xe1}:
                     bytes(name.endsWith(".pdf")?"%PDF-1.7":"材料正文");
             String hash=java.util.HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(content));
+            String firstLocator=name.endsWith(".doc")?"docx/body/paragraph:1":"pdf/page:1/text";
+            String secondLocator=name.endsWith(".doc")?"docx/body/paragraph:2":"pdf/page:2/ocr";
             when(reader.read(any(),org.mockito.ArgumentMatchers.eq(name),any(),org.mockito.ArgumentMatchers.anyLong(),
                     org.mockito.ArgumentMatchers.anyInt(),org.mockito.ArgumentMatchers.anyInt())).thenReturn(
                 new com.fuquan.audit.common.material.application.port.DocumentTextPort.Result(java.util.List.of(
-                    new com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Segment("page:1/text","首段正文"),
-                    new com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Segment("page:2/ocr","扫描页末尾金额壹拾万元")),
+                    new com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Segment(firstLocator,"首段正文"),
+                    new com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Segment(secondLocator,"扫描页末尾金额壹拾万元")),
                     name.endsWith(".txt")||name.endsWith(".doc")?"OFFICE_TEXT":"OFFICE_TEXT_OCR",hash));
             var result=service.uploadMaterial(projectId,name,null,new ByteArrayInputStream(content),"actor",transactions);
             assertThat(result.status()).isEqualTo("AVAILABLE");
             assertThat(result.parseResult().segments()).hasSize(2);
             assertThat(result.parseResult().fullText()).contains("首段正文","扫描页末尾金额壹拾万元");
+            if(name.endsWith(".pdf"))assertThat(result.parseResult().segments().get(1).pageNumber()).isEqualTo(2);
+            if(name.endsWith(".doc"))assertThat(result.parseResult().segments().get(0).pageNumber()).isNull();
             if(name.endsWith(".png")||name.endsWith(".pdf"))assertThat(result.parseMethod()).isEqualTo("OCR");
             else assertThat(result.parseMethod()).isNull();
         }

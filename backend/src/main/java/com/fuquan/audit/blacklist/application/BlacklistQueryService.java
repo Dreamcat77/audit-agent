@@ -25,11 +25,23 @@ public class BlacklistQueryService {
     private final BlacklistRuleRepository ruleRepository;
     private final BlacklistSupplierOperationLogRepository operationLogRepository;
 
+    private final com.fuquan.audit.security.application.AuthContext auth;
+    private final com.fuquan.audit.security.application.port.UploadOwnershipPort ownership;
+
+    public BlacklistQueryService(BlacklistAlertRepository alerts, BlacklistSupplierRepository suppliers,
+            BlacklistRuleRepository rules, BlacklistSupplierOperationLogRepository logs) {
+        this(alerts, suppliers, rules, logs, java.util.Optional::empty, null);
+    }
+
+    @org.springframework.beans.factory.annotation.Autowired
     public BlacklistQueryService(
             BlacklistAlertRepository alertRepository,
             BlacklistSupplierRepository supplierRepository,
             BlacklistRuleRepository ruleRepository,
-            BlacklistSupplierOperationLogRepository operationLogRepository) {
+            BlacklistSupplierOperationLogRepository operationLogRepository,
+            com.fuquan.audit.security.application.AuthContext auth,
+            com.fuquan.audit.security.application.port.UploadOwnershipPort ownership) {
+        this.auth=auth; this.ownership=ownership;
         this.alertRepository = alertRepository;
         this.supplierRepository = supplierRepository;
         this.ruleRepository = ruleRepository;
@@ -37,19 +49,25 @@ public class BlacklistQueryService {
     }
 
     public List<BlacklistAlert> findAlerts(String status) {
-        return alertRepository.findAll(status);
+        return alertRepository.findAll(status).stream().filter(this::visible).toList();
     }
 
     public List<BlacklistAlert> findAlertsForExport(
             String batchId, String alertLevel, String status, String supplierName) {
         return alertRepository.findPage(
-                batchId, alertLevel, status, supplierName, 0, Integer.MAX_VALUE);
+                batchId, alertLevel, status, supplierName, 0, Integer.MAX_VALUE).stream().filter(this::visible).toList();
     }
 
     public Page<BlacklistAlert> findAlertPage(
             String batchId, String alertLevel, String status, String supplierName,
             int page, int size) {
         PageRequest request = PageRequest.of(page, size);
+        if (personal()) {
+            var visible = findAlertsForExport(batchId, alertLevel, status, supplierName);
+            int offset = Math.min(request.offset(), visible.size());
+            int end = Math.min(offset + request.size(), visible.size());
+            return new Page<>(visible.subList(offset, end), request.page(), request.size(), visible.size());
+        }
         return new Page<>(
                 alertRepository.findPage(
                         batchId, alertLevel, status, supplierName,
@@ -59,9 +77,19 @@ public class BlacklistQueryService {
     }
 
     public BlacklistAlert requireAlert(UUID id) {
-        return alertRepository.findById(id)
+        return alertRepository.findById(id).filter(this::visible)
                 .orElseThrow(() -> new BusinessException(
                         BusinessErrorCode.NOT_FOUND, "blacklist alert not found: " + id));
+    }
+
+    private boolean personal() {
+        return auth.currentUser().filter(com.fuquan.audit.security.domain.PersonalUploadRoles::applies).isPresent();
+    }
+
+    private boolean visible(BlacklistAlert alert) {
+        var actor=auth.currentUser().orElse(null);
+        return !com.fuquan.audit.security.domain.PersonalUploadRoles.applies(actor)
+                || ownership.ownsProcurementBatch(alert.batchId(), actor.userId());
     }
 
     public List<BlacklistSupplier> findActiveEntries() {

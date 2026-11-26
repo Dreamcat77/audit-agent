@@ -1,0 +1,83 @@
+{
+  "text": "合同价款明细表（本表列明全部价款构成，无其他分项或另计费用） |  | \n项目名称：桂雨终端更新项目 | 合同编号：HT-CY-2027-009 | 单位：元\n分项名称 | 分项金额（元） | 备注\n设备 | 300,000.00 | 含税\n安装服务 | 150,000.00 | 含税\n合计 | 450,000.00 | 以上为全部合同价款明细",
+  "fileId": "bdef67d6-2189-4d40-92fc-47b975a32c92",
+  "result": {
+    "model": "synthetic-provider",
+    "version": "contract-case-v1",
+    "role": "ANNEX",
+    "profile": "PROCUREMENT",
+    "complete": true,
+    "facts": [
+      {
+        "type": "PROJECT_NAME",
+        "value": "桂雨终端更新项目",
+        "citations": [
+          {
+            "document": "bdef67d6-2189-4d40-92fc-47b975a32c92",
+            "text": "项目名称：桂雨终端更新项目"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "CONTRACT_NO",
+        "value": "HT-CY-2027-009",
+        "citations": [
+          {
+            "document": "bdef67d6-2189-4d40-92fc-47b975a32c92",
+            "text": "合同编号：HT-CY-2027-009"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "TOTAL_AMOUNT",
+        "value": "450,000.00元",
+        "citations": [
+          {
+            "document": "bdef67d6-2189-4d40-92fc-47b975a32c92",
+            "text": "合计 | 450,000.00 | 以上为全部合同价款明细"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "CURRENCY",
+        "value": "元",
+        "citations": [
+          {
+            "document": "bdef67d6-2189-4d40-92fc-47b975a32c92",
+            "text": "单位：元"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "LINE_TABLE_COMPLETE",
+        "value": "合同价款明细表（本表列明全部价款构成，无其他分项或另计费用）",
+        "citations": [
+          {
+            "document": "bdef67d6-2189-4d40-92fc-47b975a32c92",
+            "text": "合同价款明细表（本表列明全部价款构成，无其他分项或另计费用）"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      }
+    ],
+    "clauses": [
+      {
+        "topic": "OTHER",
+        "summary": "合同总价款为450,000.00元，包含设备300,000.00元及安装服务150,000.00元，均为含税价。",
+        "citations": [
+          {
+            "document": "bdef67d6-2189-4d40-92fc-47b975a32c92",
+            "text": "设备 | 300,000.00 | 含税\n安装服务 | 150,000.00 | 含税\n合计 | 450,000.00 | 以上为全部合同价款明细"
+          }
+        ],
+        "subjectScope": null
+      }
+    ],
+    "findings": [],
+    "rejectedItems": 0
+  }
+}

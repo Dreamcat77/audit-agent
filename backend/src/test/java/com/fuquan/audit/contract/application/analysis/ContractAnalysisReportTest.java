@@ -8,6 +8,91 @@ import static org.mockito.Mockito.*;
 import static com.fuquan.audit.contract.application.analysis.ContractAnalysisCase.*;
 
 class ContractAnalysisReportTest {
+    @Test void oldCrossFilePriceIssueIsNarrowedWithoutMutatingThePersistedModelOutput(){
+        var a=ContractAnalysisEvidenceTest.scope("合同总价：480000元。");var b=ContractAnalysisEvidenceTest.scope("投标报价：470000元。");
+        var ground=new ContractAnalysisEvidence();
+        var evidence=List.of(ground.locate(a,a.text()).orElseThrow(),ground.locate(b,b.text()).orElseThrow());
+        var finding=new Finding("CROSS_FILE_CONFLICT","WARNING","合同金额与投标报价不一致",
+                "两份材料金额存在差异。该差异可能影响合同效力或履约基础，需进一步核实。","核对适用金额口径。",evidence,"AI_REVIEW_SUGGESTION");
+        var output=new Output("OTHER","GENERAL",true,List.of(),List.of(),List.of(),List.of(finding),0,"test","contract-case-v1");
+        var now=Instant.now();var step=new Step("cross/old",a.source().fileId(),"CROSS_FILE",0,0,"a".repeat(64),StepState.COMPLETED,now,now,output,null);
+        var c=new ContractAnalysisCase(UUID.randomUUID(),UUID.randomUUID(),"owner","b".repeat(64),State.COMPLETED,1,null,null,1,now,now.plusSeconds(1800),List.of(a.source(),b.source()),List.of(step),null);
+        var sources=mock(ContractAnalysisSources.class);
+        when(sources.load(any(),any())).thenThrow(new IllegalStateException("test-only source temporarily unavailable"));
+        var report=new ContractAnalysisReport(mock(ContractAnalysisService.class),sources,new ContractAnalysisRelations()).project(c);
+        assertThat(report.findings()).singleElement().satisfies(f->{
+            assertThat(f.explanation()).isEqualTo("两份材料金额存在差异。");assertThat(f.evidence()).isEqualTo(evidence);
+        });
+        assertThat(c.steps().get(0).output().findings().get(0).explanation()).contains("影响合同效力");
+    }
+    @Test void specificMissingAttachmentCheckReplacesItsOverlappingGenericUploadNote(){
+        var scope=ContractAnalysisEvidenceTest.scope("合同约定：附件一设备清单和附件二保密协议作为合同组成部分。");
+        var grounding=new ContractAnalysisEvidence();
+        var broad=grounding.locate(scope,"附件一设备清单和附件二保密协议作为合同组成部分").orElseThrow();
+        var exact=grounding.locate(scope,"附件二保密协议作为合同组成部分").orElseThrow();
+        var note=new Finding("MATERIAL_SCOPE_NOTE","INFO","附件内容未在本次上传中提供",
+                "本次只上传主合同，未见附件一设备清单和附件二保密协议。","补充附件",List.of(broad),"AI_REVIEW_SUGGESTION");
+        var missing=new Finding("ATTACHMENT_REFERENCE_MATCH","WARNING","合同引用附件待补齐",
+                "附件二保密协议未在本批材料中找到。","核对附件二",List.of(exact),"DETERMINISTIC_DOCUMENT");
+        assertThat(ContractAnalysisReport.suppressCoveredAttachmentScopeNotes(List.of(note,missing)))
+                .containsExactly(missing);
+        var unrelated=grounding.locate(scope,"合同约定").orElseThrow();
+        var other=new Finding("ATTACHMENT_REFERENCE_MATCH","WARNING","另一缺失附件","未能匹配","核对",List.of(unrelated),"DETERMINISTIC_DOCUMENT");
+        assertThat(ContractAnalysisReport.suppressCoveredAttachmentScopeNotes(List.of(note,other)))
+                .containsExactly(note,other);
+    }
+    @Test void historicalRiskCountAlsoChecksTheFullDateWithoutWritingOrCallingModels(){
+        String text="签署日期：2026年10月22日\n合同有效期至执行完毕止。";
+        var scope=ContractAnalysisEvidenceTest.scope(text);var source=scope.source();
+        var evidence=new ContractAnalysisEvidence().locate(scope,"签署日期：2026年10月22").orElseThrow();
+        var finding=new Finding("MATERIAL_SCOPE_NOTE","WARNING","签署日期不完整","缺少具体日数","补全日期",List.of(evidence),"AI_REVIEW_SUGGESTION");
+        var out=new Output("CONTRACT","GENERAL",true,List.of(),List.of(),List.of(),List.of(finding),0,"test","contract-case-v1");
+        var now=Instant.now();var step=new Step("semantic/1",source.fileId(),"FRAGMENT",0,18,"c".repeat(64),StepState.COMPLETED,now,now,out,null);
+        var c=new ContractAnalysisCase(UUID.randomUUID(),UUID.randomUUID(),"owner","d".repeat(64),State.COMPLETED,1,null,null,1,now,now.plusSeconds(1800),List.of(source),List.of(step),null);
+        var parsed=mock(com.fuquan.audit.contract.domain.project.ProjectFileParseResult.class);
+        when(parsed.canonicalText()).thenReturn(text);
+        var sources=mock(ContractAnalysisSources.class);when(sources.load(c.projectId(),source)).thenReturn(parsed);
+        var service=mock(ContractAnalysisService.class);var reports=new ContractAnalysisReport(service,sources,new ContractAnalysisRelations());
+        assertThat(reports.summary(c).risks()).isZero();
+        assertThat(c.steps().get(0).output().findings()).containsExactly(finding);
+        verify(sources,times(1)).load(c.projectId(),source);verifyNoInteractions(service);
+        when(sources.load(c.projectId(),source)).thenThrow(new IllegalStateException("unavailable"));
+        assertThat(reports.summary(c).risks()).isEqualTo(1);
+    }
+    @Test void sameBlankIssueIsShownOnceButDifferentEventOrFileRemainsVisible(){
+        var s=ContractAnalysisEvidenceTest.scope("逾期付款按货款金额的    向对方支付违约金。\n留置期限    天。");
+        var g=new ContractAnalysisEvidence();var rate=g.locate(s,"逾期付款按货款金额的    向对方支付违约金。").orElseThrow();
+        var duration=g.locate(s,"留置期限    天。").orElseThrow();
+        var rule=new Finding("BREACH_TERMS_UNFILLED","WARNING","违约金比例未填写","比例留空","补齐比例",List.of(rate),"DETERMINISTIC_FORM");
+        var ai=new Finding("BREACH_AMBIGUITY","WARNING",rule.title(),"支付违约金的比例留空","核对比例",List.of(rate),"AI_REVIEW_SUGGESTION");
+        var extra=new Finding("BREACH_AMBIGUITY","WARNING",rule.title(),"比例与留置期限均留空","核对",List.of(rate,duration),"AI_REVIEW_SUGGESTION");
+        var other=ContractAnalysisEvidenceTest.scope(s.text());var otherEvidence=g.locate(other,rate.excerpt()).orElseThrow();
+        var otherFinding=new Finding(ai.code(),ai.level(),ai.title(),ai.explanation(),ai.suggestion(),List.of(otherEvidence),ai.origin());
+        var out=new Output("CONTRACT","GENERAL",true,List.of(),List.of(),List.of(),List.of(ai,rule,extra,otherFinding),0,null,"test-v1");
+        var now=Instant.now();var step=new Step("rule",s.source().fileId(),"RULES",0,s.text().length(),"d".repeat(64),StepState.COMPLETED,now,now,out,null);
+        assertThat(ContractAnalysisReport.uniqueFindings(List.of(step))).containsExactly(rule,extra,otherFinding);
+    }
+    private static ContractAnalysisCase titledCase(String... titles){
+        var now=Instant.parse("2026-11-04T00:00:00Z");var steps=new ArrayList<Step>();var sources=new ArrayList<Source>();
+        for(String title:titles){var scope=ContractAnalysisEvidenceTest.scope(title);sources.add(scope.source());
+            var evidence=new ContractAnalysisEvidence().locate(scope,title).orElseThrow();
+            var output=new Output("CONTRACT","SERVICE",true,List.of(new Fact("CONTRACT_NAME",title,"RULE",List.of(evidence))),List.of(),List.of(),List.of(),0,null,"rule");
+            steps.add(new Step("recall/"+scope.source().fileId(),scope.source().fileId(),"RECALL",0,title.length(),"c".repeat(64),StepState.COMPLETED,now,now,output,null));}
+        return new ContractAnalysisCase(UUID.randomUUID(),UUID.randomUUID(),"owner","d".repeat(64),State.PARTIAL,1,null,null,1,now,now.plusSeconds(1800),sources,steps,null);
+    }
+    @Test void descriptiveVerifiedContractSubjectProvidesDisplayNameInReportAndHistoryOnly(){
+        var c=titledCase("智能化内控模块维护及优化服务合同");
+        assertThat(ContractAnalysisReport.projectName(c,"自动整理项目-原名",List.of())).isEqualTo("智能化内控模块维护及优化服务");
+        assertThat(new ContractAnalysisReport(null,null,null).summary(c).projectName()).isEqualTo("智能化内控模块维护及优化服务");
+        assertThat(ContractAnalysisReport.projectName(c,"用户指定项目",List.of())).isEqualTo("用户指定项目");
+        assertThat(ContractAnalysisReport.projectName(c,null,List.of("项目名称：信息化改造项目"))).isEqualTo("信息化改造项目");
+    }
+    @Test void ambiguousContractSubjectsAndGenericDocumentNamesDoNotInventProjectIdentity(){
+        for(var c:List.of(titledCase("合同书"),titledCase("采购委托协议书"),titledCase("甲合同","乙合同"),
+                titledCase("东院信息化维护服务合同","西院档案管理服务合同"))){
+            assertThat(ContractAnalysisReport.projectName(c,null,List.of())).startsWith("自动整理项目-");
+        }
+    }
     @Test void resultAndHistoryUseProjectNameWithoutContractTitleFallbackOrWrites() {
         var scope=ContractAnalysisEvidenceTest.scope("项目名称：档案数字化维护服务项目\n合同名称：档案维护服务合同书");
         var e=new ContractAnalysisEvidence().locate(scope,scope.text()).orElseThrow();
@@ -57,5 +142,18 @@ class ContractAnalysisReportTest {
         assertThat(report.findings()).isEmpty();
         assertThat(report.documents()).allSatisfy(d->assertThat(d.clauses()).isEmpty());
         assertThat(report.checks()).allSatisfy(check->assertThat(check.status()).isEqualTo("NOT_EVALUATED"));
+    }
+
+    @Test void usefulPartialStepContributesToDisplayedProcessedCharacters(){
+        var scope=ContractAnalysisEvidenceTest.scope("合同总价：2100000元");
+        var evidence=new ContractAnalysisEvidence().locate(scope,scope.text()).orElseThrow();
+        var output=new Output("CONTRACT","GENERAL",false,
+                List.of(new Fact("TOTAL_AMOUNT","2100000元","RULE",List.of(evidence))),
+                List.of(),List.of(),List.of(),1,"test","contract-case-v1");
+        var now=Instant.now();
+        var step=new Step("file",scope.source().fileId(),"FILE",0,scope.text().length(),"d".repeat(64),
+                StepState.PARTIAL,now,now,output,null);
+        assertThat(ContractAnalysisReport.covered(List.of(step),scope.text().length()))
+                .isEqualTo(scope.text().length());
     }
 }

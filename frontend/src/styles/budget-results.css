@@ -95,3 +95,40 @@
   .budget-batch-metrics > div { padding: 12px; }
   .budget-amount-comparison { grid-template-columns: minmax(0, 1fr); }
 }
+
+
+/* Dense subject comparisons keep hundred-row budgets within a bounded page. */
+.budget-subject-comparison { min-width: 0; }
+.budget-comparison-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 14px; }
+.budget-comparison-count { margin-right: auto; color: #526176; font-size: 13px; }
+.budget-comparison-toolbar input,.budget-comparison-toolbar select,.budget-comparison-pagination select { height: 36px; border: 1px solid #d9e2ec; border-radius: 6px; background: #fff; padding: 0 10px; color: #334155; font-size: 13px; }
+.budget-comparison-toolbar input { width: 240px; max-width: 100%; }
+.budget-comparison-scroll { max-width: 100%; overflow-x: auto; border: 1px solid #dce3eb; border-radius: 8px; }
+.budget-comparison-table { width: 100%; min-width: 920px; border-collapse: collapse; table-layout: fixed; font-size: 13px; color: #334155; }
+.budget-comparison-table th,.budget-comparison-table td { padding: 13px 12px; border-bottom: 1px solid #e8edf3; text-align: left; vertical-align: top; line-height: 1.65; overflow-wrap: anywhere; }
+.budget-comparison-table thead th { background: #f5f7fa; color: #526176; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.budget-comparison-table th:first-child { width: 48px; }
+.budget-comparison-table th:nth-child(2) { width: 21%; }
+.budget-comparison-table th:nth-child(3),.budget-comparison-table th:nth-child(4),.budget-comparison-table th:nth-child(5) { width: 13%; text-align: right; }
+.budget-comparison-table th:nth-child(6) { width: 17%; }
+.budget-comparison-table tbody tr:last-child>* { border-bottom: 0; }
+.budget-comparison-table tbody tr:hover { background: #fafbfd; }
+.budget-comparison-index { color: #8290a2; font-variant-numeric: tabular-nums; }
+.budget-comparison-subject { display: block; font-weight: 600; color: #263a50; }
+.budget-comparison-meta { display: block; margin-top: 4px; color: #718096; font-size: 12px; font-weight: 400; }
+.budget-comparison-table .budget-comparison-money { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.budget-comparison-excess { color: #b42318; font-weight: 600; }
+.budget-comparison-badge { display: inline-block; padding: 2px 7px; border-radius: 5px; font-size: 12px; }
+.budget-comparison-badge-difference { background: #fef0ed; color: #b42318; }
+.budget-comparison-badge-normal { background: #eef8f1; color: #287447; }
+.budget-comparison-badge-uncertain { background: #fff6e5; color: #926016; }
+.budget-comparison-detail { margin-top: 5px; color: #64748b; font-size: 12px; font-weight: 400; }
+.budget-comparison-detail summary { cursor: pointer; width: fit-content; }
+.budget-comparison-detail p,.budget-comparison-detail li { margin-top: 6px; white-space: normal; overflow-wrap: anywhere; }
+.budget-comparison-detail ul { list-style: none; padding: 0; }
+.budget-comparison-pagination { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; color: #64748b; font-size: 12px; }
+.budget-comparison-pagination>div { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.budget-comparison-pagination button { height: 32px; padding: 0 11px; border: 1px solid #d9e2ec; border-radius: 6px; background: #fff; color: #475569; cursor: pointer; }
+.budget-comparison-pagination button:disabled { opacity: .4; cursor: default; }
+.budget-comparison-empty { padding: 24px; color: #718096; text-align: center; font-size: 13px; }
+@media(max-width:640px) { .budget-comparison-toolbar label { max-width: 100%; } .budget-comparison-toolbar input { width: 200px; } }

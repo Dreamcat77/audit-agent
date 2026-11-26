@@ -5,9 +5,15 @@ import com.fuquan.audit.common.exception.BusinessErrorCode;
 import com.fuquan.audit.common.exception.BusinessException;
 import com.fuquan.audit.procurement.application.ProcurementTenderDocumentService;
 import com.fuquan.audit.security.application.AuthContext;
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,5 +56,22 @@ public class ProcurementTenderDocumentController {
     @GetMapping("/latest")
     public ApiResponse<ProcurementTenderDocumentService.TenderDocumentResult> latest(@PathVariable UUID projectId) {
         return ApiResponse.success(service.findLatest(projectId).orElse(null));
+    }
+
+    @GetMapping("/{reviewId}/original")
+    public ResponseEntity<InputStreamResource> original(@PathVariable UUID projectId, @PathVariable UUID reviewId) {
+        var document=service.requireMaterial(projectId,reviewId);
+        var content=service.openMaterial(projectId,reviewId);
+        String mediaType=document.contentType()==null?MediaType.APPLICATION_OCTET_STREAM_VALUE:document.contentType();
+        boolean browserSafe=mediaType.equals(MediaType.APPLICATION_PDF_VALUE)
+                ||java.util.Set.of("image/png","image/jpeg","image/gif","image/bmp","image/tiff","image/webp")
+                        .contains(mediaType.toLowerCase(java.util.Locale.ROOT));
+        var disposition=browserSafe?ContentDisposition.inline():ContentDisposition.attachment();
+        return ResponseEntity.ok().contentType(browserSafe?MediaType.parseMediaType(mediaType):MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(content.size()).header(HttpHeaders.CONTENT_DISPOSITION,
+                        disposition.filename(document.fileName(),StandardCharsets.UTF_8).build().toString())
+                .header(HttpHeaders.CACHE_CONTROL,"no-store")
+                .header("X-Content-Type-Options","nosniff")
+                .body(new InputStreamResource(content.inputStream()));
     }
 }

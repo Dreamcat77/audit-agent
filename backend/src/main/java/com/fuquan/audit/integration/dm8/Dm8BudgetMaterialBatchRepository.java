@@ -45,18 +45,37 @@ public class Dm8BudgetMaterialBatchRepository implements BudgetMaterialBatchRepo
                     : BudgetMaterialBatchRepository.HistoryReference.batch(UUID.fromString(batchId), createdAt);
         }, args.toArray());
     }
+    public List<BudgetMaterialBatchRepository.HistoryReference> findProjectNameCandidates(String actorId, BudgetHistoryFilter filter) {
+        var args = new ArrayList<Object>();
+        var query = new StringBuilder("SELECT B.ID AS BATCH_ID,CAST(NULL AS VARCHAR(36)) AS TASK_ID,B.CREATED_AT FROM BUDGET_MATERIAL_BATCH B WHERE (B.LEASE_TOKEN IS NULL OR B.LEASE_TOKEN<>'USER_CANCELLED') AND (? IS NULL OR B.ACTOR_ID=?)");
+        args.add(actorId); args.add(actorId);
+        query.append(" AND EXISTS (SELECT 1 FROM BUDGET_MATERIAL_SOURCE S WHERE S.BATCH_ID=B.ID AND (INSTR(LOWER(S.FACTS_JSON),LOWER(?))>0 OR INSTR(LOWER(S.RESULT_JSON),LOWER(?))>0))");
+        args.add(filter.projectName());
+        args.add(filter.projectName());
+        if (filter.createdFrom() != null) {
+            query.append(" AND B.CREATED_AT>=?");
+            args.add(Timestamp.from(filter.createdFrom()));
+        }
+        if (filter.createdBefore() != null) {
+            query.append(" AND B.CREATED_AT<?");
+            args.add(Timestamp.from(filter.createdBefore()));
+        }
+        query.append(" ORDER BY B.CREATED_AT DESC,B.ID DESC");
+        return jdbc.query(query.toString(), (r, n) -> BudgetMaterialBatchRepository.HistoryReference.batch(
+                UUID.fromString(r.getString("BATCH_ID")), r.getTimestamp("CREATED_AT").toInstant()), args.toArray());
+    }
     public long countHistory(String actorId, BudgetHistoryFilter filter) {
         var args = new ArrayList<Object>();
         String union = historyUnion(actorId, filter, args);
         return jdbc.queryForObject("SELECT COUNT(1) FROM (" + union + ") H", Long.class, args.toArray());
     }
     private static String historyUnion(String actorId, BudgetHistoryFilter filter, List<Object> args) {
-        var batch = new StringBuilder("SELECT B.ID AS BATCH_ID,CAST(NULL AS VARCHAR(36)) AS TASK_ID,B.CREATED_AT FROM BUDGET_MATERIAL_BATCH B WHERE B.ACTOR_ID=?");
-        var legacy = new StringBuilder("SELECT CAST(NULL AS VARCHAR(36)) AS BATCH_ID,T.ID AS TASK_ID,T.CREATED_TIME AS CREATED_AT FROM BUDGET_REVIEW_TASK T JOIN BUDGET_MATERIAL_JOB J ON J.ID=T.ID AND J.ACTOR_ID=? WHERE NOT EXISTS (SELECT 1 FROM BUDGET_MATERIAL_SOURCE S WHERE S.TASK_ID=T.ID) AND (T.ERROR_DETAIL IS NULL OR T.ERROR_DETAIL NOT IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT'))");
+        var batch = new StringBuilder("SELECT B.ID AS BATCH_ID,CAST(NULL AS VARCHAR(36)) AS TASK_ID,B.CREATED_AT FROM BUDGET_MATERIAL_BATCH B WHERE (B.LEASE_TOKEN IS NULL OR B.LEASE_TOKEN<>'USER_CANCELLED') AND (? IS NULL OR B.ACTOR_ID=?)");
+        var legacy = new StringBuilder("SELECT CAST(NULL AS VARCHAR(36)) AS BATCH_ID,T.ID AS TASK_ID,T.CREATED_TIME AS CREATED_AT FROM BUDGET_REVIEW_TASK T JOIN BUDGET_MATERIAL_JOB J ON J.ID=T.ID AND (? IS NULL OR J.ACTOR_ID=?) WHERE NOT EXISTS (SELECT 1 FROM BUDGET_MATERIAL_SOURCE S WHERE S.TASK_ID=T.ID) AND (T.ERROR_DETAIL IS NULL OR T.ERROR_DETAIL NOT IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT','USER_CANCELLED'))");
         var batchArgs = new ArrayList<Object>();
-        batchArgs.add(actorId);
+        batchArgs.add(actorId); batchArgs.add(actorId);
         var legacyArgs = new ArrayList<Object>();
-        legacyArgs.add(actorId);
+        legacyArgs.add(actorId); legacyArgs.add(actorId);
         appendHistoryFilter(batch, batchArgs, filter, "B", true);
         appendHistoryFilter(legacy, legacyArgs, filter, "T", false);
         args.addAll(batchArgs);
@@ -98,6 +117,17 @@ public class Dm8BudgetMaterialBatchRepository implements BudgetMaterialBatchRepo
     }
     public void complete(UUID id,String token) {
         if(jdbc.update("UPDATE BUDGET_MATERIAL_BATCH SET STATUS='REVIEWED',LEASE_UNTIL=NULL WHERE ID=? AND STATUS='PROCESSING' AND LEASE_TOKEN=?",id.toString(),token)!=1)throw new IllegalStateException("budget batch lease lost");
+    }
+    @Transactional(propagation=Propagation.MANDATORY)
+    public boolean cancel(UUID id) {
+        if(jdbc.update("UPDATE BUDGET_MATERIAL_BATCH SET STATUS='REVIEWED',LEASE_TOKEN='USER_CANCELLED',LEASE_UNTIL=NULL WHERE ID=? AND STATUS<>'REVIEWED'",id.toString())!=1)return false;
+        return true;
+    }
+    public void clearCancelledSources(UUID id) {jdbc.update("UPDATE BUDGET_MATERIAL_SOURCE SET FACTS_JSON=NULL,RESULT_JSON=NULL WHERE BATCH_ID=? AND EXISTS (SELECT 1 FROM BUDGET_MATERIAL_BATCH B WHERE B.ID=? AND B.LEASE_TOKEN='USER_CANCELLED')",id.toString(),id.toString());}
+    @Transactional(propagation=Propagation.MANDATORY)
+    public void requireAcceptingUploads(UUID id) {
+        var rows=jdbc.queryForList("SELECT STATUS FROM BUDGET_MATERIAL_BATCH WHERE ID=? FOR UPDATE",String.class,id.toString());
+        if(rows.size()!=1||!"OPEN".equals(rows.get(0)))throw new IllegalStateException("budget batch closed");
     }
     public void attach(Source s) {jdbc.update("INSERT INTO BUDGET_MATERIAL_SOURCE(TASK_ID,BATCH_ID) VALUES(?,?)",s.taskId().toString(),s.batchId().toString());}
     public Optional<Source> source(UUID id) {return jdbc.query("SELECT * FROM BUDGET_MATERIAL_SOURCE WHERE TASK_ID=?",SOURCE,id.toString()).stream().findFirst();}

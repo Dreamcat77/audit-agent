@@ -34,6 +34,7 @@ export function budgetMaterialBatch(actor:string) {
         return request<BudgetMaterialResult>(prefix,{method:'POST',body,headers:{'Idempotency-Key':key}});
       },
       operation:key=>request<BudgetMaterialResult|null>(`${prefix}/operations/${encodeURIComponent(key)}`),
+      cancel:key=>request<BudgetMaterialResult>(`${prefix}/operations/${encodeURIComponent(key)}/cancel`,{method:'POST'}),
       get:id=>request<BudgetMaterialResult>(`${prefix}/${encodeURIComponent(id)}`),
       retry:()=>Promise.reject(Error('manual retry not exposed')),
     },initialError,{namespace:'budget',filePattern:OFFICE_MATERIAL_PATTERN});

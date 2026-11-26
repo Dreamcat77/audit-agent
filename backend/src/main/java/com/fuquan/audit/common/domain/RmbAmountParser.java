@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public final class RmbAmountParser {
     private RmbAmountParser() {}
     private static final String DIGITS="零壹贰叁肆伍陆柒捌玖";
-    private static final Pattern ARABIC=Pattern.compile("\\+?((?:[0-9]+|[0-9]{1,3}(?:,[0-9]{3})+)(?:\\.[0-9]+)?)(亿元?|万元?|千元?|元)?");
+    private static final Pattern ARABIC=Pattern.compile("\\+?((?:[0-9]+|[0-9]{1,3}(?:,[0-9]{3})+)(?:\\.[0-9]+)?)(?:(亿元?|万元?|千元?|元)整?)?");
     private static final Pattern DUAL=Pattern.compile("(.+?)[(]?(?:人民币)?大写[:：](.+?)[)]?");
     private static final Pattern PAREN_DUAL=Pattern.compile("([^()]+)\\(([^()]+)\\)");
     private static final Pattern FRACTION=Pattern.compile("(?:([零壹贰叁肆伍陆柒捌玖])角)?零?(?:([零壹贰叁肆伍陆柒捌玖])分)?");
@@ -48,7 +48,13 @@ public final class RmbAmountParser {
     }
     private static Optional<BigDecimal> single(String value) {
         value=value.replaceFirst("(?:人民币|(?i:RMB|CNY))$", "");
-        value=value.replaceFirst("^(?:大写[:：]?)?(?:人民币|(?i:RMB|CNY)|[¥￥])?","");
+        // Currency may follow the digits in ordinary prose: 2200000人民币元.
+        // Accept only the exact currency marker before an explicit yuan unit.
+        value=value.replaceFirst("(?<=[0-9])(?:人民币|(?i:RMB|CNY))(?=(?:亿|万|千)?元整?$)", "");
+        // Common form labels in a dual amount are metadata, not part of the
+        // number. Keep the accepted labels narrow so arbitrary prose remains
+        // rejected instead of being mined for a number.
+        value=value.replaceFirst("^(?:(?:大写|小写|数字金额)[:：]?)?(?:人民币|(?i:RMB|CNY)|[¥￥])?","");
         if(value.matches("[零〇一二两三四五六七八九十百千万亿元角分整]+")) {
             String from="〇一二两三四五六七八九十百千",to="零壹贰贰叁肆伍陆柒捌玖拾佰仟";
             var converted=new StringBuilder();

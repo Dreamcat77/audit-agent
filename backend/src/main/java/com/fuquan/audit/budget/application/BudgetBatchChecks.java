@@ -8,49 +8,8 @@ import com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.*;
 /** Automatic batch checks use uploaded facts; no generated name or guessed policy is authority. */
 final class BudgetBatchChecks {
     private BudgetBatchChecks() {}
-    private record Entry(Input input, Row row, String project, String year, String department, BigDecimal amount) {}
     static Map<UUID,FileResult> enrich(List<Input> inputs, Map<UUID,FileResult> results) {
         var findings=new ArrayList<Assessment>();
-        var grouped=new LinkedHashMap<List<String>,List<Entry>>();
-        for(var input:inputs) if(input.snapshot()!=null && input.status().equals("PARSED")) {
-            var heading=new HashMap<String,String>();
-            for(String field:List.of("projectCode","projectName","parentProjectName","budgetYear","departmentName")) {
-                var values=input.snapshot().rows().stream().flatMap(r->r.facts().stream()).filter(f->f.field().equals(field)).map(Fact::value).distinct().toList();
-                if(values.size()==1)heading.put(field,values.get(0));
-            }
-            for(var row:input.snapshot().rows()) {
-                String project=coalesce(one(row,"parentProjectName"),one(row,"projectCode"),heading.get("parentProjectName"),heading.get("projectCode"),one(row,"projectName"),heading.get("projectName"));
-                String projectType=coalesce(one(row,"parentProjectName"),heading.get("parentProjectName"))!=null?"parent:":coalesce(one(row,"projectCode"),heading.get("projectCode"))!=null?"code:":"name:";
-                var declared=row.facts().stream().filter(f->f.field().equals("declaredAmount")&&!BudgetAmountEvidence.isOtherAmount(f)).toList();
-                if(project==null||declared.size()!=1)continue;
-                var amount=com.fuquan.audit.common.domain.RmbAmountParser.parse(declared.get(0).value());
-                if(amount.isEmpty()||amount.get().signum()<=0)continue;
-                String year=coalesce(one(row,"budgetYear"),heading.get("budgetYear")),department=coalesce(one(row,"departmentName"),heading.get("departmentName"));
-                var entry=new Entry(input,row,project,year,department,amount.get());
-                grouped.computeIfAbsent(List.of(projectType+key(project),key(year),key(department)),k->new ArrayList<>()).add(entry);
-            }
-        }
-        for(var group:grouped.values()) {
-            // Exact repeated source facts are not another application. Distinct
-            // rows in the same document remain distinct, including equal amounts.
-            var unique=new ArrayList<Entry>();
-            for(var entry:group) {
-                boolean repeated=unique.stream().anyMatch(old->!old.input().taskId().equals(entry.input().taskId())
-                        &&signature(old.row()).equals(signature(entry.row())));
-                if(!repeated)unique.add(entry);
-            }
-            {
-                BigDecimal threshold=BudgetMaterialSplitAnalysis.ADDITIONAL_APPROVAL_THRESHOLD;
-                var small=unique.stream().filter(e->e.amount().compareTo(threshold)<0).toList();
-                var total=small.stream().map(Entry::amount).reduce(BigDecimal.ZERO,BigDecimal::add);
-                if(small.size()<2||total.compareTo(threshold)<0)continue;
-                var sources=small.stream().flatMap(e->e.row().facts().stream().filter(f->Set.of("declaredAmount","projectName","projectCode","parentProjectName","subjectName","applicationNo","applicationDate").contains(f.field()))
-                        .map(f->new Evidence(e.input().taskId(),e.input().fileName(),f.field(),f.value(),f.locator(),f.excerpt()))).distinct().toList();
-                findings.add(new Assessment("AUTO_SPLIT_APPLICATION","WARNING","同一项目多笔申报合计达到100万元",
-                        small.get(0).project()+"有 "+small.size()+" 笔申报分别低于 100 万元，累计 "+total.toPlainString()+" 元，合计已达到 100 万元，需关注合并申报及额外审批。涉及材料与金额见下列依据。",
-                        "申报合计达到或超过100万元时提示额外审批；仅凭金额累计不认定拆分违规。",sources));
-            }
-        }
         approvalChecks(inputs,findings);
         var enriched=new LinkedHashMap<UUID,FileResult>();
         for(var entry:results.entrySet()) {
@@ -233,6 +192,7 @@ final class BudgetBatchChecks {
     private static String one(Row row,String field) {var values=row.facts().stream().filter(f->f.field().equals(field)).map(Fact::value).distinct().toList();return values.size()==1?values.get(0):null;}
     private static String coalesce(String... values){for(String value:values)if(value!=null&&!value.isBlank())return value;return null;}
     private static String key(String value){return value==null?"":value.replaceAll("\\s+","");}
-    private static String stepKey(String value){return key(value).replaceFirst("^(?:已经|已)","").replaceFirst("(?:审核通过|审批通过|同意|批准|签字|盖章|审核|审批|通过)$","");}
-    private static String signature(Row row){return row.facts().stream().map(f->f.field()+"="+f.value()+"@"+f.excerpt()).sorted().collect(java.util.stream.Collectors.joining("|"));}
+    private static String stepKey(String value){return key(value).replaceFirst("^(?:已经|已)","")
+            .replaceFirst("(?<!未)(?:已经|已)(?=(?:书面)?(?:审核通过|审批通过|同意|批准|签字|盖章|审核|审批|通过)$)","")
+            .replaceFirst("(?:审核通过|审批通过|同意|批准|签字|盖章|审核|审批|通过)$","");}
 }

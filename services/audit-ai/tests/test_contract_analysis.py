@@ -7,6 +7,11 @@ from audit_ai.main import create_app
 from audit_ai.model.contract_analysis import AnalysisRequest, SYSTEM, CROSS_SYSTEM
 from audit_ai.model.gateway import ModelGatewayFailure, ModelNotConfigured
 
+def test_contract_fact_prompt_does_not_invite_native_line_items_or_pad_record_numbers():
+    allowed=next(line for line in SYSTEM.splitlines() if line.startswith('facts每项type'))
+    assert 'ITEM_AMOUNT' not in allowed and 'ITEM_QUANTITY' not in allowed
+    assert '10条事实只是上限' in SYSTEM and '巡检记录编号' in SYSTEM
+
 def payload(doc):
     return {"role":"CONTRACT","profile":"SERVICE","complete":True,"facts":[],"clauses":[{"topic":"ACCEPTANCE","summary":"验收合格后付款","citations":[{"document":doc,"text":"验收合格后付款"}]}],"findings":[]}
 
@@ -135,7 +140,7 @@ def test_explicit_equivalent_labels_keep_source_value(alias,canonical):
     item=Fact.model_validate({"type":alias,"value":"原文值", "citations":[{"document":str(uuid4()),"text":"原文值"}]})
     assert item.type==canonical and item.value=="原文值"
 
-@pytest.mark.parametrize("kind",["BUDGET_AMOUNT","BID_PRICE","UNIT_PRICE","UNKNOWN_AMOUNT"])
+@pytest.mark.parametrize("kind",["BID_PRICE","UNIT_PRICE","UNKNOWN_AMOUNT"])
 def test_unrelated_amount_labels_never_become_contract_totals(kind):
     from audit_ai.model.contract_analysis import Fact
     with pytest.raises(ValueError):
@@ -168,3 +173,18 @@ def test_eight_category_topics_survive_actual_endpoint_validation():
         response=client.post("/ai/v1/contracts/analyze-case",json=request(doc,"双方盖章生效，附件清单一份"))
     assert response.status_code==200
     assert {clause["topic"] for clause in response.json()["clauses"]}=={"STRUCTURE","QUALIFICATION","ATTACHMENT","EFFECTIVENESS"}
+
+
+@pytest.mark.parametrize("kind",["BUDGET_AMOUNT","BID_AMOUNT","CEILING_AMOUNT","BIDDER","PURCHASER","AGENCY"])
+def test_distinct_procurement_roles_remain_distinct(kind):
+    from audit_ai.model.contract_analysis import Fact
+    item=Fact.model_validate({"type":kind,"value":"原文值","subjectScope":"CURRENT_PROJECT","citations":[{"document":str(uuid4()),"text":"原文值"}]})
+    assert item.type==kind and item.subjectScope=="CURRENT_PROJECT"
+
+
+def test_context_metadata_cannot_bypass_total_input_bound():
+    from audit_ai.model.contract_analysis import AnalysisRequest
+    data=request(str(uuid4()),"文"*12000)
+    data["documents"][0]["header"]="背景"
+    with pytest.raises(ValueError):
+        AnalysisRequest.model_validate(data)

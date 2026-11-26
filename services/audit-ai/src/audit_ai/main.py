@@ -13,6 +13,7 @@ from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 
 from audit_ai.config import Settings
+from audit_ai.client_privacy import CURRENT, HEADER, ClientIdentity
 from audit_ai.errors import install_error_handlers
 from audit_ai.logging import configure_runtime_logging, diagnostic_context, log_event
 from audit_ai.model.gateway import ModelGatewayPort, OpenAiCompatibleModelGateway
@@ -21,8 +22,9 @@ from audit_ai.model.document_role import create_document_role_router
 from audit_ai.model.contract_fact import create_contract_fact_router
 from audit_ai.model.material_fields import create_material_fields_router
 from audit_ai.model.case_review import create_case_review_router
+from audit_ai.model.budget_review import create_budget_review_router
 from audit_ai.model.contract_analysis import create_contract_analysis_router
-from audit_ai.ocr.process_adapter import ProcessOcrAdapter, create_ocr_port
+from audit_ai.ocr.process_adapter import ProcessOcrAdapter, ProcessOcrPool, create_ocr_port
 from audit_ai.ocr.port import OcrPort
 from audit_ai.ocr.router import create_ocr_router
 
@@ -55,12 +57,30 @@ def create_app(
         try:
             yield
         finally:
-            if isinstance(effective_ocr, ProcessOcrAdapter):
+            if isinstance(effective_ocr, (ProcessOcrAdapter, ProcessOcrPool)):
                 await run_in_threadpool(effective_ocr.close)
 
     app = FastAPI(title="audit-ai", version="0.1.0", lifespan=lifespan)
     app.state.settings = effective_settings
     app.state.ocr_port = effective_ocr
+
+    @app.middleware("http")
+    async def client_identity_middleware(request: Request, call_next):
+        token = CURRENT.set(None)
+        try:
+            header = request.headers.get(HEADER)
+            if (header is None and effective_settings.client_identity_required
+                    and request.url.path.startswith('/ai/v1/') and not request.url.path.startswith('/ai/v1/ocr/')):
+                return JSONResponse(status_code=503, content={"code": "CLIENT_IDENTITY_REQUIRED"})
+            if header is not None:
+                try:
+                    payload = {} if request.method in {'GET', 'HEAD', 'OPTIONS'} else await request.json()
+                    CURRENT.set(ClientIdentity.from_header(header, payload))
+                except (ValueError, TypeError, UnicodeError):
+                    return JSONResponse(status_code=422, content={"code": "CLIENT_IDENTITY_INVALID"})
+            return await call_next(request)
+        finally:
+            CURRENT.reset(token)
 
     @app.middleware("http")
     async def request_id_middleware(request: Request, call_next):
@@ -169,6 +189,7 @@ def create_app(
     app.include_router(create_material_fields_router(effective_gateway, effective_settings))
     app.include_router(create_case_review_router(effective_gateway))
     app.include_router(create_contract_analysis_router(effective_gateway))
+    app.include_router(create_budget_review_router(effective_gateway))
 
     @app.get("/health")
     async def health() -> dict[str, str]:

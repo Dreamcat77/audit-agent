@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 /** The database owns discovery and fences; no Redis queue or process-local result store. */
 @Component @ConditionalOnProperty(name="audit.procurement.auto-case.enabled",havingValue="true")
 public class AuditCaseWorker {
+    private com.fuquan.audit.common.application.TaskCancellationRegistry cancellationRegistry=new com.fuquan.audit.common.application.TaskCancellationRegistry();
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    public void setCancellationRegistry(com.fuquan.audit.common.application.TaskCancellationRegistry value){this.cancellationRegistry=value;}
     private final AuditCaseRepository repository;private final AuditCaseService service;
     private final UserAccountRoleQueryPort users;private final Clock clock;
     private final java.util.concurrent.ThreadPoolExecutor executor=new java.util.concurrent.ThreadPoolExecutor(1,1,0,
@@ -20,11 +23,13 @@ public class AuditCaseWorker {
         try {
             for(var c:repository.pending(clock.instant())) {
                 try {executor.execute(()->{
+                    try(var registration=cancellationRegistry.register(c.id())) {
                     try {
                         var owner=users.findActiveById(c.owner());
-                        if(owner.isEmpty()||Collections.disjoint(owner.get().roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR"))) {service.rejectOwner(c);return;}
+                        if(owner.isEmpty()||Collections.disjoint(owner.get().roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER"))) {service.rejectOwner(c);return;}
                         service.process(c.id(),owner.get().toCurrentUser());
                     }catch(RuntimeException failure){org.slf4j.LoggerFactory.getLogger(getClass()).warn("AUTO_CASE_EXECUTION_FAILED exceptionType={}",failure.getClass().getSimpleName());}
+                    } finally {Thread.interrupted();}
                 });}catch(java.util.concurrent.RejectedExecutionException full){break;}
             }
         }catch(RuntimeException failure){org.slf4j.LoggerFactory.getLogger(getClass()).warn("AUTO_CASE_SCAN_FAILED exceptionType={}",failure.getClass().getSimpleName());}

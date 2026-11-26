@@ -57,7 +57,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping({"/api/v1/blacklist", "/api/blacklist"})
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class BlacklistController {
 
     private final BlacklistCheckPort blacklistCheckPort;
@@ -222,7 +222,7 @@ public class BlacklistController {
     }
 
     @PostMapping("/entries")
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
     public ApiResponse<EntryResponse> addEntry(@Valid @RequestBody EntryRequest request) {
         BlacklistSupplier saved = supplierManagementService.add(
                 new BlacklistSupplierManagementService.AddCommand(
@@ -234,7 +234,7 @@ public class BlacklistController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
     public ApiResponse<EntryResponse> addEntryAlias(@Valid @RequestBody EntryRequest request) {
         return addEntry(request);
     }
@@ -260,7 +260,7 @@ public class BlacklistController {
     }
 
     @PutMapping("/entries/{id}")
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
     public ApiResponse<EntryResponse> updateEntry(
             @PathVariable UUID id, @Valid @RequestBody EntryRequest request) {
         BlacklistSupplier updated = supplierManagementService.update(
@@ -274,7 +274,7 @@ public class BlacklistController {
     }
 
     @PostMapping("/entries/{id}/remove")
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
     public ApiResponse<EntryResponse> removeEntry(
             @PathVariable UUID id, @Valid @RequestBody RemoveEntryRequest request) {
         BlacklistSupplierManagementService.RemovalResult result =
@@ -283,7 +283,7 @@ public class BlacklistController {
     }
 
     @DeleteMapping("/entries/{id}")
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
     public ApiResponse<Void> deleteEntry(@PathVariable UUID id) {
         supplierManagementService.remove(id, currentUser(), "通过兼容 DELETE 接口人工移除");
         return ApiResponse.success(null);
@@ -296,7 +296,7 @@ public class BlacklistController {
     }
 
     @PostMapping(value = "/entries/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
     public ApiResponse<ImportResponse> importEntries(@RequestPart("file") MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new BusinessException(BusinessErrorCode.INVALID_ARGUMENT, "import file is required");
@@ -330,7 +330,7 @@ public class BlacklistController {
     }
 
     @PostMapping("/rules")
-    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
     public ApiResponse<RuleResponse> addRule(@Valid @RequestBody RuleRequest request) {
         BlacklistRule rule = ruleManagementService.add(new BlacklistRuleManagementService.RuleCommand(
                 request.ruleName(), request.ruleType(), request.blacklistTypes(),
@@ -339,7 +339,7 @@ public class BlacklistController {
     }
 
     @PutMapping("/rules/{id}")
-    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
     public ApiResponse<RuleResponse> updateRule(
             @PathVariable UUID id, @Valid @RequestBody RuleRequest request) {
         BlacklistRule updated = ruleManagementService.update(id,
@@ -350,7 +350,7 @@ public class BlacklistController {
     }
 
     @DeleteMapping("/rules/{id}")
-    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
     public ApiResponse<Void> deleteRule(@PathVariable UUID id) {
         ruleManagementService.delete(id);
         return ApiResponse.success(null);

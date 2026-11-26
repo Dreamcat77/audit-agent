@@ -9,11 +9,20 @@ import static com.fuquan.audit.contract.application.analysis.ContractAnalysisCas
 /** One durable checkpoint per bounded action. External calls never hold database transactions. */
 @Service
 public class ContractAnalysisProcessor {
+    private ContractVisualQuality visualQuality;
+    @org.springframework.beans.factory.annotation.Autowired public void setVisualQuality(ContractVisualQuality value){this.visualQuality=value;}
     private final ContractAnalysisRepository repository;private final ContractAnalysisTransactions tx;
     private final ContractAnalysisSources sources;private final ContractAnalysisPlan planner;
     private final ContractAnalysisRules rules;private final ContractAnalysisAiPort ai;
     private final ContractAnalysisEvidence evidence;private final ContractAnalysisRelations relations;private final Clock clock;
     private ContractAnalysisFormalBridge formalBridge;
+    private com.fuquan.audit.common.privacy.ClientReviewIdentity clientIdentity;
+    @org.springframework.beans.factory.annotation.Autowired
+    public void setClientIdentity(com.fuquan.audit.common.privacy.ClientReviewIdentity value){this.clientIdentity=value;}
+    private Map<UUID,String> reviewParties(Map<UUID,String> texts,List<UUID> ids){
+        // Local fake-model mode has no configured names and never sends material externally.
+        return clientIdentity==null?Map.of():clientIdentity.parties(texts,ids);
+    }
     @org.springframework.beans.factory.annotation.Autowired
     public void setFormalBridge(ContractAnalysisFormalBridge value){this.formalBridge=value;}
     public ContractAnalysisProcessor(ContractAnalysisRepository repository,ContractAnalysisTransactions tx,ContractAnalysisSources sources,
@@ -22,21 +31,22 @@ public class ContractAnalysisProcessor {
     }
     public void process(UUID id,CurrentUser actor){
         var previous=repository.find(id).orElseThrow();if(!previous.owner().equals(actor.userId())||!previous.claimable(clock.instant()))return;
-        if(Collections.disjoint(actor.roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL")))return;
+        if(Collections.disjoint(actor.roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER")))return;
         var c=previous.claim(UUID.randomUUID().toString(),clock.instant());if(!tx.save(previous,c,actor))return;
         if(c.sources().isEmpty()){
-            if(!clock.instant().isBefore(c.deadline())||!clock.instant().isBefore(c.createdAt().plusSeconds(Math.min(7200,1800+180L*c.expectedUploads())))){
-                tx.save(c,c.release(State.DATA_INSUFFICIENT,List.of(),List.of(),"UPLOAD_TOTAL_DEADLINE"),actor);return;
-            }
             Optional<List<Source>> accepted;
             try{accepted=sources.acceptedManifest(c);}
             catch(IllegalStateException changed){tx.save(c,c.release(State.UNKNOWN,List.of(),List.of(),"INTAKE_MANIFEST_UNPROVEN"),actor);return;}
-            if(accepted.isEmpty()){tx.save(c,c.release(State.QUEUED,List.of(),List.of(),"WAITING_FOR_UPLOAD"),actor);return;}
+            if(accepted.isEmpty()){
+                boolean expired=!clock.instant().isBefore(c.deadline())||!clock.instant().isBefore(c.createdAt().plusSeconds(Math.min(7200,1800+180L*c.expectedUploads())));
+                tx.save(c,c.release(expired?State.DATA_INSUFFICIENT:State.QUEUED,List.of(),List.of(),expired?"UPLOAD_TOTAL_DEADLINE":"WAITING_FOR_UPLOAD"),actor);return;
+            }
             c=save(c,c.checkpoint(accepted.get(),List.of()),actor);if(c==null)return;
         }
         var files=new ArrayList<Source>();var texts=new LinkedHashMap<UUID,String>();var work=new ArrayList<Step>();
         for(var step:c.steps())work.add(step.status()==StepState.RUNNING?step.finish(StepState.UNKNOWN,null,"EXTERNAL_OUTCOME_UNKNOWN_AFTER_RECOVERY",clock.instant()):step);
         for(var source:c.sources()){
+            if(Thread.currentThread().isInterrupted())return;
             var s=source;
             try{s=sources.freeze(c.projectId(),s);if(s.status()==SourceState.READY)texts.put(s.fileId(),sources.load(c.projectId(),s).canonicalText());}
             catch(IllegalStateException identity){s=ContractAnalysisSources.state(s,SourceState.UNKNOWN,"FROZEN_SOURCE_UNPROVEN");}
@@ -55,7 +65,8 @@ public class ContractAnalysisProcessor {
         var chosen=work.stream().filter(s->s.status()==StepState.QUEUED).findFirst();
         if(chosen.isEmpty()){
             // At most one focused supplement per file; uncertain/failed calls are never retried under another name.
-            for(var source:files)if(source.status()==SourceState.READY&&modelCalls(work)<planner.callBudget(c,texts)&&!ContractAnalysisPlan.has(work,"focus/"+source.fileId())){
+            for(var source:files)if(source.status()==SourceState.READY&&relations.role(source,work).equals("CONTRACT")
+                    &&modelCalls(work)<planner.callBudget(c,texts)&&!ContractAnalysisPlan.has(work,"focus/"+source.fileId())){
                 var fileWork=work.stream().filter(s->source.fileId().equals(s.fileId())&&Set.of("FILE","FRAGMENT").contains(s.kind())).toList();
                 var facts=fileWork.stream().filter(s->s.output()!=null).flatMap(s->s.output().facts().stream()).toList();
                 if(fileWork.isEmpty()||fileWork.stream().anyMatch(s->s.status()!=StepState.COMPLETED)||ContractAnalysisRules.unique(facts,"TOTAL_AMOUNT").isPresent()&&ContractAnalysisRules.unique(facts,"CONTRACT_NO").isPresent())continue;
@@ -95,6 +106,7 @@ public class ContractAnalysisProcessor {
         if(chosen.isEmpty()){
             finish(c,files,work,texts,actor,null);return;
         }
+        if(Thread.currentThread().isInterrupted())return;
         var step=chosen.get();int position=work.indexOf(step);UUID sourceId=step.fileId();
         var source=files.stream().filter(s->s.fileId().equals(sourceId)).findFirst().orElseThrow();
         String text=texts.get(source.fileId());var output=(Output)null;StepState result;String reason=null;
@@ -112,7 +124,7 @@ public class ContractAnalysisProcessor {
             else if(step.kind().startsWith("CROSS")){
                 var stepKey=step.id().replaceFirst("^semantic/","");var frozenWork=List.copyOf(work);
                 var pair=relations.pairs(files,frozenWork).stream().filter(p->p.id().equals(stepKey)).findFirst().orElseThrow(()->new IllegalStateException("RELATION_UNPROVEN"));
-                if(step.kind().equals("CROSS_RULES"))output=relations.evaluate(pair,work);
+                if(step.kind().equals("CROSS_RULES"))output=relations.evaluate(pair,work,texts);
                 else {
                     if(clock.instant().plusSeconds(175).isAfter(c.deadline()))throw new CaseDeadline();
                     var scopes=relations.scopes(pair,work,texts);var documents=new ArrayList<ContractAnalysisAiPort.Document>();
@@ -120,17 +132,30 @@ public class ContractAnalysisProcessor {
                         String supplied=scopes.stream().filter(s->s.source().fileId().equals(selected.fileId())).map(ContractAnalysisEvidence.Scope::supplied).collect(java.util.stream.Collectors.joining("\n\n"));
                         documents.add(new ContractAnalysisAiPort.Document(selected.fileId(),supplied));
                     }
-                    output=evidence.validate(ai.analyze(new ContractAnalysisAiPort.Request(c.id(),step.inputDigest(),"CROSS_FILE",documents)),scopes,"CROSS_FILE");
+                    if(Thread.currentThread().isInterrupted())return;
+                    output=evidence.validate(ai.analyze(new ContractAnalysisAiPort.Request(c.id(),step.inputDigest(),"CROSS_FILE",documents,
+                        reviewParties(texts,documents.stream().map(ContractAnalysisAiPort.Document::id).toList()))),scopes,"CROSS_FILE");
                 }
                 sources.load(c.projectId(),pair.support());
             }else {
                 // Keep enough time for the configured single provider timeout and result transaction.
                 if(clock.instant().plusSeconds(175).isAfter(c.deadline()))throw new CaseDeadline();
-                var scope=new ContractAnalysisEvidence.Scope(source,text,step.start(),step.end());
-                var request=new ContractAnalysisAiPort.Request(c.id(),step.inputDigest(),step.kind(),List.of(new ContractAnalysisAiPort.Document(source.fileId(),scope.supplied())));
+                var parsed=sources.load(c.projectId(),source);
+                if(Thread.currentThread().isInterrupted())return;
+                boolean ocr=(parsed.parseMethod().name()+"/"+parsed.engine()).toUpperCase(java.util.Locale.ROOT).contains("OCR");
+                var scope=new ContractAnalysisEvidence.Scope(source,text,step.start(),step.end(),ocr);
+                // A full first-page header was repeatedly quoted as evidence for
+                // later fragments. Keep naming/role context, but supply no unseen
+                // clauses or amounts outside the range being grounded.
+                String header=step.start()==0&&step.end()==text.length()?text.substring(0,Math.min(800,text.length())):null;
+                var request=new ContractAnalysisAiPort.Request(c.id(),step.inputDigest(),step.kind(),List.of(new ContractAnalysisAiPort.Document(source.fileId(),scope.supplied(),source.name(),relations.role(source,work),
+                        bounded(com.fuquan.audit.common.material.ProjectNameResolver.resolve(List.of(),List.of(text.substring(0,Math.min(1200,text.length()))),null),120),header,ContractAnalysisSemantics.section(text,step.start()))),
+                    reviewParties(texts,List.of(source.fileId())));
                 output=evidence.validate(ai.analyze(request),List.of(scope),step.kind());
             }
             // Verify the exact parse tuple still exists immediately before publication.
+            if(visualQuality!=null)for(var selected:files)if(texts.containsKey(selected.fileId()))
+                output=visualQuality.project(output,selected,texts.get(selected.fileId()));
             sources.load(c.projectId(),source);
             result=output.complete()?StepState.COMPLETED:StepState.PARTIAL;
             if(!output.useful()&&!step.kind().equals("FORMAL_LINK")){result=StepState.DATA_INSUFFICIENT;reason="NO_SUPPORTED_ANALYSIS_IN_SCOPE";}
@@ -138,7 +163,12 @@ public class ContractAnalysisProcessor {
         catch(CaseDeadline deadline){result=StepState.FAILED;reason="CASE_TOTAL_DEADLINE";}
         catch(org.springframework.web.client.ResourceAccessException timeout){result=StepState.UNKNOWN;reason="MODEL_OUTCOME_UNKNOWN";}
         catch(org.springframework.web.client.RestClientResponseException http){result=http.getStatusCode().value()==504?StepState.UNKNOWN:StepState.FAILED;reason="MODEL_HTTP_"+http.getStatusCode().value();}
-        catch(IllegalArgumentException invalid){output=null;result=StepState.FAILED;reason="MODEL_SCHEMA_OR_EVIDENCE_INVALID";}
+        catch(IllegalArgumentException invalid){
+            // Keep values, source text and exception messages out of logs. A
+            // protocol failure and a program error must still be distinguishable.
+            logInvalid(invalid,step.kind());
+            output=null;result=StepState.FAILED;reason="MODEL_SCHEMA_OR_EVIDENCE_INVALID";
+        }
         catch(RuntimeException failure){output=null;result=StepState.UNKNOWN;reason="STEP_OUTCOME_UNPROVEN";}
         work.set(position,step.finish(result,output,reason,clock.instant()));
         boolean saved=tx.save(c,c.release(State.QUEUED,files,work,null),actor);
@@ -156,6 +186,18 @@ public class ContractAnalysisProcessor {
         State state=useful?(complete?State.COMPLETED:State.PARTIAL):uncertain?State.UNKNOWN:
             files.stream().anyMatch(s->s.status()==SourceState.READY)&&work.stream().noneMatch(s->s.status()==StepState.FAILED)?State.DATA_INSUFFICIENT:State.FAILED;
         tx.save(c,c.release(state,files,work,reason!=null?reason:!complete?"ANALYSIS_COVERAGE_LIMITED":null),actor);
+    }
+    private static String bounded(String value,int max){return value==null?null:value.substring(0,Math.min(max,value.length()));}
+    static void logInvalid(IllegalArgumentException invalid,String kind){
+        Throwable root=invalid;int depth=0;
+        while(root.getCause()!=null&&root.getCause()!=root&&depth++<8)root=root.getCause();
+        var at=Arrays.stream(root.getStackTrace()).filter(s->s.getClassName().startsWith("com.fuquan.audit.")).findFirst();
+        org.slf4j.LoggerFactory.getLogger(ContractAnalysisProcessor.class).warn(
+                "CONTRACT_ANALYSIS_INVALID kind={} errorClass={} rootCauseClass={} stackClass={} stackMethod={} stackLine={}",
+                Set.of("FILE","FRAGMENT","FOCUSED","CROSS_FILE","RULES","CROSS_RULES","FORMAL_LINK").contains(kind)?kind:"OTHER",
+                invalid.getClass().getSimpleName(),root.getClass().getSimpleName(),
+                at.map(StackTraceElement::getClassName).orElse("UNAVAILABLE"),
+                at.map(StackTraceElement::getMethodName).orElse("UNAVAILABLE"),at.map(StackTraceElement::getLineNumber).orElse(-1));
     }
     private static class CaseDeadline extends RuntimeException {}
 }

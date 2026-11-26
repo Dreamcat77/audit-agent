@@ -23,6 +23,7 @@ audit:
   cache:
     key-prefix: ${AUDIT_CACHE_KEY_PREFIX:audit-agent:}
   ai:
+    material-concurrency: ${AUDIT_MATERIAL_CONCURRENCY:1}
     connect-timeout-ms: ${AUDIT_AI_CONNECT_TIMEOUT_MS:5000}
     read-timeout-ms: ${AUDIT_AI_READ_TIMEOUT_MS:960000}
     document-role:
@@ -44,8 +45,10 @@ audit:
   budget:
     material:
       worker-enabled: ${AUDIT_BUDGET_MATERIAL_WORKER_ENABLED:false}
+      max-concurrent: ${AUDIT_BUDGET_MATERIAL_MAX_CONCURRENT:2}
       scan-delay-ms: ${AUDIT_BUDGET_MATERIAL_SCAN_DELAY_MS:1500}
   ocr:
+    page-concurrency: ${AUDIT_OCR_PAGE_CONCURRENCY:1}
     connect-timeout-ms: ${AUDIT_OCR_CONNECT_TIMEOUT_MS:5000}
     read-timeout-ms: ${AUDIT_OCR_READ_TIMEOUT_MS:1900000}
   file-storage:

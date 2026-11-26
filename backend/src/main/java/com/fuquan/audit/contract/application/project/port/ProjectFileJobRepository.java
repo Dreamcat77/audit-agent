@@ -22,4 +22,6 @@ public interface ProjectFileJobRepository {
     /** CAS must occur inside the same transaction that publishes immutable parse/file facts. */
     boolean finish(UUID id, String token, String status, String reason, UUID parseResultId, Instant now);
     boolean retry(UUID projectId, UUID id, Instant now);
+    /** Fences both queued and live parsing jobs of a cancelled upload batch. */
+    default void cancelProject(UUID projectId, Instant now) { throw new UnsupportedOperationException("project cancellation unavailable"); }
 }

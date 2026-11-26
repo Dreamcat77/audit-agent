@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController @RequestMapping("/api/v1/procurement/cases")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 @ConditionalOnProperty(name="audit.procurement.auto-case.enabled",havingValue="true")
 public class AuditCaseController {
     private final AuditCaseService service;private final AuthContext auth;
@@ -38,6 +38,7 @@ public class AuditCaseController {
     }
     @GetMapping("/operations/{key}") public ApiResponse<View> operation(@PathVariable UUID key){return ApiResponse.success(service.operation(key,user()).map(AuditCaseController::view).orElse(null));}
     @GetMapping("/{id}") public ApiResponse<View> get(@PathVariable UUID id){return ApiResponse.success(view(service.owned(id,user())));}
+    @PostMapping("/{id}/cancel") public ApiResponse<View> cancel(@PathVariable UUID id){return ApiResponse.success(view(service.cancel(id,user())));}
     @GetMapping("/{id}/acknowledgments") public ApiResponse<List<String>> acknowledgments(@PathVariable UUID id){return ApiResponse.success(acknowledgments.list(id,user()));}
     @PostMapping("/{id}/acknowledgments/{key}") public ApiResponse<Void> confirm(@PathVariable UUID id,@PathVariable String key){acknowledgments.confirm(id,key,user());return ApiResponse.success(null);}
     @GetMapping(value="/{id}/report.html",produces="text/html;charset=UTF-8")
@@ -51,18 +52,27 @@ public class AuditCaseController {
     }
     @GetMapping("/{id}/files/{fileId}/original")
     public ResponseEntity<InputStreamResource> original(@PathVariable UUID id,@PathVariable UUID fileId){
-        var content=service.open(id,fileId,user());
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).contentLength(content.size())
-                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"original-document\"")
+        var actor=user();
+        var document=service.owned(id,actor).documents().stream().filter(d->d.id().equals(fileId)).findFirst()
+                .orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));
+        var content=service.open(id,fileId,actor);
+        String name=document.name(),extension=name.substring(name.lastIndexOf('.')+1).toLowerCase(java.util.Locale.ROOT);
+        MediaType media=switch(extension){case "pdf"->MediaType.APPLICATION_PDF;case "png"->MediaType.IMAGE_PNG;
+            case "jpg","jpeg"->MediaType.IMAGE_JPEG;default->MediaType.APPLICATION_OCTET_STREAM;};
+        var disposition=media.equals(MediaType.APPLICATION_OCTET_STREAM)?org.springframework.http.ContentDisposition.attachment():org.springframework.http.ContentDisposition.inline();
+        return ResponseEntity.ok().contentType(media).contentLength(content.size())
+                .header(HttpHeaders.CONTENT_DISPOSITION,disposition.filename(name,java.nio.charset.StandardCharsets.UTF_8).build().toString())
+                .header("X-Content-Type-Options","nosniff")
                 .header(HttpHeaders.CACHE_CONTROL,"no-store").body(new InputStreamResource(content.inputStream()));
     }
     private CurrentUser user(){return auth.currentUser().orElseThrow(()->new BusinessException(BusinessErrorCode.UNAUTHENTICATED));}
-    record DocumentView(UUID id,String name,String status,String parseMethod,String errorCode,int factCount) {}
-    record View(UUID id,String caseNumber,String projectName,String status,Instant createdAt,List<DocumentView> documents,AuditCase.Report report,Map<String,String> findingIds) {}
+    record DocumentView(UUID id,String name,String status,String parseMethod,String errorCode,int factCount,int segmentCount,int textChars,int extractionCalls,int reviewInputChars) {}
+    record View(UUID id,String caseNumber,String projectName,String status,Instant createdAt,List<DocumentView> documents,AuditCase.Report report,Map<String,String> findingIds,List<CaseAvailableResults.Detail> materialDetails) {}
     record EvidenceView(String fileName,String sha256,List<com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Segment> segments,List<AuditCase.Fact> facts) {}
     static View view(AuditCase c){
         var ids=new LinkedHashMap<String,String>();
         if(c.report()!=null)c.report().reviews().values().stream().flatMap(r->r.findings().stream()).forEach(f->ids.put(f.title()+"\n"+f.explanation(),CaseFindingAcknowledgments.identity(f)));
-        return new View(c.id(),"AC-"+c.id(),CaseFactPolicy.projectName(c),c.status(),c.createdAt(),c.documents().stream().map(d->new DocumentView(d.id(),d.name(),d.status(),d.parseMethod(),d.errorCode(),d.facts().size())).toList(),c.report(),ids);
+        var coverage=CaseDocumentCoverage.of(c.documents(),c.report());
+        return new View(c.id(),"AC-"+c.id(),CaseFactPolicy.projectName(c),c.cancelled()?"CANCELLED":c.status(),c.createdAt(),c.documents().stream().map(d->new DocumentView(d.id(),d.name(),d.status(),d.parseMethod(),d.errorCode(),coverage.get(d.id()).factCount(),coverage.get(d.id()).segmentCount(),coverage.get(d.id()).textChars(),coverage.get(d.id()).extractionCalls(),coverage.get(d.id()).reviewInputChars())).toList(),CaseReviewAssurance.project(c.report()),ids,CaseAvailableResults.details(c));
     }
 }

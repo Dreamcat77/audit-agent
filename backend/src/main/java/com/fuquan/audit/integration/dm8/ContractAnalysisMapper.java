@@ -9,20 +9,27 @@ import org.apache.ibatis.annotations.*;
 public interface ContractAnalysisMapper {
     record Row(String id,String projectId,String owner,String digest,String status,long version,String token,
             LocalDateTime until,LocalDateTime created,LocalDateTime deadline,String payload) {}
+    @Select("SELECT SNAPSHOT_JSON FROM CONTRACT_ANALYSIS_CASE WHERE ID=#{id} FOR UPDATE")
+    String findForUpdate(String id);
+    @Select("SELECT ID FROM (SELECT C.ID,ROW_NUMBER() OVER(ORDER BY C.CREATED_AT,C.ID) RN FROM CONTRACT_ANALYSIS_CASE C WHERE C.STATUS='FAILED' AND INSTR(C.SNAPSHOT_JSON,'\"reasonCode\":\"USER_CANCELLED\"')>0 AND EXISTS(SELECT 1 FROM PROJECT_FILE F WHERE F.PROJECT_ID=C.PROJECT_ID AND (F.SAFE_REASON_CODE IS NULL OR F.SAFE_REASON_CODE<>'USER_CANCELLED_CLEANED') AND NOT EXISTS(SELECT 1 FROM PROJECT_FILE_PARSE_RESULT P WHERE P.FILE_ID=F.ID))) WHERE RN<=#{limit}")
+    List<String> cancelledForCleanup(int limit);
+    record HistoryRow(String payload,String projectName) {}
     @Select("SELECT SNAPSHOT_JSON FROM CONTRACT_ANALYSIS_CASE WHERE ID=#{id}")
     @ResultType(String.class)
     String find(String id);
-    @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY CREATED_AT DESC,ID) RN FROM CONTRACT_ANALYSIS_CASE WHERE OWNER_ID=#{owner}) WHERE RN>#{offset} AND RN<=#{end}")
+    @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY CREATED_AT DESC,ID) RN FROM CONTRACT_ANALYSIS_CASE WHERE INSTR(SNAPSHOT_JSON,'\"reasonCode\":\"USER_CANCELLED\"')=0 AND (#{owner,jdbcType=VARCHAR} IS NULL OR OWNER_ID=#{owner,jdbcType=VARCHAR})) WHERE RN>#{offset} AND RN<=#{end}")
     List<String> recent(@Param("owner") String owner,@Param("offset") int offset,@Param("end") int end);
-    @Select("<script>SELECT ID FROM (SELECT C.ID,ROW_NUMBER() OVER(ORDER BY C.CREATED_AT DESC,C.ID) RN FROM CONTRACT_ANALYSIS_CASE C JOIN PROJECT P ON P.ID=C.PROJECT_ID WHERE C.OWNER_ID=#{owner} <if test='projectName != null and projectName != \"\"'>AND INSTR(UPPER(COALESCE(P.NAME,'')),UPPER(#{projectName})) &gt; 0</if> <if test='from != null'>AND C.CREATED_AT &gt;= #{from}</if> <if test='to != null'>AND C.CREATED_AT &lt; #{to}</if>) WHERE RN&gt;#{offset} AND RN&lt;=#{end}</script>")
-    List<String> recentFiltered(@Param("owner") String owner,@Param("projectName") String projectName,
+    @Select("<script>SELECT PAYLOAD,PROJECT_NAME FROM (SELECT C.SNAPSHOT_JSON PAYLOAD,P.NAME PROJECT_NAME,ROW_NUMBER() OVER(ORDER BY C.CREATED_AT DESC,C.ID) RN FROM CONTRACT_ANALYSIS_CASE C JOIN PROJECT P ON P.ID=C.PROJECT_ID WHERE INSTR(SNAPSHOT_JSON,'\"reasonCode\":\"USER_CANCELLED\"')=0 AND (#{owner,jdbcType=VARCHAR} IS NULL OR C.OWNER_ID=#{owner,jdbcType=VARCHAR}) <if test='from != null'>AND C.CREATED_AT &gt;= #{from}</if> <if test='to != null'>AND C.CREATED_AT &lt; #{to}</if>) WHERE RN&gt;#{offset} AND RN&lt;=#{end}</script>")
+    @ConstructorArgs({@Arg(column="PAYLOAD",javaType=String.class,typeHandler=org.apache.ibatis.type.ClobTypeHandler.class),
+            @Arg(column="PROJECT_NAME",javaType=String.class)})
+    List<HistoryRow> recentFiltered(@Param("owner") String owner,
             @Param("from") LocalDateTime from,@Param("to") LocalDateTime to,
             @Param("offset") int offset,@Param("end") int end);
-    @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY ROW_VERSION,CREATED_AT,ID) RN FROM CONTRACT_ANALYSIS_CASE WHERE STATUS='QUEUED' OR (STATUS='RUNNING' AND LEASE_UNTIL<=#{now})) WHERE RN<=#{limit}")
-    List<String> pending(@Param("now") LocalDateTime now,@Param("limit") int limit);
+    @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY CASE WHEN #{after,jdbcType=VARCHAR} IS NULL OR ID>#{after,jdbcType=VARCHAR} THEN 0 ELSE 1 END,ID) RN FROM CONTRACT_ANALYSIS_CASE WHERE STATUS='QUEUED' OR (STATUS='RUNNING' AND LEASE_UNTIL<=#{now})) WHERE RN<=#{limit} ORDER BY RN")
+    List<String> pendingAfter(@Param("now") LocalDateTime now,@Param("limit") int limit,@Param("after") String after);
     @Insert("INSERT INTO CONTRACT_ANALYSIS_CASE(ID,PROJECT_ID,OWNER_ID,INPUT_DIGEST,STATUS,ROW_VERSION,LEASE_TOKEN,LEASE_UNTIL,CREATED_AT,DEADLINE,SNAPSHOT_JSON) VALUES(#{id},#{projectId},#{owner},#{digest},#{status},#{version},#{token,jdbcType=VARCHAR},#{until,jdbcType=TIMESTAMP},#{created},#{deadline},#{payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.ClobTypeHandler})")
     int insert(Row row);
-    @Update("<script>UPDATE CONTRACT_ANALYSIS_CASE SET STATUS=#{n.status},ROW_VERSION=#{n.version},LEASE_TOKEN=#{n.token,jdbcType=VARCHAR},LEASE_UNTIL=#{n.until,jdbcType=TIMESTAMP},SNAPSHOT_JSON=#{n.payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.ClobTypeHandler} WHERE ID=#{n.id} AND ROW_VERSION=#{version} AND OWNER_ID=#{n.owner} AND PROJECT_ID=#{n.projectId} AND INPUT_DIGEST=#{n.digest} <choose><when test='oldToken != null'>AND LEASE_TOKEN=#{oldToken}</when><otherwise>AND LEASE_TOKEN IS NULL</otherwise></choose> <choose><when test='claim'>AND (STATUS='QUEUED' OR (STATUS='RUNNING' AND LEASE_UNTIL&lt;=#{now}))</when><when test='oldToken != null'>AND STATUS='RUNNING' AND LEASE_UNTIL&gt;#{now}</when></choose></script>")
+    @Update("<script>UPDATE CONTRACT_ANALYSIS_CASE SET STATUS=#{n.status},ROW_VERSION=#{n.version},LEASE_TOKEN=#{n.token,jdbcType=VARCHAR},LEASE_UNTIL=#{n.until,jdbcType=TIMESTAMP},SNAPSHOT_JSON=#{n.payload,jdbcType=CLOB,typeHandler=org.apache.ibatis.type.ClobTypeHandler} WHERE ID=#{n.id} AND ROW_VERSION=#{version} AND OWNER_ID=#{n.owner} AND PROJECT_ID=#{n.projectId} AND INPUT_DIGEST=#{n.digest} <choose><when test='oldToken != null'>AND LEASE_TOKEN=#{oldToken}</when><otherwise>AND LEASE_TOKEN IS NULL</otherwise></choose> <choose><when test='claim'>AND (STATUS='QUEUED' OR (STATUS='RUNNING' AND LEASE_UNTIL&lt;=#{now}))</when><when test='oldToken != null and !cancellation'>AND STATUS='RUNNING' AND LEASE_UNTIL&gt;#{now}</when></choose></script>")
     int replace(@Param("n") Row row,@Param("version") long version,@Param("oldToken") String token,
-            @Param("claim") boolean claim,@Param("now") LocalDateTime now);
+            @Param("claim") boolean claim,@Param("cancellation") boolean cancellation,@Param("now") LocalDateTime now);
 }

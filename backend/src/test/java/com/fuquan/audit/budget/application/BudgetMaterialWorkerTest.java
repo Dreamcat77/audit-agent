@@ -16,9 +16,21 @@ class BudgetMaterialWorkerTest {
         var j=new BudgetMaterialJob(UUID.randomUUID(),"inactive-owner",UUID.randomUUID().toString(),"a".repeat(64),"QUEUED",null,null,Instant.now());
         when(jobs.pending(any(),anyInt())).thenReturn(List.of(j));when(users.findActiveById(j.actorId())).thenReturn(Optional.empty());
         var done=new CountDownLatch(1);doAnswer(i->{done.countDown();return null;}).when(service).rejectOwner(j.id());
-        var worker=new BudgetMaterialWorker(jobs,service,users);
+        var worker=new BudgetMaterialWorker(jobs,service,users,2);
         try {worker.scan();assertThat(done.await(3,TimeUnit.SECONDS)).isTrue();verify(service,never()).process(any(),any(),any());}
         finally {worker.close();}
+    }
+    @Test void twoDistinctJobsRunConcurrentlyWithoutDuplicateDispatch() throws Exception {
+        var jobs=mock(BudgetMaterialJobRepository.class);var service=mock(BudgetMaterialService.class);var users=mock(UserAccountRoleQueryPort.class);
+        var first=new BudgetMaterialJob(UUID.randomUUID(),"owner",UUID.randomUUID().toString(),"a".repeat(64),"QUEUED",null,null,Instant.now());
+        var second=new BudgetMaterialJob(UUID.randomUUID(),"owner",UUID.randomUUID().toString(),"b".repeat(64),"QUEUED",null,null,Instant.now());
+        when(jobs.pending(any(),anyInt())).thenReturn(List.of(first,second));
+        var entered=new CountDownLatch(2);var release=new CountDownLatch(1);
+        when(users.findActiveById("owner")).thenAnswer(i->{entered.countDown();release.await(3,TimeUnit.SECONDS);return Optional.empty();});
+        var worker=new BudgetMaterialWorker(jobs,service,users,2);
+        try {worker.scan();assertThat(entered.await(3,TimeUnit.SECONDS)).isTrue();worker.scan();release.countDown();
+            verify(service,timeout(3000).times(1)).rejectOwner(first.id());verify(service,timeout(3000).times(1)).rejectOwner(second.id());}
+        finally {release.countDown();worker.close();}
     }
     @Test void fencedReviewCommitRejectsStaleWorkBeforeAnyResultWrites() {
         var tasks=mock(com.fuquan.audit.budget.application.port.BudgetReviewTaskRepository.class);

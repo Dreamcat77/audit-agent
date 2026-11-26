@@ -46,6 +46,29 @@ class ContractAnalysisCaseTest {
         var unknown=claimed.release(State.UNKNOWN,claimed.sources(),List.of(),"EXTERNAL_OUTCOME_UNKNOWN");assertThat(r.replace(claimed,unknown,NOW)).isTrue();
         assertThat(r.pending(NOW.plusSeconds(4000),10)).isEmpty();assertThat(unknown.terminal()).isTrue();
     }
+    @Test void cyclicSchedulingAdmitsOldHighVersionCaseAmongMoreThanOneDiscoveryPage(){
+        var r=new InMemoryContractAnalysisRepository();var old=sample();r.insert(old);
+        // Repeated upload polling must not push a now-ready batch behind every new case.
+        for(int i=0;i<400;i++){
+            var claim=old.claim("poll",NOW);assertThat(r.replace(old,claim,NOW)).isTrue();
+            var queued=claim.release(State.QUEUED,claim.sources(),List.of(),"WAITING_FOR_UPLOAD");
+            assertThat(r.replace(claim,queued,NOW)).isTrue();old=queued;
+        }
+        for(int i=0;i<45;i++)r.insert(sample());
+        var seen=new HashSet<UUID>();UUID cursor=null;
+        for(int i=0;i<46;i++){
+            var page=r.pendingAfter(NOW,20,cursor);assertThat(page).isNotEmpty();
+            cursor=page.get(0);assertThat(seen.add(cursor)).isTrue();
+        }
+        assertThat(seen).hasSize(46).contains(old.id());
+        assertThat(r.pendingAfter(NOW,1,cursor).get(0)).isIn(seen);
+    }
+    @Test void cyclicSchedulingSkipsLiveLeasesAndReopensExpiredLeases(){
+        var r=new InMemoryContractAnalysisRepository();var c=sample();r.insert(c);
+        var running=c.claim("live",NOW);assertThat(r.replace(c,running,NOW)).isTrue();
+        assertThat(r.pendingAfter(NOW,20,null)).isEmpty();
+        assertThat(r.pendingAfter(NOW.plusSeconds(241),20,c.id())).containsExactly(c.id());
+    }
     @Test void readyFileRequiresImmutableParseTuple(){
         assertThatThrownBy(()->new Source(UUID.randomUUID(),"合同.pdf","a".repeat(64),1,SourceState.READY,null,null,null,null)).isInstanceOf(IllegalArgumentException.class);
     }

@@ -45,6 +45,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class ContractCandidatePromotionTransactionCoordinator {
+    private com.fuquan.audit.contract.application.analysis.ContractAnalysisRepository analysisCases;
+    @org.springframework.beans.factory.annotation.Autowired
+    public void setAnalysisCases(com.fuquan.audit.contract.application.analysis.ContractAnalysisRepository value){analysisCases=value;}
     static final String SCOPE = "PROJECT_CONTRACT_CANDIDATE_PROMOTE";
     private final ProjectRepository projects;
     private final ContractCandidateRepository candidates;
@@ -121,6 +124,11 @@ public class ContractCandidatePromotionTransactionCoordinator {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public synchronized ContractCandidatePromotionResult promote(PromoteContractCandidateCommand command,
             CurrentUser actor, FreshPromotion prepared) {
+        // Same row-lock order as cancellation: analysis case, then source files.
+        // A cancellation committed first prevents creation of a late formal contract.
+        if(analysisCases!=null&&analysisCases.findForUpdate(com.fuquan.audit.contract.application.analysis.ContractAnalysisCase.identity(actor.userId(),command.projectId()))
+                .filter(value->"USER_CANCELLED".equals(value.reasonCode())).isPresent())
+            throw new BusinessException(BusinessErrorCode.CONFLICT,"本批任务已取消");
         List<UUID> fileIds = prepared.fileIds();
         return withFileFences(command.projectId(), fileIds, 0, () -> promoteLocked(command, actor,
                 prepared.confirmation(), prepared.payload(), prepared.fingerprint(), prepared.candidate(),

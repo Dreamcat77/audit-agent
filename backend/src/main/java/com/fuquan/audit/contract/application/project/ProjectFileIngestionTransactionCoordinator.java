@@ -15,6 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class ProjectFileIngestionTransactionCoordinator {
+    private com.fuquan.audit.contract.application.analysis.ContractAnalysisRepository analysisCases;
+    @org.springframework.beans.factory.annotation.Autowired public void setAnalysisCases(com.fuquan.audit.contract.application.analysis.ContractAnalysisRepository value){analysisCases=value;}
+    private void requireActiveAnalysis(UUID projectId,String owner){
+        if(analysisCases!=null&&analysisCases.findForUpdate(com.fuquan.audit.contract.application.analysis.ContractAnalysisCase.identity(owner,projectId))
+            .filter(c->"USER_CANCELLED".equals(c.reasonCode())).isPresent())conflict("analysis cancelled");
+    }
     public static final String SCOPE = "PROJECT_FILE_UPLOAD";
     public static final String ASYNC_SCOPE = "PROJECT_FILE_UPLOAD_ASYNC";
     public static final String RESOURCE = "PROJECT_FILE";
@@ -53,6 +59,7 @@ public class ProjectFileIngestionTransactionCoordinator {
 
     private UploadStart start(String scope,ProjectFile pending, CurrentUser actor, String operationKey,
                                    String fingerprint, ProjectRequestMetadata metadata) {
+        requireActiveAnalysis(pending.projectId(),actor.userId());
         flowDebug.log("PROJECT_UPLOAD_START_TX_ENTER", "PROJECT", "APPLICATION", "startUpload",
                 Map.of("projectFileId", pending.id(), "sizeBytes", pending.sizeBytes()));
         IdempotencyClaim claim = idempotency.claim(new IdempotencyRequest(scope, operationKey, actor.userId(),
@@ -77,6 +84,7 @@ public class ProjectFileIngestionTransactionCoordinator {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ProjectFile completeUpload(UploadStart start, ProcessingOutcome outcome,
                                       CurrentUser actor, ProjectRequestMetadata metadata) {
+        requireActiveAnalysis(start.file().projectId(),actor.userId());
         flowDebug.log("PROJECT_UPLOAD_COMPLETE_TX_ENTER", "PROJECT", "APPLICATION", "completeUpload",
                 Map.of("projectFileId", start.file().id()));
         IdempotencyRecord current = current(start.idempotency());
@@ -188,6 +196,7 @@ public class ProjectFileIngestionTransactionCoordinator {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void completeProcessing(ProjectFileJob job,String token,ProcessingOutcome outcome,ProjectFileJobRepository jobs,
             CurrentUser actor,ProjectRequestMetadata metadata,boolean automaticProgression) {
+        requireActiveAnalysis(job.projectId(),job.actorId());
         ProjectFile persisted=files.findByProjectIdAndId(job.projectId(),job.fileId()).orElseThrow();
         requireStorageIdentity(persisted,outcome.root());
         if(!persisted.sha256().equals(job.fileSha256())) conflict("processing input identity changed");

@@ -65,8 +65,11 @@ public class ProjectFactExtractor {
                     "(?:本?合同(?:标的[^：:\\r\\n]{0,40})?总价款(?:为)?|Contract\\s*Amount|合同金额|总金额)"
                             + SEP + LABELED_MONEY, true),
             uppercase("AMOUNT_UPPERCASE",
-                    "(?:Amount\\s*Uppercase|Amount\\s*In\\s*Words|金额大写|大写金额)"
-                            + SEP + "([^\\r\\n。）]{1,100}(?:元整)?)", true),
+                    "(?:Amount\\s*Uppercase|Amount\\s*In\\s*Words|金额大写|大写金额|"
+                            + "(?:合同)?金额\\s*[（(]\\s*大\\s*写\\s*[）)]|"
+                            + "(?:合同)?价款\\s*[（(]\\s*大\\s*写\\s*[）)]|"
+                            + "(?:合同)?总价(?:款)?\\s*[（(]\\s*大\\s*写\\s*[）)])"
+                            + "\\s*(?:[:：=]\\s*)?([^\\r\\n。）]{1,100}(?:元整|元正)?)", true),
             amountRule("AWARD_AMOUNT", "(?:Winning\\s*Amount|Award\\s*Amount|中标金额|成交金额|成交价)"
                     + SEP + LABELED_MONEY, false),
             organization("AWARD_SUPPLIER", "(?:Winning\\s*Supplier|Award\\s*Supplier|中标供应商|成交供应商(?:名称)?|成交单位)"
@@ -172,13 +175,16 @@ public class ProjectFactExtractor {
     private void extractBareContractTitle(ProjectFile source, ParsedProjectDocument.Segment segment,
                                           UUID parseResultId,
                                           boolean allowed, List<ExtractionResult> results) {
-        String raw = segment.text().strip();
-        if (!allowed || !frontMatter(segment) || !BARE_CONTRACT_TITLE.matcher(raw).matches()
-                || clauseLikeTitle(raw) || placeholder(normalizedText(raw))) {
+        if (!allowed || !frontMatter(segment)) return;
+        for (String line : segment.text().split("\\R")) {
+            String raw = line.strip();
+            String compact = raw.replaceAll("[\\s\\u3000]+", "");
+            if (!BARE_CONTRACT_TITLE.matcher(compact).matches()
+                    || clauseLikeTitle(compact) || placeholder(normalizedText(compact))) continue;
+            add(source, segment, parseResultId, results, "CONTRACT_NAME", null, raw, normalizedText(compact),
+                    null, raw, 1);
             return;
         }
-        add(source, segment, parseResultId, results, "CONTRACT_NAME", null, raw, normalizedText(raw),
-                null, raw, 1);
     }
 
     private void extractRule(ProjectFile source, ParsedProjectDocument.Segment segment,
@@ -476,7 +482,8 @@ public class ProjectFactExtractor {
 
     private static boolean validTypedValue(ValueKind kind, String value, String raw) {
         return switch (kind) {
-            case ORGANIZATION -> value.codePoints().filter(Character::isLetter).count() >= 2;
+            case ORGANIZATION -> value.codePoints().filter(Character::isLetter).count() >= 2
+                    && com.fuquan.audit.contract.domain.ContractPartyName.isPresent(value);
             case UPPERCASE -> validUppercaseAmount(value, raw);
             default -> true;
         };

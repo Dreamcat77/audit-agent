@@ -6,6 +6,7 @@ import com.fuquan.audit.common.material.application.OfficeMaterialTypes;
 import com.fuquan.audit.common.material.application.port.*;
 import com.fuquan.audit.contract.application.port.*;
 import com.fuquan.audit.security.domain.CurrentUser;
+import com.fuquan.audit.security.domain.PersonalUploadRoles;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
@@ -16,6 +17,14 @@ import static com.fuquan.audit.procurement.autocase.AuditCase.*;
 
 @Service
 public class AuditCaseService {
+    private com.fuquan.audit.common.material.application.port.MaterialExtractionLedger extractionLedger;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    public void setExtractionLedger(com.fuquan.audit.common.material.application.port.MaterialExtractionLedger value){extractionLedger=value;}
+    private com.fuquan.audit.common.application.TaskCancellationRegistry cancellationRegistry;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    public void setCancellationRegistry(com.fuquan.audit.common.application.TaskCancellationRegistry value){this.cancellationRegistry=value;}
+    private CaseVisualQuality visualQuality;
+    @org.springframework.beans.factory.annotation.Autowired public void setVisualQuality(CaseVisualQuality value){this.visualQuality=value;}
     private final AuditCaseRepository repository;
     private final AuditCaseTransactions tx;
     private final FileStoragePort storage;
@@ -97,8 +106,33 @@ public class AuditCaseService {
             org.slf4j.LoggerFactory.getLogger(getClass()).warn("AUTO_CASE_STAGING_CLEANUP_FAILED exceptionType={}",cleanup.getClass().getSimpleName());
         }}finally{uploads.release();}}
     }
-    public AuditCase owned(UUID id,CurrentUser user){return repository.find(id).filter(c->c.owner().equals(user.userId())).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));}
-    public List<AuditCase> recent(CurrentUser user){return repository.recent(user.userId());}
+    public AuditCase owned(UUID id,CurrentUser user){return repository.find(id).filter(c->isSystemAdmin(user)||c.owner().equals(user.userId())).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));}
+    public AuditCase cancel(UUID id,CurrentUser user) {
+        var current=owned(id,user);
+        if(current.cancelled())return current;
+        if(!Set.of("UPLOADING","QUEUED","RUNNING").contains(current.status()))
+            throw new BusinessException(BusinessErrorCode.CONFLICT,"当前任务已结束，无法取消");
+        var next=current.cancel();
+        if(!tx.save(current,next,user))throw new BusinessException(BusinessErrorCode.CONFLICT,"任务状态已变化，请刷新后重试");
+        if(cancellationRegistry!=null)cancellationRegistry.interrupt(id);
+        return repository.find(id).orElse(next);
+    }
+    /** Cancelled snapshots retain only storage identities until cleanup succeeds. */
+    @org.springframework.scheduling.annotation.Scheduled(fixedDelayString="${audit.material.cleanup-delay-ms:30000}")
+    public void cleanupCancelled() {
+        for(UUID id:repository.cancelledForCleanup(20)) {
+            if(cancellationRegistry!=null&&cancellationRegistry.isRunning(id))continue;
+            var current=repository.find(id).orElse(null);
+            if(current==null||!current.cancelled())continue;
+            boolean cleaned=true;
+            for(var file:current.documents())try{
+                if(extractionLedger!=null)extractionLedger.cancel(UUID.nameUUIDFromBytes(("material-extraction/PROCUREMENT_AUTO/"+file.id()).getBytes(java.nio.charset.StandardCharsets.UTF_8)),java.time.Instant.now());
+                storage.delete(new StorageKey(file.storageKey()));}
+            catch(RuntimeException failure){cleaned=false;}
+            if(cleaned&&!current.documents().isEmpty())tx.save(current,current.update(current.status(),List.of(),null),null);
+        }
+    }
+    public List<AuditCase> recent(CurrentUser user){return repository.recent(isSystemAdmin(user)?null:user.userId());}
     public record HistoryPage(List<AuditCaseHistoryEntry> items,UUID nextCursor) {}
     public HistoryPage history(UUID before,int size,CurrentUser user){
         return history(before,size,null,null,null,user);
@@ -112,7 +146,7 @@ public class AuditCaseService {
         // Bounded metadata scanning also works with old snapshots, without a
         // new migration or loading document bodies/facts into the history API.
         for(int scanned=0;scanned<400;) {
-            var page=repository.history(user.userId(),cursor,Math.min(50,400-scanned));
+            var page=repository.history(isSystemAdmin(user)?null:user.userId(),cursor,Math.min(50,400-scanned));
             if(page.isEmpty())return new HistoryPage(List.copyOf(items),null);
             for(var entry:page) {
                 cursor=entry.id();scanned++;
@@ -129,6 +163,7 @@ public class AuditCaseService {
         UUID id=UUID.nameUUIDFromBytes(("auto-case/"+user.userId()+"/"+key).getBytes(StandardCharsets.UTF_8));
         return repository.find(id).filter(c->c.owner().equals(user.userId()));
     }
+    private static boolean isSystemAdmin(CurrentUser user){return user.roles().contains(PersonalUploadRoles.SYSTEM_ADMIN);}
     public void rejectOwner(AuditCase value){
         var report=new Report("FAILED",null,null,List.of(),null,
                 List.of("创建用户已失效或不具备审查权限，任务停止；文件原有处理状态和证据保留"),
@@ -147,6 +182,7 @@ public class AuditCaseService {
         if(previous.attempts()>=3){tx.save(previous,previous.update("UNKNOWN",previous.documents().stream().map(d->d.status().equals("EXTRACTED")?d:d.state("UNKNOWN","RECOVERY_LIMIT")).toList(),previous.report()),user);return;}
         var running=previous.claim(UUID.randomUUID().toString(),now.plusSeconds(3600));
         if(!tx.save(previous,running,user))return;
+        try {
         var docs=new ArrayList<>(running.documents());
         for(int i=0;i<docs.size();i++) {
             if(Thread.currentThread().isInterrupted())return;
@@ -158,6 +194,9 @@ public class AuditCaseService {
                 running=checkpoint(running,docs,user);continue;
             }
             String stage="DOCUMENT_READ";
+            String activeExtractionId=null;
+            List<MaterialFieldAiPort.Segment> activeSource=List.of();
+            int activeWindow=-1;
             try {
                 if(doc.status().equals("STAGING")) {
                     var state=storage.inspect(new StorageKey(doc.storageKey()));
@@ -178,6 +217,7 @@ public class AuditCaseService {
                             readingCase.set(checkpoint(readingCase.get(),docs,user));
                         });
                     } finally {running=readingCase.get();doc=docs.get(i);}
+                    if(Thread.currentThread().isInterrupted())return;
                     if(!doc.sha256().equals(text.sha256()))throw new IOException("stored source digest mismatch");
                     doc=doc.parsed(text.segments(),text.method());docs.set(i,doc);running=checkpoint(running,docs,user);
                 }
@@ -188,10 +228,12 @@ public class AuditCaseService {
                         throw new IllegalStateException("WINDOW_POLICY_UNPROVEN");
                     for(int window=doc.calls();window<windows.size();window++) {
                         docs.set(i,doc.state("CALLING",null));running=checkpoint(running,docs,user);
-                        var result=ai.extract("PROCUREMENT_AUTO",CaseMaterialWindows.identity(doc.id(),window),doc.sha256(),windows.get(window));
+                        activeExtractionId=CaseMaterialWindows.identity(doc.id(),window);activeSource=windows.get(window);activeWindow=window;
+                        if(Thread.currentThread().isInterrupted())return;
+                        var result=ai.extractWithContext("PROCUREMENT_AUTO",activeExtractionId,doc.sha256(),activeSource,ProcurementMaterialSemantics.context(doc,activeSource));
                         var merged=new LinkedHashSet<>(doc.facts());
                         for(var fact:CaseFactPolicy.validate(doc,result))merged.add(new Fact("window"+window+":"+fact.row(),fact.type(),fact.value(),fact.dataType(),
-                                fact.locator(),fact.excerpt(),fact.verification(),fact.model(),fact.extractionVersion()));
+                                fact.locator(),fact.excerpt(),fact.verification(),fact.model(),fact.extractionVersion(),fact.subjectScope(),fact.amountScope()));
                         doc=doc.extractedWindow(List.copyOf(merged),window+1);docs.set(i,doc);running=checkpoint(running,docs,user);
                         if(Thread.currentThread().isInterrupted())return;
                     }
@@ -201,7 +243,9 @@ public class AuditCaseService {
                     if(attempt>0&&!CaseFactPolicy.needsSupplement(doc))break;
                     docs.set(i,doc.state("CALLING",null));running=checkpoint(running,docs,user);
                     String extractionId=attempt==0?doc.id().toString():UUID.nameUUIDFromBytes((doc.id()+"/missing-fields-v1").getBytes(StandardCharsets.UTF_8)).toString();
-                    var result=ai.extract("PROCUREMENT_AUTO",extractionId,doc.sha256(),doc.segments());
+                    activeExtractionId=extractionId;activeSource=doc.segments();activeWindow=-1;
+                    if(Thread.currentThread().isInterrupted())return;
+                    var result=ai.extractWithContext("PROCUREMENT_AUTO",extractionId,doc.sha256(),doc.segments(),ProcurementMaterialSemantics.context(doc,doc.segments()));
                     var merged=new LinkedHashSet<>(doc.facts());merged.addAll(CaseFactPolicy.validate(doc,result));
                     doc=doc.extracted(List.copyOf(merged),attempt+1);docs.set(i,doc);running=checkpoint(running,docs,user);
                 }
@@ -209,20 +253,38 @@ public class AuditCaseService {
                     span.outcome(doc.parseMethod()!=null&&doc.parseMethod().contains("PARTIAL")?"PARTIAL":"COMPLETED",Map.of());
                 }
             } catch(DocumentTextPort.ReadFailure failure) {
+                if(finishCancellation(id,stage,failure))return;
                 logFailure(doc.id(),stage,failure);
                 docs.set(i,doc.state("FAILED",failure.code()));running=checkpoint(running,docs,user);
             } catch(IOException failure) {
+                if(finishCancellation(id,stage,failure))return;
                 logFailure(doc.id(),stage,failure);
                 docs.set(i,doc.state("FAILED","SOURCE_READ_FAILED"));running=checkpoint(running,docs,user);
             } catch(RuntimeException failure) {
+                if(finishCancellation(id,stage,failure))return;
                 logFailure(doc.id(),stage,failure);
                 // Includes model timeout/invalid JSON/uncertain response. Never publish invented defaults.
                 var persisted=repository.find(id).orElseThrow();
                 if(failure instanceof org.springframework.dao.DataAccessException || failure instanceof CheckpointLost
                         ||persisted.version()!=running.version()||!Objects.equals(persisted.leaseToken(),running.leaseToken()))throw failure;
+                if(activeExtractionId!=null) {
+                    try {
+                        var acknowledged=ai.acknowledgedResult("PROCUREMENT_AUTO",activeExtractionId,doc.sha256(),activeSource);
+                        if(acknowledged!=null&&acknowledged.isPresent()) {
+                            var merged=new LinkedHashSet<>(doc.facts());
+                            for(var fact:CaseFactPolicy.validate(doc,acknowledged.get()))merged.add(activeWindow<0?fact:new Fact(
+                                    "window"+activeWindow+":"+fact.row(),fact.type(),fact.value(),fact.dataType(),fact.locator(),fact.excerpt(),
+                                    fact.verification(),fact.model(),fact.extractionVersion(),fact.subjectScope(),fact.amountScope()));
+                            // Preserve incomplete status and completed-window counter. No failed unit is replayed.
+                            doc=new Document(doc.id(),doc.name(),doc.size(),doc.sha256(),doc.storageKey(),doc.status(),doc.segments(),
+                                    List.copyOf(merged),doc.parseMethod(),doc.errorCode(),doc.calls(),doc.readCheckpoint());
+                        }
+                    } catch(RuntimeException unproven){logFailure(doc.id(),"ACKNOWLEDGED_FACT_READ",unproven);}
+                }
                 docs.set(i,doc.state("UNKNOWN",stage.equals("DOCUMENT_READ")?"READ_OUTCOME_UNPROVEN":"EXTRACTION_OUTCOME_UNPROVEN"));running=checkpoint(running,docs,user);
             }
         }
+        if(visualQuality!=null){docs.replaceAll(visualQuality::filter);running=checkpoint(running,docs,user);}
         var report=CaseFactPolicy.report(id,docs);
         if(running.report()!=null)for(var entry:running.report().reviews().entrySet())report=report.review(entry.getKey(),entry.getValue());
         if(blacklist!=null && !report.reviews().containsKey("BLACKLIST")) {
@@ -246,6 +308,8 @@ public class AuditCaseService {
                 }
             }
             running=checkpointReport(running,docs,report,user);
+            var calls=new LinkedHashMap<String,CaseReviewEngine.ReviewCall>();
+            try {
             for(String module:CaseReviewContext.MODULES) {
                 var review=report.reviews().get(module);
                 if(review.status().equals("RUNNING")) {
@@ -261,10 +325,18 @@ public class AuditCaseService {
                 }
                 var active=reviews.running(review);report=report.review(module,active);
                 running=checkpointReport(running,docs,report,user); // Commit call claim before external work.
-                report=report.review(module,reviews.execute(request,active));
+                calls.put(module,reviews.start(request,active));
+            }
+            // Both independent reviews use the existing two bounded model slots.
+            // Only this worker publishes results, against the same lease fence.
+            for(var call:calls.entrySet()) {
+                String module=call.getKey();
+                var reviewed=reviews.await(call.getValue());
+                report=report.review(module,visualQuality==null?reviewed:visualQuality.project(reviewed,docs));
                 running=checkpointReport(running,docs,report,user);
                 if(Thread.currentThread().isInterrupted())return;
             }
+            } finally {calls.values().forEach(CaseReviewEngine.ReviewCall::close);}
         }
         String status=report.quoteStatus();
         var finalReport=report;
@@ -272,16 +344,50 @@ public class AuditCaseService {
                 &&!"COMPLETED".equals(report.reviews().get("BLACKLIST").status()))status="PARTIAL";
         if(reviews!=null&&status.equals("COMPLETED")&&(!report.reviews().keySet().containsAll(CaseReviewContext.MODULES)
                 ||CaseReviewContext.MODULES.stream().anyMatch(m->!"COMPLETED".equals(finalReport.modules().get(m)))))status="PARTIAL";
+        for(var entry:CaseDocumentCoverage.of(docs,report).entrySet()){
+            var coverage=entry.getValue();
+            var document=docs.stream().filter(d->d.id().equals(entry.getKey())).findFirst().orElseThrow();
+            try(var span=PipelineDiagnostics.start("PROCUREMENT_AUTO","DOCUMENT_COVERAGE",entry.getKey(),Map.of("fileCount",docs.size()))){
+                span.outcome(document.status(),Map.of("segmentCount",coverage.segmentCount(),"outputChars",coverage.textChars(),
+                        "factCount",coverage.factCount(),"callCount",coverage.extractionCalls(),"inputChars",coverage.reviewInputChars()));
+            }
+        }
         save(running,running.update(status,docs,report),user);
+        } catch(RuntimeException failure) {
+            if(finishCancellation(id,"EXECUTION",failure))return;
+            // A worker exception must not leave a live-looking lease for an
+            // hour. Preserve the last committed files/report; do not replay an
+            // external call, overwrite cancellation, or close another claim.
+            if(!Thread.currentThread().isInterrupted())try {recordUnexpectedFailure(id,running.leaseToken(),user);}
+            catch(RuntimeException closeoutFailure) {
+                org.slf4j.LoggerFactory.getLogger(getClass()).warn("AUTO_CASE_CLOSEOUT_FAILED exceptionType={}",closeoutFailure.getClass().getSimpleName());
+            }
+            throw failure;
+        }
+    }
+    private static boolean finishCancellation(UUID id,String stage,Throwable failure) {
+        if(!com.fuquan.audit.common.application.TaskCancellationRegistry.currentCancellationRequested()
+                ||failure instanceof org.springframework.dao.DataAccessException)return false;
+        // The cancel transaction is already committed. Do not save another
+        // checkpoint or query storage on the interrupted executor thread.
+        try(var span=PipelineDiagnostics.start("PROCUREMENT_AUTO",stage,id,Map.of())) {
+            span.outcome("CANCELLED",Map.of("reason","USER_CANCELLED","errorClass",failure.getClass().getSimpleName()));
+        }
+        return true;
+    }
+    void recordUnexpectedFailure(UUID id,String claimToken,CurrentUser user) {
+        var current=repository.find(id).orElse(null);
+        if(current==null||current.cancelled()||!current.status().equals("RUNNING")||!Objects.equals(current.leaseToken(),claimToken))return;
+        tx.save(current,current.update("UNKNOWN",current.documents(),current.report()),user);
     }
     private AuditCase checkpoint(AuditCase value,List<Document> docs,CurrentUser user) {
         var next=new AuditCase(value.id(),value.owner(),value.operationKey(),value.fingerprint(),"RUNNING",value.version()+1,
-                value.leaseToken(),clock.instant().plusSeconds(3600),value.attempts(),value.createdAt(),List.copyOf(docs),value.report());
+                value.leaseToken(),clock.instant().plusSeconds(3600),value.attempts(),value.createdAt(),List.copyOf(docs),value.report(),value.reasonCode());
         save(value,next,user);return next;
     }
     private AuditCase checkpointReport(AuditCase value,List<Document> docs,Report report,CurrentUser user) {
         var next=new AuditCase(value.id(),value.owner(),value.operationKey(),value.fingerprint(),"RUNNING",value.version()+1,
-                value.leaseToken(),clock.instant().plusSeconds(1800),value.attempts(),value.createdAt(),List.copyOf(docs),report);
+                value.leaseToken(),clock.instant().plusSeconds(1800),value.attempts(),value.createdAt(),List.copyOf(docs),report,value.reasonCode());
         save(value,next,user);return next;
     }
     private static class CheckpointLost extends IllegalStateException {CheckpointLost(){super("auto-case lease/version lost");}}

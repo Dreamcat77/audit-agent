@@ -6,6 +6,7 @@ import java.util.*;
 
 /** Test seam. Production profiles always use the DM8 adapter. */
 public class InMemoryMaterialExtractionLedger implements MaterialExtractionLedger {
+    public synchronized void cancel(UUID id,Instant now){var e=entries.get(id);if(e!=null)entries.put(id,new Entry(id,e.sourceHash(),e.policyHash(),e.unitCount(),0,e.calls(),e.usedMillis(),"UNKNOWN",null,now,"[]","USER_CANCELLED",e.deadlineAt()));}
     private final Map<UUID,Entry> entries=new HashMap<>();
     public synchronized Optional<Entry> find(UUID id){return Optional.ofNullable(entries.get(id));}
     public synchronized void insert(Entry e){if(entries.putIfAbsent(e.id(),e)!=null)throw new org.springframework.dao.DuplicateKeyException("extraction exists");}

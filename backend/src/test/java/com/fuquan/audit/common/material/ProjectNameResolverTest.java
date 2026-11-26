@@ -5,6 +5,12 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 class ProjectNameResolverTest {
+    @Test void removesGrammaticalSuffixWithoutChangingARealName() {
+        assertThat(ProjectNameResolver.resolve(List.of("建国中路30号部分区域修缮项目的"),List.of(),"fallback"))
+                .isEqualTo("建国中路30号部分区域修缮项目");
+        assertThat(ProjectNameResolver.resolve(List.of("目的地服务中心改造项目"),List.of(),"fallback"))
+                .isEqualTo("目的地服务中心改造项目");
+    }
     @Test void documentTitlesNeverBecomeProjectNamesEvenWhenMislabelledByAModel() {
         for(String title:List.of("采购委托协议书","档案维护服务合同书","某单位设备采购委托协议书","需求标准","预算通知书","合同书.pdf")) {
             assertThat(ProjectNameResolver.resolve(List.of(title),List.of(title+"\n合同名称："+title),"自动整理项目-测试"))

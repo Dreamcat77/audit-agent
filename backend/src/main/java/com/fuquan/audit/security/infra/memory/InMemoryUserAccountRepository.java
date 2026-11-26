@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -27,16 +28,51 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Profile("local")
-public class InMemoryUserAccountRepository implements UserAccountRepository, UserIdentityQueryPort, UserRoleAssignmentPort {
+public class InMemoryUserAccountRepository implements UserAccountRepository, UserIdentityQueryPort, UserRoleAssignmentPort,
+        com.fuquan.audit.security.application.port.UserAdministrationPort {
 
     private static final Set<String> ACTIVE_ROLE_CODES = Set.of(
             "SYSTEM_ADMIN", "PROCUREMENT_MANAGER", "AUDITOR", "LEGAL",
             "PROCUREMENT_APPLICANT", "PROCUREMENT_REVIEWER", "FINANCE_REVIEWER",
-            "PROCUREMENT_LEADER", "PROCUREMENT_COMMITTEE");
+            "PROCUREMENT_LEADER", "PROCUREMENT_COMMITTEE",
+            "PROCUREMENT_USER", "BUDGET_USER", "CONTRACT_USER");
 
     private final ConcurrentMap<String, UserAccount> accountsById = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, String> idsByUsername = new ConcurrentHashMap<>();
     private final FlowDebugLogger flowDebugLogger;
+
+    @Override public synchronized void create(UserAccount account) {
+        if(idsByUsername.containsKey(account.username()) || accountsById.containsKey(account.id()))
+            throw new org.springframework.dao.DuplicateKeyException("account already exists");
+        accountsById.put(account.id(),account); idsByUsername.put(account.username(),account.id());
+    }
+    @Override public List<UserAccount> list(int offset,int limit) {
+        return accountsById.values().stream().sorted(java.util.Comparator.comparing(UserAccount::createdAt)
+                .reversed().thenComparing(UserAccount::id)).skip(offset).limit(limit).toList();
+    }
+    @Override public long count() { return accountsById.size(); }
+    @Override public UserAccount findById(String id) { return accountsById.get(id); }
+    @Override public synchronized void update(UserAccount account) {
+        String existingId = idsByUsername.get(account.username());
+        if (existingId != null && !existingId.equals(account.id())) throw new org.springframework.dao.DuplicateKeyException("account already exists");
+        accountsById.compute(account.id(), (id, current) -> {
+            if (current == null || current.versionNo() != account.versionNo()) {
+                throw new OptimisticLockingFailureException("account changed");
+            }
+            idsByUsername.remove(current.username(), id);
+            idsByUsername.put(account.username(), id);
+            return new UserAccount(id, account.username(), account.passwordHash(), account.realName(),
+                    account.status(), account.failedLoginCount(), account.lockedUntil(), account.lastLoginAt(),
+                    account.passwordChangedAt(), account.createdAt(), account.updatedAt(), account.versionNo() + 1,
+                    account.roles());
+        });
+    }
+
+    @Override
+    public Optional<SessionAccount> findSessionAccount(String userId) {
+        return Optional.ofNullable(accountsById.get(userId))
+                .map(account -> new SessionAccount(account.status(), account.passwordChangedAt(), account.realName()));
+    }
 
     /**
      * 创建 local 用户仓储，并在完整配置时初始化受控首账号。
@@ -59,7 +95,7 @@ public class InMemoryUserAccountRepository implements UserAccountRepository, Use
      * @return 找到的账号；不存在时返回空
      */
     @Override
-    public Optional<UserAccount> findByUsername(String normalizedUsername) {
+    public synchronized Optional<UserAccount> findByUsername(String normalizedUsername) {
         long startedAt = System.nanoTime();
         String id = idsByUsername.get(UsernameNormalizer.normalize(normalizedUsername));
         UserAccount account = id == null ? null : accountsById.get(id);

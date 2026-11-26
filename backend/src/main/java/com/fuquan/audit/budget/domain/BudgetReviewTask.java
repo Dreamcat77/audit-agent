@@ -43,6 +43,10 @@ public record BudgetReviewTask(
                 nextLineCount, nextError, budgetYear, departmentCode, reviewCursor,
                 pendingRowNumber, pendingStep, pendingReason, createdTime, Instant.now());
     }
+    public BudgetReviewTask cancelled() {
+        return new BudgetReviewTask(id,fileName,contentType,fileSize,tempFilePath,"FAILED",0,"USER_CANCELLED",budgetYear,
+            departmentCode,0,null,null,null,createdTime,Instant.now());
+    }
     public BudgetReviewTask withoutStoredMaterial() {
         return new BudgetReviewTask(id,fileName,contentType,fileSize,null,status,parsedLineCount,errorDetail,budgetYear,
             departmentCode,reviewCursor,pendingRowNumber,pendingStep,pendingReason,createdTime,Instant.now());

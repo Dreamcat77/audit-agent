@@ -7,6 +7,20 @@ async function until(f:()=>boolean) {const end=Date.now()+3000;while(!f()){asser
 const options={namespace:'budget',filePattern:/\.(docx?|xlsx?|pdf|pptx?|txt|csv|rtf|png|jpe?g|bmp|tiff?)$/i};
 const context={budgetYear:'2026',departmentCode:'PROCUREMENT'};
 function queued(id:string):MaterialUploadResult {return {id,status:'QUEUED',updatedAt:'2026-10-10T00:00:00Z',errorCode:null};}
+test('confirmed batch cancellation stops unsent files, fences a late response and survives reload',async()=>{
+  const storage=memory();let release:(value:MaterialUploadResult)=>void=()=>{};let calls=0;let firstKey='';
+  const api:MaterialBatchApi<MaterialUploadResult>={upload:async(_file,key)=>{calls++;firstKey=key;return new Promise(resolve=>release=resolve);},operation:async()=>null,get:async id=>queued(id),retry:async id=>queued(id)};
+  const batch=new MaterialUploadBatch('cancel-owner',storage,api,null,options);batch.activate();
+  try {
+    batch.add([new File(['one'],'one.pdf'),new File(['two'],'two.pdf')],context);
+    await until(()=>calls===1);
+    batch.markBatchCancelled(batch.snapshot().entries.map(row=>row.operation.key));
+    release(queued(firstKey));await new Promise(resolve=>setTimeout(resolve,25));
+    assert.equal(calls,1);assert.ok(batch.snapshot().entries.every(row=>row.phase==='CANCELLED'));
+    const reopened=new MaterialUploadBatch('cancel-owner',storage,api,null,options);
+    assert.ok(reopened.snapshot().entries.every(row=>row.phase==='CANCELLED'));
+  }finally{batch.pause();}
+});
 test('budget uses separate identities and preserves upload year/department across reload and lost response',async()=>{
   const storage=memory(),records=new Map<string,MaterialUploadResult>(),sent:MaterialOperation[]=[];
   const api:MaterialBatchApi<MaterialUploadResult>={upload:async(_file,key,op)=>{sent.push(op!);records.set(key,queued(key));throw Error('lost response');},operation:async key=>records.get(key)??null,get:async id=>records.get(id)!,retry:async id=>queued(id)};

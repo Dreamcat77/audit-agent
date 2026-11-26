@@ -43,6 +43,7 @@ class AutomaticCaseHttpTest {
         Assumptions.assumeTrue(fixtures!=null,"Set AUDIT_CASE_FIXTURES for the 12-file HTTP scenario");
         cookies=Files.createTempFile(Path.of("target"),"automatic-http-",".cookies");
         try {
+            doCallRealMethod().when(ai).extractWithContext(anyString(),anyString(),anyString(),anyList(),any());
             when(reviewAi.analyze(any())).thenAnswer(call->CaseReviewFixtures.result(call.getArgument(0)));
             when(ai.extract(eq("PROCUREMENT_AUTO"),anyString(),anyString(),anyList()))
                     .thenAnswer(call->AuditCaseIntegrationTest.sourceFixture(call.getArgument(3)));

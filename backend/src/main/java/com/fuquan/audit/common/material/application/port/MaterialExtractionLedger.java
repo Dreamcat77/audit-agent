@@ -21,4 +21,6 @@ public interface MaterialExtractionLedger {
     void startDeadline(UUID id,Instant deadline);
     /** Fences late callers and removes unpublished facts, while retaining minimal diagnostic metadata. */
     boolean terminate(UUID id,String token,String reason,Instant now);
+    /** Owning task was cancelled and its workers drained; erase candidate results and retain a non-replayable receipt. */
+    void cancel(UUID id,Instant now);
 }

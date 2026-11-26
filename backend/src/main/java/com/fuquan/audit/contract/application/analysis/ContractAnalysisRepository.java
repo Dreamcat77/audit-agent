@@ -6,15 +6,16 @@ import java.util.*;
 /** Durable case snapshots; file bytes and canonical text remain owned by Project Intake. */
 public interface ContractAnalysisRepository {
     Optional<ContractAnalysisCase> find(UUID id);
+    default Optional<ContractAnalysisCase> findForUpdate(UUID id){return find(id);}
+    default List<UUID> cancelledForCleanup(int limit){return List.of();}
+    default void cleanupComplete(UUID id){}
     List<ContractAnalysisCase> recent(String owner, int offset, int limit);
-    default List<ContractAnalysisCase> recent(String owner, int offset, int limit,
-                                              String projectName, Instant from, Instant to) {
-        return recent(owner, offset, limit).stream()
-                .filter(value -> from == null || !value.createdAt().isBefore(from))
-                .filter(value -> to == null || value.createdAt().isBefore(to))
-                .toList();
-    }
+    /** Owner/date and displayed project-name filters apply before result pagination. */
+    List<ContractAnalysisCase> recent(String owner, int offset, int limit,
+                                    String projectName, Instant from, Instant to);
     List<UUID> pending(Instant now, int limit);
+    /** Cyclic admission order; persistence versions measure mutations, not scheduling priority. */
+    default List<UUID> pendingAfter(Instant now, int limit, UUID after) { return pending(now, limit); }
     void insert(ContractAnalysisCase value);
     /** Atomic CAS with exact prior version, lease token and live publication lease. */
     boolean replace(ContractAnalysisCase previous, ContractAnalysisCase next, Instant now);

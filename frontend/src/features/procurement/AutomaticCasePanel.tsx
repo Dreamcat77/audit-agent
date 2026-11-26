@@ -1,28 +1,36 @@
-import { useEffect, useRef, useState } from 'react';
+import { ResultMaterialList } from "../../components/results/ResultMaterialList";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {ResultProjectHeader,ResultSection,ResultItem,ResultEmpty} from '../../components/results/ResultLayout';
+import {HistoryFilterBar,HistoryList,HistoryRow,HistoryFooter,HistoryPagination,historyDate,historyStatus} from '../../components/history/HistoryResults';
+import {ProcessingStatusCard} from '../../components/status/ProcessingStatusCard';
+import {XCircle} from 'lucide-react';
 import { ApiError, apiUrl, request } from '../../api/client';
 import { uploadRequest } from '../../api/clientUpload';
 import { userFacingError } from '../../api/userFacingError';
 import { writeClipboardText as copyText } from '../../utils/clipboard';
 import { createOperationKey } from '../../api/operationKey';
+import {ProcurementEvidenceDialog} from './ProcurementEvidenceDialog';
+import {OriginalFileDialog} from '../contract/components/OriginalFileDialog';
+import {indexProcurementSource,type IndexedProcurementSource} from './procurementSourceView';
 import { OFFICE_MATERIAL_ACCEPT } from './materials/officeMaterialTypes';
-import { automaticHistoryParams, automaticCheckTone, automaticPrioritySummary, automaticCheckExplanation, automaticFactLabel, automaticReviewReason, caseHistoryLabel, definiteUploadRejection } from './automaticCaseState';
+import {mergePriorityFindings,financialPriorityFindings,comparisonForOffer} from './automaticPriority';
+import { automaticHistoryParams, automaticCheckTitle, automaticCheckTone, automaticPrioritySummary, automaticCheckExplanation, automaticFactLabel, automaticReviewReason, caseHistoryLabel, definiteUploadRejection } from './automaticCaseState';
 
-type Document = { id: string; name: string; status: string; errorCode?: string; factCount: number };
-type Offer = { supplier: string; amount: string; documentId: string; lineValidation: string;
-  lines: { item: string; quantity: string; unitPrice: string; amount: string; locator: string }[] };
+type Document = { id: string; name: string; status: string; errorCode?: string; factCount: number; textChars?:number; segmentCount?:number; extractionCalls?:number; reviewInputChars?:number };
+type Offer = { supplier: string; amount: string; documentId: string; sourceRow?:string; lineValidation: string;
+  lines: { item: string; quantity: string; unitPrice: string | null; amount: string; locator: string }[] };
 type Source = { id: string; documentId: string; fileName: string; sha256: string; locator: string; excerpt: string };
 type Review = { status: string; model?: string; errorCode?: string; rejectedCitations: number; coverageGaps: string[];
   scope: { documentId: string; fileName: string; role: string; sourceChars: number; suppliedChars: number }[];
   checks: { code: string; status: string; explanation: string; evidence: Source[] }[];
   findings: { code: string; level: string; title: string; explanation: string; suggestion: string; evidence: Source[] }[] };
-type Case = { findingIds?: Record<string,string>; id: string; caseNumber: string; projectName?: string; createdAt?: string; status: string; documents: Document[]; report?: {
+type Case = { materialDetails?: {label:string;value:string;amountScope:string;evidence:Source[]}[]; findingIds?: Record<string,string>; id: string; caseNumber: string; projectName?: string; createdAt?: string; status: string; documents: Document[]; report?: {
   quoteStatus: string; quoteComparisons?: {documentId:string;status:string;difference:string}[]; ceilingComparisons?: {documentId:string;status:string;difference:string}[]; projectName?: string; budget?: string; ceilingAmount?: string; awardAmount?: string; offers: Offer[]; notices: string[];
   modules: Record<string, string>; reviews?: Record<string, Review>; calculation?: { averageQuote: string; coefficientOfVariation: string;
     quotes: { supplierName: string; overBudget: boolean }[] } } };
 type HistoryEntry = { id: string; projectName?: string; status: string; createdAt?: string; fileNames: string[] };
 type HistoryPage = { items: HistoryEntry[]; nextCursor: string | null };
-type Evidence = { fileName: string; segments: { locator: string; text: string }[]; facts: { type: string; value: string; locator: string; excerpt: string; verification: string }[] };
+type Evidence = { fileName: string; sha256:string; segments: { locator: string; text: string }[] };
 const path = '/api/v1/procurement/cases';
 const labels: Record<string, string> = { UPLOADING: '保存材料中', QUEUED: '等待处理', RUNNING: '正在处理',
   COMPLETED: '本轮分析完成', PARTIAL: '部分完成', DATA_INSUFFICIENT: '数据不足', FAILED: '执行失败', UNKNOWN: '结果待核实', PENDING: '等待分析', NOT_EXECUTED: '未执行',
@@ -34,6 +42,9 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
   const store = `procurement-auto-case-v1:${ownerId}`;
   const [historyOpen, setHistoryOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [historyQuery,setHistoryQuery]=useState({keyword:'',date:''});
+  const [historyPage,setHistoryPage]=useState(1);
+  const historyCursors=useRef<(string|null)[]>([null]);
   const [date, setDate] = useState('');
   const [copied, setCopied] = useState('');
   const [acknowledged,setAcknowledged]=useState<string[]>([]);
@@ -46,16 +57,27 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
   const [current, setCurrent] = useState<Case | null>(null);
   const currentId=useRef<string|null>(null);
   currentId.current=current?.id??null;
-  const [evidence, setEvidence] = useState<Evidence | null>(null);
+  const [evidenceFocus,setEvidenceFocus]=useState('');
+  const [evidence, setEvidence] = useState<readonly Source[] | null>(null);
+  const [originalFile,setOriginalFile]=useState<Document|null>(null);
+  const sourceCache=useMemo(()=>new Map<string,Promise<IndexedProcurementSource>>(),[current?.id]);
+  const loadSource=useCallback((fileId:string)=>{
+    if(!current)return Promise.reject(new Error("No active case"));
+    let pending=sourceCache.get(fileId);
+    if(!pending){pending=request<Evidence>(`${path}/${current.id}/files/${fileId}/evidence`).then(indexProcurementSource);sourceCache.set(fileId,pending);pending.catch(()=>sourceCache.delete(fileId));}
+    return pending;
+  },[current?.id,sourceCache]);
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
+  const [cancelling,setCancelling]=useState(false);
   const [uploadProgress, setUploadProgress] = useState<{ loaded: number; total: number } | null>(null);
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState('');
   const [uncertain, setUncertain] = useState(false);
   useEffect(() => {
     let active = true;
-    setCurrent(null); setEvidence(null); setFiles([]); setUncertain(false); setError('');
+    ++historyEpoch.current;historyCursors.current=[null];setHistoryPage(1);
+    setCurrent(null); setEvidence(null); setOriginalFile(null); setFiles([]); setUncertain(false); setError('');
     // Upload recovery is independent of listing availability and preserves its operation key.
     void (async () => {
       let selected: Case | undefined;
@@ -88,7 +110,7 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
     if (!current || !['UPLOADING', 'QUEUED', 'RUNNING'].includes(current.status)) return;
     let active = true;
     const timer = window.setInterval(() => {
-      request<Case>(`${path}/${current.id}`).then(c => { if (active) { setCurrent(c); setCases(old => old.map(entry => entry.id === c.id ? {...entry,projectName:c.projectName,status:c.status} : entry)); setError(''); } })
+      request<Case>(`${path}/${current.id}`).then(c => { if (active && currentId.current===c.id) { setCurrent(c); setCases(old => old.map(entry => entry.id === c.id ? {...entry,projectName:c.projectName,status:c.status} : entry)); setError(''); } })
         .catch(e => { if (active) setError(userFacingError(e, '进度读取失败，案件与原操作已保留')); });
     }, 2500);
     return () => { active = false; window.clearInterval(timer); };
@@ -101,34 +123,41 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
       .catch(()=>{if(active)setError('确认记录暂时无法读取，请重试。');});
     return ()=>{active=false;};
   },[current?.id,!!current?.report]);
-  async function acknowledge(key:string) {
+  async function acknowledge(keys:string[]) {
     if(!current||ackBusy)return;
     const id=current.id;
-    setAckBusy(key);
-    try {await request(`${path}/${id}/acknowledgments/${key}`,{method:'POST'});if(currentId.current===id)setAcknowledged(old=>[...new Set([...old,key])]);}
+    setAckBusy(keys[0]);
+    try {for(const key of keys){if(acknowledged.includes(key))continue;await request(`${path}/${id}/acknowledgments/${key}`,{method:'POST'});if(currentId.current===id)setAcknowledged(old=>[...new Set([...old,key])]);}}
     catch(error){if(currentId.current===id)setError(userFacingError(error,'确认未保存，请重试。'));}
     finally{setAckBusy('');}
   }
   function historyParams() {
-    return automaticHistoryParams(search,date);
+    return automaticHistoryParams(historyQuery.keyword,historyQuery.date);
   }
   useEffect(() => {
     if (!historyOpen || current) return;
     let active = true;
     const epoch=++historyEpoch.current;
-    setHistoryBusy(true); setHistoryError('');
+    setHistoryBusy(true); setHistoryError('');setCases([]);setNextCursor(null);
     const timer = window.setTimeout(() => {
-      request<HistoryPage>(`${path}/history`, { params: historyParams() }).then(value => {
+      request<HistoryPage>(`${path}/history`, { params: {...historyParams(),...(historyCursors.current[historyPage-1]?{before:historyCursors.current[historyPage-1]!}:{})} }).then(value => {
         if (active && epoch===historyEpoch.current) {setCases(value.items);setNextCursor(value.nextCursor);}
       }).catch(e => {if(active && epoch===historyEpoch.current)setHistoryError(userFacingError(e,'历史结果查询失败，请重试'));})
         .finally(() => {if(active)setHistoryBusy(false);});
     }, 300);
     return () => {active=false;window.clearTimeout(timer);};
-  }, [historyOpen, search, date, ownerId, current?.id]);
+  }, [historyOpen, historyQuery, historyPage, ownerId, current?.id]);
   const caseProcessing = !!current && ['UPLOADING', 'QUEUED', 'RUNNING'].includes(current.status);
+  async function cancelCurrent(){
+    if(!current||!caseProcessing||cancelling)return;
+    const id=current.id;setCancelling(true);
+    try{await request<Case>(`${path}/${id}/cancel`,{method:'POST'});if(currentId.current===id){currentId.current=null;setCurrent(null);setCases(old=>old.filter(entry=>entry.id!==id));localStorage.removeItem(store);}}
+    catch(cause){if(currentId.current===id)setError(userFacingError(cause,'取消请求未完成，请刷新任务状态。'));}
+    finally{setCancelling(false);}
+  }
   async function upload(selected: File[]) {
     if (!selected.length || busy || caseProcessing) return;
-    setBusy(true); setUploadProgress(null); setError(''); setFiles(selected); setCurrent(null); setEvidence(null);
+    setBusy(true); setUploadProgress(null); setError(''); setFiles(selected); setCurrent(null); setEvidence(null); setOriginalFile(null);
     let operationKey = '';
     try {
       let saved: { key?: string; manifest?: string; caseId?: string } = {};
@@ -145,7 +174,7 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
       const value = await uploadRequest<Case>(path, { method: 'POST', body, headers: { 'Idempotency-Key': key },
         onUploadProgress: progress => setUploadProgress(progress) });
       localStorage.setItem(store, JSON.stringify({ key, manifest, caseId: value.id }));
-      setCurrent(value); setCases(old => [{ id: value.id, status: value.status, projectName: value.projectName, createdAt:value.createdAt, fileNames: value.documents.map(d => d.name) }, ...old.filter(c => c.id !== value.id)]); setEvidence(null); setUncertain(false);
+      setCurrent(value); setCases(old => [{ id: value.id, status: value.status, projectName: value.projectName, createdAt:value.createdAt, fileNames: value.documents.map(d => d.name) }, ...old.filter(c => c.id !== value.id)]); setEvidence(null); setOriginalFile(null); setUncertain(false);
     } catch (e) {
       const rejected = e instanceof ApiError && definiteUploadRejection(e.status);
       if (rejected && operationKey) {
@@ -157,41 +186,38 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
     }
     finally { setBusy(false); }
   }
-  async function showEvidence(fileId: string) {
-    if (!current) return;
-    try { setEvidence(await request<Evidence>(`${path}/${current.id}/files/${fileId}/evidence`)); }
-    catch (e) { setError(userFacingError(e, '证据读取失败')); }
+  function changeHistoryPage(page:number){
+    if(historyBusy)return;
+    if(page===historyPage+1){if(!nextCursor)return;historyCursors.current[page-1]=nextCursor;}
+    if(page<1||page>historyCursors.current.length)return;
+    ++historyEpoch.current;setHistoryBusy(true);setHistoryPage(page);
   }
-  async function moreHistory() {
-    if (!nextCursor || historyBusy) return;
-    setHistoryBusy(true);const epoch=historyEpoch.current;
-    try { const value = await request<HistoryPage>(`${path}/history`, { params: { before: nextCursor, ...historyParams() } });
-      if(epoch!==historyEpoch.current)return;
-      setCases(old => [...old, ...value.items.filter(c => !old.some(p => p.id === c.id))]); setNextCursor(value.nextCursor);
-    } catch (e) { if(epoch===historyEpoch.current)setHistoryError(userFacingError(e, '历史案件读取失败，可重试')); }
-    finally { if(epoch===historyEpoch.current)setHistoryBusy(false); }
+  function applyHistoryQuery(keyword:string,date:string){
+    ++historyEpoch.current;historyCursors.current=[null];setHistoryPage(1);setHistoryBusy(true);setHistoryQuery({keyword,date});
   }
   const report = current?.report;
-  const findings = Object.entries(report?.reviews ?? {}).flatMap(([module, review]) =>
-    review.findings.map(finding => ({ ...finding, originalExplanation:finding.explanation, explanation:automaticCheckExplanation({...finding,status:'CONFLICT'}), module })))
-    .filter((finding, index, all) => all.findIndex(other => other.title === finding.title && other.explanation === finding.explanation) === index)
-    .sort((a, b) => (a.level === 'CRITICAL' ? 0 : 1) - (b.level === 'CRITICAL' ? 0 : 1));
+  const semanticFindings = Object.entries(report?.reviews ?? {}).flatMap(([module, review]) =>
+    review.findings.map(finding => ({ ...finding,module })));
+  const financialFindings=report?financialPriorityFindings(report,current?.materialDetails??[]):[];
+  const findings = mergePriorityFindings([...semanticFindings,...financialFindings.filter(f=>!semanticFindings.some(s=>
+    s.code===f.code&&s.evidence.some(e=>e.documentId===f.comparisonDocumentId)))])
+    .map(f=>({...f,explanation:automaticCheckExplanation({...f,status:'CONFLICT'})}));
   async function copy(key: string, value: string) {
     try { await copyText(value); setCopied(key); }
     catch { setError('复制未成功，请重试。'); }
   }
   async function open(id: string) {
-    try { setCurrent(await request<Case>(`${path}/${id}`)); setEvidence(null); setCopied(''); setError(''); }
+    try { setCurrent(await request<Case>(`${path}/${id}`)); setEvidence(null); setOriginalFile(null); setCopied(''); setError(''); }
     catch (error) { setError(userFacingError(error, '结果读取失败，请重试')); }
   }
   const visibleCases = cases;
   const reportText = findings.map(f => `${f.title}\n${f.explanation}\n建议：${f.suggestion}\n涉及材料：${[...new Set(f.evidence.map(e => e.fileName))].join('、')}`).join('\n\n');
-  return <section className="result-workspace mx-auto max-w-[1440px] space-y-5 p-4 sm:p-6" aria-label="采购材料批次自动审查">
-    <header className="flex flex-wrap items-center justify-between gap-3">
-      <div><h1 className="text-xl font-semibold text-slate-900">采购审查</h1><p className="mt-1 text-sm text-slate-500">上传同一项目的材料，集中查看审查结果</p></div>
+  return <section className={!current&&historyOpen?"history-page":"delivery-page result-workspace procurement-results space-y-5"} aria-label="采购材料批次自动审查">
+    <header className={!current&&historyOpen?"history-page-header":"delivery-page-header"}>
+      <div><h1 className={!current&&historyOpen?"history-page-title":"delivery-page-title"}>{!current&&historyOpen?"历史结果":"采购审查"}</h1></div>
       <div className="flex gap-2">
-        {current ? <button type="button" className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm" onClick={() => { setCurrent(null); setEvidence(null); setError(''); }}>返回{historyOpen ? '历史结果' : '采购首页'}</button>
-          : <button type="button" className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm" onClick={() => { setHistoryOpen(!historyOpen); setError(''); }}>{historyOpen ? '返回采购首页' : '历史结果'}</button>}
+        {current ? <button type="button" className="delivery-secondary-action" onClick={() => { setCurrent(null); setEvidence(null); setOriginalFile(null); setError(''); }}>返回{historyOpen ? '历史结果' : '采购首页'}</button>
+          : <button type="button" className={historyOpen?"history-button":"delivery-secondary-action"} onClick={() => { setHistoryOpen(!historyOpen); setError(''); }}>{historyOpen ? '返回采购首页' : '历史结果'}</button>}
       </div>
     </header>
     {error && <p role="alert" className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</p>}
@@ -207,68 +233,82 @@ export function AutomaticCasePanel({ ownerId }: { ownerId: string }) {
         <span className="text-sm text-slate-500">支持常用办公文档、PDF 和扫描图片</span>
       </label>
     </div>}
-    {busy && <div role="status" aria-live="polite" className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
-      正在上传本批材料{uploadProgress ? ` ${Math.min(100, Math.floor(uploadProgress.loaded / uploadProgress.total * 100))}%` : '…'}
-    </div>}
+    {busy && !current && <ProcessingStatusCard title="正在上传材料" description="请稍候，文件上传后将自动开始审查。" />}
     {uncertain && files.length > 0 && <button type="button" className="rounded border px-4 py-2 text-sm" disabled={busy} onClick={() => void upload(files)}>继续原批上传</button>}
-    {!current && historyOpen && <section className="space-y-4 rounded-xl border border-slate-200 bg-white p-5" aria-label="采购历史结果">
-      {historyError && <p role="alert" className="text-sm text-red-700">{historyError}</p>}
-      <div className="flex flex-wrap items-end gap-3">
-        <label className="text-sm text-slate-600">上传日期<input type="date" value={date} onChange={e => setDate(e.target.value)} className="mt-1 block rounded-lg border border-slate-300 px-3 py-2" /></label>
-        <label className="text-sm text-slate-600">项目或材料名称<input value={search} maxLength={160} onChange={e => setSearch(e.target.value)} placeholder="输入名称关键词" className="mt-1 block w-60 rounded-lg border border-slate-300 px-3 py-2" /></label>
-        {(search || date) && <button type="button" className="rounded-lg border px-3 py-2 text-sm" onClick={() => {setSearch('');setDate('');}}>清空</button>}
-      </div>
-      <div className="grid gap-3 lg:grid-cols-2">{visibleCases.map(c => <button type="button" key={c.id} data-procurement-case-id={c.id} onClick={() => void open(c.id)} className="rounded-lg border border-slate-200 p-4 text-left hover:border-blue-300 hover:bg-blue-50">
-        <p className="font-medium text-slate-900">{c.projectName || c.fileNames[0] || '采购材料分析'}</p>
-        <p className="mt-2 text-xs text-slate-500">{c.createdAt ? new Date(c.createdAt).toLocaleString() : ''} · {c.fileNames.length} 份材料 · {['QUEUED','RUNNING','UPLOADING'].includes(c.status) ? '正在处理' : '处理已结束'}</p>
-        <p className="mt-2 truncate text-xs text-slate-500" title={c.fileNames.join('、')}>{c.fileNames.join('、')}</p>
-      </button>)}</div>
-      {!visibleCases.length && <p className="py-5 text-center text-sm text-slate-500">暂无符合条件的记录{nextCursor ? '，可继续读取更多历史结果。' : '。'}</p>}
-      {nextCursor && <button type="button" className="rounded-lg border px-4 py-2 text-sm" disabled={historyBusy} onClick={() => void moreHistory()}>{historyBusy ? '正在读取…' : '更多历史结果'}</button>}
+    {!current && historyOpen && <section className="history-results" aria-label="采购历史结果">
+      <HistoryFilterBar keyword={search} date={date} keywordLabel="项目或材料名称" placeholder="输入项目或材料名称关键词"
+        onKeywordChange={setSearch} onDateChange={setDate}
+        onQuery={()=>applyHistoryQuery(search.trim(),date)}
+        onReset={()=>{setSearch('');setDate('');applyHistoryQuery('','');}}/>
+      <HistoryList label="采购历史记录" loading={historyBusy&&!visibleCases.length} error={historyError} empty={!visibleCases.length}>
+        {visibleCases.map(c=><HistoryRow key={c.id} data-procurement-case-id={c.id}
+          name={c.projectName||c.fileNames[0]||'采购材料分析'} details={c.fileNames.join('、')}
+          metadata={<><span>{historyDate(c.createdAt)}</span><span>{c.fileNames.length} 份材料</span></>}
+          status={historyStatus(c.status).label} tone={historyStatus(c.status).tone} onOpen={()=>void open(c.id)}/>)}
+      </HistoryList>
+      <HistoryFooter summary={`本页 ${historyBusy?'—':visibleCases.length} 条记录 · 第 ${historyPage} 页`}>
+        <HistoryPagination page={historyPage} busy={historyBusy} hasNext={!!nextCursor} onPageChange={changeHistoryPage}/>
+      </HistoryFooter>
     </section>}
     {current && <>
       <ResultProjectHeader kind="采购审查结果" name={current.projectName || report?.projectName || '采购材料分析'} metadata={<>{current.documents.length} 份材料{current.createdAt ? ` · ${new Date(current.createdAt).toLocaleString('zh-CN')}` : ''}</>}
-        actions={caseProcessing?<span role="status" className="text-sm text-blue-700">正在分析…</span>:undefined}>
-        {[['预算金额',report?.budget],['最高限价',report?.ceilingAmount],['中标金额',report?.awardAmount]].map(([label,value])=><div key={label}><p>{label}</p><p>{value==null?'—':`${Number(value).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})} 元`}</p></div>)}
-      </ResultProjectHeader>
+        actions={caseProcessing?<div className="flex flex-wrap items-start gap-3"><div className="min-w-0 flex-1"><ProcessingStatusCard variant="compact" title={current.status==='UPLOADING'?'正在上传材料':current.status==='QUEUED'?'正在准备审查':'正在分析材料'}
+          description={current.status==='UPLOADING'?(uploadProgress&&uploadProgress.total>0?`已上传 ${Math.min(100,Math.floor(uploadProgress.loaded/uploadProgress.total*100))}%，请稍候。`:'请稍候，文件上传后将自动开始审查。'):'已生成的结果会逐项显示，其余材料继续处理。'} /></div><button type="button" disabled={cancelling} onClick={()=>void cancelCurrent()} className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg border border-red-200 bg-white px-3 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-60"><XCircle size={16}/>{cancelling?'正在取消…':'取消任务'}</button></div>:undefined}/>
       {report && <section key={current.id} aria-label="本批采购审查结果" className="space-y-5">
         <ResultSection title="优先关注" number="01" tone={findings.length||report.quoteComparisons?.some(c=>c.status==='OVER_BUDGET')||report.ceilingComparisons?.some(c=>c.status==='OVER_CEILING')?'attention':'default'} actions={<>
           {findings.length > 0 && <button type="button" onClick={() => void copy('all',reportText)} className="delivery-secondary-action">{copied === 'all' ? '已复制' : '复制问题清单'}</button>}
           <a href={apiUrl(`${path}/${current.id}/report.html`)} className="delivery-secondary-action" download>导出完整报告</a></>}>
-        {findings.length ? <div className="result-two-columns">{findings.map((finding,index) => <article key={`${finding.module}-${index}`} className={`rounded-lg border p-4 ${finding.level === 'CRITICAL' ? 'border-red-200 bg-red-50' : 'border-amber-200 bg-amber-50'}`}>
-          <div className="flex items-start justify-between gap-3"><strong className="text-sm text-slate-900">{finding.title}</strong><button type="button" className="shrink-0 rounded border border-slate-300 bg-white px-2 py-1 text-xs" onClick={() => void copy(`finding-${index}`,`${finding.explanation}\n${finding.suggestion}`)}>{copied === `finding-${index}` ? '已复制' : '复制'}</button></div>
-          {finding.level === 'CRITICAL' && current.findingIds?.[`${finding.title}\n${finding.originalExplanation}`] && (()=>{
-            const key=current.findingIds![`${finding.title}\n${finding.originalExplanation}`];
-            return <button type="button" disabled={acknowledged.includes(key)||!!ackBusy} className="mt-2 rounded border border-red-300 bg-white px-3 py-1 text-xs text-red-700 disabled:opacity-60" onClick={()=>void acknowledge(key)}>{acknowledged.includes(key)?'已确认阅悉':ackBusy===key?'正在保存…':'确认已阅'}</button>;
+        {findings.length ? <div className="result-two-columns">{findings.map((finding,index) => <article key={`${finding.module}-${index}`} className={`result-issue${finding.level === 'CRITICAL' ? ' procurement-issue-critical' : ''}`}>
+          <div className="flex items-start justify-between gap-3"><h4>{index+1}. {finding.title}</h4><button type="button" className="delivery-secondary-action procurement-copy-action" onClick={() => void copy(`finding-${index}`,`${finding.explanation}\n${finding.suggestion}`)}>{copied === `finding-${index}` ? '已复制' : '复制'}</button></div>
+          {finding.level === 'CRITICAL' && (()=>{
+            const keys=[...new Set(finding.members.filter(m=>m.level==='CRITICAL').map(m=>current.findingIds?.[`${m.title}\n${m.explanation}`]).filter((key):key is string=>!!key))];
+            if(!keys.length)return null;
+            const allAcknowledged=keys.every(key=>acknowledged.includes(key));
+            return <button type="button" disabled={allAcknowledged||!!ackBusy} className="mt-2 rounded border border-red-300 bg-white px-3 py-1 text-xs text-red-700 disabled:opacity-60" onClick={()=>void acknowledge(keys)}>{allAcknowledged?'已确认阅悉':keys.includes(ackBusy)?'正在保存…':'确认已阅'}</button>;
           })()}
           <p className="mt-2 text-sm leading-6 text-slate-700">{finding.explanation}</p><p className="mt-2 text-sm leading-6 text-slate-600">建议：{finding.suggestion}</p>
-          <p className="mt-3 text-xs text-slate-500">涉及材料：{[...new Set(finding.evidence.map(e => e.fileName))].join('、')}</p>
-          <details className="mt-2 text-xs text-slate-600"><summary>查看依据</summary>{finding.evidence.map(source => <blockquote className="mt-2 whitespace-pre-wrap" key={source.id}>{source.fileName}{'\n'}{source.excerpt}</blockquote>)}</details>
+          <p className="result-issue-source">涉及材料：{[...new Set(finding.evidence.map(e => e.fileName))].join('、')}</p>
+          <button type="button" className="result-source-action" onClick={()=>{setEvidenceFocus(`${finding.title} ${finding.explanation}`);setEvidence(finding.evidence);}}>查看原文</button>
         </article>)}</div> : report.quoteComparisons?.some(c=>c.status==='OVER_BUDGET')||report.ceilingComparisons?.some(c=>c.status==='OVER_CEILING') ? <div className="result-issue"><p className="text-sm font-medium leading-7 text-amber-900">{automaticPrioritySummary(caseProcessing,report.quoteComparisons??[],report.ceilingComparisons??[])}</p></div> : <ResultEmpty>{automaticPrioritySummary(caseProcessing, report.quoteComparisons ?? [], report.ceilingComparisons ?? [])}</ResultEmpty>}
         </ResultSection>
         <ResultSection title="报价比对" number="02" tone={report.offers.some(o=>o.lineValidation==='CONFLICT')||report.quoteComparisons?.some(c=>c.status==='OVER_BUDGET')||report.ceilingComparisons?.some(c=>c.status==='OVER_CEILING')||report.reviews?.BLACKLIST?.checks.some(c=>c.status==='BLOCKED')?'attention':report.offers.length>0&&report.offers.every(o=>report.quoteComparisons?.some(c=>c.documentId===o.documentId&&c.status==='WITHIN_BUDGET'))?'clear':'default'}>{report.offers.length===0?<ResultEmpty>{caseProcessing?'正在分析…':'材料不足，未生成'}</ResultEmpty>:<div className="result-two-columns">{report.offers.map(o => {
-          const budgetStatus=report.quoteComparisons?.find(c=>c.documentId===o.documentId)?.status;
-          const ceilingStatus=report.ceilingComparisons?.find(c=>c.documentId===o.documentId)?.status;
+          const budgetStatus=comparisonForOffer(report.quoteComparisons,o,report.offers)?.status;
+          const ceilingStatus=comparisonForOffer(report.ceilingComparisons,o,report.offers)?.status;
+          const quoteEvidence=current.materialDetails?.filter(d=>d.label.startsWith('报价')).flatMap(d=>d.evidence.filter(e=>e.documentId===o.documentId))??[];
           const over=budgetStatus==='OVER_BUDGET',overCeiling=ceilingStatus==='OVER_CEILING',lineConflict=o.lineValidation==='CONFLICT';
           const blocked = report.reviews?.BLACKLIST?.checks.some(c => c.status === 'BLOCKED' && c.explanation.startsWith(`${o.supplier}命中`));
-          return <ResultItem key={o.documentId} tone={over||blocked||overCeiling||lineConflict?'attention':budgetStatus==='WITHIN_BUDGET'?'clear':'default'} title={`${o.supplier} · ${Number(o.amount).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})} 元`} label={over?'超过预算':overCeiling?'超过限价':blocked?'黑名单命中':lineConflict?'明细计算不一致':budgetStatus==='WITHIN_BUDGET'?'未超过预算':undefined}><p className="text-sm font-medium">{blocked ? '黑名单命中，暂停推荐' : ''}{over ? ' · 超过材料预算' : budgetStatus==='WITHIN_BUDGET' ? '未超过材料预算' : ''}{overCeiling?' · 超过最高限价':ceilingStatus==='WITHIN_CEILING'?' · 未超过最高限价':''}</p>
-            <p className="mt-1 text-xs text-slate-500">来源：{current.documents.find(d => d.id === o.documentId)?.name}</p>
-            <details className="mt-2 text-xs"><summary>报价明细</summary>{o.lines.map((l,index) => <p key={index} className="mt-1">{l.item}：{l.quantity} × {l.unitPrice} = {l.amount} 元</p>)}</details></ResultItem>;
+          return <ResultItem key={`${o.documentId}-${o.sourceRow??o.supplier}`} tone={over||blocked||overCeiling||lineConflict?'attention':budgetStatus==='WITHIN_BUDGET'?'clear':'default'} title={`${o.supplier} · ${Number(o.amount).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})} 元`} label={over?'超过预算':overCeiling?'超过限价':blocked?'黑名单命中':lineConflict?'明细计算不一致':budgetStatus==='WITHIN_BUDGET'?'未超过预算':undefined}><p className="text-sm font-medium">{blocked ? '黑名单命中，暂停推荐' : ''}{over ? ' · 超过预算' : budgetStatus==='WITHIN_BUDGET' ? '未超过预算' : ''}{overCeiling?' · 超过最高限价':ceilingStatus==='WITHIN_CEILING'?' · 未超过最高限价':''}</p>
+            <p className="result-issue-source">来源：{current.documents.find(d => d.id === o.documentId)?.name}</p>
+            {o.lines.length>0&&<details className="mt-2 text-sm"><summary>报价明细</summary>{o.lines.map((l,index) => <p key={index} className="mt-1">{l.item}：{l.unitPrice==null?`数量 ${l.quantity}，金额 ${l.amount} 元`:`${l.quantity} × ${l.unitPrice} = ${l.amount} 元`}</p>)}</details>}{quoteEvidence.length>0&&<button type="button" className="result-source-action" onClick={()=>{setEvidenceFocus(`报价 投标总价 ${o.amount}`);setEvidence(quoteEvidence);}}>查看原文</button>}</ResultItem>;
         })}</div>}</ResultSection>
-        <div className="result-two-columns procurement-check-grid">{[['TENDER_COMPLIANCE','招标文件合规性审查'],['BLACKLIST','供应商黑名单比对'],['AGENT_PRECHECK','跨材料一致性核对']].map(([module,title],moduleIndex)=>{
-          const review=report.reviews?.[module],checks=review?.checks.filter(c=>c.code!=='MATERIAL_COVERAGE')??[];
+        <div className="result-two-columns procurement-check-grid">{[['TENDER_COMPLIANCE','招标文件合规性审查'],['BLACKLIST','供应商黑名单比对'],['AGENT_PRECHECK','项目与采购信息核对']].map(([module,title],moduleIndex)=>{
+          const review=report.reviews?.[module],checks=review?.checks.filter(c=>c.code!=='MATERIAL_COVERAGE'&&!['RULE_CANDIDATE','UNKNOWN','NOT_EVALUATED'].includes(c.status))??[];
           const tone=review?.findings.length||checks.some(c=>automaticCheckTone(c.status)==='attention')?'attention':checks.length>0&&checks.every(c=>automaticCheckTone(c.status)==='clear')?'clear':'default';
           return <ResultSection key={module} title={title} tone={tone} number={String(moduleIndex+3).padStart(2,'0')}>
-            {checks.length>0?<div className="result-check-list">{checks.map((check,index)=><ResultItem tone={automaticCheckTone(check.status)} title={check.code.startsWith('IDENTITY_')?automaticFactLabel(check.code.slice(9)):'核对意见'} label={automaticCheckTone(check.status)==='clear'?'未见异常':automaticCheckTone(check.status)==='attention'?'需关注':undefined} key={index}>{automaticCheckExplanation(check)}
-              {check.evidence.length>0&&<p className="result-issue-source">涉及材料：{[...new Set(check.evidence.map(e=>e.fileName))].join('、')}</p>}
+            {checks.length>0?<div className="result-check-list">{checks.map((check,index)=><ResultItem tone={automaticCheckTone(check.status)} title={automaticCheckTitle(check.code)} label={automaticCheckTone(check.status)==='clear'?'未见异常':automaticCheckTone(check.status)==='attention'?'需关注':undefined} key={index}>{automaticCheckExplanation(check)}
+              {check.evidence.length>0&&<><p className="result-issue-source">涉及材料：{[...new Set(check.evidence.map(e=>e.fileName))].join('、')}</p><button type="button" className="result-source-action" onClick={()=>{setEvidenceFocus(check.explanation);setEvidence(check.evidence);}}>查看原文</button></>}
             </ResultItem>)}</div>:<ResultEmpty>{caseProcessing?'正在分析…':review&&['FAILED','UNKNOWN'].includes(review.status)?'本项暂未完成':'材料不足，未生成'}</ResultEmpty>}
           </ResultSection>;
         })}</div>
+        <ResultSection title="材料要点" number="06" actions={current.materialDetails?.length?<button type="button" className="delivery-secondary-action" onClick={()=>void copy('details',current.materialDetails!.map(d=>`${d.label}：${d.value}`).join('\n'))}>{copied==='details'?'已复制':'复制要点'}</button>:undefined}>
+          {current.materialDetails?.length?<div className="result-two-columns">{current.materialDetails.map((detail,index)=><ResultItem key={index} title={detail.label}>
+            <p className="text-sm font-medium text-slate-900">{detail.value}</p>
+            <p className="result-issue-source">来源：{[...new Set(detail.evidence.map(e=>e.fileName))].join('、')}</p>
+            <button type="button" className="result-source-action" onClick={()=>{setEvidenceFocus(`${detail.label} ${detail.value}`);setEvidence(detail.evidence);}}>查看原文</button>
+          </ResultItem>)}</div>:<ResultEmpty>{caseProcessing?'正在整理…':'暂无可核实的信息'}</ResultEmpty>}
+        </ResultSection>
+
 
       </section>}
-      <details className="rounded-xl border border-slate-200 bg-white p-5 text-sm"><summary className="cursor-pointer font-medium text-slate-700">本批材料（{current.documents.length} 份）</summary><ul className="mt-3 divide-y divide-slate-100">{current.documents.map(d => <li key={d.id} className="flex flex-wrap items-center justify-between gap-3 py-3"><span>{d.name}</span><div className="flex gap-3 text-xs"><button type="button" className="text-blue-700" onClick={() => void showEvidence(d.id)}>查看提取内容</button><a className="text-blue-700" href={apiUrl(`${path}/${current.id}/files/${d.id}/original`)}>原文件</a></div></li>)}</ul></details>
+      {!caseProcessing && <ResultMaterialList names={current.documents.map(document => document.name)}
+        originalUrls={current.documents.map(document=>`${path}/${current.id}/files/${encodeURIComponent(document.id)}/original`)}
+        onOpenOriginal={index=>{const document=current.documents[index];if(document)setOriginalFile(document);}} />}
     </>}
-    {evidence && <details open className="rounded-xl border border-slate-200 bg-white p-5"><summary className="text-sm font-medium">{evidence.fileName} · 提取内容</summary>
-      <ul className="mt-3 space-y-3 text-sm">{evidence.facts.filter(f => f.verification === 'SOURCE_VERIFIED').map((f,index) => <li key={index}><strong>{automaticFactLabel(f.type)}：{f.value}</strong><blockquote className="mt-1 whitespace-pre-wrap text-xs leading-6 text-slate-500">{f.excerpt}</blockquote></li>)}</ul></details>}
+    {current&&originalFile&&<OriginalFileDialog key={`${current.id}:${originalFile.id}`} name={originalFile.name}
+      url={`${path}/${current.id}/files/${encodeURIComponent(originalFile.id)}/original`}
+      pageBase={`${path}/${current.id}/files/${encodeURIComponent(originalFile.id)}`}
+      legacyUrl={`${path}/${current.id}/files/${encodeURIComponent(originalFile.id)}/office-html`}
+      onClose={()=>setOriginalFile(null)} />}
+    {evidence&&<ProcurementEvidenceDialog focusText={evidenceFocus} key={current?.id} evidence={evidence} loadSource={loadSource} visualBase={fileId=>`${path}/${current?.id}/files/${encodeURIComponent(fileId)}`} onClose={()=>setEvidence(null)}/>}
   </section>;
 }

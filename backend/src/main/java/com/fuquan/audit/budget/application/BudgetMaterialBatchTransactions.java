@@ -13,6 +13,27 @@ import org.springframework.transaction.annotation.*;
 @Service
 public class BudgetMaterialBatchTransactions {
     private final BudgetMaterialBatchRepository batches;
+    private BudgetMaterialJobRepository jobs;
+    @org.springframework.beans.factory.annotation.Autowired
+    public void setJobs(BudgetMaterialJobRepository value){jobs=value;}
+    @Transactional(propagation=Propagation.REQUIRES_NEW)
+    public List<UUID> cancel(UUID id,CurrentUser user) {
+        var batch=batches.find(id).orElseThrow(()->new com.fuquan.audit.common.exception.BusinessException(com.fuquan.audit.common.exception.BusinessErrorCode.NOT_FOUND));
+        if(!user.roles().contains("SYSTEM_ADMIN")&&!batch.actorId().equals(user.userId()))throw new com.fuquan.audit.common.exception.BusinessException(com.fuquan.audit.common.exception.BusinessErrorCode.NOT_FOUND);
+        if("USER_CANCELLED".equals(batch.leaseToken()))return batches.sources(id).stream().map(BudgetMaterialBatch.Source::taskId).toList();
+        if(!batches.cancel(id))throw new com.fuquan.audit.common.exception.BusinessException(com.fuquan.audit.common.exception.BusinessErrorCode.CONFLICT,"当前任务已结束，无法取消");
+        var ids=new ArrayList<UUID>();
+        for(var source:batches.sources(id)) {
+            UUID taskId=source.taskId();ids.add(taskId);
+            jobs.cancel(taskId,Instant.now());
+            var task=tasks.findByIdForUpdate(taskId).orElseThrow();
+            for(var item:items.findByTaskId(taskId))items.deleteByTaskAndRow(taskId,item.rowNumber());
+            tasks.save(task.cancelled());
+        }
+        batches.clearCancelledSources(id);
+        audit.success("BUDGET_BATCH_CANCELLED",user,"BUDGET_MATERIAL_BATCH",id.toString(),null,null,Map.of("memberCount",ids.size()),"取消预算材料处理");
+        return ids;
+    }
     private final BudgetReviewTaskRepository tasks;
     private final BudgetReviewItemRepository items;
     private final OperationAuditService audit;

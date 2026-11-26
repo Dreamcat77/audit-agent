@@ -8,6 +8,12 @@ unit_root="${install_root%/}/etc/systemd/system"
 java="${install_root%/}/opt/java/current/bin/java"
 jar="${install_root%/}/opt/java/current/bin/jar"
 python="${install_root%/}/opt/python/venvs/audit-ai/bin/python"
+is_versioned_update_path(){
+  local parent=$1 candidate=$2 leaf
+  [[ $candidate == "$parent/"* ]] || return 1
+  leaf=${candidate#"$parent/"}
+  [[ $leaf =~ ^v[0-9]+[a-z]?\.[A-Za-z0-9]+$ ]]
+}
 switch_current(){ local target=$1; local tmp="$base/current.v10-switch.$$"; ln -s "$target" "$tmp"; mv -Tf "$tmp" "$base/current"; }
 restore_dropins(){
   # Validate both paths before changing either service's configuration.
@@ -97,8 +103,48 @@ schema(){
   # V057 depends on V055; an absent V055 is an approved planned prerequisite.
   guard CustomerReadiness deadline "$mode"
   guard CustomerContractSchema "$mode" "$package_dir/schema.json" "$record/contract-ddl"
+  guard PersonalAccountBootstrap check "$package_dir/db/V058__personal_upload_roles.sql"
+  guard ClientIdentityBootstrap check "$package_dir/client-identity-aliases.txt"
 }
 readiness(){ guard CustomerReadiness ready; }
+stop_update_services(){
+  local svc group prefix process_file remaining attempt
+  local -a update_groups=()
+  for svc in audit-backend audit-ai; do
+    group=$(systemctl show "$svc" -p ControlGroup --value) || return 1
+    [[ -z $group || ( $group == /* && $group != / && $group != *..* ) ]] || die SERVICE_CGROUP_INVALID
+    update_groups+=("$group")
+  done
+  # Bound the graceful drain. Stop the units first so Restart= cannot relaunch them.
+  systemctl stop --no-block audit-backend audit-ai || return 1
+  update_processes_stopped(){
+    for svc in audit-backend audit-ai; do
+      [[ $(systemctl show "$svc" -p MainPID --value) == 0 ]] || return 1
+    done
+    for group in "${update_groups[@]}"; do
+      [[ -n $group ]] || continue
+      for prefix in /sys/fs/cgroup /sys/fs/cgroup/systemd; do
+        if [[ -d $prefix$group ]]; then
+          while IFS= read -r -d '' process_file; do
+            remaining=$(cat "$process_file") || return 1
+            [[ -z $remaining ]] || return 1
+          done < <(find "$prefix$group" -name cgroup.procs -type f -print0)
+        fi
+      done
+    done
+  }
+  for ((attempt=0; attempt<30; attempt++)); do
+    if update_processes_stopped; then echo 'UPDATE_SERVICE_STOP=PASS'; return 0; fi
+    sleep 1
+  done
+  echo 'UPDATE_SERVICE_STOP=ENDING_REMAINING_SERVICE_PROCESSES'
+  systemctl kill --kill-who=all --signal=SIGKILL audit-backend audit-ai || true
+  for ((attempt=0; attempt<10; attempt++)); do
+    if update_processes_stopped; then echo 'UPDATE_SERVICE_STOP=PASS'; return 0; fi
+    sleep 1
+  done
+  die SERVICE_PROCESS_STILL_RUNNING
+}
 check_http(){
   local release=$1 mode=${2:-verify} file relative; stage=HTTP_RESOURCES
   if [[ $mode == existing ]]; then

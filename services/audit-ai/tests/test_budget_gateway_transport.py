@@ -41,8 +41,22 @@ def test_budget_field_prompt_preserves_partial_approval_and_project_scope_withou
         assert '不得因缺少申报金额而丢弃批复资料' in prompt
         assert '不计算、不猜测' in prompt
         assert '项目预算总额' in prompt
+        assert '第三方审定金额' in prompt
+        assert '年度财政支出预算' in prompt
         return httpx.Response(200,json={'choices':[{'finish_reason':'stop','message':{'content':'{"rows":[]}'}}]})
     gateway(handler).extract_material_fields('BUDGET','[]','synthetic')
+
+
+def test_procurement_prompt_covers_observed_negotiation_documents_without_requiring_every_section():
+    def handler(request):
+        body=json.loads(request.content)
+        prompt=body['messages'][0]['content']
+        for phrase in ('国库资金','自筹资金','合同履行期限','供应商资格要求','供应商须知',
+                       '磋商须知前附表','评分细则','合同条款及格式','简要规则描述',
+                       '历史业绩名称不得冒充当前项目','不同名称拼接成一个字符串'):
+            assert phrase in prompt
+        return httpx.Response(200,json={'choices':[{'finish_reason':'stop','message':{'content':'{"rows":[]}'}}]})
+    gateway(handler).extract_material_fields('PROCUREMENT_REVIEW','[]','synthetic')
 
 
 def test_material_chunking_keeps_normal_rows_together_and_preserves_long_tail():

@@ -21,7 +21,9 @@ public class ProcurementMaterialBatchService {
     private static final Set<String> REVIEW_FIELDS = Set.of("projectName", "projectNo", "departmentName",
             "procurementType", "budgetAmount", "subjectCode", "subjectName", "procurementMethod",
             "requirementDescription", "applicantName", "purchaserName", "agencyName", "supplierName",
-            "quoteAmount", "ceilingAmount", "productDescription");
+            "quoteAmount", "ceilingAmount", "productDescription", "treasuryFundAmount", "selfFundAmount",
+            "contractPerformancePeriod", "qualificationRequirements", "supplierInstructions",
+            "negotiationInstructions", "scoringCriteria", "contractTermsSummary", "procurementRulesSummary");
     private final ProcurementTenderDocumentService documents;
     private final ProcurementTenderRuleScanService scans;
     private final ProcurementReviewMaterialService sheets;
@@ -256,6 +258,13 @@ public class ProcurementMaterialBatchService {
                 if (result != null && result.rows() != null) result.rows().stream().filter(Objects::nonNull)
                         .filter(row -> row.facts() != null).flatMap(row -> row.facts().stream())
                         .filter(Objects::nonNull).forEach(candidates::add);
+                // Funding components are often printed in compact budget
+                // lines ("国库资金：180万元；自筹资金：40万元"). Models may
+                // return the same value with a different unit/spacing, which
+                // is correctly rejected by the evidence gate. Recover only
+                // these labelled, source-backed amounts deterministically so
+                // the result still reflects material that is visibly present.
+                candidates.addAll(deterministicFundingFacts(source.parseResult().segments()));
                 var facts = candidates.stream().filter(fact -> REVIEW_FIELDS.contains(fact.field())
                         && fact.locator() != null && sourceText.containsKey(fact.locator())
                         && fact.value() != null && !fact.value().isBlank()
@@ -293,6 +302,30 @@ public class ProcurementMaterialBatchService {
                     "promptVersion", Objects.toString(state.promptVersion(), "UNAVAILABLE")));
             return saved;
         }
+    }
+
+    static List<MaterialFieldAiPort.Fact> deterministicFundingFacts(
+            List<ProcurementTenderParseResult.Segment> segments) {
+        if (segments == null || segments.isEmpty()) return List.of();
+        var facts = new ArrayList<MaterialFieldAiPort.Fact>();
+        var amount = "(?:[¥￥]?\\s*(?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\\.[0-9]+)?\\s*(?:亿元?|万元?|千元?|元)?|[零〇一二两三四五六七八九十百千万亿壹贰叁肆伍陆柒捌玖拾佰仟]+元(?:整|正)?)";
+        var pattern = java.util.regex.Pattern.compile("(国库资金(?:金额)?|自筹资金(?:金额)?)\\s*[:：]?\\s*(?:(?:人民币|RMB|CNY)\\s*)?(" + amount + ")");
+        for (var segment : segments) {
+            if (segment == null || segment.text() == null) continue;
+            var matcher = pattern.matcher(segment.text());
+            while (matcher.find()) {
+                String field = matcher.group(1).startsWith("国库") ? "treasuryFundAmount" : "selfFundAmount";
+                // Keep internal spaces so the fact remains an exact substring
+                // of the original evidence; RmbAmountParser accepts ordinary
+                // whitespace around the numeric unit.
+                String value = matcher.group(2).trim();
+                if (com.fuquan.audit.common.domain.RmbAmountParser.parse(value).isEmpty()) continue;
+                String sourceExcerpt = matcher.group(0);
+                if (!sourceExcerpt.contains(value)) continue;
+                facts.add(new MaterialFieldAiPort.Fact(field, value, segment.sourceLocator(), sourceExcerpt));
+            }
+        }
+        return facts;
     }
 
     private ProcurementTenderDocumentService.TenderDocumentResult persistExtractionState(UUID projectId,
@@ -341,6 +374,16 @@ public class ProcurementMaterialBatchService {
             Set<String> otherRole = Set.of("采购人", "招标人", "采购单位", "中标人", "中标单位",
                     "项目名称", "经办部门");
             return textHasRoleForValue(excerpt, value, supplier, otherRole);
+        }
+        if (Set.of("treasuryFundAmount", "selfFundAmount").contains(fact.field())) {
+            String value=java.text.Normalizer.normalize(fact.value(),java.text.Normalizer.Form.NFKC);
+            Set<String> treasury=Set.of("国库资金","国库资金金额");
+            Set<String> selfFunded=Set.of("自筹资金","自筹资金金额");
+            Set<String> budgetOrPrice=Set.of("预算金额","采购预算","采购预算金额","最高限价","预算控制价","采购控制价",
+                    "投标报价","投标总价","响应报价","响应总价","报价总额","报价金额","合同金额","成交金额","中标金额");
+            return fact.field().equals("treasuryFundAmount")
+                    ?textHasRoleForValue(excerpt,value,treasury,union(selfFunded,budgetOrPrice))
+                    :textHasRoleForValue(excerpt,value,selfFunded,union(treasury,budgetOrPrice));
         }
         if (!Set.of("budgetAmount", "quoteAmount", "ceilingAmount").contains(fact.field())) return true;
         String value = java.text.Normalizer.normalize(fact.value(), java.text.Normalizer.Form.NFKC);

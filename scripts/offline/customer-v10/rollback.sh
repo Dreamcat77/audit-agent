@@ -6,13 +6,13 @@ source "$(dirname -- "${BASH_SOURCE[0]}")/common.sh"
 lock_update
 [[ $# == 1 ]] || die ROLLBACK_ARGUMENTS
 record=$(readlink -f -- "$1")
-case "$record" in "$base/update-backups/v10."*) ;; *) die ROLLBACK_RECORD_PATH ;; esac
+is_versioned_update_path "$base/update-backups" "$record" || die ROLLBACK_RECORD_PATH
 [[ -d "$record" && ! -L "$1" && -f "$record/record.sha256" ]] || die ROLLBACK_RECORD_MISSING
 (cd "$record" && sha256sum -c record.sha256 >/dev/null) || die ROLLBACK_RECORD_HASH
 load_record_http
 previous=$(cat "$record/previous.txt"); release=$(cat "$record/release.txt")
 case "$previous" in "$base/releases/"*) ;; *) die ROLLBACK_OLD_RELEASE_PATH ;; esac
-case "$release" in "$base/releases/v10."*) ;; *) die ROLLBACK_NEW_RELEASE_PATH ;; esac
+is_versioned_update_path "$base/releases" "$release" || die ROLLBACK_NEW_RELEASE_PATH
 [[ -L "$base/current" && $(readlink -f "$base/current") == "$release" && -d "$previous/backend" ]] || die ROLLBACK_CURRENT_CHANGED
 sha256sum -c "$record/configs.sha256" >/dev/null || die ROLLBACK_CONFIG_CHANGED
 check_managed_dropins

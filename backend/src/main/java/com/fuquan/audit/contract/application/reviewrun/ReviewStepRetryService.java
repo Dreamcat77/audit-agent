@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 /** An authorized retry is a new durable command; terminal attempt history is never updated. */
 public class ReviewStepRetryService {
     public static final String SCOPE = "CONTRACT_REVIEW_STEP_RETRY";
-    private static final Set<String> ROLES = Set.of("SYSTEM_ADMIN", "PROCUREMENT_MANAGER", "AUDITOR", "LEGAL");
+    private static final Set<String> ROLES = Set.of("SYSTEM_ADMIN", "PROCUREMENT_MANAGER", "AUDITOR", "LEGAL","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER");
     private final ContractReviewWorkerRepository workers;
     private final ContractReviewRunRepository runs;
     private final ContractReviewStepRepository steps;

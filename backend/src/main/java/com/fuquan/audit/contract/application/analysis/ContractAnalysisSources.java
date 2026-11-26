@@ -21,6 +21,12 @@ public class ContractAnalysisSources {
     public String projectName(ContractAnalysisCase c){
         return projects.findById(c.projectId()).filter(p->p.createdBy().equals(c.owner())).map(Project::name).orElse(null);
     }
+    public List<UUID> processingJobs(UUID projectId) { return jobs.byProject(projectId).stream().map(j->j.id()).toList(); }
+    public UUID analysisIdentity(UUID projectId,CurrentUser actor){
+        var project=projects.findById(projectId).filter(p->actor.roles().contains("SYSTEM_ADMIN")||p.createdBy().equals(actor.userId()))
+                .orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));
+        return identity(project.createdBy(),projectId);
+    }
     public List<Source> manifest(UUID projectId,CurrentUser actor){
         projects.findById(projectId).filter(p->p.createdBy().equals(actor.userId())).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));
         var input=files.findByProjectId(projectId).stream().filter(f->f.category()!=ProjectFileCategory.PACKAGE)

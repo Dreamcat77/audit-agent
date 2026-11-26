@@ -16,8 +16,21 @@ class ContractAnalysisProcessorTest {
     @Test void longerScanningBudgetDoesNotKeepAnUnuploadedBatchWaitingForSixHours(){
         var p=UUID.randomUUID();var c=new ContractAnalysisCase(identity("owner",p),p,"owner",sha256("unuploaded"),State.QUEUED,0,null,null,0,
             clock.instant(),clock.instant().plusSeconds(21600),List.of(),List.of(),"WAITING_FOR_UPLOAD",1);repo.insert(c);
+        when(sources.acceptedManifest(any())).thenReturn(Optional.empty());
         clock.now=c.createdAt().plusSeconds(1981);processor.process(c.id(),actor);
         assertThat(repo.find(c.id()).orElseThrow().reasonCode()).isEqualTo("UPLOAD_TOTAL_DEADLINE");verifyNoInteractions(ai);
+    }
+    @Test void completeUploadedManifestIsNotDiscardedBecauseItsWorkerWaitExceededUploadGrace(){
+        var ready=caseFor("验收合格后付款");
+        var p=ready.projectId();var pending=new ContractAnalysisCase(UUID.randomUUID(),p,"owner",sha256("late-schedule"),State.QUEUED,800,null,null,400,
+                clock.instant(),clock.instant().plusSeconds(21600),List.of(),List.of(),"WAITING_FOR_UPLOAD",1);repo.insert(pending);
+        when(sources.acceptedManifest(any())).thenReturn(Optional.of(ready.sources()));
+        clock.now=pending.createdAt().plusSeconds(2400);
+        processor.process(pending.id(),actor);
+        var resumed=repo.find(pending.id()).orElseThrow();
+        assertThat(resumed.sources()).containsExactlyElementsOf(ready.sources());
+        assertThat(resumed.reasonCode()).isNotEqualTo("UPLOAD_TOTAL_DEADLINE");
+        assertThat(resumed.status()).isEqualTo(State.QUEUED);
     }
     static class MutableClock extends Clock {
         Instant now=ContractAnalysisCaseTest.NOW;public ZoneId getZone(){return ZoneOffset.UTC;}public Clock withZone(ZoneId zone){return this;}public Instant instant(){return now;}
@@ -31,8 +44,18 @@ class ContractAnalysisProcessorTest {
     final ContractAnalysisRelations relations=new ContractAnalysisRelations();
     final ContractAnalysisProcessor processor=new ContractAnalysisProcessor(repo,tx,sources,new ContractAnalysisPlan(),rules,ai,evidence,relations,clock);
     final CurrentUser actor=new CurrentUser("owner","test-user","测试用户",Set.of("AUDITOR"));
+    @Test void bidHistoryDoesNotTriggerContractTotalFocusedCall(){
+        var c=caseFor("合同编号：OLD-2023\n验收合格后付款","投标文件.pdf");
+        when(ai.analyze(any())).thenAnswer(i->clauses(i.getArgument(0)));
+        var done=run(c.id());assertThat(done.steps()).noneMatch(step->step.kind().equals("FOCUSED"));
+        verify(ai,times(1)).analyze(any());
+    }
     ContractAnalysisCase caseFor(String text){
-        var s=ContractAnalysisEvidenceTest.source(text);var p=UUID.randomUUID();
+        return caseFor(text,"合成合同.docx");
+    }
+    ContractAnalysisCase caseFor(String text,String name){
+        var original=ContractAnalysisEvidenceTest.source(text);
+        var s=new Source(original.fileId(),name,original.sha256(),original.size(),original.status(),original.parseResultId(),original.parseVersion(),original.textSha256(),original.reasonCode());var p=UUID.randomUUID();
         var c=new ContractAnalysisCase(identity("owner",p),p,"owner",sha256("manifest/"+p),State.QUEUED,0,null,null,0,clock.instant(),clock.instant().plusSeconds(1800),List.of(s),List.of(),null);
         when(sources.freeze(p,s)).thenReturn(s);
         var parse=new ProjectFileParseResult(s.parseResultId(),p,s.fileId(),s.sha256(),1,ProjectFileParseOrigin.CURRENT_PIPELINE,ProjectFileParseStatus.PARSED,ProjectFileParseMethod.DOCX_TEXT,"synthetic",null,text,s.textSha256(),1,1L,null,null,clock.instant(),clock.instant(),0);
@@ -103,4 +126,25 @@ class ContractAnalysisProcessorTest {
         verify(ai,atLeast(3)).analyze(captor.capture());
         assertThat(captor.getAllValues().stream().map(ContractAnalysisAiPort.Request::inputDigest)).doesNotHaveDuplicates();
     }
+    @Test void semanticContextComesFromFrozenSourceNotMutableProjectDisplayName(){
+        String text="项目名称：青禾档案整理项目\n验收合格后付款";
+        var c=caseFor(text);when(sources.projectName(any())).thenReturn("后来修改的其他项目");
+        when(ai.analyze(any())).thenAnswer(i->{var request=(ContractAnalysisAiPort.Request)i.getArgument(0);var document=request.documents().get(0);
+            assertThat(document.header()).isEqualTo(text);assertThat(document.projectName()).isEqualTo("青禾档案整理项目");
+            assertThat(document.name()).isEqualTo(c.sources().get(0).name());return clauses(request);});
+        run(c.id());verify(ai,atLeastOnce()).analyze(any());verify(sources,never()).projectName(any());
+    }
+    @Test void longFileScopesDoNotRepeatUnseenHeaderClausesAsCitableMaterial(){
+        String text="项目名称：青禾档案整理项目\n合同总价10000元。验收合格后付款。\n"+"运维记录格式，不调整合同约定。\n".repeat(220)+"特别约定：验收前付清全部价款。";
+        var c=caseFor(text);var requests=new ArrayList<ContractAnalysisAiPort.Request>();
+        when(ai.analyze(any())).thenAnswer(i->{var request=(ContractAnalysisAiPort.Request)i.getArgument(0);requests.add(request);
+            var document=request.documents().get(0);assertThat(document.header()).isNull();
+            assertThat(text).contains(document.text());assertThat(document.projectName()).isEqualTo("青禾档案整理项目");
+            return ContractAnalysisEvidenceTest.result(List.of(),List.of(),List.of());});
+        var done=run(c.id());assertThat(done.terminal()).isTrue();
+        assertThat(requests).hasSizeGreaterThan(1);
+        var fragments=requests.stream().filter(r->r.scope().equals("FRAGMENT")).toList();
+        assertThat(fragments.get(fragments.size()-1).documents().get(0).text()).contains("验收前付清全部价款").doesNotContain("验收合格后付款");
+    }
+
 }

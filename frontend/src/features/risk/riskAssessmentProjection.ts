@@ -21,10 +21,10 @@ async function loadFilter(
   risk: ContractAuditTaskRiskFilter,
   signal: AbortSignal,
 ): Promise<ContractAuditTaskItem[]> {
-  const first = await dataSource.list({ page: 1, size: 100, risk, includeHistory: true, signal });
+  const first = await dataSource.list({ page: 1, size: 100, risk, status: "COMPLETED", signal });
   const items = [...first.items];
   for (let page = 2; page <= first.totalPages; page += 1) {
-    const next = await dataSource.list({ page, size: 100, risk, includeHistory: true, signal });
+    const next = await dataSource.list({ page, size: 100, risk, status: "COMPLETED", signal });
     items.push(...next.items);
   }
   return items;
@@ -63,7 +63,7 @@ export async function loadPersistedRiskAssessment(
   const reviewIds = new Set(reviewItems.map((task) => task.taskId));
   const insufficientIds = new Set(insufficientItems.map((task) => task.taskId));
   return {
-    scopeLabel: "当前用户可访问的持久化合同审核记录",
+    scopeLabel: "当前账号已完成的最新合同审核结果",
     reviewRequiredCount: reviewIds.size,
     materialInsufficientCount: insufficientIds.size,
     items: [...byTask.values()].map((task) => ({ task, coverage: coverage(task) })),

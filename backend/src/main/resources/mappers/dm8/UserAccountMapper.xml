@@ -30,6 +30,29 @@
         WHERE USERNAME = #{username}
     </select>
 
+    <insert id="insertUser">
+        INSERT INTO SYS_USER (ID, USERNAME, PASSWORD_HASH, REAL_NAME, STATUS, FAILED_LOGIN_COUNT,
+            PASSWORD_CHANGED_AT, CREATED_AT, UPDATED_AT, VERSION_NO)
+        VALUES (#{id},#{username},#{passwordHash},#{realName},#{status},0,
+            #{passwordChangedAt},#{createdAt},#{updatedAt},0)
+    </insert>
+    <update id="updateUser">
+        UPDATE SYS_USER
+        SET USERNAME=#{username}, PASSWORD_HASH=#{passwordHash}, REAL_NAME=#{realName}, STATUS=#{status},
+            FAILED_LOGIN_COUNT=#{failedLoginCount}, LOCKED_UNTIL=#{lockedUntil,jdbcType=TIMESTAMP},
+            PASSWORD_CHANGED_AT=#{passwordChangedAt}, UPDATED_AT=#{updatedAt}, VERSION_NO=VERSION_NO+1
+        WHERE ID=#{id} AND VERSION_NO=#{versionNo}
+    </update>
+    <select id="findSessionAccount" resultMap="userAccountRow">
+        SELECT STATUS, PASSWORD_CHANGED_AT, REAL_NAME FROM SYS_USER WHERE ID = #{id}
+    </select>
+    <select id="countUsers" resultType="long">SELECT COUNT(*) FROM SYS_USER</select>
+    <select id="listUsers" resultMap="userAccountRow">
+        SELECT * FROM (
+            SELECT U.*, ROW_NUMBER() OVER (ORDER BY CREATED_AT DESC, ID) AS RN FROM SYS_USER U
+        ) WHERE RN &gt; #{offset} AND RN &lt;= (#{offset} + #{limit}) ORDER BY RN
+    </select>
+
     <select id="findById" resultMap="userAccountRow">
         SELECT <include refid="userColumns"/>
         FROM SYS_USER

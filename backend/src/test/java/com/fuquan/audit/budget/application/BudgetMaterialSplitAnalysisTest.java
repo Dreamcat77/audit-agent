@@ -12,32 +12,21 @@ class BudgetMaterialSplitAnalysisTest {
     @Test void selectedRowsAreAddedWithoutVersionIdentityDateOrDepartmentFiltering() {
         var a=BudgetMaterialSplitAnalysis.analyzeSelected(List.of(row("甲","电子","31200","2026","甲"),row("甲","电子","19600","2025","乙"),row("甲","电子","31200","2026","甲")));
         assertThat(a.totalAmount()).isEqualByComparingTo("82000");assertThat(a.countedItems()).isEqualTo(3);
-        assertThat(a.complete()).isTrue();assertThat(a.exclusions()).isEmpty();assertThat(a.bandCode()).isEqualTo("BELOW_1M");
+        assertThat(a.complete()).isTrue();assertThat(a.exclusions()).isEmpty();assertThat(a.bandCode()).isNull();
     }
-    @Test void oneMillionBoundaryIsInclusiveAndUsesExactDecimalArithmetic() {
-        for(String amount:List.of("0", "9999.99", "10000", "100000", "999999.99")) {
+    @Test void retiredThresholdsAndAdjacentAmountsDoNotChangeNeutralSum() {
+        for(String amount:List.of("0","49999.99","50000","50000.01","199999.99","200000","200000.01",
+                "999999.99","1000000","1000000.01","1999999.99","2000000","2000000.01")) {
             var a=BudgetMaterialSplitAnalysis.analyzeSelected(List.of(row("甲","电子",amount,null,null)));
             assertThat(a.version()).isEqualTo("SELECTED_SUM_V3");
-            assertThat(a.bandCode()).isEqualTo("BELOW_1M");
-            assertThat(a.riskLevel()).isEqualTo("INFO");
-            assertThat(a.summary()).contains("未触发 100 万元的额外审批门槛");
+            assertThat(a.bandCode()).isNull();assertThat(a.bandLabel()).isNull();
+            assertThat(a.riskLevel()).isEqualTo("INFO");assertThat(a.findings()).isEmpty();
+            assertThat(a.summary()).doesNotContain("审批","门槛","区间");
             assertThat(a.totalAmount()).isEqualByComparingTo(amount);
         }
-        var above=BudgetMaterialSplitAnalysis.analyzeSelected(List.of(row("甲","电子","1000000.01",null,null)));
-        assertThat(above.bandCode()).isEqualTo("AT_OR_ABOVE_1M");
-        assertThat(above.riskLevel()).isEqualTo("WARNING");
-        assertThat(above.summary()).contains("需履行额外审批");
         var combined=BudgetMaterialSplitAnalysis.analyzeSelected(List.of(row("甲","电子","999999.99",null,null),row("乙","工程","0.02",null,null)));
         assertThat(combined.totalAmount()).isEqualByComparingTo("1000000.01");
-        assertThat(combined.bandCode()).isEqualTo("AT_OR_ABOVE_1M");
-        var exact=BudgetMaterialSplitAnalysis.analyzeSelected(List.of(row("甲","电子","600000",null,null),row("乙","工程","400000.00",null,null)));
-        assertThat(exact.bandCode()).isEqualTo("AT_OR_ABOVE_1M");
-        assertThat(exact.riskLevel()).isEqualTo("WARNING");
-        for(String amount:List.of("1000000","1000000.00")) {
-            var boundary=BudgetMaterialSplitAnalysis.analyzeSelected(List.of(row("甲","电子",amount,null,null)));
-            assertThat(boundary.bandCode()).isEqualTo("AT_OR_ABOVE_1M");
-            assertThat(boundary.summary()).contains("需履行额外审批");
-        }
+        assertThat(combined.bandCode()).isNull();assertThat(combined.riskLevel()).isEqualTo("INFO");
     }
     @Test void missingOrNegativeAmountsNeverProduceAnAllClearBand() {
         for(String amount:Arrays.asList(null,"-0.01")) {

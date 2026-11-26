@@ -12,6 +12,7 @@ public interface BudgetMaterialJobRepository {
     boolean claim(UUID id, String token, Instant now, Instant until);
     boolean renew(UUID id, String token, Instant until);
     boolean complete(UUID id, String token, String status, Instant now);
+    boolean cancel(UUID id, Instant now);
     /** Hold the job row lock until the surrounding short result transaction commits. */
     void requireLease(UUID id, String token);
 }

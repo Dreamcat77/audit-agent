@@ -416,10 +416,10 @@ class ProjectApiIntegrationTest {
         Map<String, Object> xlsx = file(files, "04_其他材料/明细表.xlsx");
         Map<String, Object> nested = file(files, "04_其他材料/nested.zip");
         assertThat(xlsx).containsEntry("ingestionStatus", "AVAILABLE")
-                .containsEntry("parseStatus", "UNSUPPORTED").containsEntry("parsedText", null)
-                .containsEntry("parseMethod", null).containsEntry("parseEngine", null)
+                .containsEntry("parseStatus", "PARSED").containsEntry("parsedText", "OOXML spreadsheet compatibility fixture")
+                .containsEntry("parseMethod", "DOCX_TEXT").containsEntry("parseEngine", "SHARED_MATERIAL")
                 .containsEntry("parseConfidence", null).containsEntry("pageCount", null)
-                .containsEntry("parseDurationMs", null);
+                ;
         assertThat(nested).containsEntry("ingestionStatus", "AVAILABLE")
                 .containsEntry("parseStatus", "UNSUPPORTED");
         assertThat(files).noneMatch(value -> String.valueOf(value.get("normalizedRelativePath"))

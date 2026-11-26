@@ -10,7 +10,6 @@ import java.util.*;
 /** Threshold arithmetic on uploaded evidence. Upload time is never an application date. */
 public final class BudgetMaterialSplitAnalysis {
     private BudgetMaterialSplitAnalysis() {}
-    static final BigDecimal ADDITIONAL_APPROVAL_THRESHOLD = new BigDecimal("1000000.00");
 
     public record Rule(String code, String name, int version, BigDecimal individualLimit,
             BigDecimal threshold, int minimumCount, int windowDays) {}
@@ -39,14 +38,10 @@ public final class BudgetMaterialSplitAnalysis {
             else total=total.add(amount);
         }
         boolean complete=missing.isEmpty();
-        boolean requiresAdditionalApproval=total.compareTo(ADDITIONAL_APPROVAL_THRESHOLD)>=0;
-        String band=!complete?null:requiresAdditionalApproval?"AT_OR_ABOVE_1M":"BELOW_1M";
-        String label=!complete?null:requiresAdditionalApproval?"达到或超过 100 万元":"低于 100 万元";
-        String summary=complete?"已合计所选 "+candidates.size()+" 项申报金额，所属金额区间："+label+"。"
-                +(requiresAdditionalApproval?"需履行额外审批。":"未触发 100 万元的额外审批门槛。")
-                :"所选 "+candidates.size()+" 项中有 "+missing.size()+" 项未识别有效申报金额，暂不能确定全部申报总额及金额区间。";
-        return new Analysis("SELECTED_SUM_V3",complete?(requiresAdditionalApproval?"WARNING":"INFO"):"UNKNOWN",total,candidates.size()-missing.size(),summary,
-                List.of(),List.of(),missing,band,label,complete);
+        String summary=complete?"已合计所选 "+candidates.size()+" 项申报金额。"
+                :"所选 "+candidates.size()+" 项中有 "+missing.size()+" 项未识别有效申报金额，暂不能确定全部申报总额。";
+        return new Analysis("SELECTED_SUM_V3",complete?"INFO":"UNKNOWN",total,candidates.size()-missing.size(),summary,
+                List.of(),List.of(),missing,null,null,complete);
     }
 
     public static Analysis analyze(List<Candidate> candidates, List<BudgetSplitRiskRule> configured) {

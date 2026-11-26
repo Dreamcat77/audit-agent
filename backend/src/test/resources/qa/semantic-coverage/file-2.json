@@ -1,0 +1,77 @@
+{
+  "document": {
+    "id": "1927f1fe-315c-4738-b0df-0af45a81859f",
+    "text": "服务与验收清单\n\n项目名称：栖霞办公区设备购置项目；合同编号：HT-QX-HW-2027-062。\n\n本清单作为本合同附件二，与正文在同一项目和范围内使用。\n\n序号\t交付内容\t验收依据\n1\t设备及设施台账\t数量、位置、功能记录\n2\t服务与工单记录\t处理节点与闭环情况\n3\t培训与交付材料\t签到、培训主题及操作手册\n仿真材料  不用于实际采购或签约\n",
+    "name": "附件二服务与验收清单.docx",
+    "roleHint": "ANNEX",
+    "header": "服务与验收清单\n\n项目名称：栖霞办公区设备购置项目；合同编号：HT-QX-HW-2027-062。\n\n本清单作为本合同附件二，与正文在同一项目和范围内使用。\n\n序号\t交付内容\t验收依据\n1\t设备及设施台账\t数量、位置、功能记录\n2\t服务与工单记录\t处理节点与闭环情况\n3\t培训与交付材料\t签到、培训主题及操作手册\n仿真材料  不用于实际采购或签约\n"
+  },
+  "result": {
+    "model": "synthetic-provider",
+    "version": "contract-case-v1",
+    "role": "ANNEX",
+    "profile": "PROCUREMENT",
+    "complete": true,
+    "facts": [
+      {
+        "type": "PROJECT_NAME",
+        "value": "栖霞办公区设备购置项目",
+        "citations": [
+          {
+            "document": "1927f1fe-315c-4738-b0df-0af45a81859f",
+            "text": "项目名称：栖霞办公区设备购置项目"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "CONTRACT_NO",
+        "value": "HT-QX-HW-2027-062",
+        "citations": [
+          {
+            "document": "1927f1fe-315c-4738-b0df-0af45a81859f",
+            "text": "合同编号：HT-QX-HW-2027-062"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "CONTRACT_REFERENCE",
+        "value": "本合同附件二",
+        "citations": [
+          {
+            "document": "1927f1fe-315c-4738-b0df-0af45a81859f",
+            "text": "本清单作为本合同附件二"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      }
+    ],
+    "clauses": [
+      {
+        "topic": "ACCEPTANCE",
+        "summary": "约定设备及设施台账、服务与工单记录、培训与交付材料三项交付内容的验收依据。",
+        "citations": [
+          {
+            "document": "1927f1fe-315c-4738-b0df-0af45a81859f",
+            "text": "1\t设备及设施台账\t数量、位置、功能记录\n2\t服务与工单记录\t处理节点与闭环情况\n3\t培训与交付材料\t签到、培训主题及操作手册"
+          }
+        ],
+        "subjectScope": null
+      },
+      {
+        "topic": "ATTACHMENT",
+        "summary": "明确本清单为合同附件二，与正文在同一项目和范围内使用。",
+        "citations": [
+          {
+            "document": "1927f1fe-315c-4738-b0df-0af45a81859f",
+            "text": "本清单作为本合同附件二，与正文在同一项目和范围内使用。"
+          }
+        ],
+        "subjectScope": null
+      }
+    ],
+    "findings": [],
+    "rejectedItems": 0
+  }
+}

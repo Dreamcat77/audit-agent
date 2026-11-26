@@ -1,3 +1,4 @@
+import {ProcessingStatusCard} from '../components/status/ProcessingStatusCard';
 import {
   Fragment,
   useEffect,
@@ -20,8 +21,11 @@ import {
   Search,
   SkipForward,
   Upload,
+  XCircle,
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import { request } from '../api/client';
+import { userFacingError } from '../api/userFacingError';
 import { createOperationKey } from '../api/operationKey';
 import {
   confirmBudgetRow,
@@ -46,6 +50,7 @@ import { OFFICE_MATERIAL_ACCEPT } from '../features/procurement/materials/office
 import { BudgetHistoryResults } from '../features/budget/BudgetHistoryResults';
 import type { BudgetMaterialBatchHistoryRecord } from '../api';
 import { BudgetFileResults } from '../features/budget/BudgetFileResults';
+import { budgetBatchResultState } from '../features/budget/budgetResultState';
 import { sameMaterialFile } from '../features/procurement/materials/procurementMaterialOperation';
 import { collectProcurementDrop } from '../features/procurement/materials/procurementFolderDrop';
 
@@ -195,6 +200,7 @@ export function BudgetCheckPage({
   const [historyEntry,setHistoryEntry]=useState<BudgetMaterialBatchHistoryRecord|null>(null);
   const [resultLoading,setResultLoading]=useState(false);
   const [submittedBatch,setSubmittedBatch]=useState<{keys:string[];epoch:number}|null>(null);
+  const [cancellingBatch,setCancellingBatch]=useState(false);
   const [uploadNotice,setUploadNotice]=useState<string|null>(null);
   const [currentResultId,setCurrentResultId]=useState<string|null>(null);
   useLayoutEffect(()=>{
@@ -208,6 +214,18 @@ export function BudgetCheckPage({
   const progressEntries=submittedBatch
     ?snapshot.entries.filter(row=>submittedBatch.keys.includes(row.operation.key))
     :processing;
+  const canCancelBatch=!!submittedBatch&&progressEntries.some(row=>row.operation.context?.batchId&&row.result?.task.status!=='REVIEWED');
+  const cancelSubmittedBatch=async()=>{
+    if(!submittedBatch||cancellingBatch)return;
+    setCancellingBatch(true);
+    try{
+      const ids=[...new Set(progressEntries.map(row=>row.operation.context?.batchId).filter((id):id is string=>!!id))];
+      for(const id of ids)await request(`/api/v1/budget/material-uploads/batches/${encodeURIComponent(id)}/cancel`,{method:'POST'});
+      batch.markBatchCancelled(submittedBatch.keys);
+      setSubmittedBatch(null);setCurrentResultId(null);setSelectedId(null);setCompletedResults([]);setHistoryEntry(null);setRiskFocus(null);setActiveStep(0);setUploadNotice('本批已取消。');
+    }catch(cause){setUploadNotice(userFacingError(cause,'取消请求未完成，请刷新任务状态。'));}
+    finally{setCancellingBatch(false);}
+  };
   const overallProgressStatus=(()=>{
     if(progressEntries.some(row=>row.phase==='WAITING_UPLOAD'||row.phase==='UPLOADING'))return '正在上传本批材料，请稍候。';
     if(progressEntries.some(row=>row.phase==='QUEUED'||row.phase==='PROCESSING'))return '正在解析本批材料，可离开本页，结果会自动保存。';
@@ -217,7 +235,7 @@ export function BudgetCheckPage({
     return '正在处理本批材料，请稍候。';
   })();
   const canViewUploadedHistory=!files.length&&!batchBusy&&snapshot.entries.some(row=>
-    row.result&&['PARSED','FAILED','UNKNOWN'].includes(row.phase));
+    row.result&&['PARSED','FAILED','UNKNOWN','CANCELLED'].includes(row.phase));
   const selected=parsed.find(row=>row.result?.id===selectedId);
   const alive=useRef(true);
   useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
@@ -236,29 +254,35 @@ export function BudgetCheckPage({
     if(!submittedBatch || submittedBatch.epoch!==viewEpoch.current)return;
     const rows=snapshot.entries.filter(row=>submittedBatch.keys.includes(row.operation.key));
     if(!rows.length)return;
-    if(rows.some(row=>row.phase==='WAITING_UPLOAD'||row.phase==='UPLOADING')){
-      setUploadNotice('正在上传材料，请稍候。');return;
-    }
-    if(rows.some(row=>row.phase==='QUEUED'||row.phase==='PROCESSING')){
-      setUploadNotice('材料已上传，正在解析与分析，可离开本页，结果会自动保存。');return;
-    }
+    const {processing,results}=budgetBatchResultState(rows);
     const hasUnknown=rows.some(row=>row.phase==='UNKNOWN');
+    const hasCancelled=rows.some(row=>row.phase==='CANCELLED');
+    if(results.length){
+      setCompletedResults(results);
+      if(!currentResultId)setCurrentResultId(results[0].id);
+      setHistoryOpen(false);setActiveStep(1);
+    }
+    if(processing){
+      setUploadNotice(results.length?'已先展示当前可用结果，其余材料仍在处理中。'
+        :snapshot.uploading?'正在上传本批材料，请稍候。':'材料已上传，正在解析与分析，可离开本页，结果会自动保存。');
+      return;
+    }
     if(snapshot.uploading)return;
-    // Open an available result first when only part of a batch failed. Keep the
-    // ended files accessible too, without presenting their explanation as success.
-    const results=[...rows.filter(row=>row.phase==='PARSED'&&row.result),
-      ...rows.filter(row=>['FAILED','UNKNOWN'].includes(row.phase)&&row.result)]
-      .map(row=>({id:row.result!.task.taskId,name:row.result!.fileName}));
     if(!results.length){
       if(hasUnknown){setUploadNotice('部分材料的上传或处理结果暂时无法读取，请在历史结果中核实记录，避免重复上传。');return;}
       setSubmittedBatch(null);
-      setUploadNotice(null);setError('本批材料未能完成解析，请核对文件格式或联系管理员查看日志。');return;
+      setUploadNotice(hasCancelled?'本批已取消。':'');
+      if(!hasCancelled)setError('本批材料未能完成解析，请核对文件格式或联系管理员查看日志。');
+      return;
     }
     setSubmittedBatch(null);
-    setCompletedResults(results);setCurrentResultId(results[0].id);
+    setCompletedResults(results);
+    if(!currentResultId)setCurrentResultId(results[0].id);
     const analyzedIds=rows.filter(row=>row.phase==='PARSED'&&row.result).map(row=>row.result!.task.taskId);
     setRiskFocus(analyzedIds.length?{token:submittedBatch.keys.join(','),taskIds:analyzedIds}:null);
-    setUploadNotice(rows.some(row=>row.phase==='UNKNOWN'&&!row.result)
+    setUploadNotice(hasCancelled
+      ?'本批已取消。'
+      :rows.some(row=>row.phase==='UNKNOWN'&&!row.result)
       ?'可用结果已保存，部分材料的上传或处理结果暂时无法读取，请在历史结果中核实记录，避免重复上传。'
       :rows.some(row=>['FAILED','UNKNOWN'].includes(row.phase)||['FAILED','UNKNOWN'].includes(row.result?.task.status??''))
         ?analyzedIds.length?'本次处理已结束，可用结果及未生成结果的说明已保留。':'本次处理已结束，未生成分析结果，具体原因见下方说明。'
@@ -476,21 +500,22 @@ export function BudgetCheckPage({
   };
 
   return (
-    <div className="min-h-full bg-[#f5f5f7] px-3 py-3 sm:px-5 sm:py-5">
-      <div className="mx-auto max-w-[1440px] rounded-[28px] bg-[#f5f5f7] px-3 py-5 sm:px-6 sm:py-7 lg:px-8">
-        <header className="flex flex-wrap items-start justify-between gap-5">
+    <div className={historyOpen?"history-page-canvas":"min-h-full bg-[#f5f5f7]"}>
+      <div className={historyOpen?"history-page":"delivery-page"}>
+        <header className={historyOpen?"history-page-header":"delivery-page-header"}>
+          {historyOpen&&!historyEntry&&<h1 className="history-page-title">历史结果</h1>}
           {!historyOpen && <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">预算审查</h1>
+            <h1 className="delivery-page-title">预算审查</h1>
             <p className="mt-1.5 text-sm text-slate-400">上传同一项目的预算和批复材料，集中查看差异与审查结果</p>
           </div>}
           <div className="ml-auto flex flex-wrap items-center gap-3">
-          {(activeStep===1||historyOpen) && <button type="button" onClick={returnOneLevel} className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50"><ArrowRight size={16} className="rotate-180" />返回</button>}
-          {!historyOpen && <button type="button" onClick={openHistory} className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50">历史结果</button>}
+          {(activeStep===1||historyOpen) && <button type="button" onClick={returnOneLevel} className={historyOpen?"history-button":"delivery-secondary-action"}><ArrowRight size={16} className="rotate-180" />返回</button>}
+          {!historyOpen && <button type="button" onClick={openHistory} className="delivery-secondary-action">历史结果</button>}
           </div>
         </header>
 
-        <main className="mt-7 space-y-6">
-        {!historyOpen&&uploadNotice&&<p role="status" aria-live="polite" className="text-sm text-slate-600">{uploadNotice}</p>}
+        <div className={historyOpen?"history-page-content":"mt-7 space-y-6"}>
+        {!historyOpen&&uploadNotice&&!batchBusy&&activeStep!==1&&<p role="status" aria-live="polite" className="text-sm text-slate-600">{uploadNotice}</p>}
         {(error||snapshot.error) && (
           <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-700">
             <AlertTriangle size={14} className="shrink-0" />
@@ -552,10 +577,8 @@ export function BudgetCheckPage({
 
             </div>
 
-            {(submittedBatch||batchBusy)&&<div role="status" aria-live="polite" aria-label="本批材料处理状态" className="flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
-              {batchBusy&&<Loader2 size={16} className="shrink-0 animate-spin text-[#ef9739]"/>}
-              <span>{overallProgressStatus}</span>
-            </div>}
+            {batchBusy?<div className="flex flex-wrap items-center gap-3"><div className="min-w-0 flex-1"><ProcessingStatusCard variant="compact" label="本批材料处理状态" title="正在分析" description={overallProgressStatus} /></div>{canCancelBatch&&<button type="button" disabled={cancellingBatch} onClick={()=>void cancelSubmittedBatch()} className="delivery-secondary-action shrink-0 disabled:opacity-60"><XCircle size={16}/>{cancellingBatch?'正在取消…':'取消本批'}</button>}</div>
+              :submittedBatch&&<p role="status" className="text-center text-sm text-slate-600">{overallProgressStatus}</p>}
 
           </section>
         )}
@@ -566,7 +589,7 @@ export function BudgetCheckPage({
 
         {!historyOpen&&activeStep === 1 && !currentResultId && !review && (
           <section className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_2px_8px_rgba(15,23,42,0.03)]">
-            {resultLoading ? <p role="status" className="text-sm text-slate-500">正在读取预算结果...</p> : <>
+            {resultLoading ? <ProcessingStatusCard title="正在读取审查结果" description="正在加载已保存的预算结果，请稍候。" /> : <>
             <div className="flex items-center gap-3"><ScanLine size={18} className="text-[#ef9739]" /><div><h2 className="text-sm font-semibold text-slate-900">科目额度一致性校验</h2><p className="mt-1 text-xs text-slate-500">材料解析完成后，启动后端预算审查任务。</p></div></div>
             <div className="mt-5 flex flex-wrap items-center gap-3"><span className="text-xs text-emerald-700">{task ? `已准备 ${task.parsedLineCount} 行材料` : '请先上传并解析预算材料'}</span><button type="button" onClick={handleReview} disabled={!task || loading !== null} className="inline-flex items-center gap-2 rounded-xl bg-[#f6a142] px-4 py-2 text-xs font-semibold text-white hover:bg-[#ed9130] disabled:cursor-not-allowed disabled:opacity-40">{loading === 'review' ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle size={14} />}{loading === 'review' ? '审查中...' : '开始预算审查'}</button></div>
             </>}
@@ -596,7 +619,7 @@ export function BudgetCheckPage({
           <BudgetProjectRiskPanel focus={riskFocus} onReady={()=>setUploadNotice(previous=>previous==='材料已解析，正在整理同批材料的预算参考结果。'?'解析与分析已完成，结果已保存。':previous)} />
         </details>
 
-        </main>
+        </div>
       </div>
     </div>
   );

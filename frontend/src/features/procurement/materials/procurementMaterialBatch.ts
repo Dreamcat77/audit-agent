@@ -15,6 +15,7 @@ export interface MaterialBatchApi<T extends MaterialUploadResult=ProcurementMate
   operation(key: string): Promise<T | null>;
   get(id: string): Promise<T>;
   retry(id: string): Promise<T>;
+  cancel?(key:string):Promise<T>;
 }
 export function materialProblem(result: MaterialUploadResult): string {
   const messages: Record<string,string> = {
@@ -74,9 +75,9 @@ export class MaterialUploadBatch<T extends MaterialUploadResult=ProcurementMater
             && o.name===row.operation.name && o.size===row.operation.size
             && o.lastModified===row.operation.lastModified && o.relativePath===row.operation.relativePath
             && JSON.stringify(o.context)===JSON.stringify(row.operation.context))
-          || !['WAITING_UPLOAD','UPLOADING','QUEUED','PROCESSING','PARSED','FAILED','UNKNOWN'].includes(row.phase))) throw Error();
+          || !['WAITING_UPLOAD','UPLOADING','QUEUED','PROCESSING','PARSED','FAILED','UNKNOWN','CANCELLED'].includes(row.phase))) throw Error();
         // Never render a stored extraction result: reopen it through the authenticated API.
-        const entries=rows.map(row=>row.result || row.phase!=='FAILED'
+        const entries=rows.map(row=>row.phase==='CANCELLED'?{...row,result:null}:row.result || row.phase!=='FAILED'
           ? {operation:row.operation,result:null,phase:'UNKNOWN' as const,error:'正在核对服务端进度；未上传的文件可重新选择原文件继续'}
           : {operation:row.operation,result:null,phase:row.phase,error:row.error});
         // A quota failure can occur between the two writes. Canonical identities
@@ -237,6 +238,24 @@ export class MaterialUploadBatch<T extends MaterialUploadResult=ProcurementMater
       this.accept(key,result); void this.reconcile();
     }
     catch { if(generation===this.generation) this.publish(this.state.entries.map(item=>item.operation.key===key?{...item,error:'重试结果待确认，请刷新进度'}:item)); }
+  }
+  async cancel(keys:readonly string[]) {
+    if(!this.api.cancel)return;
+    const targets=this.state.entries.filter(row=>keys.includes(row.operation.key)&&(inProgress(row.phase)||row.phase==='PARSED'));
+    await Promise.all(targets.map(async row=>{
+      try { const result=await this.api.cancel!(row.operation.key);this.accept(row.operation.key,result); }
+      catch { /* A missing response is reconciled by the original operation key. */ }
+    }));
+    void this.reconcile();
+  }
+  /** Use only after the server has durably cancelled the whole immutable batch. */
+  markBatchCancelled(keys:readonly string[]) {
+    ++this.generation;
+    clearTimeout(this.pollTimer);
+    for(const key of keys)this.files.delete(key);
+    this.publish(this.state.entries.map(row=>keys.includes(row.operation.key)
+      ?{...row,phase:'CANCELLED',result:null,error:null}:row),false);
+    void this.reconcile();
   }
 }
 

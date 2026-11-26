@@ -69,7 +69,7 @@
     <select id="timedOutForCleanup" resultMap="taskRow">
         SELECT * FROM (SELECT T.*,ROW_NUMBER() OVER (ORDER BY UPDATED_TIME,ID) RN FROM BUDGET_REVIEW_TASK T
         WHERE STATUS='FAILED' AND PARSED_LINE_COUNT=0 AND TEMP_FILE_PATH IS NOT NULL
-        AND ERROR_DETAIL IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT')) WHERE RN &lt;= #{limit}
+        AND ERROR_DETAIL IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT','USER_CANCELLED')) WHERE RN &lt;= #{limit}
     </select>
     <select id="findPage" resultMap="taskRow">
         SELECT ID, FILE_NAME, CONTENT_TYPE, FILE_SIZE, TEMP_FILE_PATH, STATUS,
@@ -84,7 +84,7 @@
                    ROW_NUMBER() OVER (ORDER BY CREATED_TIME DESC, ID DESC) AS RN
             FROM BUDGET_REVIEW_TASK
             <where>
-                AND (ERROR_DETAIL IS NULL OR ERROR_DETAIL NOT IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT'))
+                AND (ERROR_DETAIL IS NULL OR ERROR_DETAIL NOT IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT','USER_CANCELLED'))
                 <if test="batchId != null and batchId != ''">AND ID = #{batchId}</if>
                 <if test="budgetYear != null and budgetYear != ''">AND BUDGET_YEAR = #{budgetYear}</if>
                 <if test="departmentCode != null and departmentCode != ''">AND DEPARTMENT_CODE = #{departmentCode}</if>
@@ -101,7 +101,7 @@
         SELECT COUNT(1)
         FROM BUDGET_REVIEW_TASK
         <where>
-            AND (ERROR_DETAIL IS NULL OR ERROR_DETAIL NOT IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT'))
+            AND (ERROR_DETAIL IS NULL OR ERROR_DETAIL NOT IN ('MATERIAL_CALL_TIMEOUT','MATERIAL_TIME_LIMIT','MATERIAL_QUEUE_TIMEOUT','USER_CANCELLED'))
             <if test="batchId != null and batchId != ''">AND ID = #{batchId}</if>
             <if test="budgetYear != null and budgetYear != ''">AND BUDGET_YEAR = #{budgetYear}</if>
             <if test="departmentCode != null and departmentCode != ''">AND DEPARTMENT_CODE = #{departmentCode}</if>

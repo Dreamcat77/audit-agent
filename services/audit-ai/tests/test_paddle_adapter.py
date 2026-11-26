@@ -13,7 +13,7 @@ from audit_ai.ocr.paddle_adapter import (
 
 
 class FakePrediction:
-    def __init__(self, page_index: int | None, texts: list[str], scores: list[float]):
+    def __init__(self, page_index: int | None, texts: list[str], scores: list[float], polygons=None):
         self.json = {
             "res": {
                 "page_index": page_index,
@@ -21,6 +21,8 @@ class FakePrediction:
                 "rec_scores": scores,
             }
         }
+        if polygons is not None:
+            self.json["res"]["rec_polys"] = polygons
 
 
 class RecordingPaddleOcr:
@@ -124,6 +126,42 @@ def test_adapter_rejects_constructor_without_3x_parameters(tmp_path: Path) -> No
 
     with pytest.raises(OcrRuntimeUnavailable, match="runtime contract is not verified"):
         adapter.extract(tmp_path / "scan.png")
+
+
+def test_prediction_boxes_rebuild_reading_order_for_interleaved_table_columns() -> None:
+    # Detector order is deliberately column-major (the failure seen in rotated
+    # scans).  The returned text must be row-major so budget rows keep their
+    # subject and amount together, and visual offsets must follow that text.
+    polygons = [
+        [(110, 10), (180, 10), (180, 30), (110, 30)],  # amount row 1
+        [(10, 10), (90, 10), (90, 30), (10, 30)],      # subject row 1
+        [(110, 45), (180, 45), (180, 65), (110, 65)],  # amount row 2
+        [(10, 45), (90, 45), (90, 65), (10, 65)],      # subject row 2
+    ]
+    adapter = PaddleOcrAdapter(Settings(ocr_orientation_enabled=False))
+    pages, scores = adapter._map_predictions([
+        FakePrediction(0, ["12000", "设备", "8000", "服务"], [.9, .9, .9, .9], polygons)
+    ])
+    assert pages[0].text == "设备\n12000\n服务\n8000"
+    assert [page.start for page in pages[0].regions] == [0, 3, 9, 12]
+    assert [page.end for page in pages[0].regions] == [2, 8, 11, 16]
+    assert scores == [.9, .9, .9, .9]
+
+
+def test_same_table_row_crossing_quantization_boundary_keeps_column_identity() -> None:
+    polygons = [
+        [(850, 9), (920, 9), (920, 29), (850, 29)],
+        [(620, 10), (690, 10), (690, 30), (620, 30)],
+        [(80, 10), (300, 10), (300, 30), (80, 30)],
+        [(1200, 10), (1350, 10), (1350, 30), (1200, 30)],
+        [(80, 60), (300, 60), (300, 80), (80, 80)],
+    ]
+    texts = ["5000", "100", "档案整理", "500000", "下一行"]
+    adapter = PaddleOcrAdapter(Settings(ocr_orientation_enabled=False))
+    pages, _ = adapter._map_predictions([FakePrediction(0, texts, [.9]*5, polygons)])
+    assert pages[0].text == "档案整理\n100\n5000\n500000\n下一行"
+    assert [pages[0].text[r.start:r.end] for r in pages[0].regions] == ["档案整理", "100", "5000", "500000", "下一行"]
+    assert [r.polygon[0][0] for r in pages[0].regions] == [80, 620, 850, 1200, 80]
 
 
 def test_prediction_stage_brackets_real_call_and_lazy_consumption_without_source_logs(

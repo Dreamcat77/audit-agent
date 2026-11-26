@@ -24,7 +24,9 @@ class PipelineDiagnosticsTest {
         Level previous = logger.getLevel();
         var logs = new ListAppender<ILoggingEvent>(); logs.start(); logger.addAppender(logs); logger.setLevel(Level.INFO);
         var encoder = new StructuredLogEncoder();
-        encoder.setContext(logger.getLoggerContext()); encoder.setFormat("logstash"); encoder.start();
+        var encoderContext=new ch.qos.logback.classic.LoggerContext();
+        encoderContext.putObject(org.springframework.core.env.Environment.class.getName(),new org.springframework.core.env.StandardEnvironment());
+        encoder.setContext(encoderContext); encoder.setFormat("logstash"); encoder.start();
         MDC.put("requestId", "synthetic-structured-request");
         MDC.put("traceId", "synthetic-structured-trace");
         try {
@@ -40,7 +42,7 @@ class PipelineDiagnosticsTest {
                 assertThat(event.getKeyValuePairs()).noneMatch(pair -> pair.key.equals("requestId"));
             }
         } finally {
-            MDC.remove("requestId"); MDC.remove("traceId"); encoder.stop();
+            MDC.remove("requestId"); MDC.remove("traceId"); encoder.stop();encoderContext.stop();
             logger.detachAppender(logs); logger.setLevel(previous); logs.stop();
         }
     }

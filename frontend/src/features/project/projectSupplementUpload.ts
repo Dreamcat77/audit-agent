@@ -1,6 +1,6 @@
 import type { ProjectDataSource } from "./data/projectDataSource";
 
-const SUPPLEMENT_EXTENSION = /\.(?:pdf|docx?|png|jpe?g)$/i;
+const SUPPLEMENT_EXTENSION = /\.(?:pdf|docx?|xlsx?|png|jpe?g)$/i;
 
 export interface SupplementUploadOperation {
   file: File;

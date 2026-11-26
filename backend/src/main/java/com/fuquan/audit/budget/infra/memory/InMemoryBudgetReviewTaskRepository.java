@@ -46,13 +46,13 @@ public class InMemoryBudgetReviewTaskRepository implements BudgetReviewTaskRepos
     private List<BudgetReviewTask> filtered(
             String batchId, String budgetYear, String departmentCode) {
         return tasks.values().stream()
-                .filter(task -> !java.util.Set.of("MATERIAL_CALL_TIMEOUT","MATERIAL_TIME_LIMIT","MATERIAL_QUEUE_TIMEOUT").contains(java.util.Objects.toString(task.errorDetail(),"")))
+                .filter(task -> !java.util.Set.of("MATERIAL_CALL_TIMEOUT","MATERIAL_TIME_LIMIT","MATERIAL_QUEUE_TIMEOUT","USER_CANCELLED").contains(java.util.Objects.toString(task.errorDetail(),"")))
                 .filter(task -> isBlank(batchId) || task.id().toString().equals(batchId))
                 .filter(task -> isBlank(budgetYear) || budgetYear.equals(task.budgetYear()))
                 .filter(task -> isBlank(departmentCode) || departmentCode.equals(task.departmentCode()))
                 .toList();
     }
-    public List<BudgetReviewTask> timedOutForCleanup(int limit){return tasks.values().stream().filter(t->t.status().equals("FAILED")&&t.parsedLineCount()==0&&t.tempFilePath()!=null&&java.util.Set.of("MATERIAL_CALL_TIMEOUT","MATERIAL_TIME_LIMIT","MATERIAL_QUEUE_TIMEOUT").contains(java.util.Objects.toString(t.errorDetail(),""))).limit(limit).toList();}
+    public List<BudgetReviewTask> timedOutForCleanup(int limit){return tasks.values().stream().filter(t->t.status().equals("FAILED")&&t.parsedLineCount()==0&&t.tempFilePath()!=null&&java.util.Set.of("MATERIAL_CALL_TIMEOUT","MATERIAL_TIME_LIMIT","MATERIAL_QUEUE_TIMEOUT","USER_CANCELLED").contains(java.util.Objects.toString(t.errorDetail(),""))).limit(limit).toList();}
 
     private static boolean isBlank(String value) {
         return value == null || value.isBlank();

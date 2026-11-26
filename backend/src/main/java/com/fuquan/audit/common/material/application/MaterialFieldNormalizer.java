@@ -48,7 +48,7 @@ public class MaterialFieldNormalizer {
             if (factCount > 2000) throw new IllegalArgumentException("too many extracted facts");
             for (var fact : row.facts()) {
                 String text = source.get(fact.locator());
-                if (!LABELS.containsKey(fact.field()) || text == null || fact.value() == null || fact.value().isBlank()
+                if (!com.fuquan.audit.common.material.SourceIdentityPolicy.plausible(fact.field(),fact.value()) || !LABELS.containsKey(fact.field()) || text == null || fact.value() == null || fact.value().isBlank()
                         || fact.excerpt() == null || fact.excerpt().isBlank() || fact.excerpt().length() > 2400
                         || !text.contains(fact.excerpt()) || !fact.excerpt().contains(fact.value())) {
                     LOG.info("MATERIAL_FACT_EXCLUDED stage=FIELD_NORMALIZATION reasonCode=EVIDENCE_UNVERIFIED count=1");

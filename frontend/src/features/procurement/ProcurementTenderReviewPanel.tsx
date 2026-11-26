@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import {ProcessingStatusCard} from "../../components/status/ProcessingStatusCard";
 import { ResultCopyButton } from './ResultCopyButton';
 import { tenderExplanationText } from './review/tenderFindingDisplay';
 import { AlertTriangle, CheckCircle, FileSearch, FileText, LoaderCircle, Upload, XCircle } from "lucide-react";
@@ -16,6 +17,8 @@ import { userFacingError } from "../../api/userFacingError";
 import { enumLabel, riskLevelLabel } from "../../utils/enumLabels";
 import { procurementFileProblem } from './materials/procurementUploadQueue';
 import { OFFICE_MATERIAL_ACCEPT, OFFICE_MATERIAL_PATTERN } from './materials/officeMaterialTypes';
+import { apiUrl } from '../../api/client';
+import { fieldEvidence } from './procurementFieldEvidence';
 
 type RiskLevel = "CRITICAL" | "WARNING" | "INFO";
 
@@ -218,16 +221,16 @@ export default function ProcurementTenderReviewPanel({ projectId, analyzed = fal
       <input ref={inputRef} type="file" multiple accept={OFFICE_MATERIAL_ACCEPT} className="hidden" onChange={event => void upload(Array.from(event.target.files ?? []))} />
       <div className="flex items-center gap-2">
         <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading || analyzing || loading} className="inline-flex items-center gap-2 rounded border border-slate-300 px-3 py-2 text-xs text-slate-700 hover:bg-slate-50 disabled:opacity-50">{uploading ? <LoaderCircle size={14} className="animate-spin" /> : <Upload size={14} />}{uploading ? "正在上传…" : "上传材料"}</button>
-        {analyzing && <span role="status" className="inline-flex items-center gap-1 text-xs text-indigo-700"><LoaderCircle size={13} className="animate-spin" />系统自动解析并生成结果</span>}
       </div>
     </div>
     <div className="space-y-4 p-4">
-      {loading && <p role="status" className="text-xs text-slate-500">正在加载已保存的材料和结果…</p>}
+      {loading && <ProcessingStatusCard title="正在读取审查结果" description="正在加载已保存的材料与结果，请稍候。" />}
+      {!loading && analyzing && <ProcessingStatusCard title="正在分析材料" description="系统正在提取文件内容并生成审查结果，请稍候。" />}
       {error && <div role="alert" className="rounded border border-red-200 bg-red-50 p-3 text-xs text-red-700">{error}</div>}
       {!loading && !batch?.files.length && <div className="rounded border border-dashed border-slate-300 bg-slate-50 px-4 py-5 text-center text-xs leading-6 text-slate-500">支持多选 Word、PDF、Excel、演示文稿、文本及图片扫描件；单文件最大 500 MB。上传后系统自动解析并生成结果，无法识别的信息显示“暂未识别”。</div>}
       {!!batch?.files.length && <p className="text-xs font-medium text-slate-700">已上传材料（{batch.files.length} 份）</p>}
       {batch?.notices.map((notice, i) => <p key={i} role="status" className="rounded bg-slate-50 p-3 text-xs text-slate-600">{notice}</p>)}
-      {batch?.files.map((file, index) => <MaterialResult key={file.document?.id ?? `${file.fileName}-${index}`} file={file} processing={analyzing || uploading} />)}
+      {!loading&&!analyzing&&!uploading&&batch?.files.map((file, index) => <MaterialResult key={file.document?.id ?? `${file.fileName}-${index}`} file={file} processing={false} />)}
     </div>
   </section>;
 }
@@ -235,12 +238,12 @@ export default function ProcurementTenderReviewPanel({ projectId, analyzed = fal
 function MaterialResult({ file, processing }: { file: ProcurementMaterialFileResult; processing: boolean }) {
   const label = file.kind === "BIDDER" ? "投标材料" : file.kind === "QUOTATION" ? "报价材料" : file.kind === "GENERAL" ? "其他采购材料" : file.kind === "TENDER" ? "合规审查材料" : "其他";
   const fields = file.document?.parseResult?.extractedFields ?? [];
-  const names: Record<string,string> = { projectName:'项目名称',projectNo:'项目编号',departmentName:'申请部门',budgetAmount:'预算金额',ceilingAmount:'最高限价',subjectCode:'科目编码',subjectName:'科目名称',procurementMethod:'采购方式',requirementDescription:'需求内容',applicantName:'申请人',purchaserName:'采购人/招标人',agencyName:'招标代理机构',supplierName:'供应商',quoteAmount:'报价金额',productDescription:'产品描述',procurementType:'采购类型' };
+  const names: Record<string,string> = { projectName:'项目名称',projectNo:'项目编号',departmentName:'申请部门',budgetAmount:'预算金额',ceilingAmount:'最高限价',subjectCode:'科目编码',subjectName:'科目名称',procurementMethod:'采购方式',requirementDescription:'需求内容',applicantName:'申请人',purchaserName:'采购人/招标人',agencyName:'招标代理机构',supplierName:'供应商',quoteAmount:'报价金额',productDescription:'产品描述',procurementType:'采购类型',treasuryFundAmount:'国库资金',selfFundAmount:'自筹资金',contractPerformancePeriod:'合同履行期限',qualificationRequirements:'供应商资格要求',supplierInstructions:'供应商须知',negotiationInstructions:'磋商须知',scoringCriteria:'评分细则',contractTermsSummary:'合同条款及格式',procurementRulesSummary:'采购规则要点' };
   const expected = file.kind === 'QUOTATION' ? ['supplierName','quoteAmount']
     : file.kind === 'BIDDER' ? ['supplierName']
-    : file.kind === 'TENDER' ? ['projectName','projectNo','budgetAmount','ceilingAmount','procurementMethod']
+    : file.kind === 'TENDER' ? ['projectName','projectNo','budgetAmount','treasuryFundAmount','selfFundAmount','ceilingAmount','procurementMethod','contractPerformancePeriod','qualificationRequirements','supplierInstructions','negotiationInstructions','scoringCriteria','contractTermsSummary','procurementRulesSummary']
     : ['projectName','departmentName','procurementType','budgetAmount'];
-  const displayFields = expected.map(field => ({ field, value: [...new Set(fields.filter(item => item.field === field).map(item => item.value))].join('；') || '暂未识别' }));
+  const displayFields = expected.map(field => ({ field, values: fieldEvidence(fields, field) }));
   return <div data-copy-result className="rounded-lg border border-slate-200">
     <div data-copy-heading className="flex flex-wrap items-start justify-between gap-2 bg-slate-50 px-4 py-3 text-xs">
       <span className="flex min-w-0 items-center gap-2 font-medium text-slate-800"><FileText size={14} /><span className="break-all">{file.fileName}</span></span><span className="text-slate-500">{label}</span><ResultCopyButton/>
@@ -249,7 +252,17 @@ function MaterialResult({ file, processing }: { file: ProcurementMaterialFileRes
       <p role="status" className={['PARSE_FAILED','ANALYSIS_FAILED'].includes(file.status) ? 'text-red-700' : 'text-slate-600'}>
         {processing ? <><LoaderCircle size={12} className="mr-1 inline animate-spin" />正在统一分析材料…</> : file.message}
       </p>
-      {!processing && <dl className="space-y-1 text-slate-700">{displayFields.map(field => <div key={field.field} className="break-words"><dt className="inline text-slate-500">{names[field.field] ?? '材料信息'}：</dt><dd className="inline">{field.value}</dd></div>)}</dl>}
+      {file.document?.id && <a href={apiUrl(`/api/v1/procurement/projects/${encodeURIComponent(file.document.projectId)}/tender-reviews/${encodeURIComponent(file.document.id)}/original`)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline"><FileSearch size={13}/>打开原文件</a>}
+      {!processing && <dl className="grid gap-2 text-slate-700 sm:grid-cols-2">{displayFields.map(field => {
+        const occurrenceList = ['projectName','projectNo'].includes(field.field);
+        return <div key={field.field} className="min-w-0 rounded border border-slate-100 p-2.5">
+          <dt className="text-[11px] font-medium text-slate-500">{occurrenceList ? `文中提及的${names[field.field]}` : names[field.field] ?? '材料信息'}</dt>
+          {field.values.length ? <dd className="mt-1 space-y-2">{field.values.map((item,index) => <div key={`${item.value}-${index}`} className="min-w-0 border-t border-slate-100 pt-2 first:border-t-0 first:pt-0">
+            <div className="break-words text-xs font-medium text-slate-800">{item.value}</div>
+            {item.excerpts.length>0&&<ul className="mt-1 space-y-1 text-[11px] leading-relaxed text-slate-500">{item.excerpts.map((excerpt,i)=><li key={`${excerpt}-${i}`} className="break-words">依据：{excerpt}</li>)}</ul>}
+          </div>)}</dd> : <dd className="mt-1 text-xs text-slate-400">暂未识别</dd>}
+        </div>;
+      })}</dl>}
       {file.scan && <>
         <p className="text-slate-600">合规审查：{file.scan.findings.length ? `发现 ${file.scan.findings.length} 条需关注内容` : "当前已保存结果未命中风险规则"}
           {file.scan.aiStatus && file.scan.aiStatus !== "AVAILABLE" && "；AI 分析暂不可用，当前仅含规则结果"}</p>

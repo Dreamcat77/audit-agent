@@ -18,12 +18,15 @@ public class ContractAnalysisRelations {
         for(var contract:contracts)for(var support:files){
             if(contract.fileId().equals(support.fileId())||support.status()!=SourceState.READY||role(support,work).equals("CONTRACT")||role(support,work).equals("OTHER"))continue;
             var cf=facts(contract.fileId(),work);var sf=facts(support.fileId(),work);
-            var no=ContractAnalysisRules.unique(cf,"CONTRACT_NO");var ref=ContractAnalysisRules.unique(sf,"CONTRACT_REFERENCE");
+            var no=ContractAnalysisRules.unique(cf,"CONTRACT_NO");var explicit=ContractAnalysisRules.unique(sf,"CONTRACT_REFERENCE");
+            boolean explicitReference=sf.stream().anyMatch(f->f.type().equals("CONTRACT_REFERENCE"));
+            boolean annexCaption=role(support,work).equals("ANNEX")&&sf.stream().anyMatch(f->f.type().equals("CONTRACT_NO"));
+            var ref=explicitReference?explicit:annexCaption?ContractAnalysisRules.unique(sf,"CONTRACT_NO"):explicit;
             boolean exactContract=no.isPresent()&&ref.isPresent()&&same(no.get(),ref.get())&&contracts.stream().filter(c->ContractAnalysisRules.unique(facts(c.fileId(),work),"CONTRACT_NO").map(f->same(f,ref.get())).orElse(false)).count()==1;
             var pn=ContractAnalysisRules.unique(cf,"PROJECT_NO");var sp=ContractAnalysisRules.unique(sf,"PROJECT_NO");
-            boolean uniqueProject=sf.stream().noneMatch(f->f.type().equals("CONTRACT_REFERENCE"))&&pn.isPresent()&&sp.isPresent()&&same(pn.get(),sp.get())&&contracts.stream().filter(c->ContractAnalysisRules.unique(facts(c.fileId(),work),"PROJECT_NO").map(f->same(f,pn.get())).orElse(false)).count()==1;
+            boolean uniqueProject=!explicitReference&&!annexCaption&&pn.isPresent()&&sp.isPresent()&&same(pn.get(),sp.get())&&contracts.stream().filter(c->ContractAnalysisRules.unique(facts(c.fileId(),work),"PROJECT_NO").map(f->same(f,pn.get())).orElse(false)).count()==1;
             var name=ContractAnalysisRules.unique(cf,"PROJECT_NAME");var supportName=ContractAnalysisRules.unique(sf,"PROJECT_NAME");
-            boolean uniqueName=sf.stream().noneMatch(f->f.type().equals("CONTRACT_REFERENCE"))
+            boolean uniqueName=!explicitReference&&!annexCaption
                     &&!(pn.isPresent()&&sp.isPresent()&&!same(pn.get(),sp.get()))
                     &&name.isPresent()&&supportName.isPresent()&&same(name.get(),supportName.get())
                     &&contracts.stream().filter(c->ContractAnalysisRules.unique(facts(c.fileId(),work),"PROJECT_NAME").map(f->same(f,name.get())).orElse(false)).count()==1;
@@ -43,6 +46,7 @@ public class ContractAnalysisRelations {
     }
     private boolean same(Fact a,Fact b){return ContractAnalysisEvidence.compact(a.value()).equals(ContractAnalysisEvidence.compact(b.value()));}
     public String role(Source source,List<Step> work){
+        if(com.fuquan.audit.contract.application.project.ProjectFileClassifier.isAuxiliary(source.name()))return "ANNEX";
         // Filename is a classification hint only, never contract facts or authority.
         var category=new com.fuquan.audit.contract.application.project.ProjectFileClassifier().classify(source.name());
         String named=switch(category){
@@ -62,6 +66,9 @@ public class ContractAnalysisRelations {
         return recalled.size()==1?recalled.get(0):"OTHER";
     }
     public Output evaluate(Pair pair,List<Step> work){
+        return evaluate(pair,work,Map.of());
+    }
+    public Output evaluate(Pair pair,List<Step> work,Map<UUID,String> texts){
         var checks=new ArrayList<Check>();var findings=new ArrayList<Finding>();
         var cf=facts(pair.contract().fileId(),work);var sf=facts(pair.support().fileId(),work);
         if(role(pair.support(),work).equals("AWARD")){
@@ -75,6 +82,16 @@ public class ContractAnalysisRelations {
                 var e=ContractAnalysisRules.combine(party.get(),supplier.get());String message="合同乙方“"+party.get().value()+"”与关联中标供应商“"+supplier.get().value()+"”"+(match?"名称一致":"名称不同，请核对主体或更名依据");
                 checks.add(new Check(F02RuleCodes.AWARD_SUPPLIER_MATCH,match?"PASS":"FAIL",message,e));
                 if(!match)findings.add(new Finding(F02RuleCodes.AWARD_SUPPLIER_MATCH,"WARNING","合同乙方与中标供应商名称不同",message,"核对名称变更或合同承接的有效依据。",e,"DETERMINISTIC_F02"));
+            }
+        }
+        if(role(pair.support(),work).equals("ANNEX")&&texts.containsKey(pair.support().fileId())) {
+            var total=ContractAnalysisRules.unique(cf,"TOTAL_AMOUNT");
+            var table=ContractAnalysisTable.parse(pair.support(),texts.get(pair.support().fileId()));
+            if(table.complete()&&total.isPresent()&&ContractAnalysisRules.money(total.get().value()).isPresent()) {
+                var evidence=new ArrayList<Evidence>(total.get().evidence());table.rows().forEach(r->evidence.add(r.evidence()));
+                ContractAnalysisRules.compare(checks,findings,F02RuleCodes.LINE_SUM_MATCH,"合同明细合计与总价核对",
+                        ContractArithmetic.sum(table.rows().stream().map(ContractAnalysisTable.Row::amount).toList()),
+                        ContractAnalysisRules.money(total.get().value()).orElseThrow(),evidence);
             }
         }
         return new Output("OTHER","GENERAL",true,List.of(),List.of(),checks,findings,0,null,"contract-relations-v1");

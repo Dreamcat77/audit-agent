@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import {partitionAnalysisFindings,analysisBusy,showAnalysisIntakeNotice,aggregateMaterialHighlights,findingCopyText,findingSourceNames} from "./contractAnalysisPresentation.ts";
+import {partitionAnalysisFindings,analysisBusy,aggregateMaterialHighlights,findingCopyText,findingSourceNames,contractCheckLabel} from "./contractAnalysisPresentation.ts";
+
+test('listed amounts are shown as extracted information rather than a passed comparison',()=>{
+  assert.equal(contractCheckLabel('SOURCE_GROUNDED_OBSERVATION'),'已读取明细');
+  assert.equal(contractCheckLabel('PASS'),'已核对一致');
+  assert.equal(contractCheckLabel('FAIL'),'需要关注');
+});
 
 test("optional follow-ups remain visible but do not inflate observed risk counts",()=>{
   const optional={level:"INFO",title:"补充核对附件"};
@@ -15,16 +21,6 @@ test("optional follow-ups remain visible but do not inflate observed risk counts
 test("uncertain and partial terminal results are never displayed as still running",()=>{
   for(const status of ["UNKNOWN","PARTIAL","DATA_INSUFFICIENT","FAILED","COMPLETED"] as const)assert.equal(analysisBusy(status),false);
   assert.equal(analysisBusy("QUEUED"),true);assert.equal(analysisBusy("RUNNING"),true);
-});
-
-test("completed report hides stale intake progress while another upload remains visible",()=>{
-  for(const status of ["UNKNOWN","PARTIAL","DATA_INSUFFICIENT","FAILED","COMPLETED"] as const){
-    assert.equal(showAnalysisIntakeNotice(status,false,false),false);
-    assert.equal(showAnalysisIntakeNotice(status,true,false),true);
-    assert.equal(showAnalysisIntakeNotice(status,false,true),true);
-  }
-  assert.equal(showAnalysisIntakeNotice("RUNNING",false,false),true);
-  assert.equal(showAnalysisIntakeNotice(undefined,false,false),true);
 });
 
 test("contract findings name only the source documents attached to their evidence", () => {
@@ -64,7 +60,17 @@ test("contract analysis summary is consolidated while formal eight-category revi
   const formalReview = await readFile(new URL("./components/ContractReviewWorkspace.tsx", import.meta.url), "utf8");
 
   assert.doesNotMatch(analysis, /本次处理说明/);
-  assert.match(analysis, /材料提取内容/);
+  assert.match(analysis, /<ResultMaterialList names=\{report\.documents\.map\(document => document\.name\)\}/);
+  assert.doesNotMatch(analysis, /材料提取内容/);
   assert.match(analysis, /复制问题项/);
   assert.match(formalReview, /<EightCategoryReviewPanel/);
+});
+
+test("contract analysis renders persisted findings and eight categories while later steps are running", async () => {
+  const analysis = await readFile(new URL("./components/ContractAnalysisWorkspace.tsx", import.meta.url), "utf8");
+  const categories = await readFile(new URL("./components/ContractAnalysisCategories.tsx", import.meta.url), "utf8");
+
+  assert.doesNotMatch(analysis, /\{!analysisBusy\(report\.status\)&&<div className="space-y-5">/);
+  assert.match(analysis, /processing=\{analysisBusy\(report\.status\)\}/);
+  assert.match(categories, /正在整理，结果将逐项显示/);
 });

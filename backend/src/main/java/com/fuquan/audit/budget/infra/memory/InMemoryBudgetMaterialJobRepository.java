@@ -30,6 +30,10 @@ public class InMemoryBudgetMaterialJobRepository implements BudgetMaterialJobRep
         var j=jobs.get(id);if(j==null||!j.status().equals("PROCESSING")||!Objects.equals(token,j.leaseToken())) return false;
         jobs.put(id,new BudgetMaterialJob(id,j.actorId(),j.operationKey(),j.sha256(),status,token,j.leaseUntil(),now));return true;
     }
+    public synchronized boolean cancel(UUID id,Instant now) {
+        var j=jobs.get(id);if(j==null||!Set.of("QUEUED","PROCESSING","PARSED").contains(j.status()))return false;
+        jobs.put(id,new BudgetMaterialJob(id,j.actorId(),j.operationKey(),j.sha256(),"FAILED",null,null,now));return true;
+    }
     public synchronized void requireLease(UUID id,String token) {
         var j=jobs.get(id);if(j==null||!j.status().equals("PROCESSING")||!Objects.equals(token,j.leaseToken())) throw new IllegalStateException("budget material lease lost");
     }

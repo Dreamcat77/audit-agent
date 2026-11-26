@@ -16,18 +16,19 @@ public class BudgetMaterialRiskService {
     private final AuthContext auth;private final OperationAuditService audit;
     private final com.fasterxml.jackson.databind.ObjectMapper json;
     public BudgetMaterialRiskService(BudgetMaterialBatchService batches,BudgetReviewTaskRepository tasks,BudgetMaterialJobRepository jobs,BudgetMaterialRiskRepository results,AuthContext auth,OperationAuditService audit,com.fasterxml.jackson.databind.ObjectMapper json){this.batches=batches;this.tasks=tasks;this.jobs=jobs;this.results=results;this.auth=auth;this.audit=audit;this.json=json;}
+    private String scope(){var user=actor();return user.roles().contains("SYSTEM_ADMIN")?null:user.userId();}
     private CurrentUser actor(){return auth.currentUser().orElseThrow(()->new BusinessException(BusinessErrorCode.UNAUTHENTICATED));}
     public CandidatePage candidatePage(int page,List<UUID> focus) {
         var rows=candidates(page,focus);
         return new CandidatePage(rows,(focus==null||focus.isEmpty())&&tasks.count(null,null,null)>(long)page*50);
     }
     public List<Candidate> candidates(int page,List<UUID> focus) {
-        String actor=actor().userId();
+        String actor=scope();
         if(page<1||page>100000||focus!=null&&focus.size()>1000)throw new BusinessException(BusinessErrorCode.INVALID_ARGUMENT);
         var selected=focus==null||focus.isEmpty()?tasks.findPage(null,null,null,(page-1)*50,50):focus.stream().distinct().map(id->tasks.findById(id).orElse(null)).filter(Objects::nonNull).toList();
         var rows=new ArrayList<Candidate>();
         for(var task:selected) {
-            if(jobs.find(task.id()).filter(j->j.actorId().equals(actor)).isEmpty())continue;
+            if(jobs.find(task.id()).filter(j->(actor==null||j.actorId().equals(actor))).isEmpty())continue;
             var reference=batches.result(task.id());
             if(reference==null||!reference.status().equals("COMPLETED"))continue;
             for(int index=0;index<reference.lines().size();index++)rows.add(new Candidate(new Selection(task.id(),index),task.fileName(),task.createdTime().toString(),reference.lines().get(index)));
@@ -42,7 +43,7 @@ public class BudgetMaterialRiskService {
         var old=results.find(id,user.userId());
         if(old.isPresent()) {
             if(!old.get().projects().stream().map(Candidate::source).toList().equals(ordered))throw new BusinessException(BusinessErrorCode.CONFLICT,"本次分析范围已确定，不能替换项目");
-            return old.get();
+            return current(old.get());
         }
         var available=candidates(1,ordered.stream().map(Selection::taskId).distinct().toList());
         var rows=new ArrayList<Candidate>();
@@ -53,15 +54,34 @@ public class BudgetMaterialRiskService {
         audit.success("BUDGET_MATERIAL_RISK_ANALYZED",user,"BUDGET_MATERIAL_RISK_RESULT",id.toString(),null,null,Map.of("itemCount",rows.size()),"保存预算项目风险参考结果");
         return result;
     }
-    public List<Result> history(int page){if(page<1||page>100000)throw new BusinessException(BusinessErrorCode.INVALID_ARGUMENT);return results.history(actor().userId(),(page-1)*20,20);}
-    public Result get(UUID id){return results.find(id,actor().userId()).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));}
+    public List<Result> history(int page){if(page<1||page>100000)throw new BusinessException(BusinessErrorCode.INVALID_ARGUMENT);return results.history(scope(),(page-1)*20,20).stream().map(BudgetMaterialRiskService::current).toList();}
+    public Result get(UUID id){return current(results.find(id,scope()).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND)));}
+
+    // Reproject the saved selections; retain the immutable original result in storage.
+    static Result current(Result saved) {
+        var previous=saved.splitAnalysis();
+        if(previous==null)return saved;
+        BudgetMaterialSplitAnalysis.Analysis split;
+        if(previous.version().startsWith("SELECTED_SUM_"))split=BudgetMaterialSplitAnalysis.analyzeSelected(saved.projects());
+        else {
+            var rules=previous.rules().stream().filter(r->BudgetAmountThresholdPolicy.activeRule(r.code())).toList();
+            var findings=previous.findings().stream().filter(f->BudgetAmountThresholdPolicy.activeRule(f.rule().code())).toList();
+            if(rules.size()==previous.rules().size()&&findings.size()==previous.findings().size())return saved;
+            split=new BudgetMaterialSplitAnalysis.Analysis(previous.version(),findings.isEmpty()?"UNKNOWN":"WARNING",
+                    previous.totalAmount(),previous.countedItems(),"已汇总所选材料中的申报金额。",rules,findings,previous.exclusions(),null,null,previous.complete());
+        }
+        var opinions=new ArrayList<>(saved.opinions());
+        opinions.removeIf(opinion->Objects.equals(opinion,previous.summary()));
+        if(!opinions.contains(split.summary()))opinions.add(0,split.summary());
+        return new Result(saved.id(),saved.actorId(),saved.createdAt(),saved.projects(),opinions,split);
+    }
 
     private String keyword(String value) {
         if(value!=null&&value.length()>100)throw new BusinessException(BusinessErrorCode.INVALID_ARGUMENT);
         return value==null||value.isBlank()?null:value.strip();
     }
     public BrowsePage browse(String cursor,String search) {
-        String user=actor().userId(),term=keyword(search);
+        String user=scope(),term=keyword(search);
         Position position=null;
         if(cursor!=null&&!cursor.isBlank())try {
             if(cursor.length()>180)throw new IllegalArgumentException();
@@ -97,10 +117,10 @@ public class BudgetMaterialRiskService {
     }
     public HistoryPage searchHistory(int page,String search,java.time.LocalDate date) {
         if(page<1||page>100000)throw new BusinessException(BusinessErrorCode.INVALID_ARGUMENT);
-        String user=actor().userId(),term=keyword(search);
+        String user=scope(),term=keyword(search);
         var filter=BudgetHistoryFilter.of(null,date,date);
         var found=results.searchHistory(user,term,filter.createdFrom(),filter.createdBefore(),(page-1)*6,6);
-        var items=found.stream().map(r->new HistoryItem(r.id(),r.createdAt(),r.projects().size(),
+        var items=found.stream().map(BudgetMaterialRiskService::current).map(r->new HistoryItem(r.id(),r.createdAt(),r.projects().size(),
                 r.projects().stream().map(c->Objects.toString(c.line().project(),"项目待核对")+" · "+Objects.toString(c.line().subject(),"科目待核对"))
                         .distinct().limit(3).collect(java.util.stream.Collectors.joining("、")),
                 r.splitAnalysis()==null?null:r.splitAnalysis().totalAmount(),r.splitAnalysis()==null?null:r.splitAnalysis().bandLabel())).toList();

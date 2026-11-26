@@ -40,6 +40,9 @@ public class Dm8BudgetMaterialJobRepository implements BudgetMaterialJobReposito
     public boolean complete(UUID id,String token,String status,Instant now) {
         return jdbc.update("UPDATE BUDGET_MATERIAL_JOB SET STATUS=?,UPDATED_AT=? WHERE ID=? AND STATUS='PROCESSING' AND LEASE_TOKEN=?",status,Timestamp.from(now),id.toString(),token)==1;
     }
+    public boolean cancel(UUID id,Instant now) {
+        return jdbc.update("UPDATE BUDGET_MATERIAL_JOB SET STATUS='FAILED',LEASE_TOKEN=NULL,LEASE_UNTIL=NULL,UPDATED_AT=? WHERE ID=? AND STATUS IN ('QUEUED','PROCESSING','PARSED')",Timestamp.from(now),id.toString())==1;
+    }
     @Transactional(propagation=Propagation.MANDATORY)
     public void requireLease(UUID id,String token) {
         var values=jdbc.queryForList("SELECT LEASE_TOKEN FROM BUDGET_MATERIAL_JOB WHERE ID=? AND STATUS='PROCESSING' FOR UPDATE",String.class,id.toString());

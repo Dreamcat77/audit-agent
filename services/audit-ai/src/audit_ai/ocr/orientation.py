@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Iterator
+from dataclasses import replace
 import logging
 from pathlib import Path
 import time
@@ -110,9 +111,27 @@ def recognize_page(image: Any, page_num: int, predict: Callable,
     import numpy as np
     from PIL import Image
 
+    # Cropping a tilted scan can enlarge the detector's effective scale and
+    # trigger several expensive rereads. Keep the proven full-page path for
+    # skewed source pages, including its later deskew candidate.
+    margin_safe = image.width*image.height >= 1_000_000 and deskew_angle(image) == 0.
+
     def recognize(candidate):
         # Fully consume each prediction while the caller holds the OCR slot.
-        pages, scores = map_predictions(predict(np.asarray(candidate)[:, :, ::-1].copy()))
+        box = white_margin_box(candidate) if margin_safe else None
+        if box is None:
+            pages, scores = map_predictions(predict(np.asarray(candidate)[:, :, ::-1].copy()))
+        else:
+            with candidate.crop(box) as cropped:
+                pages, scores = map_predictions(predict(np.asarray(cropped)[:, :, ::-1].copy()))
+            if len(pages) == 1 and pages[0].text.strip() and pages[0].confidence >= .8:
+                x0, y0, _, _ = box
+                pages = (replace(pages[0], regions=tuple(replace(r,
+                    polygon=tuple((x+x0, y+y0) for x,y in r.polygon)) for r in pages[0].regions)),)
+            else:
+                # A crop is only a compute optimization, never the reason to
+                # publish an empty or uncertain read instead of the full page.
+                pages, scores = map_predictions(predict(np.asarray(candidate)[:, :, ::-1].copy()))
         if len(pages) != 1:
             raise ValueError("OCR rotation page coverage invalid")
         return pages[0], scores
@@ -176,6 +195,7 @@ def recognize_page(image: Any, page_num: int, predict: Callable,
                 best_page, best_scores, best_angle = full_page, full_scores, full_angle
     best_quality = quality(best_page, best_scores)
     with image.rotate(best_angle, expand=True) as upright:
+        rotations = [(best_angle, image.size, upright.size)]
         tilt = deskew_angle(upright)
         if tilt:
             with upright.rotate(tilt, resample=Image.Resampling.BICUBIC,
@@ -186,6 +206,7 @@ def recognize_page(image: Any, page_num: int, predict: Callable,
                     score = quality(page, scores)
                     if score > best_quality * 1.02 + .01:
                         best_page, best_scores, best_quality = page, scores, score
+                        rotations.append((tilt, upright.size, candidate.size))
                     else:
                         tilt = 0.
                 else:
@@ -196,4 +217,22 @@ def recognize_page(image: Any, page_num: int, predict: Callable,
               duration_ms=max(0, (time.perf_counter_ns() - started) // 1_000_000),
               orientation_quality_milli=round(max(0., best_quality) * 1000),
               classifier_confidence_milli=round(classifier_confidence * 1000), ocr_page_count=page_num)
-    return OcrPage(page_num, best_page.text, best_page.confidence), best_scores
+    from audit_ai.ocr.geometry import restore_regions
+    return replace(restore_regions(best_page, image.size, rotations), page_num=page_num), best_scores
+
+
+def white_margin_box(image: Any):
+    """Remove only proven pure-white outer bands; original pixels are unchanged."""
+    import numpy as np
+    if image.width*image.height < 1_000_000 or min(image.size) < 512:
+        return None
+    # Keep even extremely faint or colored marks. Nonwhite scan noise simply
+    # disables this optimization; it is never erased to manufacture a margin.
+    ink = np.any(np.asarray(image) < 255, axis=2)
+    ys = np.flatnonzero(ink.any(axis=1)); xs = np.flatnonzero(ink.any(axis=0))
+    if len(xs) == 0 or len(ys) == 0 or xs[-1]-xs[0] < 160 or ys[-1]-ys[0] < 40:
+        return None
+    pad = max(24, round(max(image.size)*.015))
+    box = (max(0,int(xs[0])-pad),max(0,int(ys[0])-pad),
+           min(image.width,int(xs[-1])+1+pad),min(image.height,int(ys[-1])+1+pad))
+    return box if (box[2]-box[0])*(box[3]-box[1]) < image.width*image.height*.7 else None

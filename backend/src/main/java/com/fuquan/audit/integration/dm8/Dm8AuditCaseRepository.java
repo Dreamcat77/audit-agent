@@ -39,9 +39,10 @@ public class Dm8AuditCaseRepository implements AuditCaseRepository {
         }
         if(facts.stream().anyMatch(f->!consumed.contains(f.fileId())))throw new IllegalStateException("orphan fact corrupt");
         if(!c.documents().stream().map(AuditCase.Document::id).toList().equals(docs.stream().map(AuditCase.Document::id).toList()))throw new IllegalStateException("case file manifest corrupt");
-        return new AuditCase(c.id(),c.owner(),c.operationKey(),c.fingerprint(),c.status(),c.version(),c.leaseToken(),c.leaseUntil(),c.attempts(),c.createdAt(),docs,c.report());
+        return new AuditCase(c.id(),c.owner(),c.operationKey(),c.fingerprint(),c.status(),c.version(),c.leaseToken(),c.leaseUntil(),c.attempts(),c.createdAt(),docs,c.report(),c.reasonCode());
     });}
     public List<AuditCase> recent(String owner){return mapper.recent(owner).stream().map(UUID::fromString).map(id->find(id).orElseThrow()).toList();}
+    public List<UUID> cancelledForCleanup(int limit){return mapper.cancelledForCleanup(limit).stream().map(UUID::fromString).toList();}
     public List<AuditCaseHistoryEntry> history(String owner,UUID beforeId,int limit){
         return mapper.history(owner,beforeId==null?null:beforeId.toString(),limit)
                 .stream().map(v->AuditCaseHistoryEntry.from(decode(v,AuditCase.class))).toList();
@@ -51,12 +52,18 @@ public class Dm8AuditCaseRepository implements AuditCaseRepository {
     public void insert(AuditCase c){mapper.insert(row(c));files(c);facts(c);}
     @org.springframework.transaction.annotation.Transactional(propagation=org.springframework.transaction.annotation.Propagation.MANDATORY)
     public boolean replace(AuditCase previous,AuditCase next){
+        if(previous.cancelled()&&(!next.cancelled()||!"FAILED".equals(next.status())||!next.documents().isEmpty()||next.report()!=null))return false;
         if(mapper.replace(row(next),previous.version(),previous.leaseToken())!=1)return false;
         mapper.deleteFacts(next.id().toString());
         mapper.deleteLines(next.id().toString());
         mapper.deleteFiles(next.id().toString());files(next);facts(next);
         if(next.report()!=null)for(var offer:next.report().offers())for(int i=0;i<offer.lines().size();i++) {
             var line=offer.lines().get(i);String id=UUID.nameUUIDFromBytes((offer.documentId()+"/line/"+i).getBytes(java.nio.charset.StandardCharsets.UTF_8)).toString();
+            // The legacy relation is a quantity-times-price projection with a
+            // NOT NULL unit price. Amount-only lines remain durably available
+            // in the authoritative report JSON and source facts above. Never
+            // manufacture a price or reject the whole report for this projection.
+            if(line.unitPrice()==null)continue;
             mapper.insertLine(id,next.id().toString(),offer.documentId().toString(),line.item(),line.quantity(),line.unitPrice(),line.amount(),line.locator());
         }
         return true;
@@ -72,7 +79,7 @@ public class Dm8AuditCaseRepository implements AuditCaseRepository {
     private String digest(Object v){try{return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(encode(v).getBytes(java.nio.charset.StandardCharsets.UTF_8)));}catch(java.security.NoSuchAlgorithmException e){throw new IllegalStateException(e);}}
     private AutoCaseMapper.Row row(AuditCase c){
         var manifest=c.documents().stream().map(d->new AuditCase.Document(d.id(),d.name(),d.size(),d.sha256(),d.storageKey(),d.status(),List.of(),List.of(),d.parseMethod(),d.errorCode(),d.calls())).toList();
-        var metadata=new AuditCase(c.id(),c.owner(),c.operationKey(),c.fingerprint(),c.status(),c.version(),c.leaseToken(),c.leaseUntil(),c.attempts(),c.createdAt(),manifest,c.report());
+        var metadata=new AuditCase(c.id(),c.owner(),c.operationKey(),c.fingerprint(),c.status(),c.version(),c.leaseToken(),c.leaseUntil(),c.attempts(),c.createdAt(),manifest,c.report(),c.reasonCode());
         return new AutoCaseMapper.Row(c.id().toString(),c.owner(),c.operationKey().toString(),c.fingerprint(),c.status(),c.version(),c.leaseToken(),LocalDateTime.ofInstant(c.leaseUntil(),ZoneOffset.UTC),LocalDateTime.ofInstant(c.createdAt(),ZoneOffset.UTC),encode(metadata));
     }
     private String encode(Object v){try{return json.writeValueAsString(v);}catch(Exception e){throw new IllegalStateException("case serialization failed",e);}}

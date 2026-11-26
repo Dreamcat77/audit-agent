@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.*;
 
 @Service
 public class ContractAnalysisTransactions {
+    private com.fuquan.audit.contract.application.project.port.ProjectFileJobRepository jobs;
+    @org.springframework.beans.factory.annotation.Autowired public void setJobs(com.fuquan.audit.contract.application.project.port.ProjectFileJobRepository value){jobs=value;}
     private final ContractAnalysisRepository repository;
     private final OperationAuditService audit;
     private final Clock clock;
@@ -21,8 +23,9 @@ public class ContractAnalysisTransactions {
     }
     @Transactional(propagation=Propagation.REQUIRES_NEW)
     public boolean save(ContractAnalysisCase previous,ContractAnalysisCase next,CurrentUser actor){
-        if(!actor.userId().equals(previous.owner()))throw new IllegalArgumentException("CASE_OWNER_MISMATCH");
+        if(!actor.userId().equals(previous.owner())&&!actor.roles().contains("SYSTEM_ADMIN"))throw new IllegalArgumentException("CASE_OWNER_MISMATCH");
         if(!repository.replace(previous,next,clock.instant()))return false;
+        if(jobs!=null&&"USER_CANCELLED".equals(next.reasonCode()))jobs.cancelProject(next.projectId(),clock.instant());
         audit.success("CONTRACT_ANALYSIS_CHECKPOINT",actor,"CONTRACT_ANALYSIS_CASE",next.id().toString(),null,null,
                 Map.of("status",next.status(),"version",next.version()),"保存合同自动分析进度");
         return true;

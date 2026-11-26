@@ -7,6 +7,14 @@ import static com.fuquan.audit.budget.application.BudgetUploadedFacts.*;
 import com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.*;
 
 class BudgetBatchChecksTest {
+    @Test void completionWordInsideActualStepCannotCreateMissingApprovalWarning() {
+        var policy=file("制度.txt",row("p","projectName","设施更新","requiredApprovalStep","财务部门书面批准","policyClause","须经财务部门书面批准后方可付款。"));
+        var record=file("审批记录.txt",row("a","projectName","设施更新","actualApprovalStep","财务部门已书面批准","approvalDate","2026年3月1日"));
+        var result=new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(policy,record));
+        assertThat(result.get(policy.taskId()).assessments()).filteredOn(a->a.code().equals("APPROVAL_PROCEDURE")).singleElement().satisfies(a->assertThat(a.level()).isEqualTo("INFO"));
+        var unapproved=file("未批.txt",row("u","projectName","设施更新","actualApprovalStep","财务部门未书面批准"));
+        assertThat(new BudgetUploadedMaterialAnalyzer().analyzeBatch(List.of(policy,unapproved)).get(policy.taskId()).assessments()).filteredOn(a->a.code().equals("APPROVAL_PROCEDURE")).singleElement().satisfies(a->assertThat(a.level()).isEqualTo("WARNING"));
+    }
     @Test void wordHeadingNameAndCodeInDifferentParagraphsStillScopePolicyAndPurposes() {
         var declaration=file("申报.docx",row("n","projectName","设备更新"),row("c","projectCode","P001"),
                 row("d","subjectName","设备","declaredAmount","120000元","spendingPurpose","旅游"));
@@ -72,12 +80,12 @@ class BudgetBatchChecksTest {
         assertThat(snapshot.issues()).isEmpty();
         assertThat(snapshot.rows().stream().flatMap(r->r.facts().stream()).map(Fact::field)).contains("requiredApprovalStep","approvalThreshold","thresholdCondition","policyClause");
     }
-    @Test void automaticallyFindsSameProjectSmallApplicationsAndSeparatesDifferentProjects() {
+    @Test void sameProjectApplicationsDoNotTriggerRetiredFixedThreshold() {
         var a=file("申报1.docx",row("1","projectName","办公终端更新","subjectName","设备","declaredAmount","600000元"));
         var b=file("申报2.pdf",row("2","projectName","办公终端更新","subjectName","安装","declaredAmount","400000.01元"));
         var c=file("别的工程.pdf",row("3","projectName","屋面修缮","subjectName","工程","declaredAmount","600000元"));
         var results=new BudgetUploadedMaterialAnalyzer().analyze(List.of(a,b,c));
-        assertThat(results.get(a.taskId()).assessments()).singleElement().satisfies(f->{assertThat(f.code()).isEqualTo("AUTO_SPLIT_APPLICATION");assertThat(f.explanation()).contains("1000000.01", "额外审批");assertThat(f.sources()).noneMatch(s->s.taskId().equals(c.taskId()));});
+        assertThat(results.get(a.taskId()).assessments()).isEmpty();
         assertThat(results.get(c.taskId()).assessments()).isEmpty();
     }
     @Test void automaticSplitDoesNotWarnBelowOneMillionOrAtOldReferenceBands() {
@@ -88,11 +96,11 @@ class BudgetBatchChecksTest {
                     .noneMatch(f->f.code().equals("AUTO_SPLIT_APPLICATION"));
         }
     }
-    @Test void automaticSplitWarnsAtExactlyOneMillion() {
+    @Test void automaticSplitDoesNotWarnAtExactlyOneMillion() {
         var a=file("申报1.docx",row("1","projectName","办公终端更新","subjectName","设备","declaredAmount","600000元"));
         var b=file("申报2.pdf",row("2","projectName","办公终端更新","subjectName","安装","declaredAmount","400000.00元"));
         assertThat(new BudgetUploadedMaterialAnalyzer().analyze(List.of(a,b)).get(a.taskId()).assessments())
-                .anySatisfy(f->{assertThat(f.code()).isEqualTo("AUTO_SPLIT_APPLICATION");assertThat(f.explanation()).contains("额外审批");});
+                .noneMatch(f->f.code().equals("AUTO_SPLIT_APPLICATION"));
     }
     @Test void approvalEvidenceIsComparedWithUploadedPolicyAndNotAnInventedDemoRule() {
         var declaration=file("申报.docx",row("d","projectName","终端更新","subjectName","设备","declaredAmount","120000元"));

@@ -1,6 +1,25 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { groupBudgetMaterialLines, mergeBudgetMaterialReferences } from "./budgetBatchResult.ts";
+import { budgetBatchResultState } from "./budgetResultState.ts";
+
+test('batch semantic projection keeps project name, deduplicates totals and never upgrades partial analysis',()=>{
+  const total={role:'projectBudgetAmount',scope:'TOTAL',year:'2026',amount:1000000,sources:[]};
+  const assessment={code:'SEMANTIC_PURPOSE_SCOPE',level:'WARNING',title:'用途不一致',explanation:'批复购置，申请宴请',basis:'按批复调整',sources:[]};
+  const reference={status:'COMPLETED' as const,summary:'已整理',lines:[],projectName:'终端更新项目',totals:[total],assessments:[assessment],analysisCoverage:'COMPLETE' as const};
+  const merged=mergeBudgetMaterialReferences([reference,{...reference,analysisCoverage:'PARTIAL'}]);
+  assert.equal(merged?.projectName,'终端更新项目');assert.equal(merged?.totals.length,1);
+  assert.equal(merged?.assessments.length,1);assert.equal(merged?.analysisCoverage,'PARTIAL');
+  assert.equal(mergeBudgetMaterialReferences([reference,{status:'PENDING',summary:'整理中',lines:[]}])?.analysisCoverage,null);
+});
+
+test('one batch name merges duplicate cross-file lines while retaining every original source',()=>{
+ const line={project:'项目别称',projectCode:null,subject:'设备',subjectCode:null,year:'2026',department:null,declaredAmount:12000,approvalAmount:10000,status:'OVER_APPROVAL',opinion:'超出2000元',sources:[]};
+ const reference={status:'COMPLETED' as const,summary:'',projectName:'终端改造项目',lines:[line]};
+ const result=mergeBudgetMaterialReferences([reference,{...reference,lines:[{...line,project:'另一名称'}]}]);
+ assert.equal(result?.lines.length,1);assert.equal(result?.lines[0].project,'终端改造项目');
+});
 
 test("identical cross-file views of one batch finding appear only once", () => {
   const line = { project: "办公设备", subject: "电脑", subjectCode: "A01", year: "2026", department: "采购",
@@ -15,6 +34,31 @@ test("identical cross-file views of one batch finding appear only once", () => {
   ]);
   assert.equal(result?.lines.length, 1);
   assert.deepEqual(result?.lines[0].sources, line.sources);
+});
+
+test('same physical money evidence merges partial cross-file year and department but retains distinct rows',()=>{
+  const source=(row:number,field:string)=>({taskId:'table',fileName:'明细.xlsx',field,value:'120',locator:`excel/sheet:1/row:${row}/col:3`,excerpt:'120'});
+  const base={project:null,projectCode:null,subject:'设备维护',subjectCode:null,year:null,department:null,declaredAmount:120,approvalAmount:110,status:'OVER_APPROVAL',opinion:'超出10元',sources:[source(3,'declaredAmount'),source(3,'approvalAmount')]};
+  const rich={...base,year:'2027年',department:'保障处'};
+  const ref={status:'COMPLETED' as const,summary:'',projectName:'设施项目'};
+  const result=mergeBudgetMaterialReferences([{...ref,lines:[base]},{...ref,lines:[rich,{...rich,sources:[source(4,'declaredAmount'),source(4,'approvalAmount')]}]}]);
+  assert.equal(result?.lines.length,2);
+  assert.equal(result?.lines[0].year,'2027年');assert.equal(result?.lines[0].department,'保障处');
+  const conflict=mergeBudgetMaterialReferences([{...ref,lines:[{...rich,year:'2026年'}]},{...ref,lines:[rich]}]);
+  assert.equal(conflict?.lines.length,2);
+});
+
+test("subject code merges partial cross-file metadata and keeps the richer row", () => {
+  const base = { subject: "设备", subjectCode: "A01", declaredAmount: 31200, approvalAmount: 32760,
+    status: "WITHIN_APPROVAL", opinion: "未超批复", sources: [] };
+  const result = mergeBudgetMaterialReferences([
+    { status: "COMPLETED", lines: [{ ...base, project: "项目一", year: "2026", department: null }] },
+    { status: "COMPLETED", lines: [{ ...base, project: null, year: null, department: "财务" }] },
+  ]);
+  assert.equal(result?.lines.length, 1);
+  assert.equal(result?.lines[0].project, "项目一");
+  assert.equal(result?.lines[0].year, "2026");
+  assert.equal(result?.lines[0].department, "财务");
 });
 
 test("batch views keep unique issues and mark partial coverage when a source did not finish", () => {
@@ -35,6 +79,19 @@ test('missing coverage remains unverified and pending members prevent a complete
   assert.equal(result?.coverage, null);
 });
 
+test('an available batch file result can be shown while sibling files are still processing', async () => {
+  const state = budgetBatchResultState([
+    { phase: 'PARSED', result: { task: { taskId: 'task-1' }, fileName: '预算表.xlsx' } },
+    { phase: 'PROCESSING', result: null },
+  ]);
+
+  assert.equal(state.processing, true);
+  assert.deepEqual(state.results, [{ id: 'task-1', name: '预算表.xlsx' }]);
+  const page = await readFile(new URL('../../app/BudgetCheckPage.tsx', import.meta.url), 'utf8');
+  assert.match(page, /budgetBatchResultState\(rows\)/);
+  assert.match(page, /if\(!currentResultId\)setCurrentResultId\(results\[0\]\.id\)/);
+});
+
 test('projects, years and departments remain separate while differences come first in each group', () => {
   const line = { project: '设备项目', year: '2026', department: '采购', subject: '设备', subjectCode: null,
     declaredAmount: 50, approvalAmount: 100, status: 'WITHIN_APPROVAL', opinion: '参考意见', sources: [] };
@@ -51,4 +108,31 @@ test('same subject with different amounts or conflicting opinions is never silen
   const result = mergeBudgetMaterialReferences([{ status: 'COMPLETED', summary: '待核对',
     lines: [line, { ...line, declaredAmount: 60 }, { ...line, opinion: '另一条核对意见' }] }]);
   assert.equal(result?.lines.length, 3);
+});
+
+test('batch totals and repeated issues merge all evidence without merging different scopes or conclusions',()=>{
+  const source=(id:string)=>({taskId:id,fileName:id+'.pdf',field:'projectBudgetAmount',value:'100万元',locator:'p1',excerpt:'项目预算100万元'});
+  const total={role:'projectBudgetAmount',scope:'TOTAL',year:'2026',amount:1000000,sources:[source('a')]};
+  const issue={code:'PURPOSE',level:'WARNING',title:'用途不一致',explanation:'用途与批复不同',basis:'按批复用途执行',sources:[source('a')]};
+  const result=mergeBudgetMaterialReferences([
+    {status:'COMPLETED',summary:'',lines:[],totals:[total],assessments:[issue]},
+    {status:'COMPLETED',summary:'',lines:[],totals:[{...total,sources:[source('b')]},{...total,year:'2025'},
+      {...total,scope:'PACKAGE'},{...total,scope:'PACKAGE',sources:[source('b')]}],
+      assessments:[{...issue,sources:[source('b')]},{...issue,explanation:'另一项用途不同'}]},
+  ]);
+  assert.equal(result?.totals.length,4);
+  assert.equal(result?.totals[0].sources.length,2);
+  assert.equal(result?.assessments.length,2);
+  assert.equal(result?.assessments[0].sources.length,2);
+});
+
+test('repeated metadata combines source anchors while equal expense lines stay separate',()=>{
+  const source=(id:string,field:string)=>({taskId:id,fileName:id+'.pdf',field,value:'XM-01',locator:'p1',excerpt:'项目编号XM-01'});
+  const line={project:'设备项目',year:'2026',department:null,subject:'设备',subjectCode:null,
+    declaredAmount:50,approvalAmount:100,status:'WITHIN_APPROVAL',opinion:'已整理',sources:[source('a','projectCode')]};
+  const result=mergeBudgetMaterialReferences([{status:'COMPLETED',summary:'',lines:[line,
+    {...line,sources:[source('b','projectCode')]}, {...line,sources:[source('a','declaredAmount')]},
+    {...line,sources:[source('b','declaredAmount')]}]}]);
+  assert.equal(result?.lines.length,3);
+  assert.equal(result?.lines[0].sources.length,2);
 });

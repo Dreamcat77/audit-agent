@@ -8,9 +8,15 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserAccountMapper {
 
+    int insertUser(UserAccountPersistenceRow row);
+    int updateUser(UserAccountPersistenceRow row);
+    List<UserAccountPersistenceRow> listUsers(@Param("offset") int offset,@Param("limit") int limit);
+    long countUsers();
+
     UserAccountPersistenceRow findByUsername(@Param("username") String normalizedUsername);
 
     UserAccountPersistenceRow findById(@Param("id") String id);
+    UserAccountPersistenceRow findSessionAccount(@Param("id") String id);
 
     UserAccountPersistenceRow findFirstActiveByRole(@Param("roleCode") String roleCode);
 

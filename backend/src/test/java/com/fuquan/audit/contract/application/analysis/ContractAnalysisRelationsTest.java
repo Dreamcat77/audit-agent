@@ -72,4 +72,31 @@ class ContractAnalysisRelationsTest {
         assertThat(relations.scopes(new ContractAnalysisRelations.Pair(c,s),List.of(),Map.of(c.fileId(),main,s.fileId(),support)))
             .extracting(ContractAnalysisEvidence.Scope::supplied).containsExactly(main,support);
     }
+
+    @Test void chineseLineAmountColumnTriggersDeterministicContractAnnexSumCheck(){
+        String contractText="合同编号：HT-1\n合同总价：2100000元";
+        String tableText="合同价款明细表\n项目名称 | 数量 | 单价（元） | 分项金额（元）\n设备 | 2 | 1000000 | 2000000\n安装服务 | 1 | 50000 | 50000\n合计 |  |  | 2050000\n";
+        var contractScope=ContractAnalysisEvidenceTest.scope(contractText);
+        var tableScope=ContractAnalysisEvidenceTest.scope(tableText);
+        var contractSource=new Source(contractScope.source().fileId(),"合同书.docx",contractScope.source().sha256(),contractScope.source().size(),
+                contractScope.source().status(),contractScope.source().parseResultId(),1,contractScope.source().textSha256(),null);
+        var tableSource=new Source(tableScope.source().fileId(),"合同价款明细表.xlsx",tableScope.source().sha256(),tableScope.source().size(),
+                tableScope.source().status(),tableScope.source().parseResultId(),1,tableScope.source().textSha256(),null);
+        var grounding=new ContractAnalysisEvidence();
+        var total=new Fact("TOTAL_AMOUNT","2100000元","RULE",List.of(grounding.locate(contractScope,"合同总价：2100000元").orElseThrow()));
+        var contractNo=new Fact("CONTRACT_NO","HT-1","RULE",List.of(grounding.locate(contractScope,"合同编号：HT-1").orElseThrow()));
+        var contractStep=ContractAnalysisPlan.step("contract",contractSource,"FILE",0,contractText.length())
+                .running(ContractAnalysisCaseTest.NOW).finish(StepState.COMPLETED,
+                        new Output("CONTRACT","GENERAL",true,List.of(total,contractNo),List.of(),List.of(),List.of(),0,"test","v1"),null,ContractAnalysisCaseTest.NOW);
+        var tableStep=ContractAnalysisPlan.step("annex",tableSource,"FILE",0,tableText.length())
+                .running(ContractAnalysisCaseTest.NOW).finish(StepState.COMPLETED,
+                        new Output("ANNEX","GENERAL",true,List.of(),List.of(),List.of(),List.of(),0,"test","v1"),null,ContractAnalysisCaseTest.NOW);
+        var pair=new ContractAnalysisRelations.Pair(contractSource,tableSource);
+        var output=relations.evaluate(pair,List.of(contractStep,tableStep),Map.of(contractSource.fileId(),contractText,tableSource.fileId(),tableText));
+        assertThat(output.checks()).singleElement().satisfies(check->{
+            assertThat(check.code()).isEqualTo("F02_LINE_SUM_MATCH");
+            assertThat(check.status()).isEqualTo("FAIL");
+            assertThat(check.explanation()).contains("50000");
+        });
+    }
 }

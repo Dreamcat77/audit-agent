@@ -16,13 +16,17 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Propagation;
 
 @Repository
 @Profile({"dev29", "customer", "local-dev"})
-public class Dm8UserAccountRepository implements UserAccountRepository, UserIdentityQueryPort, UserRoleAssignmentPort {
+public class Dm8UserAccountRepository implements UserAccountRepository, UserIdentityQueryPort, UserRoleAssignmentPort,
+        com.fuquan.audit.security.application.port.UserAdministrationPort {
 
     private final UserAccountMapper mapper;
     private final FlowDebugLogger flowDebugLogger;
@@ -30,6 +34,62 @@ public class Dm8UserAccountRepository implements UserAccountRepository, UserIden
     public Dm8UserAccountRepository(UserAccountMapper mapper, FlowDebugLogger flowDebugLogger) {
         this.mapper = mapper;
         this.flowDebugLogger = flowDebugLogger;
+    }
+
+    @Override @Transactional(propagation=Propagation.MANDATORY)
+    public void create(UserAccount account) {
+        var row=new UserAccountPersistenceRow();
+        row.setId(account.id()); row.setUsername(account.username()); row.setPasswordHash(account.passwordHash());
+        row.setRealName(account.realName()); row.setStatus(account.status().name());
+        row.setCreatedAt(LocalDateTime.ofInstant(account.createdAt(),ZoneOffset.UTC));
+        row.setUpdatedAt(LocalDateTime.ofInstant(account.updatedAt(),ZoneOffset.UTC));
+        row.setPasswordChangedAt(LocalDateTime.ofInstant(account.passwordChangedAt(),ZoneOffset.UTC));
+        try {if(mapper.insertUser(row)!=1) throw new IllegalStateException("user insert failed");}
+        catch (DataAccessException failure) { throw translateUniqueViolation(failure); }
+        for(String role:account.roles()) if(mapper.insertUserRole(account.id(),role)!=1)
+            throw new IllegalStateException("user role insert failed");
+    }
+    @Override @Transactional(readOnly=true)
+    public List<UserAccount> list(int offset,int limit) { return mapper.listUsers(offset,limit).stream().map(this::toDomain).toList(); }
+    @Override @Transactional(readOnly=true)
+    public long count() { return mapper.countUsers(); }
+
+    @Override @Transactional(readOnly=true)
+    public UserAccount findById(String id) {
+        UserAccountPersistenceRow row = mapper.findById(id);
+        return row == null ? null : toDomain(row);
+    }
+
+    @Override @Transactional(propagation=Propagation.MANDATORY)
+    public void update(UserAccount account) {
+        var row = new UserAccountPersistenceRow();
+        row.setId(account.id()); row.setUsername(account.username()); row.setPasswordHash(account.passwordHash());
+        row.setRealName(account.realName()); row.setStatus(account.status().name());
+        row.setFailedLoginCount(account.failedLoginCount());
+        row.setLockedUntil(account.lockedUntil() == null ? null : toUtc(account.lockedUntil()));
+        row.setPasswordChangedAt(toUtc(account.passwordChangedAt())); row.setUpdatedAt(toUtc(account.updatedAt()));
+        row.setVersionNo(account.versionNo());
+        try {
+            if (mapper.updateUser(row) != 1) throw new OptimisticLockingFailureException("account changed");
+        } catch (DataAccessException failure) {
+            throw translateUniqueViolation(failure);
+        }
+    }
+
+    @Override @Transactional(readOnly = true)
+    public Optional<SessionAccount> findSessionAccount(String userId) {
+        return Optional.ofNullable(mapper.findSessionAccount(userId))
+                .map(row -> new SessionAccount(UserAccountStatus.valueOf(row.getStatus()),
+                        toInstant(row.getPasswordChangedAt()), row.getRealName()));
+    }
+
+    private static DataAccessException translateUniqueViolation(DataAccessException failure) {
+        for (Throwable cause = failure; cause != null; cause = cause.getCause()) {
+            if (cause instanceof java.sql.SQLException sql && sql.getErrorCode() == -6602) {
+                return new DuplicateKeyException("user already exists", failure);
+            }
+        }
+        return failure;
     }
 
     @Override

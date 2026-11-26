@@ -59,6 +59,45 @@ import static org.mockito.Mockito.verify;
 class ProjectFileIngestionServiceTest {
     @TempDir Path storageRoot;
 
+    @Test void excelWithoutLegacyParserReachesSharedParserAndPublishesBoundEvidence() throws Exception {
+        Clock clock=Clock.fixed(Instant.parse("2026-11-19T00:00:00Z"),ZoneOffset.UTC);
+        var repositories=new InMemoryProjectRepositories();var parses=new InMemoryProjectFileParseResultRepository();
+        var projects=new ProjectApplicationService(repositories.projectRepository(),repositories.projectFileRepository(),
+                repositories.contractCandidateRepository(),repositories.extractionResultRepository(),clock);
+        var project=projects.createBlank("actor-string");var properties=new FileStorageProperties();properties.setRoot(storageRoot.toString());
+        var storage=new FileSystemStorageAdapter(properties);var intake=ProjectIntakeProperties.defaults();
+        var policy=new ProjectFilePolicy(intake,Duration.ofMinutes(15));
+        var coordinator=new ProjectFileIngestionTransactionCoordinator(repositories.projectRepository(),repositories.projectFileRepository(),
+                repositories.contractCandidateRepository(),repositories.extractionResultRepository(),parses,new InMemoryIdempotencyAdapter(),event->{},clock,
+                new FlowDebugLogger(new ObservabilityProperties()));
+        var archives=new ProjectArchiveProcessingService(new SelectedProjectArchiveReader(intake),new ProjectFileClassifier(),policy,new ProjectArchiveStorageKeyFactory(),storage);
+        var actor=new CurrentUser("actor-string","actor","Actor",Set.of("AUDITOR"));
+        var service=new ProjectFileIngestionService(projects,storage,policy,new ProjectFileClassifier(),List.of(),new FakeOcrAdapter(),
+                new ProjectFactExtractor(new ExtractionKeyFactory(),clock),new ContractCandidateAssembler(clock),archives,coordinator,()->Optional.of(actor),clock);
+        byte[] bytes;try(var workbook=new org.apache.poi.xssf.usermodel.XSSFWorkbook();var out=new java.io.ByteArrayOutputStream()){
+            workbook.createSheet("费用明细").createRow(0).createCell(0).setCellValue("合同总价：120000元");workbook.write(out);bytes=out.toByteArray();
+        }
+        var calls=new AtomicInteger();String originalSha=contractAnalysisHash(bytes);
+        com.fuquan.audit.common.material.application.port.MaterialParsePort shared=request->{
+            calls.incrementAndGet();assertThat(request.fileName()).isEqualTo("费用明细.xlsx");
+            assertThat(request.content().readAllBytes()).isEqualTo(bytes);
+            return new com.fuquan.audit.common.material.application.port.MaterialParsePort.ParseResult(request.documentId(),originalSha,"XLSX",
+                com.fuquan.audit.common.material.application.port.MaterialParsePort.ParseStatus.PARSED,"合同总价：120000元",null,List.of(),
+                List.of(new com.fuquan.audit.common.material.application.port.MaterialParsePort.Paragraph("sheet:费用明细/row:1","合同总价：120000元")),
+                List.of(),List.of(),List.of(),"material-parse-v5",java.util.Map.of(),List.of(),null);
+        };
+        org.springframework.test.util.ReflectionTestUtils.setField(service,"sharedParser",shared);
+        var file=service.upload(new ProjectFileUploadCommand(project.id(),"费用明细.xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                bytes.length,new ByteArrayInputStream(bytes),"excel-key",new ProjectRequestMetadata("req","trace","127.0.0.1")));
+        assertThat(calls).hasValue(1);assertThat(file.parseStatus()).isEqualTo(ProjectFileParseStatus.PARSED);
+        var frozen=parses.findLatestByFileId(file.id()).orElseThrow();
+        assertThat(frozen.fileSha256()).isEqualTo(originalSha);assertThat(frozen.canonicalText()).contains("合同总价：120000元");
+        assertThat(frozen.fileId()).isEqualTo(file.id());
+    }
+    private static String contractAnalysisHash(byte[] bytes) throws Exception {
+        return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+    }
+
     @Test
     @org.junit.jupiter.api.condition.EnabledIfSystemProperty(named="audit.word97.fixture",matches=".+")
     void genuineWordRootAndZipReuseOriginalStorageAndPublishBoundParseEvidence() throws Exception {

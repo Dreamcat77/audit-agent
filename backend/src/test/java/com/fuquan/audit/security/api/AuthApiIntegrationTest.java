@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -314,6 +316,62 @@ class AuthApiIntegrationTest {
                         + Pattern.quote(account.id()))
                 .containsPattern("HTTP_OUT method=GET path=/api/v1/health status=200 durationMs=\\d+ userId=anonymous")
                 .doesNotContain(rawPassword);
+    }
+
+    @Test
+    void personChangesKeepIdentityAndRevokeSessionsAcrossPasswordResetAndReenable() throws Exception {
+        String password = UUID.randomUUID().toString();
+        String nextPassword = UUID.randomUUID().toString();
+        var member = seedAccount(UserAccountStatus.ACTIVE, password, 0, null);
+        var admin = seedAccount(UserAccountStatus.ACTIVE, password, 0, null);
+        userAccountRepository.assignRole(admin.id(), "SYSTEM_ADMIN");
+        var adminSession = csrf(loginSession(admin.username(), password));
+        var memberSession = loginSession(member.username(), password);
+        var anotherSession = loginSession(member.username(), password);
+        String path = "/api/v1/system/users/" + member.id();
+
+        mockMvc.perform(get("/api/v1/system/users").session(memberSession)).andExpect(status().isForbidden());
+        mockMvc.perform(put(path).session(adminSession.session()).header(adminSession.headerName(), adminSession.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(Map.of("username", member.username(), "displayName", "Updated name"))))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/api/v1/auth/me").session(memberSession))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.realName").value("Updated name"));
+
+        String newUsername = "renamed-" + UUID.randomUUID();
+        mockMvc.perform(put(path).session(adminSession.session()).header(adminSession.headerName(), adminSession.token())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(Map.of("username", newUsername, "displayName", "Updated name",
+                                "password", nextPassword))))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.id").value(member.id()));
+        mockMvc.perform(get("/api/v1/auth/me").session(memberSession)).andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/api/v1/auth/me").session(anotherSession)).andExpect(status().isUnauthorized());
+        loginExpectingUnauthorized(newUsername, password);
+        var beforeDisable = loginSession(newUsername, nextPassword);
+        var beforeEnable = loginSession(newUsername, nextPassword);
+
+        mockMvc.perform(patch(path + "/status").session(adminSession.session()).header(adminSession.headerName(), adminSession.token())
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"status\":\"DISABLED\"}"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.status").value("DISABLED"));
+        mockMvc.perform(get("/api/v1/auth/me").session(beforeDisable)).andExpect(status().isUnauthorized());
+        loginExpectingUnauthorized(newUsername, nextPassword);
+
+        mockMvc.perform(patch(path + "/status").session(adminSession.session()).header(adminSession.headerName(), adminSession.token())
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"status\":\"ACTIVE\"}"))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/api/v1/auth/me").session(beforeEnable)).andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/api/v1/auth/me").session(loginSession(newUsername, nextPassword)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.userId").value(member.id()))
+                .andExpect(jsonPath("$.data.roles[0]").value("AUDITOR"));
+    }
+
+    private MockHttpSession loginSession(String username, String password) throws Exception {
+        var initial = csrf(null);
+        var login = mockMvc.perform(post("/api/v1/auth/login")
+                        .session(initial.session()).header(initial.headerName(), initial.token())
+                        .contentType(MediaType.APPLICATION_JSON).content(loginBody(username, password)))
+                .andExpect(status().isOk()).andReturn();
+        return (MockHttpSession) login.getRequest().getSession(false);
     }
 
     private MvcResult loginExpectingUnauthorized(String username, String password) throws Exception {

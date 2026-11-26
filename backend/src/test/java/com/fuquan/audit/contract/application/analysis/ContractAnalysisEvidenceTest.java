@@ -6,7 +6,67 @@ import static org.assertj.core.api.Assertions.*;
 import static com.fuquan.audit.contract.application.analysis.ContractAnalysisCase.*;
 
 class ContractAnalysisEvidenceTest {
+    @Test void completeAppendixTotalNeedsPriceTableCaptionAndCompletenessStatementInTheCitation(){
+        String text="合同价款明细表\n1 | 设备维护 | 200,000.00 | 固定含税\n2 | 安装培训 | 60,000.00 | 固定含税\n合计 | | 260,000.00 |\n以上为本合同全部价款明细，无其他分项或另计费用。";
+        var origin=source(text);var annex=new Source(origin.fileId(),"附件一合同价款明细表.xlsx",origin.sha256(),origin.size(),origin.status(),origin.parseResultId(),origin.parseVersion(),origin.textSha256(),null);
+        var s=new ContractAnalysisEvidence.Scope(annex,text,0,text.length());var full=new ContractAnalysisAiPort.Citation(s.source().fileId(),text);
+        var supported=validator.validate(result(List.of(new ContractAnalysisAiPort.Fact("TOTAL_AMOUNT","260,000.00",List.of(full))),
+                List.of(new ContractAnalysisAiPort.Clause("OTHER","合同价款明细合计为260,000.00",List.of(full))),List.of()),List.of(s),"FILE");
+        assertThat(supported.facts()).extracting(Fact::type).containsExactly("TOTAL_AMOUNT");
+        assertThat(supported.complete()).isTrue();
+        var partial=new ContractAnalysisAiPort.Citation(s.source().fileId(),"合计 | | 260,000.00 |");
+        var rejected=validator.validate(result(List.of(new ContractAnalysisAiPort.Fact("TOTAL_AMOUNT","260,000.00",List.of(partial))),List.of(),List.of()),List.of(s),"FILE");
+        assertThat(rejected.facts()).isEmpty();assertThat(rejected.complete()).isFalse();
+    }
+    @Test void disputeCourtIsNotAReferenceToAnotherContract() {
+        var s=scope("争议解决：协商不成向青禾区人民法院起诉。");
+        var citation=new ContractAnalysisAiPort.Citation(s.source().fileId(),s.text());
+        var out=validator.validate(result(List.of(new ContractAnalysisAiPort.Fact("CONTRACT_REFERENCE","青禾区人民法院",List.of(citation))),
+                List.of(new ContractAnalysisAiPort.Clause("DISPUTE","争议协商不成向青禾区人民法院起诉",List.of(citation))),List.of()),List.of(s),"FILE");
+        assertThat(out.facts()).isEmpty();assertThat(out.clauses()).hasSize(1);assertThat(out.complete()).isFalse();
+        s=scope("本补充协议的主合同名称为《青禾家具定制合同》。");
+        citation=new ContractAnalysisAiPort.Citation(s.source().fileId(),s.text());
+        assertThat(validator.validate(result(List.of(new ContractAnalysisAiPort.Fact("CONTRACT_REFERENCE","青禾家具定制合同",List.of(citation))),List.of(),List.of()),List.of(s),"FILE").facts()).hasSize(1);
+    }
+    @Test void templatePartyCaptionsAndUnitOnlyAmountFormsAreNotFacts() {
+        assertThat(ContractAnalysisEvidence.usableFact("PROJECT_NAME","[合同中心-项目名称]")).isFalse();
+        assertThat(ContractAnalysisEvidence.usableFact("CONTRACT_NO","${contractNo}")).isFalse();
+        for(String value:List.of("乙方（承揽方）","（承揽方）","承揽方","乙方（承揽方）（盖章）")) {
+            var s=scope("家具定制合同\n"+value+"：\n双方签字盖章后生效。");
+            var citation=new ContractAnalysisAiPort.Citation(s.source().fileId(),s.text());
+            var out=validator.validate(result(List.of(new ContractAnalysisAiPort.Fact("PARTY_B",value,List.of(citation))),
+                    List.of(new ContractAnalysisAiPort.Clause("EFFECTIVENESS","双方签字盖章后生效",List.of(citation))),List.of()),List.of(s),"FILE");
+            assertThat(out.facts()).isEmpty();assertThat(out.clauses()).hasSize(1);assertThat(out.complete()).isFalse();
+        }
+        assertThat(ContractAnalysisEvidence.usableFact("AMOUNT_WORDS","佰拾万仟佰拾元角分")).isFalse();
+        assertThat(ContractAnalysisEvidence.usableFact("AMOUNT_WORDS","零元整")).isTrue();
+        assertThat(ContractAnalysisEvidence.usableFact("AMOUNT_WORDS","壹万元整")).isTrue();
+        assertThat(ContractAnalysisEvidence.usableFact("AMOUNT_WORDS","拾万元整")).isTrue();
+        assertThat(ContractAnalysisEvidence.usableFact("AMOUNT_WORDS","人民币金额（大写）：佰拾万仟佰拾元角分（包含税费）")).isFalse();
+    }
+    @Test void fragmentAbsenceIsNotAUserActionButActualClauseConcernsRemain(){
+        var s=scope("违约按第九条执行；未取得验收结果也须足额付款，且验收合格才付款。");
+        var cite=List.of(new ContractAnalysisAiPort.Citation(s.source().fileId(),s.text()));
+        var noise=new ContractAnalysisAiPort.Finding("MATERIAL_SCOPE_NOTE","INFO","部分条款未体现",
+                "当前片段未包含付款条款和生效条件","请提供完整合同文本以核实",cite,"MATERIAL_VERIFICATION");
+        var real=new ContractAnalysisAiPort.Finding("PAYMENT_CONFLICT","WARNING","付款条件相互冲突",
+                "未验收须足额付款与验收合格才付款的约定相互冲突","明确付款条件",cite,"CLAUSE_ISSUE");
+        var result=validator.validate(result(List.of(),List.of(),List.of(noise,real)),List.of(s),"FRAGMENT");
+        assertThat(result.findings()).extracting(Finding::code).containsExactly("PAYMENT_CONFLICT");
+    }
     final ContractAnalysisEvidence validator=new ContractAnalysisEvidence();
+    @Test void blankFormPlaceholdersAreNotFactsButValidIndependentClausesSurvive(){
+        for(String value:List.of("________","＿ ＿ ＿","____年____月____日","待填写","未知")){
+            var scope=scope("甲方："+value+"\n乙方：青禾技术有限公司\n验收合格后付款");
+            var citation=new ContractAnalysisAiPort.Citation(scope.source().fileId(),scope.text());
+            var input=result(List.of(new ContractAnalysisAiPort.Fact("PARTY_A",value,List.of(citation)),
+                    new ContractAnalysisAiPort.Fact("PARTY_B","青禾技术有限公司",List.of(citation))),
+                    List.of(new ContractAnalysisAiPort.Clause("PAYMENT","验收合格后付款",List.of(citation))),List.of());
+            var output=validator.validate(input,List.of(scope),"FILE");
+            assertThat(output.facts()).extracting(Fact::type).containsExactly("PARTY_B");
+            assertThat(output.clauses()).hasSize(1);assertThat(output.complete()).isFalse();
+        }
+    }
     static Source source(String text){return new Source(UUID.randomUUID(),"合成合同.docx","a".repeat(64),100,SourceState.READY,UUID.randomUUID(),1,sha256(text),null);}
     static ContractAnalysisEvidence.Scope scope(String text){return new ContractAnalysisEvidence.Scope(source(text),text,0,text.length());}
     static ContractAnalysisAiPort.Result result(List<ContractAnalysisAiPort.Fact> facts,List<ContractAnalysisAiPort.Clause> clauses,List<ContractAnalysisAiPort.Finding> findings){return new ContractAnalysisAiPort.Result("synthetic-test","contract-case-v1","CONTRACT","SERVICE",true,facts,clauses,findings);}
@@ -69,7 +129,7 @@ class ContractAnalysisEvidenceTest {
     @Test void procurementBudgetCannotBeRelabeledAsContractTotal(){
         var s=scope("项目预算金额为100万元，中标金额为90万元");
         var f=new ContractAnalysisAiPort.Fact("TOTAL_AMOUNT","100万元",List.of(new ContractAnalysisAiPort.Citation(s.source().fileId(),s.text())));
-        assertThat(validator.validate(result(List.of(f),List.of(),List.of()),List.of(s),"FILE").facts()).isEmpty();
+        assertThat(validator.validate(result(List.of(f),List.of(),List.of()),List.of(s),"FILE").facts()).extracting(Fact::type).containsExactly("BUDGET_AMOUNT");
     }
     @Test void referencedContractNumberIsNotTheSupplementOwnNumber(){
         var s=scope("关联合同编号：MAIN-01");
@@ -82,6 +142,18 @@ class ContractAnalysisEvidenceTest {
         var own=scope("合同编号：SUP-02");
         var ownFact=new ContractAnalysisAiPort.Fact("CONTRACT_NO","SUP-02",List.of(new ContractAnalysisAiPort.Citation(own.source().fileId(),own.text())));
         assertThat(validator.validate(result(List.of(ownFact),List.of(),List.of()),List.of(own),"FILE").facts()).hasSize(1);
+    }
+    @Test void correspondingContractWithoutAColonIsStillAnExplicitReference(){
+        for(String text:List.of("本补充协议对应合同编号HT-C04-2026，经双方授权代表签字盖章生效。",
+                "本协议对应的合同编号为HT-C04-2026。","主合同编号HT-C04-2026。")){
+            var s=scope(text);var citation=new ContractAnalysisAiPort.Citation(s.source().fileId(),text);
+            var reference=new ContractAnalysisAiPort.Fact("CONTRACT_REFERENCE","HT-C04-2026",List.of(citation));
+            var correct=validator.validate(result(List.of(reference),List.of(),List.of()),List.of(s),"FILE");
+            assertThat(correct.facts()).extracting(Fact::type).containsExactly("CONTRACT_REFERENCE");
+            assertThat(correct.complete()).isTrue();
+            var own=new ContractAnalysisAiPort.Fact("CONTRACT_NO","HT-C04-2026",List.of(citation));
+            assertThat(validator.validate(result(List.of(own),List.of(),List.of()),List.of(s),"FILE").facts()).isEmpty();
+        }
     }
     @Test void singleFileCannotDeclareAnUploadedBatchAttachmentMissing(){
         var s=scope("验收时按合同附件技术参数逐台核对");

@@ -19,6 +19,29 @@ import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.junit.jupiter.api.Test;
 
 class OfficeDocumentTextReaderTest {
+    @Test void realContainerSelectsWordParserWithoutRenamingFilesOrFetchingHtmlImages()throws Exception{
+        try(var doc=new XWPFDocument();var out=new ByteArrayOutputStream()){
+            doc.createParagraph().createRun().setText("合同总价：10000元");doc.write(out);
+            assertThat(read(out.toByteArray(),"WPS导出.doc").segments()).anyMatch(s->s.text().contains("合同总价"));
+        }
+        var html=read("<html><head><meta charset='utf-8'></head><body><p>项目名称：青松维护</p><p>合同金额：10000元</p><img src='http://127.0.0.1:9/private'></body></html>".getBytes(StandardCharsets.UTF_8),"网页导出.doc");
+        assertThat(html.segments()).anyMatch(s->s.text().contains("青松维护"));assertThat(html.method()).contains("PARTIAL");assertThat(calls).isEmpty();
+        var rtf=read("{\\rtf1\\ansi Contract amount 10000}".getBytes(StandardCharsets.US_ASCII),"富文本导出.doc");
+        assertThat(rtf.segments()).anyMatch(s->s.text().contains("10000"));
+    }
+    @Test void nativeWordServiceRowsKeepEmptyColumnsAndMultilineCellsTogether() throws Exception {
+        try(var doc=new XWPFDocument();var out=new ByteArrayOutputStream()) {
+            var table=doc.createTable(3,4);
+            String[][] values={{"服务事项","工作量（人月）","含税单价（元/人月）","含税经费（元）"},
+                    {"同名服务","1.00","45,580","45,580"},{"合计","4.00","","182,320"}};
+            for(int row=0;row<3;row++)for(int col=0;col<4;col++)table.getRow(row).getCell(col).setText(values[row][col]);
+            var run=table.getRow(1).getCell(0).getParagraphs().get(0).createRun();run.addBreak();run.setText("第二行内容");
+            doc.write(out);var result=read(out.toByteArray(),"service.docx");
+            assertThat(result.segments()).extracting(MaterialFieldAiPort.Segment::text)
+                    .contains("同名服务\u2028第二行内容\t1.00\t45,580\t45,580","合计\t4.00\t\t182,320");
+            assertThat(calls).isEmpty();
+        }
+    }
     @Test void directJpegUploadKeepsOriginalBytesAndMimeForExifAwareOcr() throws Exception {
         byte[] bytes;
         try(var out=new ByteArrayOutputStream()) {

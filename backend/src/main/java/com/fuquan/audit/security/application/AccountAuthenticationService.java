@@ -139,8 +139,16 @@ public class AccountAuthenticationService {
         }
 
         UserAccount updated = userAccountRepository.recordSuccessfulLogin(account.id(), now);
+        if (updated.status() != UserAccountStatus.ACTIVE
+                || !account.passwordChangedAt().equals(updated.passwordChangedAt())
+                || !account.username().equals(updated.username())) {
+            appendFailureAudit(updated.id(), normalizedUsername, LoginAuditEventType.LOGIN_FAILED,
+                    LoginFailureReason.BAD_CREDENTIALS, safeMetadata, now);
+            return failure(LoginFailureReason.BAD_CREDENTIALS);
+        }
         appendSuccessAudit(updated, LoginAuditEventType.LOGIN_SUCCESS, safeMetadata, now);
-        CurrentUser currentUser = updated.toCurrentUser();
+        CurrentUser currentUser = new CurrentUser(updated.id(), updated.username(), updated.realName(),
+                updated.roles(), updated.passwordChangedAt());
         flowDebugLogger.log(
                 "AUTH_SUCCESS",
                 "AUTH",

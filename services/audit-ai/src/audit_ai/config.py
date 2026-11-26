@@ -60,13 +60,19 @@ class Settings:
     ocr_fast_enabled: bool = True
     ocr_fast_model_dir: str | None = None
     ocr_process_isolation: bool = False
+    ocr_worker_processes: int = 1
+    ocr_memory_budget_mb: int = 16384
+    ocr_memory_reserve_mb: int = 4096
+    ocr_worker_memory_mb: int = 4096
     max_upload_bytes: int = 50 * 1024 * 1024
     ocr_temp_root: str | None = None
     model_base_url: str | None = None
     model_api_key: str | None = field(default=None, repr=False)
     model_name: str | None = None
+    client_identity_required: bool = False
     model_connect_timeout_seconds: float = 5.0
     model_read_timeout_seconds: float = 60.0
+    model_provider_concurrency: int = 2
     contract_model_read_timeout_seconds: float = 600.0
     case_model_read_timeout_seconds: float = 150.0
     case_output_tokens: int = 4096
@@ -79,6 +85,7 @@ class Settings:
     material_chunk_bytes: int = 8000
     material_context_chars: int = 96
     material_output_tokens: int = 1536
+    material_concurrency: int = 1
     material_model_read_timeout_seconds: float = 180.0
     material_checkpoint_root: str | None = None
     material_checkpoint_ttl_seconds: int = 900
@@ -104,6 +111,11 @@ class Settings:
             raise ValueError("ocr_fast_enabled must be boolean")
         if not isinstance(self.ocr_process_isolation, bool):
             raise ValueError("ocr_process_isolation must be boolean")
+        if type(self.ocr_worker_processes) is not int or not 1 <= self.ocr_worker_processes <= 4:
+            raise ValueError("ocr_worker_processes must be between one and four")
+        for name in ('ocr_memory_budget_mb','ocr_memory_reserve_mb','ocr_worker_memory_mb'):
+            if type(getattr(self,name)) is not int or getattr(self,name)<512:
+                raise ValueError(name+' must be an integer of at least 512 MB')
         if self.ocr_cpu_threads != 1 or self.ocr_enable_mkldnn:
             raise ValueError(
                 "OCR runtime safety invariant requires one CPU thread and MKLDNN disabled"
@@ -114,6 +126,8 @@ class Settings:
             raise ValueError("model_connect_timeout_seconds must be positive")
         if self.model_read_timeout_seconds <= 0:
             raise ValueError("model_read_timeout_seconds must be positive")
+        if type(self.model_provider_concurrency) is not int or not 1 <= self.model_provider_concurrency <= 4:
+            raise ValueError("model_provider_concurrency must be an integer between 1 and 4")
         if not math.isfinite(self.case_model_read_timeout_seconds) or not 1 <= self.case_model_read_timeout_seconds <= 150:
             raise ValueError("case_model_read_timeout_seconds must be between 1 and 150")
         if not 256 <= self.case_output_tokens <= 4096:
@@ -150,6 +164,8 @@ class Settings:
             raise ValueError("material_context_chars must be between 0 and 192")
         if not 256 <= self.material_output_tokens <= 4096:
             raise ValueError("material_output_tokens must be between 256 and 4096")
+        if self.material_concurrency not in (1, 2):
+            raise ValueError("material_concurrency must be 1 or 2")
         if not math.isfinite(self.material_model_read_timeout_seconds) or not 1 <= self.material_model_read_timeout_seconds <= 180:
             raise ValueError("material_model_read_timeout_seconds must be between 1 and 180")
         if not 60 <= self.material_checkpoint_ttl_seconds <= 3600:
@@ -169,6 +185,10 @@ class Settings:
             ocr_fast_enabled=_environment_bool("AUDIT_OCR_FAST_ENABLED", True),
             ocr_fast_model_dir=os.getenv("AUDIT_OCR_FAST_MODEL_DIR") or None,
             ocr_process_isolation=_environment_bool("AUDIT_OCR_PROCESS_ISOLATION", False),
+            ocr_worker_processes=_environment_int("AUDIT_OCR_WORKER_PROCESSES", 1),
+            ocr_memory_budget_mb=_environment_int("AUDIT_OCR_MEMORY_BUDGET_MB", 16384),
+            ocr_memory_reserve_mb=_environment_int("AUDIT_OCR_MEMORY_RESERVE_MB", 4096),
+            ocr_worker_memory_mb=_environment_int("AUDIT_OCR_WORKER_MEMORY_MB", 4096),
             max_upload_bytes=_environment_int(
                 "AUDIT_AI_MAX_UPLOAD_BYTES", 50 * 1024 * 1024
             ),
@@ -176,12 +196,14 @@ class Settings:
             model_base_url=os.getenv("AUDIT_MODEL_BASE_URL") or None,
             model_api_key=os.getenv("AUDIT_MODEL_API_KEY") or None,
             model_name=os.getenv("AUDIT_MODEL_NAME") or None,
+            client_identity_required=_environment_bool("AUDIT_CLIENT_IDENTITY_REQUIRED", False),
             model_connect_timeout_seconds=_environment_float(
                 "AUDIT_MODEL_CONNECT_TIMEOUT_SECONDS", 5.0
             ),
             model_read_timeout_seconds=_environment_float(
                 "AUDIT_MODEL_READ_TIMEOUT_SECONDS", 60.0
             ),
+            model_provider_concurrency=_environment_int("AUDIT_MODEL_PROVIDER_CONCURRENCY", 2),
             contract_model_read_timeout_seconds=_environment_float(
                 "AUDIT_CONTRACT_MODEL_READ_TIMEOUT_SECONDS", 600.0
             ),
@@ -201,6 +223,7 @@ class Settings:
             material_chunk_bytes=_environment_int("AUDIT_MATERIAL_CHUNK_BYTES", 8000),
             material_context_chars=_environment_int("AUDIT_MATERIAL_CONTEXT_CHARS", 96),
             material_output_tokens=_environment_int("AUDIT_MATERIAL_OUTPUT_TOKENS", 1536),
+            material_concurrency=_environment_int("AUDIT_MATERIAL_CONCURRENCY", 1),
             material_model_read_timeout_seconds=_environment_float("AUDIT_MATERIAL_MODEL_READ_TIMEOUT_SECONDS", 180.0),
             material_checkpoint_root=os.getenv("AUDIT_MATERIAL_CHECKPOINT_ROOT") or None,
             material_checkpoint_ttl_seconds=_environment_int("AUDIT_MATERIAL_CHECKPOINT_TTL_SECONDS", 900),

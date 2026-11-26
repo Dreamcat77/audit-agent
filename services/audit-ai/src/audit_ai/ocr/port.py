@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
+from audit_ai.ocr.geometry import OcrRegion
 
 
 def _confidence(value: float) -> float:
@@ -18,6 +19,9 @@ class OcrPage:
     page_num: int
     text: str
     confidence: float
+    regions: tuple[OcrRegion, ...] = ()
+    width: int = 0
+    height: int = 0
 
     def __post_init__(self) -> None:
         if self.page_num < 1:
@@ -25,6 +29,11 @@ class OcrPage:
         if self.text is None:
             raise ValueError("text must not be None")
         object.__setattr__(self, "confidence", _confidence(self.confidence))
+        object.__setattr__(self, "regions", tuple(self.regions))
+        if self.width < 0 or self.height < 0 or len(self.regions) > 10000:
+            raise ValueError("OCR geometry bound invalid")
+        if any(region.end > len(self.text) for region in self.regions):
+            raise ValueError("OCR region outside text")
 
 
 @dataclass(frozen=True, slots=True)

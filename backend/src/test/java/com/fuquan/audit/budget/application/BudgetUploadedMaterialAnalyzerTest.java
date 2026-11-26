@@ -10,6 +10,84 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class BudgetUploadedMaterialAnalyzerTest {
+    @Test void explicitlyRelatedApplicantAndPreparingDepartmentNeedNotBeSuffixAliases() {
+        var relation=new Row("heading",List.of(
+            new Fact("departmentName","明远市事务局综合保障处","p1/line:0","申报单位：明远市事务局综合保障处"),
+            new Fact("departmentName","装备财务处","p1/line:0","部门：装备财务处")));
+        var d=file(relation,row("projectCode","P","subjectCode","S","declaredAmount","100"));
+        var a=file(row("projectCode","P","subjectCode","S","departmentName","装备财务处","approvalAmount","120"));
+        assertThat(engine.analyzeBatch(List.of(d,a)).values()).allSatisfy(f->assertThat(f.lines()).singleElement()
+            .satisfies(l->assertThat(l.status()).isEqualTo("WITHIN_APPROVAL")));
+        var other=new Row("other",List.of(
+            new Fact("departmentName","明远市事务局综合保障处","p2/line:0","申报单位：明远市事务局综合保障处"),
+            new Fact("departmentName","其他业务处","p2/line:0","部门：其他业务处")));
+        var b=file(other,row("projectCode","P","subjectCode","S","approvalAmount","900"));
+        assertThat(engine.analyzeBatch(List.of(d,a,b)).get(a.taskId()).lines()).singleElement()
+            .satisfies(l->assertThat(l.status()).isNotEqualTo("WITHIN_APPROVAL"));
+    }
+
+    @Test void explicitSameRowApplicantAndDepartmentRelationLinksOnlyTheUniqueDocumentedAlias() {
+        var relation=new Row("heading",List.of(
+            new Fact("projectCode","P","p1/line:0","项目编号：P"),
+            new Fact("departmentName","明远市事务局综合保障处","p1/line:0","申报单位：明远市事务局综合保障处"),
+            new Fact("departmentName","综合保障处","p1/line:0","部门：综合保障处")));
+        var d=file(relation,row("projectCode","P","subjectCode","S","declaredAmount","100"));
+        var a=file(row("projectCode","P","subjectCode","S","departmentName","综合保障处","approvalAmount","120"));
+        var result=engine.analyzeBatch(List.of(d,a));
+        assertThat(result.values()).allSatisfy(f->assertThat(f.lines()).singleElement().satisfies(l->{
+            assertThat(l.status()).isEqualTo("WITHIN_APPROVAL");
+            assertThat(l.declaredAmount()).isEqualByComparingTo("100");assertThat(l.approvalAmount()).isEqualByComparingTo("120");
+            assertThat(l.sources()).anyMatch(e->e.value().equals("综合保障处"));}));
+        var unrelated=file(row("projectCode","P","subjectCode","S","departmentName","其他市事务局综合保障处","approvalAmount","900"));
+        assertThat(engine.analyzeBatch(List.of(d,a,unrelated)).get(d.taskId()).lines()).singleElement()
+            .satisfies(l->assertThat(l.approvalAmount()).isEqualByComparingTo("120"));
+        var secondRelation=new Row("other",List.of(
+            new Fact("departmentName","其他市事务局综合保障处","p2/line:0","申报单位：其他市事务局综合保障处"),
+            new Fact("departmentName","综合保障处","p2/line:0","部门：综合保障处")));
+        var ambiguous=file(secondRelation,row("projectCode","P","subjectCode","S","approvalAmount","900"));
+        assertThat(engine.analyzeBatch(List.of(d,a,ambiguous)).get(a.taskId()).lines()).singleElement()
+            .satisfies(l->assertThat(l.status()).isNotEqualTo("WITHIN_APPROVAL"));
+    }
+    @Test void suffixAloneCannotJoinDifferentApplicantUnits() {
+        var d=file(row("projectCode","P","subjectCode","S","departmentName","明远市事务局综合保障处","declaredAmount","100"));
+        var a=file(row("projectCode","P","subjectCode","S","departmentName","综合保障处","approvalAmount","120"));
+        assertThat(engine.analyzeBatch(List.of(d,a)).get(d.taskId()).lines()).singleElement()
+            .satisfies(l->{assertThat(l.approvalAmount()).isNull();assertThat(l.status()).isEqualTo("INSUFFICIENT");});
+    }
+    @Test void subjectLabelCannotOverrideDocumentProjectHeadingInStoredFacts() {
+        var input=file(row("projectName","设施维护项目"),new Row("r",List.of(
+            new Fact("projectName","设备更新","p1","预算科目：设备更新"),
+            new Fact("subjectName","设备更新","p1","预算科目：设备更新"),
+            new Fact("declaredAmount","100","p1","申报金额：100"),new Fact("approvalAmount","120","p1","批复金额：120"))));
+        assertThat(first(input).project()).isEqualTo("设施维护项目");
+        assertThat(first(input).status()).isEqualTo("WITHIN_APPROVAL");
+    }
+
+    @Test void explicitMissingAmountsDoNotInvalidateValuesFromAnotherFile() {
+        var declaration=file(row("projectCode","P","subjectName","设备","declaredAmount","100","approvalAmount","待批复"));
+        var approval=file(row("projectCode","P","subjectName","设备","declaredAmount","未载明","approvalAmount","120"));
+        var result=first(declaration,approval);
+        assertThat(result.status()).isEqualTo("WITHIN_APPROVAL");
+        assertThat(result.declaredAmount()).isEqualByComparingTo("100");
+        assertThat(result.approvalAmount()).isEqualByComparingTo("120");
+        assertThat(first(file(row("subjectName","设备","declaredAmount","100","approvalAmount","金额待核实"))).status()).isEqualTo("INVALID_AMOUNT");
+    }
+    @Test void preparerAndConcatenatedLabelsDoNotConflictWithApplicantUnit() {
+        var heading=new Row("heading",List.of(
+            new Fact("projectCode","P-01","h","项目编号：P-01"),
+            new Fact("departmentName","上海市公安局警务保障处","h","申报单位：上海市公安局警务保障处"),
+            new Fact("departmentName","警务保障处","h","编制部门：警务保障处"),
+            new Fact("departmentName","上海市公安局警务保障处 部门：警务保障处","h","申报单位：上海市公安局警务保障处 部门：警务保障处")));
+        var input=file(heading,row("projectCode","P-01","subjectName","设备","declaredAmount","100","approvalAmount","100"));
+        assertThat(first(input).status()).isEqualTo("WITHIN_APPROVAL");
+        assertThat(first(input).department()).isEqualTo("上海市公安局警务保障处");
+    }
+    @Test void unifiedContractNumberCannotBecomeBudgetProjectCode(){
+        var input=file(new Row("r",List.of(new Fact("projectCode","HT-09","p1","合同统一编号：HT-09"),
+            new Fact("subjectName","设备","p1","预算科目：设备"),new Fact("declaredAmount","100元","p1","申报金额：100元"))));
+        assertThat(first(input).projectCode()).isNull();
+        assertThat(first(input).declaredAmount()).isEqualByComparingTo("100");
+    }
     @ParameterizedTest @ValueSource(strings={"办公设备，","办公设备,","办公设备；","办公设备;"})
     void subjectSentenceBoundaryDoesNotCreateFalseMissingOrUnapprovedItems(String subject) {
         var d=file(row("projectCode","QA26-B04","subjectName","办公设备","declaredAmount","18000元"));
@@ -55,6 +133,23 @@ class BudgetUploadedMaterialAnalyzerTest {
         assertThat(result.get(other.taskId()).coverage()).isEqualTo("PARTIAL");
         assertThat(result.get(incomplete.taskId()).summary()).contains("未能与原文核实");
         assertThat(result.values()).allSatisfy(f->assertThat(f.lines()).allSatisfy(l->assertThat(l.status()).isEqualTo("INSUFFICIENT")));
+    }
+    @Test void rejectedOptionalPolicyConditionCannotSuppressVerifiedFinancialDifferences() {
+        var snapshot=new Snapshot(List.of(row("projectCode","P","subjectName","设备","declaredAmount","50","approvalAmount","100"),
+                row("projectCode","P","subjectName","新增服务","declaredAmount","80")),
+                List.of(new ExtractionIssue("thresholdCondition","policy","EVIDENCE_UNVERIFIED")));
+        var input=new Input(UUID.randomUUID(),"仿真.txt","PARSED",snapshot);
+        var result=engine.analyze(List.of(input)).get(input.taskId());
+        assertThat(result.coverage()).isEqualTo("PARTIAL");
+        assertThat(result.lines()).extracting(Line::status).containsExactly("WITHIN_APPROVAL","UNAPPROVED_SUBJECT");
+        assertThat(result.lines().get(0).opinion()).doesNotContain("整体");
+    }
+    @Test void coverPageTotalDoesNotReappearAsUnidentifiedSubjectButUnrelatedAmountSurvives(){
+        var input=file(row("projectName","信息化项目","declaredTotalAmount","198万元"),
+                row("projectName","信息化项目","declaredAmount","198万元"),
+                row("projectName","信息化项目","declaredAmount","10万元"));
+        var result=engine.analyzeBatch(List.of(input)).get(input.taskId());
+        assertThat(result.lines()).singleElement().satisfies(line->assertThat(line.declaredAmount()).isEqualByComparingTo("100000"));
     }
     @Test void fullyVerifiedBatchIsDistinguishedFromCompletedButIncompleteAnalysis() {
         var input=file(row("projectCode","P","subjectCode","S","declaredAmount","100","approvalAmount","120"));
@@ -125,6 +220,26 @@ class BudgetUploadedMaterialAnalyzerTest {
         assertThat(result.get(a.taskId()).lines().get(1).declaredAmount()).isNull();
         assertThat(result.get(a.taskId()).lines().get(1).sources()).extracting(Evidence::taskId).contains(a.taskId());
     }
+    @Test void unrelatedDocumentExtractionFailureDoesNotSuppressGroundedAmounts() {
+        var source=new Input(UUID.randomUUID(),"申报与批复.pdf","PARSED",new Snapshot(
+                List.of(row("projectCode","P","subjectCode","S1","declaredAmount","100","approvalAmount","120")),
+                List.of(new ExtractionIssue("document","document/extraction","MODEL_EXTRACTION_INCOMPLETE"))));
+        assertThat(first(source).status()).isEqualTo("WITHIN_APPROVAL");
+    }
+    @Test void rowScopedExtractionIssueOnlySuppressesTheAffectedSubject() {
+        var firstRow=new Row("r1",List.of(new Fact("projectCode","P","excel/sheet:1/row:1","P"),
+                new Fact("subjectCode","S1","excel/sheet:1/row:1","S1"),
+                new Fact("declaredAmount","100","excel/sheet:1/row:1","100"),
+                new Fact("approvalAmount","120","excel/sheet:1/row:1","120")));
+        var secondRow=new Row("r2",List.of(new Fact("projectCode","P","excel/sheet:1/row:2","P"),
+                new Fact("subjectCode","S2","excel/sheet:1/row:2","S2"),
+                new Fact("declaredAmount","200","excel/sheet:1/row:2","200"),
+                new Fact("approvalAmount","180","excel/sheet:1/row:2","180")));
+        var source=new Input(UUID.randomUUID(),"预算明细.xlsx","PARSED",new Snapshot(List.of(firstRow,secondRow),
+                List.of(new ExtractionIssue("approvalAmount","excel/sheet:1/row:2","EVIDENCE_UNVERIFIED"))));
+        var lines=engine.analyze(List.of(source)).get(source.taskId()).lines();
+        assertThat(lines).extracting(Line::status).containsExactly("WITHIN_APPROVAL","INSUFFICIENT");
+    }
     @Test void absentOrFailedCounterpartNeverBecomesAProvenOmission() {
         var d=file(row("projectCode","P","subjectCode","S1","declaredAmount","100"));
         var a=file(row("projectCode","P","subjectCode","S2","approvalAmount","100"));
@@ -166,6 +281,12 @@ class BudgetUploadedMaterialAnalyzerTest {
         var second=file(row("projectCode","P1","projectName","北区网络升级工程","subjectCode","S1","subjectName","设备","budgetYear","2026","approvalAmount","80000"));
         assertThat(first(first,second).status()).isEqualTo("CONFLICT");
         assertThat(first(first,second).opinion()).contains("项目编号一致").contains("项目名称不一致");
+    }
+    @Test void trailingOcrParticleDoesNotCreateFalseProjectNameConflict() {
+        var declaration=file(row("projectCode","P1","projectName","道路修缮项目","subjectCode","S1","subjectName","设备","budgetYear","2026","declaredAmount","84000"));
+        var approval=file(row("projectCode","P1","projectName","道路修缮项目的。","subjectCode","S1","subjectName","设备","budgetYear","2026","approvalAmount","80000"));
+        assertThat(first(declaration,approval).status()).isEqualTo("OVER_APPROVAL");
+        assertThat(first(declaration,approval).approvalAmount()).isEqualByComparingTo("80000");
     }
     @Test void identifiedSubjectWithoutEitherAmountExplainsWhyComparisonWasSkipped() {
         var line=first(file(row("projectCode","P1","subjectName","设备")));
@@ -272,6 +393,12 @@ class BudgetUploadedMaterialAnalyzerTest {
         var second=new Row("other",List.of(new Fact("projectCode","P","p","P"),new Fact("subjectName","设备","p","设备"),
             new Fact("declaredAmount","300","p","预算金额300，另有申报金额100")));
         assertThat(first(file(first,second)).status()).isEqualTo("CONFLICT");
+    }
+    @Test void projectBudgetWithoutSubjectLinesIsNotDescribedAsMissingAllAmounts() {
+        var input=file(row("projectName","明远设施服务项目"),row("projectBudgetAmount","1860000元"));
+        var result=engine.analyze(List.of(input)).get(input.taskId());
+        assertThat(result.lines()).isEmpty();
+        assertThat(result.summary()).contains("已识别项目预算金额").doesNotContain("未找到可确认的预算科目或金额信息");
     }
 
     @Test void repeatedWorkbookSheetsRetainVerifiedSingleAmountsWithoutInventingTotals() {

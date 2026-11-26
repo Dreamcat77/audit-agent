@@ -34,9 +34,6 @@ public class BudgetSplitRiskEvaluator {
                 .sorted(Comparator.comparing(ProcurementDemand::createdTime)
                         .thenComparing(ProcurementDemand::id))
                 .toList();
-        if (rules.isEmpty()) {
-            throw new IllegalStateException("未配置有效的项目拆分风险规则");
-        }
 
         BigDecimal totalAmount = demands.stream().map(ProcurementDemand::amount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

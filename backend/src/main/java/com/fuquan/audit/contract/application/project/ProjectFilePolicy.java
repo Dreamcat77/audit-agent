@@ -45,7 +45,7 @@ public final class ProjectFilePolicy {
             return ARCHIVE_CHILD_ALLOWLIST.contains(extension) && (!verifySignature || magicMatches(extension, header))
                     ? Decision.ARCHIVE_CHILD_ALLOWED : Decision.REJECTED;
         }
-        if (!Set.of("zip", "pdf", "doc", "docx", "png", "jpg", "jpeg").contains(extension)
+        if (!Set.of("zip", "pdf", "doc", "docx", "xls", "xlsx", "png", "jpg", "jpeg").contains(extension)
                 || mediaType == null) {
             return Decision.REJECTED;
         }
@@ -55,6 +55,8 @@ public final class ProjectFilePolicy {
             case "pdf" -> "application/pdf".equals(mime);
             case "doc" -> "application/msword".equals(mime);
             case "docx" -> "application/vnd.openxmlformats-officedocument.wordprocessingml.document".equals(mime);
+            case "xls" -> "application/vnd.ms-excel".equals(mime);
+            case "xlsx" -> "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(mime);
             case "png" -> "image/png".equals(mime);
             case "jpg", "jpeg" -> "image/jpeg".equals(mime);
             default -> false;
@@ -66,7 +68,7 @@ public final class ProjectFilePolicy {
     public boolean isParseSupported(ProjectFileCategory category, String filename) {
         String extension = extension(filename);
         return category != ProjectFileCategory.PACKAGE
-                && Set.of("pdf", "doc", "docx", "png", "jpg", "jpeg").contains(extension);
+                && Set.of("pdf", "doc", "docx", "xls", "xlsx", "png", "jpg", "jpeg").contains(extension);
     }
 
     public Duration pendingRecoveryAge() {
@@ -87,8 +89,7 @@ public final class ProjectFilePolicy {
         return switch (extension) {
             case "pdf" -> startsWith(header, "%PDF-".getBytes(java.nio.charset.StandardCharsets.US_ASCII));
             case "zip", "docx", "xlsx" -> startsWith(header, new byte[]{'P', 'K', 3, 4});
-            case "doc" -> startsWith(header, new byte[]{(byte) 0xd0, (byte) 0xcf, 0x11, (byte) 0xe0,
-                    (byte) 0xa1, (byte) 0xb1, 0x1a, (byte) 0xe1});
+            case "doc" -> com.fuquan.audit.common.material.application.OfficeMaterialTypes.validSignature("application/msword",header);
             case "xls" -> startsWith(header, new byte[]{(byte) 0xd0, (byte) 0xcf, 0x11, (byte) 0xe0});
             case "png" -> startsWith(header, new byte[]{(byte) 0x89, 'P', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a});
             case "jpg", "jpeg" -> header.length >= 3 && (header[0] & 0xff) == 0xff

@@ -290,6 +290,8 @@ public class AutomaticProjectFileClassificationService {
             com.fuquan.audit.contract.domain.project.ContractCandidate candidate) {
         if (blank(candidate.contractNo()) || blank(candidate.contractName()) || blank(candidate.contractType())
                 || blank(candidate.partyA()) || blank(candidate.partyB()) || candidate.contractAmount() == null) return null;
+        if (!com.fuquan.audit.contract.domain.ContractPartyName.isPresent(candidate.partyA())
+                || !com.fuquan.audit.contract.domain.ContractPartyName.isPresent(candidate.partyB())) return null;
         var lines = new java.util.ArrayList<ConfirmedContractPayload.ConfirmedLineItem>();
         for (var line : candidate.lineItems()) {
             if (blank(line.itemKey()) || blank(line.itemName()) || line.declaredAmount() == null) return null;

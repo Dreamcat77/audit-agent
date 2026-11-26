@@ -66,14 +66,15 @@ grep -E '^(PYTHON311_PADDLEOCR37_SOURCE_IMPORTS=PASS|RUNTIME_PROBE=FAIL reasonCo
 load_db
 record="$runtime/records"
 install -d -m 0700 "$record"
-schema check; readiness
+schema check
+echo 'TASK_STATE_POLICY=PRESERVE_DURABLE_TASKS; task status does not block deployment'
 if [[ $check_only == yes ]]; then
   unset AUDIT_DB_PASSWORD
   echo 'CHECK=PASS；未迁移数据库、切换版本或重启服务。甲方模型尚需现场验证。'
   exit 0
 fi
 # This package intentionally has no operator-created recovery-record gate.
-# Required schema and quiescence checks above remain fail-closed.
+# Schema checks remain required; task rows are retained across the service restart.
 stage=STAGE_RELEASE
 install -d -m 0700 "$base/update-backups"
 record=$(mktemp -d "$base/update-backups/${package_version}.XXXXXXXX")
@@ -106,8 +107,8 @@ if [[ -e $release/deploy/update-v10 ]]; then
   mv -- "$release/deploy/update-v10" "$record/inherited-update-v10"
 fi
 install -d -m 0755 "$release/deploy/update-v10"
-printf '%s\n' 'AUDIT_BUDGET_MATERIAL_WORKER_ENABLED=true' 'AUDIT_PROCUREMENT_MATERIAL_WORKER_ENABLED=true' 'AUDIT_CONTRACT_FILE_PROCESSING_WORKER_ENABLED=true' 'AUDIT_PROCUREMENT_AUTO_CASE_ENABLED=true' 'AUDIT_CONTRACT_ANALYSIS_ENABLED=true' > "$release/deploy/update-v10/backend.env"
-printf '%s\n' 'AUDIT_OCR_CPU_THREADS=1' 'AUDIT_OCR_ENABLE_MKLDNN=false' 'AUDIT_OCR_ORIENTATION_ENABLED=true' 'AUDIT_OCR_PROCESS_ISOLATION=true' 'AUDIT_MATERIAL_MODEL_READ_TIMEOUT_SECONDS=180' "AUDIT_OCR_ORIENTATION_MODEL_DIR=$base/current/services/audit-ai/models/PP-LCNet_x1_0_doc_ori" > "$release/deploy/update-v10/ai.env"
+printf '%s\n' 'AUDIT_BUDGET_MATERIAL_WORKER_ENABLED=true' 'AUDIT_PROCUREMENT_MATERIAL_WORKER_ENABLED=true' 'AUDIT_CONTRACT_FILE_PROCESSING_WORKER_ENABLED=true' 'AUDIT_PROCUREMENT_AUTO_CASE_ENABLED=true' 'AUDIT_CONTRACT_ANALYSIS_ENABLED=true' 'AUDIT_OCR_PAGE_CONCURRENCY=4' > "$release/deploy/update-v10/backend.env"
+printf '%s\n' 'AUDIT_OCR_CPU_THREADS=1' 'AUDIT_OCR_ENABLE_MKLDNN=false' 'AUDIT_OCR_ORIENTATION_ENABLED=true' 'AUDIT_OCR_PROCESS_ISOLATION=true' 'AUDIT_OCR_WORKER_PROCESSES=4' 'AUDIT_OCR_MEMORY_BUDGET_MB=16384' 'AUDIT_OCR_MEMORY_RESERVE_MB=4096' 'AUDIT_OCR_WORKER_MEMORY_MB=4096' 'AUDIT_MATERIAL_MODEL_READ_TIMEOUT_SECONDS=180' "AUDIT_OCR_ORIENTATION_MODEL_DIR=$base/current/services/audit-ai/models/PP-LCNet_x1_0_doc_ori" > "$release/deploy/update-v10/ai.env"
 chmod 0644 "$release/deploy/update-v10/"*.env
 for svc in backend ai; do
   dropin="$unit_root/audit-$svc.service.d/99-audit-v10.conf"
@@ -135,14 +136,15 @@ trap finish EXIT
 trap 'exit 130' INT HUP TERM
 stage=STOP_SERVICES
 stopped=yes
-systemctl stop audit-backend audit-ai
-systemctl is-active --quiet audit-backend && die BACKEND_NOT_STOPPED
-systemctl is-active --quiet audit-ai && die AI_NOT_STOPPED
-# Re-check after the writers have stopped. No automatic retry of unknown model work.
-schema check; readiness
+stop_update_services
+# Process shutdown, rather than durable task status, fences the old writers.
+schema check
 stage=DATABASE_APPLY
 schema apply
 schema verify
+stage=DATABASE_ACCOUNT_BOOTSTRAP
+guard PersonalAccountBootstrap apply "$package_dir/db/V058__personal_upload_roles.sql"
+guard ClientIdentityBootstrap apply "$package_dir/client-identity-aliases.txt"
 unset AUDIT_DB_PASSWORD
 sha256sum -c "$record/configs.sha256" >/dev/null || die CONFIG_CHANGED_BEFORE_SWITCH
 stage=SWITCH_RELEASE

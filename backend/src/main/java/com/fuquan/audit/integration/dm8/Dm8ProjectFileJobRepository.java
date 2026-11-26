@@ -91,6 +91,11 @@ public class Dm8ProjectFileJobRepository implements ProjectFileJobRepository {
     }
     public boolean retry(UUID projectId,UUID id,Instant now) {
         return jdbc.update("UPDATE PROJECT_FILE_PROCESSING_JOB SET STATUS='QUEUED',REASON_CODE=NULL,UPDATED_AT=? "
-            +"WHERE PROJECT_ID=? AND JOB_ID=? AND STATUS='FAILED'",ts(now),projectId.toString(),id.toString())==1;
+            +"WHERE PROJECT_ID=? AND JOB_ID=? AND STATUS='FAILED' AND (REASON_CODE IS NULL OR REASON_CODE<>'USER_CANCELLED')",ts(now),projectId.toString(),id.toString())==1;
+    }
+    @Transactional
+    public void cancelProject(UUID projectId,Instant now) {
+        jdbc.update("UPDATE PROJECT_FILE_PROCESSING_JOB SET STATUS='FAILED',REASON_CODE='USER_CANCELLED',LEASE_TOKEN=NULL,LEASE_UNTIL=NULL,UPDATED_AT=? WHERE PROJECT_ID=? AND STATUS IN ('QUEUED','PROCESSING')",ts(now),projectId.toString());
+        jdbc.update("UPDATE PROJECT_FILE_PROCESSING_ATTEMPT SET STATUS='FAILED',REASON_CODE='USER_CANCELLED',COMPLETED_AT=? WHERE STATUS='PROCESSING' AND JOB_ID IN (SELECT JOB_ID FROM PROJECT_FILE_PROCESSING_JOB WHERE PROJECT_ID=? AND REASON_CODE='USER_CANCELLED')",ts(now),projectId.toString());
     }
 }

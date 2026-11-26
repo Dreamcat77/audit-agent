@@ -18,21 +18,144 @@ from starlette.concurrency import run_in_threadpool
 from audit_ai.errors import AuditAiError
 from audit_ai.model.gateway import ModelGatewayPort, ModelGatewayFailure, ModelNotConfigured
 from audit_ai.config import Settings
+from audit_ai.client_privacy import CURRENT
 from audit_ai.model.material_chunks import bounded_chunks, render, split_chunk
 from audit_ai.model.material_checkpoints import MaterialCheckpoints, digest
 from audit_ai.model.automatic_procurement_prompt import AUTO_CASE_FIELDS_VERSION
+from audit_ai.model.procurement_context import contextual_renderer
 
 _STRICT = ConfigDict(extra="forbid", populate_by_name=True)
 _PROCUREMENT = frozenset({"projectName", "projectNo", "departmentName", "procurementType", "budgetAmount",
     "subjectCode", "subjectName", "procurementMethod", "requirementDescription", "applicantName"})
-_BUDGET = frozenset({"subjectCode", "subjectName", "declaredAmount", "approvalAmount", "supplierName", "projectCode", "projectName", "budgetYear", "departmentName",
-                     "parentProjectName", "applicationNo", "applicationDate", "actualApprovalStep", "requiredApprovalStep", "policyClause", "approvalThreshold", "thresholdCondition", "spendingPurpose", "approvedPurpose", "requiredPreviousStep", "approvalDate"})
+_BUDGET = frozenset({"subjectCode", "subjectName", "declaredAmount", "approvalAmount", "projectBudgetAmount", "declaredTotalAmount", "approvedTotalAmount", "ceilingAmount", "supplierName", "projectCode", "projectName", "budgetYear", "departmentName",
+                     "parentProjectName", "applicationNo", "applicationDate", "actualApprovalStep", "requiredApprovalStep", "policyClause", "approvalThreshold", "thresholdCondition", "spendingPurpose", "approvedPurpose", "requiredPreviousStep", "approvalDate",
+                     "subjectLevel1Name", "subjectLevel2Name", "subjectLevel3Name", "functionalClassificationCode", "functionalClassificationName", "thirdPartyReviewAmount"})
 _PROCUREMENT_REVIEW = _PROCUREMENT | frozenset({
-    'purchaserName', 'agencyName', 'supplierName', 'quoteAmount', 'ceilingAmount', 'productDescription'
+    'purchaserName', 'agencyName', 'supplierName', 'quoteAmount', 'ceilingAmount', 'productDescription',
+    'treasuryFundAmount', 'selfFundAmount', 'contractPerformancePeriod', 'qualificationRequirements',
+    'supplierInstructions', 'negotiationInstructions', 'scoringCriteria', 'contractTermsSummary',
+    'procurementRulesSummary'
 })
-_PROCUREMENT_AUTO = frozenset({"documentType", "projectName", "projectNo", "purchaserName",
-    "budgetAmount", "ceilingAmount", "supplierName", "quoteAmount", "awardAmount",
-    "productDescription", "itemName", "quantity", "unitPrice", "lineAmount"})
+_PROCUREMENT_AUTO = frozenset({"documentType", "projectName", "projectNo", "purchaserName", "agencyName", "packageName",
+    "budgetAmount", "ceilingAmount", "supplierName", "quoteAmount", "awardAmount", "contractNo", "tenderNo", "procurementNo", "applicationNo",
+    "productDescription", "itemName", "quantity", "unitPrice", "lineAmount", "procurementMethod",
+    "treasuryFundAmount", "selfFundAmount", "contractPerformancePeriod", "qualificationRequirements",
+    "supplierInstructions", "negotiationInstructions", "scoringCriteria", "contractTermsSummary", "procurementRulesSummary"})
+
+# A model call is useful for context and cross-file meaning, but it must not be
+# the only way to get a result.  These are deliberately narrow, label-bound
+# fallbacks for the facts that are normally printed in government templates.
+# They keep the exact source line as evidence and never infer a value from a
+# filename, a neighbouring row, or an unlabeled number.
+_LOCAL_LABELS = {
+    "BUDGET": {
+        "项目名称": "projectName", "项目编号": "projectCode", "项目编码": "projectCode",
+        "预算科目编码": "subjectCode", "科目编码": "subjectCode", "支出功能分类代码": "functionalClassificationCode",
+        "预算科目名称": "subjectName", "科目名称": "subjectName", "一级名称": "subjectLevel1Name",
+        "二级名称": "subjectLevel2Name", "三级名称": "subjectLevel3Name", "支出功能分类名称": "functionalClassificationName",
+        "申报金额": "declaredAmount", "申请金额": "declaredAmount", "本次申报金额": "declaredAmount",
+        "本次申请金额": "declaredAmount", "批复金额": "approvalAmount", "批准金额": "approvalAmount",
+        "第三方审定金额": "thirdPartyReviewAmount", "下达金额": "approvalAmount", "批复参考金额": "approvalAmount",
+        "预算金额": "projectBudgetAmount", "预算总额": "projectBudgetAmount", "项目预算": "projectBudgetAmount",
+        "项目预算金额": "projectBudgetAmount", "最高限价": "ceilingAmount",
+        "申报总额": "declaredTotalAmount", "申请总额": "declaredTotalAmount", "申报合计": "declaredTotalAmount",
+        "批复总额": "approvedTotalAmount", "批复控制数": "approvedTotalAmount",
+        "预算年度": "budgetYear", "申报年度": "budgetYear", "年度": "budgetYear",
+        "申报部门": "departmentName", "申请部门": "departmentName", "申报单位": "departmentName",
+        "部门名称": "departmentName", "项目预算单位": "departmentName", "供应商名称": "supplierName",
+        "申报编号": "applicationNo", "申请编号": "applicationNo", "政府采购编号": "applicationNo",
+        "采购编号": "applicationNo", "申报日期": "applicationDate", "申请日期": "applicationDate",
+        "审批日期": "approvalDate", "支出用途": "spendingPurpose", "批准用途": "approvedPurpose",
+    },
+    "PROCUREMENT": {
+        "项目名称": "projectName", "采购项目名称": "projectName", "项目编号": "projectNo",
+        "采购项目编号": "projectNo", "申请部门": "departmentName", "需求部门": "departmentName",
+        "申报部门": "departmentName", "采购类型": "procurementType", "采购类别": "procurementType",
+        "预算金额": "budgetAmount", "采购预算": "budgetAmount", "采购预算金额": "budgetAmount",
+        "最高限价": "ceilingAmount", "预算控制价": "ceilingAmount", "采购控制价": "ceilingAmount",
+        "科目编码": "subjectCode", "预算科目编码": "subjectCode", "科目名称": "subjectName",
+        "预算科目名称": "subjectName", "采购方式": "procurementMethod", "申请人": "applicantName",
+    },
+    "PROCUREMENT_REVIEW": {
+        "项目名称": "projectName", "采购项目名称": "projectName", "项目编号": "projectNo",
+        "申请部门": "departmentName", "需求部门": "departmentName", "申报部门": "departmentName",
+        "采购类型": "procurementType", "预算金额": "budgetAmount", "采购预算金额": "budgetAmount",
+        "最高限价": "ceilingAmount", "预算控制价": "ceilingAmount", "采购控制价": "ceilingAmount",
+        "采购人": "purchaserName", "招标人": "purchaserName", "采购代理机构": "agencyName",
+        "供应商名称": "supplierName", "供应商": "supplierName", "报价金额": "quoteAmount",
+        "报价总额": "quoteAmount", "投标报价": "quoteAmount", "投标总价": "quoteAmount",
+        "响应报价": "quoteAmount", "响应总价": "quoteAmount", "含税总价": "quoteAmount",
+        "国库资金": "treasuryFundAmount", "国库资金金额": "treasuryFundAmount", "自筹资金": "selfFundAmount",
+        "自筹资金金额": "selfFundAmount", "合同履行期限": "contractPerformancePeriod",
+        "供应商资格要求": "qualificationRequirements", "供应商须知": "supplierInstructions",
+        "磋商须知": "negotiationInstructions", "磋商须知前附表": "negotiationInstructions",
+        "评分细则": "scoringCriteria", "评分标准": "scoringCriteria", "评分办法": "scoringCriteria",
+        "合同条款及格式": "contractTermsSummary", "合同条款": "contractTermsSummary",
+        "简要规则描述": "procurementRulesSummary", "磋商规则": "procurementRulesSummary",
+    },
+    "PROCUREMENT_AUTO": {
+        "项目名称": "projectName", "采购项目名称": "projectName", "项目编号": "projectNo",
+        "采购人": "purchaserName", "招标人": "purchaserName", "采购代理机构": "agencyName",
+        "供应商名称": "supplierName", "供应商": "supplierName", "预算金额": "budgetAmount",
+        "采购预算金额": "budgetAmount", "最高限价": "ceilingAmount", "预算控制价": "ceilingAmount",
+        "报价金额": "quoteAmount", "报价总额": "quoteAmount", "投标报价": "quoteAmount",
+        "投标总价": "quoteAmount", "响应报价": "quoteAmount", "响应总价": "quoteAmount",
+        "采购方式": "procurementMethod", "国库资金": "treasuryFundAmount", "自筹资金": "selfFundAmount",
+        "合同履行期限": "contractPerformancePeriod", "供应商资格要求": "qualificationRequirements",
+        "供应商须知": "supplierInstructions", "磋商须知": "negotiationInstructions",
+        "磋商须知前附表": "negotiationInstructions", "评分细则": "scoringCriteria", "评分标准": "scoringCriteria",
+        "合同条款及格式": "contractTermsSummary", "简要规则描述": "procurementRulesSummary",
+    },
+}
+_LOCAL_PLACEHOLDERS = frozenset({"无", "未填写", "未提供", "待定", "待填", "暂无", "不适用", "乙方", "甲方", "供应商"})
+_LOCAL_AMOUNT_FIELDS = frozenset({"declaredAmount", "approvalAmount", "projectBudgetAmount", "declaredTotalAmount",
+                                  "approvedTotalAmount", "ceilingAmount", "budgetAmount", "quoteAmount",
+                                  "treasuryFundAmount", "selfFundAmount", "thirdPartyReviewAmount"})
+_MATERIAL_TIMEOUT_REASONS = frozenset({"READ_TIMEOUT", "CONNECT_TIMEOUT", "TOTAL_BUDGET_EXCEEDED"})
+_LOCAL_BOUNDARY_LABELS = frozenset().union(*(_LOCAL_LABELS[kind].keys() for kind in _LOCAL_LABELS)) | frozenset({
+    "申报金额", "申请金额", "本次申报金额", "本次申请金额", "批复参考金额", "批复参考额度",
+    "批复金额", "批准金额", "第三方审定金额", "下达金额", "合同金额", "合同价款", "中标金额", "成交金额",
+    "报价金额", "报价总额", "投标报价", "投标总价", "响应报价", "响应总价",
+})
+
+
+def _local_label_rows(kind: str, segments: list[Segment]) -> dict[str, list[dict]]:
+    """Extract only explicit ``label: value`` pairs before contacting the model."""
+    labels = _LOCAL_LABELS.get(kind, {})
+    if not labels:
+        return {}
+    ordered = sorted(_LOCAL_BOUNDARY_LABELS, key=len, reverse=True)
+    label_re = re.compile(r"(?P<label>" + "|".join(re.escape(v) for v in ordered)
+                          + r")(?P<separator>\s*[:：=]|\s*(?=[0-9０-９零〇○一二三四五六七八九十百千万亿萬壹貳參肆伍陸柒捌玖拾佰仟¥￥]))")
+    rows: dict[str, list[dict]] = {}
+    for segment in segments:
+        for line_no, line in enumerate(segment.text.splitlines() or [segment.text]):
+            matches = list(label_re.finditer(line))
+            for index, match in enumerate(matches):
+                field = labels.get(match.group("label"))
+                if field is None or not re.fullmatch(r"\s*[:：=]", match.group("separator")):
+                    continue
+                start = match.end()
+                end = matches[index + 1].start() if index + 1 < len(matches) else len(line)
+                raw = line[start:end].strip(" \t|；;，,。")
+                if not raw or len(raw) > 2000 or raw in labels or raw in _LOCAL_PLACEHOLDERS:
+                    continue
+                # Amount labels must contain a visible amount token.  This
+                # prevents a nearby date, page number, or unit from becoming a
+                # budget/quote amount during OCR noise.
+                if field in _LOCAL_AMOUNT_FIELDS and not re.search(
+                        r"(?:\d[\d,，]*(?:[.．]\d+)?|[零〇○一二三四五六七八九十百千万亿萬壹貳參肆伍陸柒捌玖拾佰仟]+)", raw):
+                    continue
+                if field == "budgetYear" and not re.search(r"(?:19|20)\d{2}", raw):
+                    continue
+                # Keep the exact line as the evidence slice.  The value itself
+                # is trimmed only at punctuation that terminates a label value.
+                key = f"local:{segment.locator}:{line_no}"
+                fact = {"field": field, "value": raw, "locator": segment.locator, "excerpt": line}
+                bucket = rows.setdefault(key, [])
+                if not any(f["field"] == field and f["value"] == raw for f in bucket):
+                    bucket.append(fact)
+    return rows
 
 def text_parts(text, limit=1800):
     """Keep normal office rows/paragraphs together without dropping any character."""
@@ -50,12 +173,18 @@ class Segment(BaseModel):
     locator: str = Field(min_length=1, max_length=300)
     text: str = Field(min_length=1, max_length=6000, repr=False)
 
+class DocumentContext(BaseModel):
+    model_config = _STRICT
+    header: str = Field(default='', max_length=800, repr=False)
+    section: str = Field(default='', max_length=160, repr=False)
+
 class ExtractionRequest(BaseModel):
     model_config = _STRICT
     business_type: Literal["PROCUREMENT", "BUDGET", "PROCUREMENT_REVIEW", "PROCUREMENT_AUTO"] = Field(alias="businessType")
     material_id: str = Field(alias="materialId", min_length=1, max_length=36)
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     segments: list[Segment] = Field(min_length=1, max_length=10000)
+    context: DocumentContext | None = None
     policy_id: str | None = Field(default=None, alias='policyId', pattern=r'^[a-f0-9]{64}$')
     call_limit: int = Field(default=512, alias='callLimit', ge=1, le=512)
     time_limit_millis: int = Field(default=900000, alias='timeLimitMillis', ge=1, le=900000)
@@ -66,6 +195,8 @@ class Fact(BaseModel):
     value: str = Field(min_length=1, max_length=2000, repr=False)
     locator: str = Field(min_length=1, max_length=300)
     excerpt: str = Field(min_length=1, max_length=2400, repr=False)
+    subject_scope: Literal['CURRENT_PROJECT', 'REFERENCE', 'GENERAL', 'UNKNOWN'] | None = Field(default=None, alias='subjectScope')
+    amount_scope: Literal['TOTAL', 'ANNUAL', 'PACKAGE', 'UNIT', 'UNKNOWN'] | None = Field(default=None, alias='amountScope')
 
 class Row(BaseModel):
     model_config = _STRICT
@@ -103,10 +234,10 @@ def restore_description_sentence_breaks(fact: Fact, text: str | None) -> Fact:
 def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings | None = None) -> APIRouter:
     settings = settings or Settings()
     router = APIRouter(prefix="/ai/v1/materials")
-    capacity = threading.BoundedSemaphore(1)
+    capacity = threading.BoundedSemaphore(settings.material_concurrency)
     checkpoints = MaterialCheckpoints(settings.material_checkpoint_root,settings.material_checkpoint_ttl_seconds)
     namespace = gateway.material_cache_namespace() if hasattr(gateway,'material_cache_namespace') else type(gateway).__qualname__
-    policy_id=digest([namespace,'material-evidence-v11-budget-procedure',AUTO_CASE_FIELDS_VERSION,settings.material_chunk_chars,settings.material_chunk_bytes,
+    policy_id=digest([namespace,'material-evidence-v15-completed-json-split',AUTO_CASE_FIELDS_VERSION,settings.material_chunk_chars,settings.material_chunk_bytes,
                       settings.material_context_chars,settings.material_output_tokens])
 
     @router.get('/policy')
@@ -157,10 +288,14 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                     semantic_segments.append(Segment(locator=segment.locator,text=''.join(pending)))
             if len(explicit)>2000:
                 raise AuditAiError(413, "MATERIAL_AI_RESULT_LIMIT", "too many extracted fields")
-            try: chunks=bounded_chunks(semantic_segments,settings,text_parts)
+            renderer = (contextual_renderer(data.segments, data.context, settings)
+                        if data.business_type == 'PROCUREMENT_AUTO' else render)
+            try: chunks=bounded_chunks(semantic_segments,settings,text_parts,renderer)
             except ValueError as exc:
                 raise AuditAiError(413,'MATERIAL_AI_INPUT_LIMIT','source metadata exceeds configured chunk bound') from exc
-            operation=digest([namespace,policy_id,'material-adaptive-v1',data.model_dump(),
+            identity = CURRENT.get()
+            identity_scope = digest(sorted(identity.names)) if identity is not None else None
+            operation=digest([namespace,policy_id,identity_scope,'material-adaptive-v1',data.model_dump(),
                               settings.material_chunk_chars,settings.material_chunk_bytes,
                               settings.material_context_chars,settings.material_output_tokens])
             logger = logging.getLogger("audit_ai.material_fields")
@@ -169,6 +304,11 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                       explicit_fact_count=len(explicit), text_limit=192000, remaining_budget_ms=data.time_limit_millis)
             # One bounded sequential operation; no thread-per-page or unbounded executor queue.
             started = time.monotonic()
+            # Keep deterministic labels as a bounded fallback.  They are
+            # published when the model cannot finish; a normal model result is
+            # still authoritative for contextual grouping and existing callers
+            # retain their previous row semantics.
+            local_rows = _local_label_rows(data.business_type, data.segments)
             rows: dict[str, list[dict]] = {'explicit-requirements':explicit} if explicit else {}
             model = 'EXPLICIT_LABELS' if not chunks else None
             work=[(chunk,0,str(i)) for i,chunk in enumerate(chunks)]
@@ -189,7 +329,7 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                     raise AuditAiError(504, "MATERIAL_AI_TIME_LIMIT", "material extraction time budget exceeded")
                 views={s['locator']:s for s in [p.view(settings.material_context_chars) for p in chunk]}
                 texts={locator:v.get('contextBefore','')+v['text']+v.get('contextAfter','') for locator,v in views.items()}
-                source=render(chunk,settings.material_context_chars)
+                source=renderer(chunk,settings.material_context_chars)
                 checkpoint_key=digest([path,source])
                 cached=checkpoints.get(operation,checkpoint_key)
                 completion=None
@@ -232,6 +372,11 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                         except ModelGatewayFailure as failure:
                             if failure.input_limited:split_reason='INPUT_LIMIT'
                             elif failure.reason in {'INVALID_PROVIDER_JSON','INVALID_PROVIDER_RESPONSE'} and failure.finish_reason=='LENGTH':truncated=True
+                            elif failure.reason=='INVALID_PROVIDER_JSON' and failure.finish_reason=='STOP':
+                                # The provider completed and returned malformed
+                                # JSON. Repartition this failed source only;
+                                # never retry a timeout or uncertain envelope.
+                                split_reason='INVALID_PROVIDER_JSON'
                             else:raise
                     if truncated or split_reason:
                         split=split_chunk(chunk) if depth<5 else None
@@ -239,7 +384,8 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                                   reason_code=split_reason or 'OUTPUT_TRUNCATED',
                                   input_chars=sum(len(s.text) for s in chunk),segment_count=len(chunk),attempt=depth+1)
                         if not split:
-                            code='MATERIAL_AI_CONTEXT_LIMIT' if split_reason else 'MATERIAL_AI_TRUNCATED'
+                            code=('MATERIAL_AI_INVALID_RESULT' if split_reason=='INVALID_PROVIDER_JSON'
+                                  else 'MATERIAL_AI_CONTEXT_LIMIT' if split_reason else 'MATERIAL_AI_TRUNCATED')
                             raise AuditAiError(502,code,'material extraction cannot fit provider limits')
                         checkpoints.put(operation,checkpoint_key,{'kind':'split'})
                         work[:0]=[(part,depth+1,path+'.'+str(i)) for i,part in enumerate(split)]
@@ -299,7 +445,10 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                             log_event(logger,'MATERIAL_FACT_EXCLUDED',stage='RESULT_VALIDATION',
                                       outcome='PARTIAL',reason_code='MATERIAL_AI_UNGROUNDED')
                             continue
-                        value = fact.model_dump()
+                        value = fact.model_dump(by_alias=True, exclude_none=True)
+                        if data.business_type not in {'PROCUREMENT_AUTO','BUDGET'}:
+                            value.pop('subjectScope', None)
+                            value.pop('amountScope', None)
                         view=views[fact.locator]
                         # An overlap is context, not a second budget row. Only keep
                         # evidence that intersects the newly processed core text.
@@ -335,9 +484,39 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                 log_event(logger, "MATERIAL_CHUNK_VALIDATED", stage="RESULT_VALIDATION", outcome="SUCCESS",
                           chunk_index=index, chunk_count=calls+len(work), row_count=len(parsed.rows),
                           fact_count=sum(len(r.facts) for r in parsed.rows), duration_ms=completion.duration_ms)
+            # Remove duplicate labelled/model observations by their grounded
+            # source tuple while preserving conflicting values as separate facts.
+            for row_key, facts in list(rows.items()):
+                unique = []
+                seen = set()
+                for fact in facts:
+                    marker = (fact.get('field'), fact.get('value'), fact.get('locator'), fact.get('excerpt'))
+                    if marker not in seen:
+                        seen.add(marker)
+                        unique.append(fact)
+                rows[row_key] = unique
             # Chunks without an identity may contain supplementary requirements.
             # Merge their model-local row keys only when grounded identity facts
             # prove a single project; never hide conflicting project identities.
+            from audit_ai.model.project_names import review_names
+            names = [f for facts in rows.values() for f in facts if f['field'] == 'projectName']
+            checked, review_calls = review_names(gateway, names, request_id,
+                timeout_seconds=max(0, budget_seconds - (time.monotonic() - started)) if calls < data.call_limit else 0)
+            calls += review_calls
+            for fact, value in zip(names, checked):
+                if value is None:
+                    for facts in rows.values():
+                        if fact in facts: facts.remove(fact)
+                else: fact['value'] = value
+            # If the model completed but produced no evidence-valid fact, keep
+            # only explicitly labelled source facts. This gives the user a
+            # useful extraction result without converting it into a risk or
+            # compliance conclusion. When the model has usable facts, its
+            # contextual grouping remains authoritative.
+            if not any(facts for facts in rows.values()) and local_rows:
+                rows = {key: list(facts) for key, facts in local_rows.items() if facts}
+                log_event(logger, 'MATERIAL_LOCAL_FACT_FALLBACK', stage='MERGE', outcome='LABELLED_FACTS',
+                          row_count=len(rows), fact_count=sum(len(facts) for facts in rows.values()))
             project_numbers = {unicodedata.normalize('NFKC', f['value']).strip()
                                for facts in rows.values() for f in facts if f['field']=='projectNo'}
             project_names = {unicodedata.normalize('NFKC', f['value']).strip()
@@ -372,16 +551,29 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
                 **({'issues':issues} if data.business_type in {'BUDGET','PROCUREMENT_AUTO'} else {}),
                 "promptVersion": (AUTO_CASE_FIELDS_VERSION if data.business_type == 'PROCUREMENT_AUTO' else
                     'procurement-review-fields-v2' if data.business_type == 'PROCUREMENT_REVIEW' else
-                    "business-material-fields-v8-budget-procedure" if data.business_type == "BUDGET" else "business-material-fields-v5")}}
+                    "business-material-fields-v10-budget-field-office" if data.business_type == "BUDGET" else "business-material-fields-v5")}}
         except ModelNotConfigured as exc:
             raise AuditAiError(503, "MATERIAL_AI_UNAVAILABLE", "material AI is not configured") from exc
         except ModelGatewayFailure as exc:
-            if exc.reason == 'READ_TIMEOUT':
+            if exc.reason in _MATERIAL_TIMEOUT_REASONS:
+                # Keep deterministic and already validated facts. A slow model
+                # chunk must not erase amounts/project identity extracted from
+                # earlier pages; Java persists this as a partial snapshot.
                 if 'operation' in locals(): checkpoints.discard(operation)
-                raise AuditAiError(504, "MATERIAL_AI_CALL_TIMEOUT", "material model response timed out; processing ended") from exc
+                return _partial_material_response(data, locals().get('rows', {}) if isinstance(locals().get('rows', {}), dict) else {},
+                                                   locals().get('local_rows', {}) if isinstance(locals().get('local_rows', {}), dict) else {},
+                                                   locals().get('model'), locals().get('calls', 0) if isinstance(locals().get('calls', 0), int) else 0,
+                                                   locals().get('issues', []),
+                                                   'MATERIAL_AI_CALL_TIMEOUT')
             raise AuditAiError(502, "MATERIAL_AI_FAILED", "material AI extraction failed") from exc
         except AuditAiError as exc:
-            if exc.code == 'MATERIAL_AI_TIME_LIMIT' and 'operation' in locals(): checkpoints.discard(operation)
+            if exc.code == 'MATERIAL_AI_TIME_LIMIT':
+                if 'operation' in locals(): checkpoints.discard(operation)
+                return _partial_material_response(data, locals().get('rows', {}) if isinstance(locals().get('rows', {}), dict) else {},
+                                                   locals().get('local_rows', {}) if isinstance(locals().get('local_rows', {}), dict) else {},
+                                                   locals().get('model'), locals().get('calls', 0) if isinstance(locals().get('calls', 0), int) else 0,
+                                                   locals().get('issues', []),
+                                                   'MATERIAL_AI_TIME_LIMIT')
             raise
         finally:
             capacity.release()
@@ -396,3 +588,39 @@ def create_material_fields_router(gateway: ModelGatewayPort, settings: Settings 
         return await run_in_threadpool(execute, data, request.state.request_id)
 
     return router
+
+
+def _partial_material_response(data: ExtractionRequest, rows: dict[str, list[dict]], fallback_rows: dict[str, list[dict]], model: str | None,
+                               calls: int, issues: list[dict], reason: str) -> dict:
+    """Return a useful, source-grounded projection after a bounded timeout.
+
+    The response intentionally carries no guessed fallback values. Existing
+    deterministic labels and completed model chunks remain visible; the issue
+    is metadata for coverage/diagnostics and must not turn into a fake finding.
+    """
+    locators = [segment.locator for segment in data.segments]
+    issue = {'field': 'document', 'locator': locators[0] if locators else 'document',
+             'reasonCode': 'MODEL_EXTRACTION_INCOMPLETE'}
+    safe_issues = list(issues) if isinstance(issues, list) else []
+    if issue not in safe_issues:
+        safe_issues.append(issue)
+    prompt = (AUTO_CASE_FIELDS_VERSION if data.business_type == 'PROCUREMENT_AUTO' else
+              'procurement-review-fields-v2' if data.business_type == 'PROCUREMENT_REVIEW' else
+              'business-material-fields-v10-budget-field-office' if data.business_type == 'BUDGET' else
+              'business-material-fields-v5')
+    combined = {key: list(facts) for key, facts in rows.items()}
+    for key, facts in fallback_rows.items():
+        bucket = combined.setdefault(key, [])
+        for fact in facts:
+            marker = (fact.get('field'), fact.get('value'), fact.get('locator'), fact.get('excerpt'))
+            if not any((known.get('field'), known.get('value'), known.get('locator'), known.get('excerpt')) == marker
+                       for known in bucket):
+                bucket.append(fact)
+    log_event(logging.getLogger("audit_ai.material_fields"), "MATERIAL_PARTIAL_RESULT_READY",
+              stage="MERGE", outcome="PARTIAL", reason_code=reason,
+              row_count=sum(bool(facts) for facts in combined.values()),
+              fact_count=sum(len(facts) for facts in combined.values()), provider_call_count=calls)
+    return {'code': 200, 'message': 'success', 'data': {
+        'rows': [{'rowKey': key, 'facts': facts} for key, facts in combined.items() if facts],
+        'model': model or 'PARTIAL_LOCAL', 'callCount': calls, 'issues': safe_issues,
+        'promptVersion': prompt, 'partial': True, 'partialReason': reason}}

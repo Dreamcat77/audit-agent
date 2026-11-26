@@ -88,7 +88,8 @@ def test_procurement_review_keeps_grounded_fields_and_omits_foreign_candidates()
         request['materialId']='different-operation'
         response=client.post('/ai/v1/materials/extract-fields',json=request)
         assert response.status_code==200
-        assert response.json()['data']['rows']==[]
+        facts=[f for r in response.json()['data']['rows'] for f in r['facts']]
+        assert [(f['field'],f['value']) for f in facts]==[('projectName','设备更新')]
 
 def test_procurement_review_extracts_tender_owner_and_keeps_budget_ceiling_and_quote_roles_distinct():
     class ReviewGateway:
@@ -109,6 +110,31 @@ def test_procurement_review_extracts_tender_owner_and_keeps_budget_ceiling_and_q
     assert facts=={'purchaserName':'市政服务中心','agencyName':'远达招标代理有限公司',
                    'budgetAmount':'100万元','ceilingAmount':'95万元','quoteAmount':'88万元'}
 
+
+def test_procurement_review_retains_observed_negotiation_terms_and_scoring_as_separate_facts():
+    class NegotiationGateway:
+        def extract_material_fields(self,kind,source,request_id,*,timeout_seconds=60):
+            facts=[]
+            for field,value,label in [
+                ('treasuryFundAmount','800000元','国库资金：800000元'),
+                ('selfFundAmount','200000元','自筹资金：200000元'),
+                ('contractPerformancePeriod','签订后30日','合同履行期限：签订后30日'),
+                ('qualificationRequirements','具有有效资质','供应商资格要求：具有有效资质'),
+                ('scoringCriteria','价格分30分','评分细则：价格分30分'),
+                ('contractTermsSummary','按附件执行','合同条款及格式：按附件执行'),
+            ]:
+                facts.append({'field':field,'value':value,'locator':'p1','excerpt':label})
+            return ModelCompletion(payload={'rows':[{'rowKey':'tender','facts':facts}]},model='model',duration_ms=1)
+    request=body();request['businessType']='PROCUREMENT_REVIEW'
+    request['segments']=[{'locator':'p1','text':'国库资金：800000元；自筹资金：200000元；合同履行期限：签订后30日；供应商资格要求：具有有效资质；评分细则：价格分30分；合同条款及格式：按附件执行'}]
+    with TestClient(create_app(Settings(),model_gateway=NegotiationGateway())) as client:
+        response=client.post('/ai/v1/materials/extract-fields',json=request)
+    assert response.status_code==200
+    facts={fact['field']:fact['value'] for row in response.json()['data']['rows'] for fact in row['facts']}
+    assert facts=={'treasuryFundAmount':'800000元','selfFundAmount':'200000元',
+                   'contractPerformancePeriod':'签订后30日','qualificationRequirements':'具有有效资质',
+                   'scoringCriteria':'价格分30分','contractTermsSummary':'按附件执行'}
+
 def test_provider_truncation_repartitions_only_failed_chunks_and_keeps_all_tail_evidence():
     class TruncatedGateway:
         def __init__(self): self.calls=[];self.accepted=[]
@@ -126,6 +152,40 @@ def test_provider_truncation_repartitions_only_failed_chunks_and_keeps_all_tail_
     assert response.status_code==200
     assert gateway.accepted==request['segments']
     assert len(response.json()['data']['rows'][0]['facts'])==12
+
+def test_completed_invalid_json_is_repartitioned_without_replaying_any_completed_piece():
+    class Gateway:
+        def __init__(self):self.calls=[];self.accepted=[]
+        def extract_material_fields(self,kind,source,request_id,*,timeout_seconds=60):
+            segments=json.loads(source);self.calls.append(segments)
+            if len(segments)>1:
+                error=ModelGatewayFailure(reason='INVALID_PROVIDER_JSON',retryable=True,duration_ms=1)
+                error.finish_reason='STOP';raise error
+            self.accepted.extend(segments)
+            return ModelCompletion(payload={'rows':[{'rowKey':'one','facts':[{'field':'requirementDescription','value':s['text'],'excerpt':s['text'],'locator':s['locator']} for s in segments]}]},model='model',duration_ms=1)
+    gateway=Gateway();request=body();request['segments']=[{'locator':f'p{i}','text':f'设备{i}验收要求'} for i in range(4)]
+    with TestClient(create_app(Settings(),model_gateway=gateway)) as client:
+        response=client.post('/ai/v1/materials/extract-fields',json=request)
+    assert response.status_code==200
+    assert gateway.accepted==request['segments']
+    assert len(gateway.calls)==7
+    assert len(response.json()['data']['rows'][0]['facts'])==4
+
+
+def test_completed_invalid_json_has_no_unbounded_or_same_source_retry():
+    class Gateway:
+        def __init__(self):self.calls=0
+        def extract_material_fields(self,*args,**kwargs):
+            self.calls+=1
+            error=ModelGatewayFailure(reason='INVALID_PROVIDER_JSON',retryable=True,duration_ms=1)
+            error.finish_reason='STOP';raise error
+    gateway=Gateway();request=body();request['segments']=[{'locator':'page','text':'设备验收要求'}]
+    with TestClient(create_app(Settings(),model_gateway=gateway)) as client:
+        response=client.post('/ai/v1/materials/extract-fields',json=request)
+    assert response.status_code==502
+    assert response.json()['code']=='MATERIAL_AI_INVALID_RESULT'
+    assert gateway.calls==1
+
 
 def test_truncated_completion_with_valid_json_is_split_and_partial_facts_are_never_committed():
     class TruncatedGateway:
@@ -177,13 +237,16 @@ def test_exact_empty_object_in_a_chunk_does_not_stop_later_grounded_fields():
     assert response.status_code==200 and len(gateway.calls)==2
     assert response.json()['data']['rows'][0]['facts'][0]['value']=='设备更新'
 
-def test_all_empty_objects_remain_no_fields_and_nonempty_invalid_objects_fail_closed():
+def test_empty_model_objects_keep_only_explicitly_labelled_facts_and_invalid_objects_fail_closed():
     class ShapeGateway:
         def __init__(self,payload):self.payload=payload
         def extract_material_fields(self,*args,**kwargs):return ModelCompletion(payload=self.payload,model='model',duration_ms=1)
     with TestClient(create_app(Settings(),model_gateway=ShapeGateway({}))) as client:
         response=client.post('/ai/v1/materials/extract-fields',json=body())
-        assert response.status_code==200 and response.json()['data']['rows']==[]
+        assert response.status_code==200
+        facts=[fact for row in response.json()['data']['rows'] for fact in row['facts']]
+        assert [(fact['field'],fact['value'],fact['excerpt']) for fact in facts]==[
+            ('projectName','设备更新','项目名称：设备更新')]
     for payload in ({'rows':None},{'unknown':'value'},{'rows':[{'rowKey':'one','facts':None}]}):
         with TestClient(create_app(Settings(),model_gateway=ShapeGateway(payload))) as client:
             response=client.post('/ai/v1/materials/extract-fields',json=body())
@@ -294,7 +357,8 @@ def test_hallucinated_fact_is_discarded_and_capacity_is_released():
         for _ in range(3):
             response = client.post('/ai/v1/materials/extract-fields', json=body())
             assert response.status_code == 200
-            assert response.json()['data']['rows'] == []
+            facts=[fact for row in response.json()['data']['rows'] for fact in row['facts']]
+            assert [(fact['field'],fact['value']) for fact in facts]==[('projectName','设备更新')]
         gateway.bad = False
         assert client.post('/ai/v1/materials/extract-fields', json=body()).status_code == 200
 
@@ -335,6 +399,38 @@ def test_real_gateway_uses_dedicated_extraction_prompt_and_strict_json():
     assert result.payload == {'rows': []}
     assert captured[0]['max_tokens'] <= 4096
     assert '不猜测' in captured[0]['messages'][0]['content']
+
+
+def test_two_material_slots_are_shared_across_budget_and_procurement_and_released_on_failure():
+    class Blocking:
+        def __init__(self):
+            self.entered=threading.Barrier(3);self.release=threading.Event()
+        def extract_material_fields(self,kind,source,request_id,*,timeout_seconds=180):
+            self.entered.wait(5);self.release.wait(5)
+            if kind=='BUDGET':raise ModelGatewayFailure(reason='READ_TIMEOUT',retryable=False,duration_ms=1)
+            return ModelCompletion(payload={'rows':[]},model='model',duration_ms=1)
+    gateway=Blocking()
+    with TestClient(create_app(Settings(material_concurrency=2),model_gateway=gateway)) as client, ThreadPoolExecutor(2) as pool:
+        a=body();a['businessType']='BUDGET';a['materialId']='budget-concurrency'
+        b=body();b['businessType']='PROCUREMENT';b['materialId']='procurement-concurrency'
+        first=pool.submit(client.post,'/ai/v1/materials/extract-fields',json=a)
+        second=pool.submit(client.post,'/ai/v1/materials/extract-fields',json=b)
+        try:
+            gateway.entered.wait(5)
+            assert client.post('/ai/v1/materials/extract-fields',json=body()).status_code==503
+        finally:gateway.release.set()
+        # A read timeout now returns a source-grounded partial result so the
+        # caller can still see deterministic facts already recovered.
+        partial=first.result(10)
+        assert partial.status_code==200 and partial.json()['data']['partial'] is True
+        assert second.result(10).status_code==200
+        gateway.entered=threading.Barrier(1)
+        assert client.post('/ai/v1/materials/extract-fields',json=body()).status_code==200
+
+
+@pytest.mark.parametrize('value',[0,3,-1])
+def test_material_concurrency_stays_bounded(value):
+    with pytest.raises(ValueError):Settings(material_concurrency=value)
 
 def test_long_material_is_partitioned_without_losing_tail_or_locator():
     class PartitionGateway:
@@ -475,3 +571,23 @@ def test_budget_partial_approval_and_heading_survive_all_chunks_without_declarat
     rows=response.json()['data']['rows']
     assert len(rows)==12
     assert all({f['field'] for f in row['facts']}=={'approvalAmount','projectName'} for row in rows)
+
+
+def test_budget_field_office_hierarchy_and_review_reference_survive_the_schema():
+    values = {'subjectLevel1Name': '设施保障', 'subjectLevel2Name': '设备更新',
+              'subjectLevel3Name': '终端更新', 'functionalClassificationCode': 'F02',
+              'functionalClassificationName': '信息设备支出', 'thirdPartyReviewAmount': '2100000元',
+              'approvalAmount': '2050000元'}
+    source = '\n'.join(f'{key}：{value}' for key, value in values.items())
+    class FieldOfficeGateway:
+        def extract_material_fields(self, *args, **kwargs):
+            return ModelCompletion(payload={'rows':[{'rowKey':'one','facts':[
+                dict(field=key,value=value,locator='budget/row:1',excerpt=f'{key}：{value}')
+                for key,value in values.items()
+            ]}]}, model='model', duration_ms=1)
+    request=body();request['businessType']='BUDGET';request['segments']=[{'locator':'budget/row:1','text':source}]
+    with TestClient(create_app(Settings(),model_gateway=FieldOfficeGateway())) as client:
+        response=client.post('/ai/v1/materials/extract-fields',json=request)
+    assert response.status_code==200
+    facts={f['field']:f['value'] for row in response.json()['data']['rows'] for f in row['facts']}
+    assert facts==values

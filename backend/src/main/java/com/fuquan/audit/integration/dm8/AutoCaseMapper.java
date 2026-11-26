@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.*;
 /** DM8 SQL only. Snapshot writes execute inside AuditCaseTransactions. */
 @Mapper
 public interface AutoCaseMapper {
+    @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY CREATED_AT,ID) RN FROM AUDIT_CASE WHERE STATUS='FAILED' AND INSTR(SNAPSHOT_JSON,'\"reasonCode\":\"USER_CANCELLED\"')>0 AND EXISTS(SELECT 1 FROM AUDIT_CASE_FILE F WHERE F.CASE_ID=AUDIT_CASE.ID)) WHERE RN<=#{limit}")
+    List<String> cancelledForCleanup(int limit);
     record Row(String id,String owner,String operation,String fingerprint,String status,long version,String token,
                LocalDateTime until,LocalDateTime created,String payload) {}
     @Select("SELECT SNAPSHOT_JSON FROM AUDIT_CASE WHERE ID=#{id}")
@@ -18,10 +20,13 @@ public interface AutoCaseMapper {
     @ConstructorArgs({@Arg(column="FILE_ID",javaType=String.class),@Arg(column="FACT_ORDER",javaType=int.class),
             @Arg(column="FACT_JSON",javaType=String.class,typeHandler=org.apache.ibatis.type.ClobTypeHandler.class)})
     List<StoredFact> facts(String id);
-    @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY CREATED_AT DESC,ID) RN FROM AUDIT_CASE WHERE OWNER_ID=#{owner}) WHERE RN<=100")
+    @Select({"<script>SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY CREATED_AT DESC,ID) RN FROM AUDIT_CASE WHERE INSTR(SNAPSHOT_JSON,'\"reasonCode\":\"USER_CANCELLED\"')=0",
+        "<if test='owner != null'> AND OWNER_ID=#{owner}</if>",
+        ") WHERE RN&lt;=100</script>"})
     List<String> recent(String owner);
-    @Select({"<script>SELECT SNAPSHOT_JSON FROM (SELECT SNAPSHOT_JSON,ROW_NUMBER() OVER(ORDER BY CREATED_AT DESC,ID) RN FROM AUDIT_CASE WHERE OWNER_ID=#{owner}",
-        "<if test='beforeId != null'> AND (CREATED_AT &lt; (SELECT CREATED_AT FROM AUDIT_CASE WHERE ID=#{beforeId} AND OWNER_ID=#{owner}) OR (CREATED_AT=(SELECT CREATED_AT FROM AUDIT_CASE WHERE ID=#{beforeId} AND OWNER_ID=#{owner}) AND ID &gt; #{beforeId}))</if>",
+    @Select({"<script>SELECT SNAPSHOT_JSON FROM (SELECT SNAPSHOT_JSON,ROW_NUMBER() OVER(ORDER BY CREATED_AT DESC,ID) RN FROM AUDIT_CASE WHERE INSTR(SNAPSHOT_JSON,'\"reasonCode\":\"USER_CANCELLED\"')=0",
+        "<if test='owner != null'> AND OWNER_ID=#{owner}</if>",
+        "<if test='beforeId != null'> AND (CREATED_AT &lt; (SELECT CREATED_AT FROM AUDIT_CASE WHERE ID=#{beforeId} <if test='owner != null'>AND OWNER_ID=#{owner}</if>) OR (CREATED_AT=(SELECT CREATED_AT FROM AUDIT_CASE WHERE ID=#{beforeId} <if test='owner != null'>AND OWNER_ID=#{owner}</if>) AND ID &gt; #{beforeId}))</if>",
         ") WHERE RN &lt;= #{limit} ORDER BY RN</script>"})
     List<String> history(@Param("owner") String owner,@Param("beforeId") String beforeId,@Param("limit") int limit);
     @Select("SELECT ID FROM (SELECT ID,ROW_NUMBER() OVER(ORDER BY CREATED_AT,ID) RN FROM AUDIT_CASE WHERE STATUS='QUEUED' OR (STATUS IN ('RUNNING','UPLOADING') AND LEASE_UNTIL<=#{now})) WHERE RN<=8")

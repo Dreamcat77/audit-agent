@@ -30,6 +30,36 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class DocumentRoleSignalExtractorTest {
     private final DocumentRoleSignalExtractor extractor = new DocumentRoleSignalExtractor();
 
+    @Test void amountAppendixCoverIsSupportingMaterialButAnEmbeddedTableDoesNotReplaceTheContractRole(){
+        String appendix="合同价款明细表（本表列明全部价款构成，无其他分项或另计费用） |  | \n项目名称：青禾项目 | 合同编号：HT-001 | 单位：元\n分项名称 | 分项金额（元） | 备注\n设备 | 300,000.00 | 含税\n安装服务 | 150,000.00 | 含税\n合计 | 450,000.00 | 以上为全部合同价款明细";
+        assertThat(new DeterministicDocumentRoleResolver().resolve(extractor.extract(parsed(appendix))).proposedRole()).isEqualTo(DocumentRole.SUPPLEMENT);
+        String current="服务合同\n甲方：当前单位\n乙方：当前公司\n违约责任：逾期承担责任。\n双方签字盖章后生效。\n"+appendix;
+        assertThat(new DeterministicDocumentRoleResolver().resolve(extractor.extract(parsed(current))).proposedRole()).isEqualTo(DocumentRole.CONTRACT_BODY);
+    }
+
+    @Test void numberedCurrentPartRestartsSignalsAfterHistory(){
+        String text="历史合同\n合同书\n甲方：旧单位\n乙方：旧公司\n第二部分 当前合同正文\n合同书\n甲方：当前单位\n乙方：当前公司\n违约责任：逾期承担责任。\n双方签字盖章后生效。";
+        var signals=extractor.extract(parsed(text));
+        assertThat(new DeterministicDocumentRoleResolver().resolve(signals).proposedRole()).isEqualTo(DocumentRole.CONTRACT_BODY);
+        assertThat(signals).allMatch(s->s.charStart()>=text.indexOf("第二部分"));
+    }
+
+    @Test void historicalPerformanceCaptionsDoNotBecomeTheCurrentContract() {
+        for(String text:List.of("供应商履约业绩说明\n供应商：青禾服务有限公司\n历史项目合同金额：9600000元，历史项目甲方：东河档案管理中心。\n本页仅为历史业绩，不是当前合同。",
+                "历史合同\n合同书\n甲方：东河档案管理中心\n乙方：青禾服务有限公司\n违约责任：迟延交付承担责任。\n双方签字盖章后生效。")) {
+            var signals=extractor.extract(parsed(text));
+            assertThat(signals).isNotEmpty().allMatch(s->s.role()==DocumentRole.OTHER);
+            assertThat(new DeterministicDocumentRoleResolver().resolve(signals).proposedRole()).isEqualTo(DocumentRole.OTHER);
+        }
+    }
+
+    @Test void explicitCurrentSectionAfterHistoricalMaterialRetainsItsOwnContractSignals() {
+        String text="历史业绩\n甲方：历史单位\n乙方：历史服务公司\n违约责任：历史约定。\n本次项目合同正文\n合同书\n甲方：当前单位\n乙方：当前服务公司\n违约责任：延迟交付承担责任。\n双方签字盖章后生效。";
+        var signals=extractor.extract(parsed(text));
+        assertThat(new DeterministicDocumentRoleResolver().resolve(signals).proposedRole()).isEqualTo(DocumentRole.CONTRACT_BODY);
+        assertThat(signals).allMatch(s->s.charStart()>=text.indexOf("本次项目合同正文"));
+    }
+
     @Test
     void exposesTheExactBusinessRoleVocabulary() {
         assertThat(DocumentRole.values()).containsExactly(

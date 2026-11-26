@@ -1,0 +1,4 @@
+preview-table.doc is Apache POI's simple-table.doc fixture (Apache-2.0).
+Source: https://github.com/apache/poi/blob/REL_4_1_2/test-data/document/simple-table.doc
+Used to verify native binary Word table preview, without customer data.
+License: preview-table.LICENSE.txt

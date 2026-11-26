@@ -1,0 +1,99 @@
+{
+  "document": {
+    "id": "79a89c6c-bc0e-4d9e-8620-a48656170f2f",
+    "text": "中标通知书\n栖霞设备有限公司：\n经本项目采购程序，确定贵公司为栖霞办公区设备购置项目的中标供应商。\n项目编号：QX-HW-2027-062。\n中标金额：人民币265000元。\n履行期限按采购文件及有效响应执行，签约不得擅自改变采购实质内容。\n采购人：上海市公安局警务保障处2027年1月20日\n仿真材料不用于实际采购或签约\n第1页",
+    "name": "中标通知书.pdf",
+    "roleHint": "AWARD",
+    "header": "中标通知书\n栖霞设备有限公司：\n经本项目采购程序，确定贵公司为栖霞办公区设备购置项目的中标供应商。\n项目编号：QX-HW-2027-062。\n中标金额：人民币265000元。\n履行期限按采购文件及有效响应执行，签约不得擅自改变采购实质内容。\n采购人：上海市公安局警务保障处2027年1月20日\n仿真材料不用于实际采购或签约\n第1页"
+  },
+  "result": {
+    "model": "synthetic-provider",
+    "version": "contract-case-v1",
+    "role": "AWARD",
+    "profile": "PROCUREMENT",
+    "complete": true,
+    "facts": [
+      {
+        "type": "PROJECT_NAME",
+        "value": "栖霞办公区设备购置项目",
+        "citations": [
+          {
+            "document": "79a89c6c-bc0e-4d9e-8620-a48656170f2f",
+            "text": "确定贵公司为栖霞办公区设备购置项目的中标供应商。"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "PROJECT_NO",
+        "value": "QX-HW-2027-062",
+        "citations": [
+          {
+            "document": "79a89c6c-bc0e-4d9e-8620-a48656170f2f",
+            "text": "项目编号：QX-HW-2027-062。"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "AWARD_SUPPLIER",
+        "value": "栖霞设备有限公司",
+        "citations": [
+          {
+            "document": "79a89c6c-bc0e-4d9e-8620-a48656170f2f",
+            "text": "确定贵公司为栖霞办公区设备购置项目的中标供应商。"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "AWARD_AMOUNT",
+        "value": "人民币265000元",
+        "citations": [
+          {
+            "document": "79a89c6c-bc0e-4d9e-8620-a48656170f2f",
+            "text": "中标金额：人民币265000元。"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "PURCHASER",
+        "value": "上海市公安局警务保障处2",
+        "citations": [
+          {
+            "document": "79a89c6c-bc0e-4d9e-8620-a48656170f2f",
+            "text": "采购人：上海市公安局警务保障处2"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "SIGN_DATE",
+        "value": "2027年1月20日",
+        "citations": [
+          {
+            "document": "79a89c6c-bc0e-4d9e-8620-a48656170f2f",
+            "text": "2027年1月20日"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      }
+    ],
+    "clauses": [
+      {
+        "topic": "OTHER",
+        "summary": "履行期限按采购文件及有效响应执行，签约不得擅自改变采购实质内容。",
+        "citations": [
+          {
+            "document": "79a89c6c-bc0e-4d9e-8620-a48656170f2f",
+            "text": "履行期限按采购文件及有效响应执行，签约不得擅自改变采购实质内容。"
+          }
+        ],
+        "subjectScope": null
+      }
+    ],
+    "findings": [],
+    "rejectedItems": 0
+  }
+}

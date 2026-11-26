@@ -21,6 +21,73 @@ def mapped(predictions):
     return predictions
 
 
+@pytest.mark.parametrize('rotation', [0, 90, 180, 270])
+def test_blank_margins_are_not_ocr_work_but_source_pixel_anchors_stay_exact(rotation, monkeypatch):
+    from PIL import ImageDraw
+    from audit_ai.ocr.geometry import OcrRegion
+    monkeypatch.setattr('audit_ai.ocr.orientation.deskew_angle', lambda image: 0)
+    base=Image.new('RGB',(1000,1600),'white')
+    ImageDraw.Draw(base).rectangle((200,300,500,500),fill='black')
+    image=base.rotate(rotation,expand=True)
+    classifier=SimpleNamespace(predict=lambda image:[SimpleNamespace(json={'res':{
+        'label_names':[str((360-rotation)%360)],'scores':[.99]}})])
+    def predict(array):
+        assert array.shape[0]*array.shape[1] < 1000*1600*.4
+        ys,xs=np.where(np.any(array<250,axis=2));x0,x1=int(xs.min()),int(xs.max());y0,y1=int(ys.min()),int(ys.max())
+        region=OcrRegion(0,6,((x0,y0),(x1,y0),(x1,y1),(x0,y1)),.99)
+        return (OcrPage(1,'预算金额正确',.99,(region,)),),[.99]
+    page,_=recognize_page(image,17,predict,mapped,classifier)
+    ys,xs=np.where(np.any(np.asarray(image)<250,axis=2))
+    polygon=page.regions[0].polygon
+    assert min(x for x,y in polygon)==pytest.approx(xs.min()/image.width,abs=.002)
+    assert max(x for x,y in polygon)==pytest.approx(xs.max()/image.width,abs=.002)
+    assert min(y for x,y in polygon)==pytest.approx(ys.min()/image.height,abs=.002)
+    assert max(y for x,y in polygon)==pytest.approx(ys.max()/image.height,abs=.002)
+    assert page.text=='预算金额正确' and page.page_num==17 and (page.width,page.height)==image.size
+
+
+def test_margin_crop_keeps_faint_edge_marks_and_leaves_dense_or_blank_pages_unchanged():
+    from PIL import ImageDraw
+    from audit_ai.ocr.orientation import white_margin_box
+    image=Image.new('RGB',(1000,1600),'white')
+    ImageDraw.Draw(image).rectangle((200,300,500,500),fill='black')
+    image.putpixel((3,4),(254,255,255))
+    box=white_margin_box(image)
+    assert box is not None and box[0]==0 and box[1]==0
+    assert white_margin_box(Image.new('RGB',(1000,1600),'gray')) is None
+    assert white_margin_box(Image.new('RGB',(1000,1600),'white')) is None
+    assert white_margin_box(Image.new('RGB',(100,160),'gray')) is None
+
+
+def test_unreliable_crop_falls_back_to_full_pixels_without_publishing_cropped_text(monkeypatch):
+    from PIL import ImageDraw
+    monkeypatch.setattr('audit_ai.ocr.orientation.deskew_angle',lambda image:0)
+    image=Image.new('RGB',(1000,1600),'white')
+    ImageDraw.Draw(image).rectangle((200,300,500,500),fill='black')
+    classifier=SimpleNamespace(predict=lambda image:[SimpleNamespace(json={'res':{'label_names':['0'],'scores':[.99]}})])
+    calls=[]
+    def predict(array):
+        calls.append(array.shape)
+        return output('完整原页',.99) if array.shape[:2]==(1600,1000) else output('不可靠片段',.4)
+    page,_=recognize_page(image,1,predict,mapped,classifier)
+    assert page.text=='完整原页' and len(calls)==2
+
+
+def test_detected_skew_keeps_the_original_full_pixel_path(monkeypatch):
+    from PIL import ImageDraw
+    monkeypatch.setattr('audit_ai.ocr.orientation.deskew_angle',lambda image:1.6)
+    image=Image.new('RGB',(1000,1600),'white')
+    ImageDraw.Draw(image).rectangle((200,300,500,500),fill='black')
+    classifier=SimpleNamespace(predict=lambda image:[SimpleNamespace(json={'res':{'label_names':['0'],'scores':[.99]}})])
+    calls=[]
+    def predict(array):
+        calls.append(array.shape)
+        assert array.shape[0]*array.shape[1]>=1000*1600*.9
+        return output('金额120000元',.99)
+    page,_=recognize_page(image,1,predict,mapped,classifier)
+    assert calls[0][:2]==(1600,1000) and page.text=='金额120000元'
+
+
 def output(text="预算金额 120000.00", confidence=.98):
     return (OcrPage(1, text, confidence),), [confidence]
 

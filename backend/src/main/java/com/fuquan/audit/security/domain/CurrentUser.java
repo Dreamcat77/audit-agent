@@ -2,6 +2,7 @@ package com.fuquan.audit.security.domain;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,11 +16,15 @@ import java.util.Set;
  * @param displayName 页面显示名称
  * @param roles 不带 {@code ROLE_} 前缀的业务角色集合
  */
-public record CurrentUser(String userId, String username, String displayName, Set<String> roles)
+public record CurrentUser(String userId, String username, String displayName, Set<String> roles, Instant sessionVersion)
         implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
+
+    public CurrentUser(String userId, String username, String displayName, Set<String> roles) {
+        this(userId, username, displayName, roles, null);
+    }
 
     /**
      * 校验 Session 用户身份完整性并建立角色不可变快照。

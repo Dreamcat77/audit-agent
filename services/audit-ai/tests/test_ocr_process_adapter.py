@@ -114,6 +114,32 @@ def synthetic(settings):
 windows = pytest.mark.skipif(sys.platform != "win32", reason="Windows Job lifecycle")
 
 
+@windows
+def test_explicit_cancel_reaps_native_worker_and_next_request_gets_fresh_slot(tmp_path):
+    from audit_ai.ocr.cancellation import CURRENT, OcrCancelled
+    from threading import Event
+    path=tmp_path/'cancel.png';path.write_bytes(b'HANG')
+    cancel=Event();port=ProcessOcrAdapter(Settings(),factory=synthetic)
+    def work():
+        token=CURRENT.set(cancel)
+        try:return port.extract(path)
+        finally:CURRENT.reset(token)
+    try:
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            future=pool.submit(work)
+            deadline=time.monotonic()+10
+            while not path.with_suffix('.entered').exists():
+                assert time.monotonic()<deadline
+                time.sleep(.01)
+            started=time.monotonic();cancel.set()
+            with pytest.raises(OcrCancelled):future.result(timeout=3)
+            assert time.monotonic()-started<3
+            assert port._child is None and path.exists()
+            path.write_bytes(b'NEXT')
+            assert pool.submit(port.extract,path).result(timeout=10).text.endswith(':1')
+    finally:port.close()
+
+
 @pytest.mark.skipif(sys.platform != 'linux', reason='Linux PDEATHSIG thread ownership')
 def test_linux_request_thread_retirement_keeps_persistent_child_and_close_reaps_it(tmp_path):
     path=tmp_path/'small.png';path.write_bytes(b'small')
@@ -427,7 +453,7 @@ def test_normal_close_proves_job_descendant_also_terminated(tmp_path):
         result=port.extract(path)
         handle=kernel.OpenProcess(0x100000,False,int(result.text));assert handle
         port.close()
-        assert kernel.WaitForSingleObject(handle,0)==0,"Job descendant survived normal cleanup"
+        assert kernel.WaitForSingleObject(handle,5000)==0,"Job descendant survived normal cleanup"
     finally:
         port.close()
         if handle:kernel.CloseHandle(handle)

@@ -44,7 +44,7 @@ public class ProjectFileProcessingWorker {
                 MDC.put("requestId",job.requestId());MDC.put("traceId",job.traceId());
                 try {
                     var account=users.findActiveById(job.actorId());
-                    if(account.isEmpty()||Collections.disjoint(account.get().roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL"))) {
+                    if(account.isEmpty()||Collections.disjoint(account.get().roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER"))) {
                         service.blockUnavailableOwner(job.id());
                         try(var span=PipelineDiagnostics.start("CONTRACT","FILE_OWNER_UNAVAILABLE",job.fileId(),Map.of())){
                             span.outcome("BLOCKED",Map.of("reason","FILE_OWNER_UNAVAILABLE"));

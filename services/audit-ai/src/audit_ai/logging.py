@@ -119,6 +119,9 @@ _SAFE_FIELDS = frozenset(
     }
 )
 _PIPELINE_COUNTS = frozenset({
+    "queue_wait_ms", "provider_capacity",
+    "worker_count", "requested_workers", "memory_budget_mb",
+    "resource_accounting_known", "effective_cpu_milli", "available_memory_mb",
     "http_status", "input_bytes", "output_bytes", "prompt_chars", "user_chars",
     "prompt_tokens", "completion_tokens", "total_tokens", "max_output_tokens",
     "connect_timeout_ms", "read_timeout_ms", "remaining_budget_ms", "page_count",
@@ -210,7 +213,10 @@ _COUNT_FIELDS = frozenset(
 )
 _SAFE_REASON_CODES = frozenset(
     {
-        "INPUT_LIMIT", "PREVIOUS_SPLIT", "OUTPUT_TRUNCATED",
+        "SCHEMA_INVALID",
+        "CITATION_INVALID",
+        "QUOTE_UNLOCATABLE",
+        "INPUT_LIMIT", "PREVIOUS_SPLIT", "OUTPUT_TRUNCATED", "INVALID_PROVIDER_JSON",
         "MATERIAL_AI_CONTEXT_LIMIT",
         "NONE",
         "INTERNAL_ERROR",

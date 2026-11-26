@@ -22,6 +22,7 @@ from audit_ai.ocr.paddle_adapter import (
 )
 from audit_ai.ocr.port import OcrExtraction, OcrPort
 from audit_ai.ocr.process_adapter import OcrWorkerReapUnproven
+from audit_ai.ocr.cancellation import OcrCancelled
 
 
 _CHUNK_BYTES = 64 * 1024
@@ -64,6 +65,10 @@ class OcrApplicationService:
             try:
                 return await asyncio.shield(worker)
             except asyncio.CancelledError:
+                from audit_ai.ocr.cancellation import CURRENT
+                cancelled = CURRENT.get()
+                if cancelled is not None:
+                    cancelled.set()
                 with CancelScope(shield=True):
                     while not worker.done():
                         try:
@@ -107,6 +112,8 @@ class OcrApplicationService:
                     raise AuditAiError(
                         503, "OCR_RUNTIME_UNAVAILABLE", "OCR worker exit is unproven"
                     ) from failure
+                except OcrCancelled as failure:
+                    raise AuditAiError(409, "OCR_CANCELLED", "OCR request cancelled") from failure
                 except OcrPredictionInvalid as failure:
                     raise AuditAiError(
                         502, "OCR_INVALID_RESULT", "OCR service returned an invalid result"

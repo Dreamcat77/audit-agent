@@ -1,0 +1,88 @@
+{
+  "document": {
+    "id": "09c151e0-c5e0-433c-ad36-534570742855",
+    "text": "合同价款明细表 |  |  | \n项目名称：栖霞办公区设备购置项目  合同编号：HT-QX-HW-2027-062  单位：元\n序号 | 分项名称 | 分项金额（元） | 备注\n1 | 设备及维护主体内容 | 200,000.00 | 固定含税\n2 | 安装培训及售后 | 60,000.00 | 固定含税\n合计 |  | 260,000.00 | \n以上为本合同全部价款明细，无其他分项或另计费用。\n仿真材料  不用于实际采购或签约",
+    "name": "附件一合同价款明细表.xlsx",
+    "roleHint": "ANNEX",
+    "header": "合同价款明细表 |  |  | \n项目名称：栖霞办公区设备购置项目  合同编号：HT-QX-HW-2027-062  单位：元\n序号 | 分项名称 | 分项金额（元） | 备注\n1 | 设备及维护主体内容 | 200,000.00 | 固定含税\n2 | 安装培训及售后 | 60,000.00 | 固定含税\n合计 |  | 260,000.00 | \n以上为本合同全部价款明细，无其他分项或另计费用。\n仿真材料  不用于实际采购或签约"
+  },
+  "result": {
+    "model": "synthetic-provider",
+    "version": "contract-case-v1",
+    "role": "ANNEX",
+    "profile": "PROCUREMENT",
+    "complete": true,
+    "facts": [
+      {
+        "type": "PROJECT_NAME",
+        "value": "栖霞办公区设备购置项目",
+        "citations": [
+          {
+            "document": "09c151e0-c5e0-433c-ad36-534570742855",
+            "text": "项目名称：栖霞办公区设备购置项目"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "CONTRACT_NO",
+        "value": "HT-QX-HW-2027-062",
+        "citations": [
+          {
+            "document": "09c151e0-c5e0-433c-ad36-534570742855",
+            "text": "合同编号：HT-QX-HW-2027-062"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "TOTAL_AMOUNT",
+        "value": "260,000.00元",
+        "citations": [
+          {
+            "document": "09c151e0-c5e0-433c-ad36-534570742855",
+            "text": "合计 |  | 260,000.00 | \n以上为本合同全部价款明细，无其他分项或另计费用。"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "CURRENCY",
+        "value": "元",
+        "citations": [
+          {
+            "document": "09c151e0-c5e0-433c-ad36-534570742855",
+            "text": "单位：元"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      },
+      {
+        "type": "LINE_TABLE_COMPLETE",
+        "value": "合同价款明细表",
+        "citations": [
+          {
+            "document": "09c151e0-c5e0-433c-ad36-534570742855",
+            "text": "合同价款明细表"
+          }
+        ],
+        "subjectScope": "CURRENT_PROJECT"
+      }
+    ],
+    "clauses": [
+      {
+        "topic": "OTHER",
+        "summary": "合同价款由设备及维护主体内容200,000.00元、安装培训及售后60,000.00元组成，均为固定含税价，合计260,000.00元，无其他另计费用。",
+        "citations": [
+          {
+            "document": "09c151e0-c5e0-433c-ad36-534570742855",
+            "text": "1 | 设备及维护主体内容 | 200,000.00 | 固定含税\n2 | 安装培训及售后 | 60,000.00 | 固定含税\n合计 |  | 260,000.00 | \n以上为本合同全部价款明细，无其他分项或另计费用。"
+          }
+        ],
+        "subjectScope": null
+      }
+    ],
+    "findings": [],
+    "rejectedItems": 0
+  }
+}

@@ -25,13 +25,17 @@ test('historic or incomplete reports retain eight module positions without inven
   assert.doesNotMatch(html,/审查通过|无风险|open=""/);
 });
 
-test('clear and incomplete sections start collapsed; attention opens without disguising unknown as success',async()=>{
+test('large sections retain their disclosure while small items always show their content',async()=>{
   const render=await renderer();
   for(const tone of ['clear','default'])assert.match(render.section(tone),/aria-expanded="false"/);
   assert.match(render.section('clear'),/hidden=""/);assert.match(render.section('attention'),/aria-expanded="true"/);
   assert.doesNotMatch(render.section('attention'),/hidden=""/);
   assert.match(render.section('clear'),/未见异常/);assert.doesNotMatch(render.section('default'),/未见异常|result-state-clear/);
-  assert.doesNotMatch(render.item('clear'),/open=""/);assert.match(render.item('attention'),/open=""/);
+  for(const tone of ['clear','default','attention']){
+    const item=render.item(tone);
+    assert.match(item,/<article/);assert.match(item,/详细内容/);
+    assert.doesNotMatch(item,/<details|<summary|hidden=|aria-expanded=/);
+  }
 });
 test('module previews preserve real findings and name only their evidence sources',async()=>{
   const render=await renderer();const html=render.categories({documents:[{fileId:'a',name:'合同书.pdf'},{fileId:'b',name:'其他文件.pdf'}],categories:[{id:'BREACH',order:3,title:'违约责任条款量化审查',status:'ATTENTION',items:[{title:'违约金超限',summary:'累计7200元，上限6000元',level:'WARNING',evidence:[{fileId:'a',start:1,end:2,excerpt:'依据'}]}]}]});

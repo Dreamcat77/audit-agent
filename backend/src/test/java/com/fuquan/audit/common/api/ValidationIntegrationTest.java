@@ -34,6 +34,10 @@ import org.springframework.web.bind.annotation.RestController;
         ValidationIntegrationTest.TestValidationProbeController.class
 })
 class ValidationIntegrationTest {
+    @org.springframework.test.context.bean.override.mockito.MockitoBean
+    private com.fuquan.audit.security.application.AuthContext authContext;
+    @org.springframework.test.context.bean.override.mockito.MockitoBean
+    private com.fuquan.audit.security.application.port.UploadOwnershipPort uploadOwnership;
 
     private static final String TEST_PATH = "/test-only/validation-probe";
 

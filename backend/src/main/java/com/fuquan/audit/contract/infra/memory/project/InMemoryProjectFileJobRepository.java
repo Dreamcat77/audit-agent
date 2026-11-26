@@ -71,7 +71,13 @@ public class InMemoryProjectFileJobRepository implements ProjectFileJobRepositor
     }
     public synchronized boolean retry(UUID projectId, UUID id, Instant now) {
         var current=jobs.get(id);
-        if(current == null || !current.projectId().equals(projectId) || !"FAILED".equals(current.status())) return false;
+        if(current == null || !current.projectId().equals(projectId) || !"FAILED".equals(current.status()) || "USER_CANCELLED".equals(current.reasonCode())) return false;
         jobs.put(id,current.finish("QUEUED",null,null,now));return true;
+    }
+    public synchronized void cancelProject(UUID projectId,Instant now) {
+        for(var current:byProject(projectId))if(Set.of("QUEUED","PROCESSING").contains(current.status())) {
+            if(current.status().equals("PROCESSING"))closeAttempt(current,"FAILED","USER_CANCELLED",now);
+            jobs.put(current.id(),current.finish("FAILED","USER_CANCELLED",current.parseResultId(),now));
+        }
     }
 }

@@ -14,7 +14,7 @@ test("automatic analysis is the default without a build-time flag while explicit
 
 const bundled = await build({
   bundle: true, write: false, platform: "node", format: "cjs", jsx: "automatic",
-  loader: { ".css": "empty" },
+  loader: { ".css": "empty", ".woff2": "dataurl" },
   external: ["react", "react-dom/server", "react/jsx-runtime", "lucide-react"],
   define: { "import.meta.env": '{"VITE_API_BASE_URL":"","VITE_CONTRACT_DATA_SOURCE":"http"}' },
   stdin: { contents: 'export { ContractPortalContent } from "./src/features/contract/components/ContractPortalHome.tsx";', loader: "tsx", resolveDir: process.cwd() },

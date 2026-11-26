@@ -35,6 +35,8 @@ public record ContractAnalysisCase(UUID id, UUID projectId, String owner, String
         if(previous.terminal()||!previous.id.equals(next.id)||!previous.projectId.equals(next.projectId)||!previous.owner.equals(next.owner)
             ||!previous.inputDigest.equals(next.inputDigest)||!previous.createdAt.equals(next.createdAt)||!previous.deadline.equals(next.deadline)
             ||previous.expectedUploads!=next.expectedUploads||next.version!=previous.version+1)throw new IllegalArgumentException("CASE_IDENTITY_OR_TERMINAL_MUTATION");
+        // Cancellation discards incomplete analysis and stops every later publication.
+        if(next.status==State.FAILED&&"USER_CANCELLED".equals(next.reasonCode))return;
         if(!previous.sources.isEmpty()){
             if(previous.sources.size()!=next.sources.size())throw new IllegalArgumentException("SEALED_MANIFEST_MUTATION");
             for(int i=0;i<previous.sources.size();i++){
@@ -95,7 +97,11 @@ public record ContractAnalysisCase(UUID id, UUID projectId, String owner, String
         public Finding { evidence=List.copyOf(evidence); if(code==null||title==null||explanation==null||evidence.isEmpty())throw new IllegalArgumentException("ungrounded finding"); }
     }
     public record Check(String code, String status, String explanation, List<Evidence> evidence) {
-        public Check { evidence=List.copyOf(evidence); if(!Set.of("PASS","FAIL","NOT_EVALUATED").contains(status))throw new IllegalArgumentException("invalid check state"); }
+        public Check {
+            evidence=List.copyOf(evidence);
+            boolean observation="SOURCE_GROUNDED_OBSERVATION".equals(status)&&"CONTRACT_LISTED_AMOUNTS".equals(code)&&!evidence.isEmpty();
+            if(!Set.of("PASS","FAIL","NOT_EVALUATED").contains(status)&&!observation)throw new IllegalArgumentException("invalid check state");
+        }
     }
     /** No full document text here; only validated evidence snippets and derived analysis. */
     public record Output(String role, String profile, boolean complete, List<Fact> facts,

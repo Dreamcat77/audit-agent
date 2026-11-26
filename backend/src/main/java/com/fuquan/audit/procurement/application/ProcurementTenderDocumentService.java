@@ -51,6 +51,7 @@ public class ProcurementTenderDocumentService {
     private static final Logger LOG = LoggerFactory.getLogger(ProcurementTenderDocumentService.class);
     private static final String DOCX_MIME =
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    private static final java.util.regex.Pattern PDF_PAGE_LOCATOR = java.util.regex.Pattern.compile("(?:^|/)page:(\\d+)(?:/|$)");
 
     private final ProcurementProjectQueryPort projectQueryPort;
     private final ProcurementTenderDocumentRepository repository;
@@ -233,7 +234,7 @@ public class ProcurementTenderDocumentService {
             var parsed = new ProcurementTenderParseResult(String.join("\n", text.segments().stream()
                     .map(com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.Segment::text).toList()),
                     text.segments().stream().map(s -> new ProcurementTenderParseResult.Segment(
-                            s.locator(), s.text(), null, null)).toList());
+                            s.locator(), s.text(), pageNumber(s.locator()), null)).toList());
             var method = text.method().contains("OCR") ? ProcurementTenderParseMethod.OCR
                     : source.fileExtension().equals("pdf") ? ProcurementTenderParseMethod.PDF_TEXT
                     : source.fileExtension().equals("docx") ? ProcurementTenderParseMethod.DOCX_TEXT
@@ -255,6 +256,12 @@ public class ProcurementTenderDocumentService {
         } catch (IOException failure) {
             throw new TenderParseFailure("MATERIAL_READ_FAILED", failure);
         }
+    }
+
+    private static Integer pageNumber(String locator) {
+        if (locator == null) return null;
+        var match = PDF_PAGE_LOCATOR.matcher(locator);
+        return match.find() ? Integer.valueOf(match.group(1)) : null;
     }
 
     public TenderDocumentResult requireMaterial(UUID projectId, UUID id) {

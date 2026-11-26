@@ -18,8 +18,8 @@ public class AuditCaseTransactions {
     @Transactional(propagation=Propagation.REQUIRES_NEW)
     public boolean save(AuditCase previous,AuditCase next,CurrentUser user) {
         if(!repository.replace(previous,next))return false;
-        audit.success("AUTO_CASE_CHECKPOINT",user,"AUDIT_CASE",next.id().toString(),null,null,
-                java.util.Map.of("status",next.status(),"version",next.version()),"保存自动审查进度与证据");
+        audit.success(next.cancelled()?"AUTO_CASE_CANCELLED":"AUTO_CASE_CHECKPOINT",user,"AUDIT_CASE",next.id().toString(),null,null,
+                java.util.Map.of("status",next.cancelled()?"CANCELLED":next.status(),"version",next.version()),next.cancelled()?"用户取消采购材料处理":"保存自动审查进度与证据");
         return true;
     }
     /** Lock the current version before durable alarms, then commit alarms and the checkpoint together. */

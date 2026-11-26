@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/budget/material-uploads")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','FINANCE_REVIEWER')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','FINANCE_REVIEWER','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class BudgetMaterialController {
     private final BudgetMaterialService service;private final AuthContext auth;
     private final com.fuquan.audit.budget.application.BudgetMaterialBatchService batches;
@@ -25,16 +25,18 @@ public class BudgetMaterialController {
         var batch=batches.register(request.batchId(),request.members(),request.budgetYear(),request.departmentCode(),user());
         return ApiResponse.success(java.util.Map.of("batchId",batch.id().toString(),"status",batch.status()));
     }
+    @PostMapping("/batches/{id}/cancel")
+    public ApiResponse<java.util.Map<String,String>> cancelBatch(@PathVariable UUID id){batches.cancel(id,user());service.cleanupTimedOut();return ApiResponse.success(java.util.Map.of("status","CANCELLED"));}
     @GetMapping("/batches")
     public ApiResponse<com.fuquan.audit.budget.application.BudgetMaterialBatchService.BatchHistoryPage> history(
-            @RequestParam(required=false) String fileName,
+            @RequestParam(required=false) String projectName,
             @RequestParam(required=false) @org.springframework.format.annotation.DateTimeFormat(iso=org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate createdFrom,
             @RequestParam(required=false) @org.springframework.format.annotation.DateTimeFormat(iso=org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate createdTo,
             @RequestParam(defaultValue="1") int page,
             @RequestParam(defaultValue="20") int size) {
         int safePage=Math.max(page,1);
         int safeSize=Math.min(Math.max(size,1),100);
-        var filter=com.fuquan.audit.budget.application.port.BudgetHistoryFilter.of(fileName,createdFrom,createdTo);
+        var filter=com.fuquan.audit.budget.application.port.BudgetHistoryFilter.projectName(projectName,createdFrom,createdTo);
         return ApiResponse.success(batches.history(user(),filter,safePage,safeSize));
     }
     @PostMapping(consumes="multipart/form-data")
@@ -45,7 +47,20 @@ public class BudgetMaterialController {
         }
     }
     @GetMapping("/operations/{key}") public ApiResponse<Result> operation(@PathVariable UUID key) {return ApiResponse.success(service.operation(user(),key.toString()).map(this::result).orElse(null));}
+    @PostMapping("/operations/{key}/cancel") public ApiResponse<Result> cancelOperation(@PathVariable UUID key) {
+        var job=service.operation(user(),key.toString()).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));
+        return ApiResponse.success(result(service.cancel(job.id(),user())));
+    }
     @GetMapping("/{id}") public ApiResponse<Result> get(@PathVariable UUID id) {return ApiResponse.success(result(service.owned(id,user())));}
+    @PostMapping("/{id}/cancel") public ApiResponse<Result> cancel(@PathVariable UUID id) {return ApiResponse.success(result(service.cancel(id,user())));}
+    @GetMapping("/{id}/source-text") public ApiResponse<SourceText> sourceText(@PathVariable UUID id,
+            @RequestParam(defaultValue="0") int start,@RequestParam(defaultValue="20000") int size) {
+        service.owned(id,user());
+        if(start<0||size<1||size>20000)throw new BusinessException(BusinessErrorCode.INVALID_ARGUMENT);
+        var snapshot=batches.snapshot(id);String text=snapshot==null?"":com.fuquan.audit.budget.application.BudgetSourceText.text(snapshot);
+        int at=Math.min(start,text.length());return ApiResponse.success(new SourceText(text.substring(at,Math.min(text.length(),at+size)),at,text.length()));
+    }
+    public record SourceText(String text,int start,int totalChars) {}
     @GetMapping("/batches/{id}")
     public ApiResponse<com.fuquan.audit.budget.application.BudgetMaterialBatchService.BatchView> batch(@PathVariable UUID id) {
         return ApiResponse.success(batches.view(id, user()));
@@ -53,7 +68,8 @@ public class BudgetMaterialController {
     private CurrentUser user() {return auth.currentUser().orElseThrow(()->new BusinessException(BusinessErrorCode.UNAUTHENTICATED));}
     private Result result(BudgetMaterialJob job) {
         var task=service.task(job.id());
-        return new Result(job.id(),task.fileName(),job.status(),java.util.Set.of("MATERIAL_CALL_TIMEOUT","MATERIAL_TIME_LIMIT","MATERIAL_QUEUE_TIMEOUT").contains(java.util.Objects.toString(task.errorDetail(),""))?task.errorDetail():job.status().equals("FAILED")?"BUDGET_PARSE_FAILED":job.status().equals("UNKNOWN")?"BUDGET_OUTCOME_UNKNOWN":null,job.updatedAt(),BudgetController.BudgetReviewTaskResponse.from(task));
+        boolean cancelled="USER_CANCELLED".equals(task.errorDetail());
+        return new Result(job.id(),task.fileName(),cancelled?"CANCELLED":job.status(),cancelled?"USER_CANCELLED":java.util.Set.of("MATERIAL_CALL_TIMEOUT","MATERIAL_TIME_LIMIT","MATERIAL_QUEUE_TIMEOUT").contains(java.util.Objects.toString(task.errorDetail(),""))?task.errorDetail():job.status().equals("FAILED")?"BUDGET_PARSE_FAILED":job.status().equals("UNKNOWN")?"BUDGET_OUTCOME_UNKNOWN":null,job.updatedAt(),BudgetController.BudgetReviewTaskResponse.from(task));
     }
     public record Result(UUID id,String fileName,String status,String errorCode,Instant updatedAt,BudgetController.BudgetReviewTaskResponse task) {}
 }

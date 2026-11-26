@@ -49,4 +49,8 @@ public class Dm8MaterialExtractionLedger implements MaterialExtractionLedger {
             new Object[]{reason,new SqlLobValue("[]"),Timestamp.from(now),id.toString(),token,token},
             new int[]{Types.VARCHAR,Types.CLOB,Types.TIMESTAMP,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR})==1;
     }
+    public void cancel(UUID id,Instant now) {
+        jdbc.update("UPDATE MATERIAL_EXTRACTION_LEDGER SET STATUS='UNKNOWN',REASON_CODE='USER_CANCELLED',RESULTS_JSON=?,NEXT_UNIT=0,CALL_TOKEN=NULL,UPDATED_AT=? WHERE ID=?",
+            new Object[]{new SqlLobValue("[]"),Timestamp.from(now),id.toString()},new int[]{Types.CLOB,Types.TIMESTAMP,Types.VARCHAR});
+    }
 }

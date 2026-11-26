@@ -1,6 +1,7 @@
 package com.fuquan.audit.security.application.port;
 
 import com.fuquan.audit.security.domain.UserAccount;
+import com.fuquan.audit.security.domain.UserAccountStatus;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -10,6 +11,10 @@ import java.util.Optional;
  * <p>正式账号、密码 Hash、角色、失败次数和锁定状态以 DM8 为事实源，不存放于 Redis Session。</p>
  */
 public interface UserAccountRepository extends UserAccountRoleQueryPort {
+
+    Optional<SessionAccount> findSessionAccount(String userId);
+
+    record SessionAccount(UserAccountStatus status, Instant version, String displayName) {}
 
     /**
      * 按规范化用户名读取账号。

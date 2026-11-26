@@ -15,6 +15,11 @@ import org.springframework.stereotype.Service;
 /** Short DB claims/completion surround deterministic parse/OCR outside transactions. */
 @Service
 public class ProjectFileProcessingService {
+    private com.fuquan.audit.common.application.TaskCancellationRegistry cancellations;
+    private com.fuquan.audit.contract.application.analysis.ContractAnalysisRepository analyses;
+    @org.springframework.beans.factory.annotation.Autowired public void setCancellationDependencies(
+        com.fuquan.audit.common.application.TaskCancellationRegistry value,
+        com.fuquan.audit.contract.application.analysis.ContractAnalysisRepository cases) { cancellations=value;analyses=cases; }
     private final ProjectFileIngestionService ingestion;
     private final ProjectFileRepository files;
     private final ProjectFileParseResultRepository parses;
@@ -29,8 +34,17 @@ public class ProjectFileProcessingService {
         this.transactions=transactions;this.jobs=jobs;this.clock=clock;
     }
     public ProjectFileJob process(UUID id,CurrentUser actor,Consumer<String> onClaim) {
+        try(com.fuquan.audit.common.application.TaskCancellationRegistry.Registration registration=cancellations==null?()->{}:cancellations.register(id)) {
+            return processRegistered(id,actor,onClaim);
+        } finally { Thread.interrupted(); }
+    }
+    private ProjectFileJob processRegistered(UUID id,CurrentUser actor,Consumer<String> onClaim) {
         ProjectFileJob original=jobs.find(id).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));
         if(!original.actorId().equals(actor.userId()))throw new BusinessException(BusinessErrorCode.FORBIDDEN);
+        if(analyses!=null && analyses.find(com.fuquan.audit.contract.application.analysis.ContractAnalysisCase.identity(original.actorId(),original.projectId()))
+                .filter(c->"USER_CANCELLED".equals(c.reasonCode())).isPresent()) {
+            jobs.cancelProject(original.projectId(),clock.instant());return jobs.find(id).orElseThrow();
+        }
         String token=UUID.randomUUID().toString();
         if(!jobs.claim(id,token,clock.instant(),clock.instant().plusSeconds(900)))return original;
         ProjectFileJob job=jobs.find(id).orElseThrow();
@@ -64,6 +78,7 @@ public class ProjectFileProcessingService {
                 return close(job,token,"UNKNOWN","PARSE_PUBLICATION_REQUIRES_RECONCILIATION",actor,metadata);
             }
             var outcome=ingestion.processQueued(file);
+            if(Thread.currentThread().isInterrupted())return jobs.find(id).orElseThrow();
             completionAttempted=true;
             boolean automatic = ingestion.automaticProgressionEnabled();
             if(automatic) transactions.completeProcessing(job,token,outcome,jobs,actor,metadata,true);
@@ -97,7 +112,7 @@ public class ProjectFileProcessingService {
         }
     }
     public ProjectFileJob retry(UUID projectId,UUID fileId,CurrentUser actor,ProjectRequestMetadata metadata) {
-        if(Collections.disjoint(actor.roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL"))) {
+        if(Collections.disjoint(actor.roles(),Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER"))) {
             throw new BusinessException(BusinessErrorCode.FORBIDDEN);
         }
         return transactions.retryProcessing(projectId,fileId,jobs,actor,metadata);

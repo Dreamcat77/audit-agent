@@ -171,8 +171,8 @@ class BudgetMaterialBackgroundIntegrationTest {
         mvc.perform(multipart("/api/v1/budget/material-uploads").file(f).with(authentication(u)).with(csrf())).andExpect(status().isBadRequest());
     }
     @org.junit.jupiter.params.ParameterizedTest
-    @org.junit.jupiter.params.provider.CsvSource({"30000,20000,50000,BELOW_1M,INFO", "600000,400000,1000000,AT_OR_ABOVE_1M,WARNING", "600000,400000.01,1000000.01,AT_OR_ABOVE_1M,WARNING"})
-    void selectedAmountsPersistTheNewBandAndEvidenceSnapshot(String firstAmount,String secondAmount,String total,String band,String level) throws Exception {
+    @org.junit.jupiter.params.provider.CsvSource({"30000,20000,50000", "600000,400000,1000000", "600000,400000.01,1000000.01"})
+    void selectedAmountsPersistWithoutFixedBandAndReopenTheEvidenceSnapshot(String firstAmount,String secondAmount,String total) throws Exception {
         var u=user(UUID.randomUUID().toString());var ids=new ArrayList<UUID>();
         for(int i=0;i<2;i++) {
             byte[] bytes;
@@ -189,9 +189,9 @@ class BudgetMaterialBackgroundIntegrationTest {
                 .content(json.writeValueAsString(body)).with(authentication(auth(u))).with(csrf()))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.data.splitAnalysis.countedItems").value(2))
                 .andExpect(jsonPath("$.data.splitAnalysis.totalAmount").value(org.hamcrest.Matchers.comparesEqualTo(new java.math.BigDecimal(total)),java.math.BigDecimal.class))
-                .andExpect(jsonPath("$.data.splitAnalysis.bandCode").value(band))
+                .andExpect(jsonPath("$.data.splitAnalysis.bandCode").isEmpty())
                 .andExpect(jsonPath("$.data.splitAnalysis.version").value("SELECTED_SUM_V3"))
-                .andExpect(jsonPath("$.data.splitAnalysis.riskLevel").value(level))
+                .andExpect(jsonPath("$.data.splitAnalysis.riskLevel").value("INFO"))
                 .andExpect(jsonPath("$.data.splitAnalysis.complete").value(true))
                 .andReturn().getResponse().getContentAsString();
         var saved=mvc.perform(get("/api/v1/budget/material-risk/analyses/{id}",id).with(authentication(auth(u))))
@@ -275,8 +275,8 @@ class BudgetMaterialBackgroundIntegrationTest {
     }
     @Test void explicitBatchWaitsForAllMembersAndPersistsCrossFileResultsWithoutMappings() throws Exception {
         var u=user(UUID.randomUUID().toString());var batchId=UUID.randomUUID();var a=UUID.randomUUID();var b=UUID.randomUUID();
-        byte[] declaration="项目编号：SYNTHETIC-P；科目名称：测试设备；申报金额：31200元".getBytes(java.nio.charset.StandardCharsets.UTF_8);
-        byte[] approval="项目编号：SYNTHETIC-P；科目名称：测试设备；批复参考金额：32760元".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        byte[] declaration="项目名称：市政道路改造项目；项目编号：SYNTHETIC-P；科目名称：测试设备；申报金额：31200元".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        byte[] approval="项目名称：市政道路改造项目；项目编号：SYNTHETIC-P；科目名称：测试设备；批复参考金额：32760元".getBytes(java.nio.charset.StandardCharsets.UTF_8);
         var members=List.of(new BudgetMaterialBatch.Member(a,"回归批次_申报材料_ONLY.txt",declaration.length),new BudgetMaterialBatch.Member(b,"回归批次_批复材料_ONLY.txt",approval.length));
         batches.register(batchId,members,null,null,u);
         assertThat(batches.register(batchId,members,null,null,u).id()).isEqualTo(batchId);
@@ -296,7 +296,7 @@ class BudgetMaterialBackgroundIntegrationTest {
             .andExpect(status().isOk()).andExpect(jsonPath("$.data.batchId").value(batchId.toString()))
             .andExpect(jsonPath("$.data.files.length()").value(2))
             .andExpect(jsonPath("$.data.files[0].taskId").isNotEmpty());
-        mvc.perform(get("/api/v1/budget/material-uploads/batches").param("fileName","申报材料_ONLY")
+        mvc.perform(get("/api/v1/budget/material-uploads/batches").param("projectName","市政道路改造")
                 .with(authentication(auth(u))))
             .andExpect(status().isOk()).andExpect(jsonPath("$.data.total").value(1))
             .andExpect(jsonPath("$.data.records.length()").value(1))
@@ -304,7 +304,7 @@ class BudgetMaterialBackgroundIntegrationTest {
             .andExpect(jsonPath("$.data.records[0].fileCount").value(2))
             .andExpect(jsonPath("$.data.records[0].previewFileNames.length()").value(2))
             .andExpect(jsonPath("$.data.records[0].status").value("REVIEWED"));
-        mvc.perform(get("/api/v1/budget/material-uploads/batches").param("fileName","申报材料_ONLY").with(authentication(auth(user("other-history-owner")))))
+        mvc.perform(get("/api/v1/budget/material-uploads/batches").param("projectName","市政道路改造").with(authentication(auth(user("other-history-owner")))))
             .andExpect(status().isOk()).andExpect(jsonPath("$.data.records").isEmpty());
         UUID legacyId=UUID.randomUUID();Instant legacyTime=Instant.now().plusSeconds(1);
         tasks.save(new BudgetReviewTask(legacyId,"合成旧版单文件.xlsx","application/octet-stream",16,null,
@@ -316,17 +316,14 @@ class BudgetMaterialBackgroundIntegrationTest {
                 "REVIEWED",1,null,"2026","PROCUREMENT",legacyTime,legacyTime));
         jobs.insert(new BudgetMaterialJob(otherLegacyId,"other-history-owner",UUID.randomUUID().toString(),"0".repeat(64),
                 "PARSED",null,null,legacyTime));
-        mvc.perform(get("/api/v1/budget/material-uploads/batches").param("size","10").param("fileName","合成旧版单文件")
+        mvc.perform(get("/api/v1/budget/material-uploads/batches").param("size","10").param("projectName","合成旧版单文件")
                 .with(authentication(auth(u))))
-            .andExpect(status().isOk()).andExpect(jsonPath("$.data.total").value(1))
-            .andExpect(jsonPath("$.data.records.length()").value(1))
-            .andExpect(jsonPath("$.data.records[0].taskId").value(legacyId.toString()))
-            .andExpect(jsonPath("$.data.records[0].fileCount").value(1))
-            .andExpect(jsonPath("$.data.records[0].previewFileNames[0]").value("合成旧版单文件.xlsx"));
-        mvc.perform(get("/api/v1/budget/material-uploads/batches").param("size","10").param("fileName","合成旧版单文件")
+            .andExpect(status().isOk()).andExpect(jsonPath("$.data.total").value(0))
+            .andExpect(jsonPath("$.data.records").isEmpty());
+        mvc.perform(get("/api/v1/budget/material-uploads/batches").param("size","10").param("projectName","合成旧版单文件")
                 .with(authentication(auth(user("other-history-owner")))))
-            .andExpect(status().isOk()).andExpect(jsonPath("$.data.total").value(1))
-            .andExpect(jsonPath("$.data.records[0].taskId").value(otherLegacyId.toString()));
+            .andExpect(status().isOk()).andExpect(jsonPath("$.data.total").value(0))
+            .andExpect(jsonPath("$.data.records").isEmpty());
         mvc.perform(get("/api/v1/budget/material-uploads/batches/{id}",one.id()).with(authentication(auth(user("other")))))
             .andExpect(status().isNotFound());
         assertThat(review.findItems(one.id()).get(0).approvalAmount()).isEqualByComparingTo("32760");

@@ -9,7 +9,9 @@ import java.util.Objects;
  * @param text 该页识别文本
  * @param confidence 0 到 1 之间的页级置信度
  */
-public record OcrPage(int pageNumber, String text, double confidence) {
+public record OcrPage(int pageNumber, String text, double confidence,
+        java.util.List<com.fuquan.audit.common.material.visual.VisualIndex.Region> regions) {
+    public OcrPage(int pageNumber,String text,double confidence){this(pageNumber,text,confidence,java.util.List.of());}
 
     /**
      * 校验页码、文本和置信度边界。
@@ -22,6 +24,8 @@ public record OcrPage(int pageNumber, String text, double confidence) {
             throw new IllegalArgumentException("pageNumber must be positive");
         }
         Objects.requireNonNull(text, "text must not be null");
+        regions=regions==null?java.util.List.of():java.util.List.copyOf(regions);
+        if(regions.size()>10000||regions.stream().anyMatch(r->r.end()>text.length()))throw new IllegalArgumentException("invalid OCR regions");
         if (!Double.isFinite(confidence) || confidence < 0.0 || confidence > 1.0) {
             throw new IllegalArgumentException("confidence must be between 0 and 1");
         }

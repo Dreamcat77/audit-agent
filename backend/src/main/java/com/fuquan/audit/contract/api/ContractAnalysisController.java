@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/contract-analysis-cases")
 @ConditionalOnProperty(name="audit.contract.analysis.enabled",havingValue="true")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class ContractAnalysisController {
     private final ContractAnalysisService service;private final AuthContext auth;private final ContractAnalysisReport reports;private final ContractAnalysisIntake intake;private final ProjectApplicationService projects;
     public ContractAnalysisController(ContractAnalysisService service,AuthContext auth,ContractAnalysisReport reports,ContractAnalysisIntake intake,ProjectApplicationService projects){this.service=service;this.auth=auth;this.reports=reports;this.intake=intake;this.projects=projects;}
@@ -29,6 +29,8 @@ public class ContractAnalysisController {
     public ApiResponse<ContractAnalysisCase> forProject(@PathVariable UUID projectId){return ApiResponse.success(service.forProject(projectId,actor()));}
     @GetMapping("/{id}")
     public ApiResponse<ContractAnalysisCase> get(@PathVariable UUID id){return ApiResponse.success(service.owned(id,actor()));}
+    @PostMapping("/{id}/cancel")
+    public ApiResponse<ContractAnalysisCase> cancel(@PathVariable UUID id){return ApiResponse.success(service.cancel(id,actor()));}
     @GetMapping
     public ApiResponse<List<ContractAnalysisReport.Summary>> list(@RequestParam(defaultValue="1") int page,
             @RequestParam(defaultValue="20") int size,

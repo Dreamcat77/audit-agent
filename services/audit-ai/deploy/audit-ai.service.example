@@ -10,6 +10,7 @@ Group=admin
 WorkingDirectory=/home/admin/audit_ai_runtime/current/services/audit-ai
 EnvironmentFile=/home/admin/audit_ai_runtime/audit-ai.env
 Environment=PYTHONUNBUFFERED=1
+Environment=AUDIT_CLIENT_IDENTITY_REQUIRED=true
 ExecStart=/opt/python/venvs/audit-ai/bin/python -m uvicorn audit_ai.main:app --app-dir /home/admin/audit_ai_runtime/current/services/audit-ai/src --host 127.0.0.1 --port 8001 --workers 1
 Restart=on-failure
 RestartSec=5s

@@ -9,14 +9,24 @@ import java.util.*;
 /** An upload workspace, independent of formal Project, ReviewSession and AuditTask. */
 public record AuditCase(UUID id, String owner, UUID operationKey, String fingerprint, String status,
         long version, String leaseToken, Instant leaseUntil, int attempts, Instant createdAt,
-        List<Document> documents, Report report) {
+        List<Document> documents, Report report, String reasonCode) {
     public AuditCase { documents=List.copyOf(documents); }
+    public AuditCase(UUID id,String owner,UUID operationKey,String fingerprint,String status,long version,
+            String leaseToken,Instant leaseUntil,int attempts,Instant createdAt,List<Document> documents,Report report) {
+        this(id,owner,operationKey,fingerprint,status,version,leaseToken,leaseUntil,attempts,createdAt,documents,report,null);
+    }
     public AuditCase update(String state, List<Document> files, Report result) {
-        return new AuditCase(id,owner,operationKey,fingerprint,state,version+1,leaseToken,leaseUntil,attempts,createdAt,files,result);
+        return new AuditCase(id,owner,operationKey,fingerprint,state,version+1,leaseToken,leaseUntil,attempts,createdAt,files,result,reasonCode);
     }
     public AuditCase claim(String token, Instant until) {
-        return new AuditCase(id,owner,operationKey,fingerprint,"RUNNING",version+1,token,until,attempts+1,createdAt,documents,report);
+        return new AuditCase(id,owner,operationKey,fingerprint,"RUNNING",version+1,token,until,attempts+1,createdAt,documents,report,reasonCode);
     }
+    public AuditCase cancel() {
+        var cleared=documents.stream().map(d->new Document(d.id(),d.name(),d.size(),d.sha256(),d.storageKey(),
+            "FAILED",List.of(),List.of(),null,"USER_CANCELLED",0)).toList();
+        return new AuditCase(id,owner,operationKey,fingerprint,"FAILED",version+1,leaseToken,leaseUntil,attempts,createdAt,cleared,null,"USER_CANCELLED");
+    }
+    public boolean cancelled() { return "USER_CANCELLED".equals(reasonCode); }
     public record Document(UUID id,String name,long size,String sha256,String storageKey,String status,
             List<MaterialFieldAiPort.Segment> segments,List<Fact> facts,String parseMethod,String errorCode,int calls,
             com.fuquan.audit.common.material.application.port.DocumentTextPort.PdfCheckpoint readCheckpoint) {
@@ -42,10 +52,18 @@ public record AuditCase(UUID id, String owner, UUID operationKey, String fingerp
         }
     }
     public record Fact(String row,String type,String value,String dataType,String locator,String excerpt,
-            String verification,String model,String extractionVersion) {}
+            String verification,String model,String extractionVersion,
+            @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) String subjectScope,
+            @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) String amountScope) {
+        public Fact(String row,String type,String value,String dataType,String locator,String excerpt,String verification,String model,String extractionVersion){
+            this(row,type,value,dataType,locator,excerpt,verification,model,extractionVersion,null,null);
+        }
+    }
     public record Line(String item,BigDecimal quantity,BigDecimal unitPrice,BigDecimal amount,String locator) {}
-    public record Offer(String supplier,BigDecimal amount,UUID documentId,List<Line> lines,String lineValidation) {
+    public record Offer(String supplier,BigDecimal amount,UUID documentId,List<Line> lines,String lineValidation,
+            @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) String sourceRow) {
         public Offer {lines=List.copyOf(lines);}
+        public Offer(String supplier,BigDecimal amount,UUID documentId,List<Line> lines,String lineValidation){this(supplier,amount,documentId,lines,lineValidation,null);}
     }
     @com.fasterxml.jackson.annotation.JsonIgnoreProperties(value={"quoteComparisons","ceilingComparisons"},allowGetters=true)
     public record Report(String quoteStatus,BigDecimal budget,BigDecimal awardAmount,List<Offer> offers,
@@ -75,16 +93,20 @@ public record AuditCase(UUID id, String owner, UUID operationKey, String fingerp
             return offers.stream().map(Offer::supplier).filter(name->review.checks().stream()
                     .anyMatch(c->c.status().equals("BLOCKED")&&c.explanation().startsWith(name+"命中"))).distinct().toList();
         }
-        public record QuoteComparison(UUID documentId,String status,BigDecimal difference) {}
+        public record QuoteComparison(UUID documentId,String status,BigDecimal difference,
+                @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) String sourceRow,
+                @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) String supplier) {
+            public QuoteComparison(UUID documentId,String status,BigDecimal difference){this(documentId,status,difference,null,null);}
+        }
         @com.fasterxml.jackson.annotation.JsonProperty("quoteComparisons")
         public List<QuoteComparison> quoteComparisons() {
             return offers.stream().map(o->new QuoteComparison(o.documentId(),budget==null?"NOT_EVALUATED":o.amount().compareTo(budget)>0?"OVER_BUDGET":"WITHIN_BUDGET",
-                    budget==null?null:o.amount().subtract(budget))).toList();
+                    budget==null?null:o.amount().subtract(budget),o.sourceRow(),o.sourceRow()==null?null:o.supplier())).toList();
         }
         @com.fasterxml.jackson.annotation.JsonProperty("ceilingComparisons")
         public List<QuoteComparison> ceilingComparisons() {
             return offers.stream().map(o->new QuoteComparison(o.documentId(),ceilingAmount==null?"NOT_EVALUATED":o.amount().compareTo(ceilingAmount)>0?"OVER_CEILING":"WITHIN_CEILING",
-                    ceilingAmount==null?null:o.amount().subtract(ceilingAmount))).toList();
+                    ceilingAmount==null?null:o.amount().subtract(ceilingAmount),o.sourceRow(),o.sourceRow()==null?null:o.supplier())).toList();
         }
     }
     public record SourceEvidence(String id,UUID documentId,String fileName,String sha256,String locator,String excerpt) {}

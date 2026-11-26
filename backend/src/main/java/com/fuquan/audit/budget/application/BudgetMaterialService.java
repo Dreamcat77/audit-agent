@@ -14,6 +14,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BudgetMaterialService {
+    private com.fuquan.audit.common.material.application.port.MaterialExtractionLedger extractionLedger;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    public void setExtractionLedger(com.fuquan.audit.common.material.application.port.MaterialExtractionLedger value){extractionLedger=value;}
+    private com.fuquan.audit.common.application.TaskCancellationRegistry cancellationRegistry;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    public void setCancellationRegistry(com.fuquan.audit.common.application.TaskCancellationRegistry value){this.cancellationRegistry=value;}
     private final BudgetMaterialJobRepository jobs;
     private final BudgetReviewTaskRepository tasks;
     private final BudgetMaterialStoragePort storage;
@@ -52,9 +58,16 @@ public class BudgetMaterialService {
         }
         try {tx.startInBatch(job,task,batchId,user);return job;}
         catch(DuplicateKeyException race) {
+            storage.delete(reference);
             var replay=jobs.operation(user.userId(),key).orElseThrow();
             if(!batchId.equals(batches.sourceBatch(replay.id())))throw new BusinessException(BusinessErrorCode.CONFLICT,"原上传操作属于其他材料批次");
             return validateReplay(replay,name,size,year,department,hash);
+        }
+        catch(IllegalStateException closedBatch) {
+            // requireAcceptingUploads rejects before any write; do not retain the upload
+            // when cancellation wins while its bytes are still arriving.
+            if("budget batch closed".equals(closedBatch.getMessage()))storage.delete(reference);
+            throw closedBatch;
         }
     }
     private BudgetMaterialJob validateReplay(BudgetMaterialJob job,String name,long size,String year,String department,String hash) {
@@ -65,9 +78,25 @@ public class BudgetMaterialService {
     }
     public Optional<BudgetMaterialJob> operation(CurrentUser user,String key) {return jobs.operation(user.userId(),key);}
     public BudgetMaterialJob owned(UUID id,CurrentUser user) {
-        return jobs.find(id).filter(j->j.actorId().equals(user.userId())).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));
+        return jobs.find(id).filter(j->user.roles().contains("SYSTEM_ADMIN")||j.actorId().equals(user.userId())).orElseThrow(()->new BusinessException(BusinessErrorCode.NOT_FOUND));
+    }
+    public BudgetMaterialJob cancel(UUID id,CurrentUser user) {
+        var job=owned(id,user);
+        UUID batchId=batches.sourceBatch(id);
+        if(batchId!=null){batches.cancel(batchId,user);cleanupTimedOut();return jobs.find(id).orElseThrow();}
+        if(job.status().equals("FAILED")&&"USER_CANCELLED".equals(task(id).errorDetail()))return job;
+        if(!Set.of("QUEUED","PROCESSING").contains(job.status()))
+            throw new BusinessException(BusinessErrorCode.CONFLICT,"当前任务已结束，无法取消");
+        if(!tx.cancel(id,user))throw new BusinessException(BusinessErrorCode.CONFLICT,"任务状态已变化，请刷新后重试");
+        if(cancellationRegistry!=null)cancellationRegistry.interrupt(id);
+        return jobs.find(id).orElseThrow();
     }
     public BudgetReviewTask task(UUID id) {return tasks.findById(id).orElseThrow();}
+    public InputStream openOriginal(UUID id,CurrentUser actor)throws IOException {
+        owned(id,actor);var task=task(id);
+        if(task.tempFilePath()==null)throw new BusinessException(BusinessErrorCode.NOT_FOUND);
+        return storage.open(task.tempFilePath());
+    }
     public void process(UUID id,CurrentUser user,java.util.function.Consumer<String> claimed) {
         String token=UUID.randomUUID().toString();Instant now=Instant.now();
         if(!tx.claim(id,token,now,now.plusSeconds(1200))) return;
@@ -124,8 +153,16 @@ public class BudgetMaterialService {
     public void cleanupTimedOut(){for(var task:tasks.timedOutForCleanup(50))cleanup(task);}
     private void cleanup(BudgetReviewTask task) {
         if(!task.status().equals("FAILED")||task.parsedLineCount()!=0||task.tempFilePath()==null||
-            !Set.of("MATERIAL_CALL_TIMEOUT","MATERIAL_TIME_LIMIT","MATERIAL_QUEUE_TIMEOUT").contains(Objects.toString(task.errorDetail(),"")))return;
-        try {storage.delete(task.tempFilePath());tx.cleaned(task.id(),task.tempFilePath());}
+            !Set.of("MATERIAL_CALL_TIMEOUT","MATERIAL_TIME_LIMIT","MATERIAL_QUEUE_TIMEOUT","USER_CANCELLED").contains(Objects.toString(task.errorDetail(),"")))return;
+        if(cancellationRegistry!=null&&cancellationRegistry.isRunning(task.id()))return;
+        UUID batchId=batches.sourceBatch(task.id());
+        if(batchId!=null&&cancellationRegistry!=null&&cancellationRegistry.isRunning(batchId))return;
+        try {
+            if(extractionLedger!=null&&"USER_CANCELLED".equals(task.errorDetail())){
+                extractionLedger.cancel(UUID.nameUUIDFromBytes(("material-extraction/BUDGET/"+task.id()).getBytes(java.nio.charset.StandardCharsets.UTF_8)),Instant.now());
+                if(batchId!=null)extractionLedger.cancel(UUID.nameUUIDFromBytes((BudgetBatchReviewService.VERSION+"/"+batchId).getBytes(java.nio.charset.StandardCharsets.UTF_8)),Instant.now());
+            }
+            storage.delete(task.tempFilePath());tx.cleaned(task.id(),task.tempFilePath());}
         catch(IOException|RuntimeException error){try(var span=PipelineDiagnostics.start("BUDGET","TIMEOUT_CLEANUP",task.id(),Map.of())){span.fail(error);}}
     }
     public void processPendingBatch(){batches.processNext();}

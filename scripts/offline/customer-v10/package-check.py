@@ -6,10 +6,11 @@ import sys
 
 root=Path(sys.argv[1]).resolve(); expected={}
 for line in (root/'manifest.sha256').read_text(encoding='utf-8').splitlines():
-    match=re.fullmatch(r'([a-f0-9]{64})  ([A-Za-z0-9_.$/-]+)',line)
-    if not match:raise SystemExit('MANIFEST_FORMAT')
-    digest,name=match.groups();parts=PurePosixPath(name)
-    if parts.is_absolute() or '..' in parts.parts or name in expected:raise SystemExit('MANIFEST_PATH')
+    fields=line.split('  ',1)
+    if len(fields)!=2 or not re.fullmatch(r'[a-f0-9]{64}',fields[0]) or not fields[1]:
+        raise SystemExit('MANIFEST_FORMAT')
+    digest,name=fields;parts=PurePosixPath(name)
+    if parts.is_absolute() or '\\' in name or '\n' in name or '\r' in name or '..' in parts.parts or name in expected:raise SystemExit('MANIFEST_PATH')
     if parts.name in {'.env','backend.env','audit-ai.env','id_rsa','id_ed25519'} or parts.suffix.lower() in {'.pem','.key'}:raise SystemExit('PRIVATE_FILE_IN_PACKAGE')
     path=root/name
     if not path.is_file() or path.is_symlink() or hashlib.sha256(path.read_bytes()).hexdigest()!=digest:raise SystemExit('MANIFEST_HASH')

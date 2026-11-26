@@ -32,6 +32,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectFileIngestionService {
+    private com.fuquan.audit.common.application.TaskCancellationRegistry cancellationRegistry;
+    @org.springframework.beans.factory.annotation.Autowired
+    public void setCancellationRegistry(com.fuquan.audit.common.application.TaskCancellationRegistry value){cancellationRegistry=value;}
     private final ProjectApplicationService projects;
     private final FileStoragePort storage;
     private final ProjectFilePolicy policy;
@@ -134,6 +137,13 @@ public class ProjectFileIngestionService {
     }
 
     private ProjectFile upload(ProjectFileUploadCommand command,
+            com.fuquan.audit.contract.application.project.port.ProjectFileJobRepository jobs) {
+        var id=com.fuquan.audit.contract.application.analysis.ContractAnalysisCase.identity(actor().userId(),command.projectId());
+        try(com.fuquan.audit.common.application.TaskCancellationRegistry.Registration ignored=cancellationRegistry==null?()->{}:cancellationRegistry.register(id)){
+            return uploadRegistered(command,jobs);
+        }
+    }
+    private ProjectFile uploadRegistered(ProjectFileUploadCommand command,
             com.fuquan.audit.contract.application.project.port.ProjectFileJobRepository jobs) {
         CurrentUser actor = actor();
         projects.get(command.projectId());
@@ -325,7 +335,8 @@ public class ProjectFileIngestionService {
 
     private ParseOutcome parse(ProjectFile file) {
         Optional<ProjectDocumentParser> parser = parsers.stream().filter(value -> value.supports(file)).findFirst();
-        if (parser.isEmpty() && !isOcrImage(file)) {
+        if (parser.isEmpty() && !isOcrImage(file)
+                && !(sharedParser!=null&&com.fuquan.audit.common.material.application.OfficeMaterialTypes.supports(file.originalFilename()))) {
             return new ParseOutcome(file.complete(ProjectFileParseStatus.UNSUPPORTED, null,
                     "PARSER_UNSUPPORTED", clock.instant()), null, List.of(), null);
         }

@@ -11,4 +11,5 @@ public interface AuditCaseRepository {
     void insert(AuditCase value);
     /** Compare version and previous fencing token. False means the caller lost ownership. */
     boolean replace(AuditCase previous,AuditCase next);
+    default List<UUID> cancelledForCleanup(int limit) { return List.of(); }
 }

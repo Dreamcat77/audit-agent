@@ -161,6 +161,9 @@ test("delivery workbench loads direct F02 facts and renders their business ident
   assert.match(markup, /采购审查/);
   assert.match(markup, /合同审核/);
   assert.match(markup, /合同审核数据概览/);
+  assert.match(markup, /辅助工具/);
+  assert.match(markup, /黑名单/);
+  assert.match(markup, /风险预估/);
   assert.match(markup, />7</);
   assert.doesNotMatch(markup, /办公设备采购合同|办公设备更新项目|设备维护服务合同|设备维护项目/);
 });
@@ -194,6 +197,43 @@ test("delivery workbench renders explicit empty and error states", async () => {
   assert.match(failed, /重新读取/);
 });
 
+test("shared workbench shows only each role's permitted module links and retains procurement blacklist", async () => {
+  const { render } = await loadWorkbenchHarness();
+  const view = workbenchPresentation(null, [], null);
+  const renderRole = (roles: string[]) => render({
+    view,
+    loading: false,
+    error: null,
+    roles,
+    onOpenContract() {},
+    onOpenProcurement() {},
+    onOpenBudget() {},
+    onOpenBlacklist() {},
+    onOpenRisk() {},
+  });
+
+  const budget = renderRole(["BUDGET_USER"]);
+  assert.match(budget, /预算审查/);
+  assert.match(budget, /黑名单/);
+  assert.match(budget, /采购审查/); assert.match(budget, /合同审核/); assert.match(budget, /风险预估/);
+
+  const procurement = renderRole(["PROCUREMENT_USER"]);
+  assert.match(procurement, /采购审查/);
+  assert.match(procurement, /黑名单/);
+  assert.match(procurement, /预算审查/); assert.match(procurement, /合同审核/); assert.match(procurement, /风险预估/);
+
+  const contract = renderRole(["CONTRACT_USER"]);
+  assert.match(contract, /合同审核/);
+  assert.match(contract, /黑名单/);
+  assert.match(contract, /合同审核数据概览/);
+  assert.match(contract, /预算审查/); assert.match(contract, /采购审查/); assert.match(contract, /风险预估/);
+
+  const admin = renderRole(["SYSTEM_ADMIN"]);
+  for (const label of ["预算审查", "采购审查", "合同审核", "黑名单", "风险预估"]) {
+    assert.match(admin, new RegExp(label));
+  }
+});
+
 test("workbench scopes selections and empty claims when global pending and review totals are positive", async () => {
   const { render } = await loadWorkbenchHarness();
   const view = workbenchPresentation(
@@ -204,5 +244,8 @@ test("workbench scopes selections and empty claims when global pending and revie
   });
   assert.deepEqual(view.stats.map((item) => item.value), [30, 8, 22, 4]);
   assert.match(markup, /合同审核数据概览/);
+  assert.match(markup, /辅助工具/);
+  assert.match(markup, /黑名单/);
+  assert.match(markup, /风险预估/);
   assert.doesNotMatch(markup, /已完成的无风险合同|待处理任务|最近动态/);
 });

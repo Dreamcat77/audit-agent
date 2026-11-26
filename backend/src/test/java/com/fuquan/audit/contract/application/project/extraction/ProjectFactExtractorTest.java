@@ -111,6 +111,46 @@ class ProjectFactExtractorTest {
     }
 
     @Test
+    void extractsOcrFriendlyUppercaseAmountLabelAndShortSalesContractHeading() {
+        ProjectFile source = source(ProjectFileCategory.CONTRACT_BODY, "扫描件.pdf");
+        ParsedProjectDocument parsed = paragraphs(
+                "销售合同",
+                "合同金额（大写）：人民币壹拾贰万元整",
+                "合同金额（小写）：120000元");
+
+        List<ExtractionResult> facts = new ProjectFactExtractor(new ExtractionKeyFactory(), fixedClock())
+                .extract(source, parsed);
+
+        assertThat(facts).filteredOn(fact -> fact.factType().equals("CONTRACT_NAME"))
+                .extracting(ExtractionResult::normalizedValue).contains("销售合同");
+        assertThat(facts).filteredOn(fact -> fact.factType().equals("AMOUNT_UPPERCASE"))
+                .extracting(ExtractionResult::normalizedValue).contains("人民币壹拾贰万元整");
+    }
+
+    @Test
+    void findsAnIndependentContractTitleInsideTheFirstScannedPageAndRecognizesUppercaseLabelVariants() {
+        ProjectFile source = source(ProjectFileCategory.CONTRACT_BODY, "扫描合同.pdf");
+        ParsedProjectDocument parsed = new ParsedProjectDocument(List.of(
+                new ParsedProjectDocument.Segment("ocr/page:1",
+                        "上海市公安局\n销售合同\n合同编号：SCAN-001\n金额（大写）：人民币壹拾贰万元整", 1, null),
+                new ParsedProjectDocument.Segment("ocr/page:2",
+                        "合同总价（大 写）：人民币壹拾贰万元整", 2, null)));
+
+        List<ExtractionResult> facts = new ProjectFactExtractor(new ExtractionKeyFactory(), fixedClock())
+                .extract(source, parsed);
+
+        assertThat(facts).filteredOn(fact -> fact.factType().equals("CONTRACT_NAME"))
+                .singleElement().satisfies(fact -> {
+                    assertThat(fact.normalizedValue()).isEqualTo("销售合同");
+                    assertThat(fact.sourceText()).isEqualTo("销售合同");
+                    assertThat(fact.pageNumber()).isEqualTo(1);
+                });
+        assertThat(facts).filteredOn(fact -> fact.factType().equals("AMOUNT_UPPERCASE"))
+                .extracting(ExtractionResult::normalizedValue)
+                .containsExactly("人民币壹拾贰万元整", "人民币壹拾贰万元整");
+    }
+
+    @Test
     void percentagesThatReferToContractAmountsDoNotBecomeNumericContractFacts() {
         ProjectFile source = source(ProjectFileCategory.CONTRACT_BODY, "contract.docx");
         ParsedProjectDocument parsed = paragraphs(

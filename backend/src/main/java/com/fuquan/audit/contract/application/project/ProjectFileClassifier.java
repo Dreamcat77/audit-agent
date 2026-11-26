@@ -40,6 +40,7 @@ public final class ProjectFileClassifier {
     }
 
     private static ProjectFileCategory classifyFilename(String filename) {
+        if(isAuxiliary(filename))return ProjectFileCategory.SUPPLEMENT;
         if (contains(filename, "中标通知书", "成交通知书", "中标", "成交", "award", "winning")) {
             return ProjectFileCategory.AWARD_NOTICE;
         }
@@ -57,6 +58,9 @@ public final class ProjectFileClassifier {
         }
         return ProjectFileCategory.UNKNOWN;
     }
+    public static boolean isAuxiliary(String name){return contains(name,"廉洁协议","廉政协议","保密协议","廉洁、保密","定密公开审批","督申总队回复单","领导签字工作单")
+            ||!name.matches(".*(?:招标|投标|响应|模板|历史|业绩|测算|预算).*")
+              &&name.matches("(?i).*(?:合同价款|合同价格|合同金额|合同标的)(?:明细表?|清单)(?:[（(][^）)]*[）)])?\\.(?:xlsx?|docx?|pdf)$");}
 
     private static void addIf(EnumSet<ProjectFileCategory> matches, String value,
             ProjectFileCategory category, String... tokens) {

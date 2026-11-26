@@ -93,6 +93,37 @@ public class ProjectDocumentParserTest {
     }
 
     @Test
+    void longPdfKeepsEveryPhysicalPageAndItsTextInOrder() throws Exception {
+        byte[] bytes;
+        try (PDDocument document = new PDDocument(); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            for (int pageNumber = 1; pageNumber <= 40; pageNumber++) {
+                PDPage page = new PDPage();
+                document.addPage(page);
+                try (PDPageContentStream content = new PDPageContentStream(document, page)) {
+                    content.beginText();
+                    content.setFont(PDType1Font.HELVETICA, 12);
+                    content.newLineAtOffset(72, 720);
+                    content.showText("ROUND-20261111-PAGE-" + pageNumber);
+                    content.endText();
+                }
+            }
+            document.save(output);
+            bytes = output.toByteArray();
+        }
+
+        ParsedProjectDocument parsed = new ProjectPdfTextParser().parse(
+                file("round-20261111-long.pdf", "application/pdf"), new ByteArrayInputStream(bytes));
+
+        assertThat(parsed.segments()).hasSize(40);
+        for (int pageNumber = 1; pageNumber <= 40; pageNumber++) {
+            ParsedProjectDocument.Segment segment = parsed.segments().get(pageNumber - 1);
+            assertThat(segment.sourceLocator()).isEqualTo("pdf/page:" + pageNumber);
+            assertThat(segment.pageNumber()).isEqualTo(pageNumber);
+            assertThat(segment.text()).contains("ROUND-20261111-PAGE-" + pageNumber);
+        }
+    }
+
+    @Test
     void docxTablePreservesTypedRowsAndCellLocatorsWithoutDuplicatingFlatText() throws Exception {
         ProjectIntakeProperties defaults = ProjectIntakeProperties.defaults();
         ProjectDocxTextParser parser = new ProjectDocxTextParser(

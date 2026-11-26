@@ -57,7 +57,7 @@ def test_low_confidence_page_is_rechecked_once_by_accuracy_model_without_splicin
     def recognize(image,page,predict,mapper,classifier):
         pages,scores=mapper(predict(image));calls.append(pages[0].text);return OcrPage(page,pages[0].text,pages[0].confidence),scores
     monkeypatch.setattr('audit_ai.ocr.orientation.recognize_page',recognize)
-    adapter=PaddleOcrAdapter(Settings(ocr_fast_model_dir=str(tmp_path)),module_loader=lambda _:SimpleNamespace(__version__='3.7.0',PaddleOCR=Pipeline))
+    adapter=PaddleOcrAdapter(Settings(ocr_fast_model_dir=str(tmp_path)),module_loader=lambda _:SimpleNamespace(__version__='3.7.0',PaddleOCR=Pipeline,DocImgOrientationClassification=lambda **_:None))
     first=adapter.extract(path);second=adapter.extract(path)
     assert first.text==second.text=='本项目预算为2200000人民币。'
     assert constructors==[True,False] and calls==['低质量猜测','本项目预算为2200000人民币。']*2
@@ -81,5 +81,5 @@ def test_accuracy_review_cannot_replace_a_legible_page_with_blank_or_fragment(tm
     def recognize(image,page,predict,mapper,classifier):
         pages,scores=mapper(predict(image));return OcrPage(page,pages[0].text,pages[0].confidence),scores
     monkeypatch.setattr('audit_ai.ocr.orientation.recognize_page',recognize)
-    adapter=PaddleOcrAdapter(Settings(ocr_fast_model_dir=str(tmp_path)),module_loader=lambda _:SimpleNamespace(__version__='3.7.0',PaddleOCR=Pipeline))
+    adapter=PaddleOcrAdapter(Settings(ocr_fast_model_dir=str(tmp_path)),module_loader=lambda _:SimpleNamespace(__version__='3.7.0',PaddleOCR=Pipeline,DocImgOrientationClassification=lambda **_:None))
     assert adapter.extract(path).text==original

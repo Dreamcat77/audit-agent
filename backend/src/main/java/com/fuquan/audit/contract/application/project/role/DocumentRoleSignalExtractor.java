@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 /** Pure deterministic signal extraction over one immutable canonical parse result. */
 public final class DocumentRoleSignalExtractor {
-    public static final String EXTRACTOR_VERSION = "document-role-signals-v2";
+    public static final String EXTRACTOR_VERSION = "document-role-signals-v3";
     private static final int TITLE_LIMIT = 240;
     private static final int FRONT_MATTER_LIMIT = 1_200;
     private static final int MAX_STRUCTURE_SPAN = 12_000;
@@ -29,6 +29,9 @@ public final class DocumentRoleSignalExtractor {
     private static final String LINE_SPACE = "[\\p{Zs}\\t]*";
     private static final List<TextRule> TEXT_RULES = textRules();
     private static final List<StructureRule> STRUCTURE_RULES = structureRules();
+    private static final Pattern LINES = Pattern.compile("(?m)^[^\\r\\n]+$");
+    private static final Pattern REFERENCE_TITLE = Pattern.compile("(?:[一二三四五六七八九十0-9]+[、.．]\\h*)?(?:供应商(?:履约)?业绩(?:说明|证明|表)|历史业绩|历史合同|过往业绩|参考合同|类似项目业绩)(?:[（(][^）)]{0,30}[）)])?");
+    private static final Pattern CURRENT_TITLE = Pattern.compile("(?:第[一二三四五六七八九十0-9]+(?:部分|章|节|篇)\\h*)?(?:(?:本次|当前|本项目)(?:项目|采购)?(?:合同正文|合同文本|合同|采购文件|投标文件)|投标函|开标一览表|报价一览表|采购需求)");
 
     public DocumentRoleSignalExtractor() {
     }
@@ -61,6 +64,16 @@ public final class DocumentRoleSignalExtractor {
                         rule.weight(), match));
             }
         }
+        // A historical document can contain genuine parties, prices and even a
+        // complete signed contract. Preserve its role as supporting material.
+        if(signals.isEmpty()) {
+            Matcher lines=LINES.matcher(text);
+            while(lines.find())if(REFERENCE_TITLE.matcher(lines.group().strip()).matches()) {
+                signals.add(signal(parseResult,text,DocumentRole.OTHER,SignalType.TITLE,"ROLE_REFERENCE_MATERIAL_TITLE",
+                        new BigDecimal("3.00"),new Match(lines.start(),lines.end(),normalize(lines.group()))));
+                break;
+            }
+        }
         signals.sort(Comparator.comparing(DocumentRoleSignal::signalType)
                 .thenComparing(DocumentRoleSignal::role)
                 .thenComparing(DocumentRoleSignal::ruleCode)
@@ -77,10 +90,9 @@ public final class DocumentRoleSignalExtractor {
         };
         Matcher matcher = rule.pattern().matcher(text);
         matcher.region(0, regionEnd);
-        if (!matcher.find()) {
-            return null;
-        }
-        return new Match(matcher.start(), matcher.end(), normalize(matcher.group()));
+        while(matcher.find())if(!referenceAt(text,matcher.start()))
+            return new Match(matcher.start(), matcher.end(), normalize(matcher.group()));
+        return null;
     }
 
     private static Match structureMatch(String text, StructureRule rule) {
@@ -89,9 +101,9 @@ public final class DocumentRoleSignalExtractor {
         List<String> values = new ArrayList<>();
         for (Pattern requiredTerm : rule.requiredTerms()) {
             Matcher matcher = requiredTerm.matcher(text);
-            if (!matcher.find()) {
-                return null;
-            }
+            boolean found=false;
+            while(matcher.find())if(!referenceAt(text,matcher.start())){found=true;break;}
+            if(!found)return null;
             start = Math.min(start, matcher.start());
             end = Math.max(end, matcher.end());
             values.add(normalize(matcher.group()));
@@ -102,6 +114,16 @@ public final class DocumentRoleSignalExtractor {
             return null;
         }
         return new Match(start, end, String.join(" | ", values));
+    }
+
+    private static boolean referenceAt(String text,int at) {
+        boolean reference=false;Matcher lines=LINES.matcher(text);
+        while(lines.find()&&lines.start()<=at) {
+            String line=lines.group().strip();
+            if(REFERENCE_TITLE.matcher(line).matches())reference=true;
+            else if(CURRENT_TITLE.matcher(line).matches())reference=false;
+        }
+        return reference;
     }
 
     private static DocumentRoleSignal signal(ProjectFileParseResult parseResult, String canonicalText,
@@ -154,6 +176,10 @@ public final class DocumentRoleSignalExtractor {
         rules.add(title(DocumentRole.BID_RESPONSE, "ROLE_BID_TITLE", "投标文件|响应文件"));
         rules.add(title(DocumentRole.SUPPLEMENT, "ROLE_SUPPLEMENT_TITLE",
                 "澄清与补充说明|补充协议书|补充协议|变更协议"));
+        // Only a standalone table cover is an appendix signal. The same caption
+        // inside a contract must not replace its actual title and party signals.
+        rules.add(new TextRule(DocumentRole.SUPPLEMENT,SignalType.TITLE,"ROLE_AMOUNT_APPENDIX_COVER",new BigDecimal("3.00"),
+                Pattern.compile("\\A\\s*(?:附件[一二三四五六七八九十0-9]*[：:]?\\h*)?合同(?:价款|价格|金额|标的)(?:明细表?|清单)(?:[（(][^）)\\r\\n]{0,100}[）)])?\\h*(?:\\|\\h*)*$",FLAGS),Scope.TITLE));
 
         rules.add(front(DocumentRole.CONTRACT_BODY, "ROLE_CONTRACT_PARTY_A", "甲方(?:（[^）\\r\\n]{1,20}）)?[：:]"));
         rules.add(front(DocumentRole.CONTRACT_BODY, "ROLE_CONTRACT_PARTY_B", "乙方(?:（[^）\\r\\n]{1,20}）)?[：:]"));

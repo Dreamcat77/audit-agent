@@ -26,10 +26,10 @@ export function ResultSection({title,number,children,actions,tone='default',labe
 
 /** Neutral means information/reference only, never a successful risk check. */
 export function ResultItem({title,children,tone='default',label}:{title:ReactNode;children:ReactNode;tone?:'default'|'attention'|'clear';label?:string}){
-  return <details className={`result-item result-item-${tone}`} open={tone==='attention'}>
-    <summary><span>{title}</span>{label&&<span className={`result-item-label${tone==='clear'?' result-state-clear':''}`}>{label}</span>}<ChevronDown size={15} aria-hidden="true"/></summary>
+  return <article className={`result-item result-item-${tone}`}>
+    <header className="result-item-heading"><div className="result-item-title">{title}</div>{label&&<span className={`result-item-label${tone==='clear'?' result-state-clear':''}`}>{label}</span>}</header>
     <div className="result-item-body">{children}</div>
-  </details>;
+  </article>;
 }
 
 export function ResultEmpty({children='材料不足，未生成'}:{children?:ReactNode}){

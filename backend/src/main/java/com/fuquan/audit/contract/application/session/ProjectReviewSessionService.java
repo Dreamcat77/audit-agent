@@ -22,7 +22,7 @@ public class ProjectReviewSessionService {
     public static final String BIND_SCOPE="PROJECT_REVIEW_SESSION_BIND";
     public static final String CONFIRM_SCOPE="PROJECT_REVIEW_SESSION_CONFIRM";
     private static final String RESOURCE="CONTRACT_REVIEW_SESSION";
-    private static final Set<String> ROLES=Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL");
+    private static final Set<String> ROLES=Set.of("SYSTEM_ADMIN","PROCUREMENT_MANAGER","AUDITOR","LEGAL","PROCUREMENT_USER","BUDGET_USER","CONTRACT_USER");
     public record View(ContractReviewSession session,List<ReviewSessionProjectFileBinding> bindings) {
         public View { bindings=List.copyOf(bindings); }
     }

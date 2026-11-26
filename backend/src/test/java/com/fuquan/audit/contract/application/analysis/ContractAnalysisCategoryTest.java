@@ -4,6 +4,15 @@ import static com.fuquan.audit.contract.application.analysis.ContractAnalysisCas
 import java.util.*;
 import org.junit.jupiter.api.Test;
 class ContractAnalysisCategoryTest {
+    @Test void oneBatchMetadataMergesAcrossFilesKeepingBothEvidenceAnchors(){
+        var docs=new ArrayList<ContractAnalysisReport.Document>();
+        for(String title:List.of("合同书.pdf","合同副本.pdf")){
+            String text="合同统一编号：HT-09";var s=ContractAnalysisEvidenceTest.source(text);
+            var e=new Evidence(s.fileId(),s.sha256(),s.parseResultId(),1,s.textSha256(),0,text.length(),text);
+            docs.add(new ContractAnalysisReport.Document(s.fileId(),title,"READY","CONTRACT","GENERAL",List.of(new Fact("CONTRACT_NO","HT-09","MODEL",List.of(e))),List.of(),List.of(),List.of(),text.length(),text.length(),true));
+        }
+        assertThat(ContractAnalysisCategories.project(docs,List.of(),List.of()).get(1).items()).singleElement().satisfies(i->{assertThat(i.title()).isEqualTo("合同编号");assertThat(i.evidence()).hasSize(2);});
+    }
     @Test void supportingDocumentTitleDoesNotBecomeAContractName(){
         String text="中标通知书";var source=ContractAnalysisEvidenceTest.source(text);
         var e=new Evidence(source.fileId(),source.sha256(),source.parseResultId(),1,source.textSha256(),0,text.length(),text);

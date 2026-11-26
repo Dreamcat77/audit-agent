@@ -29,16 +29,18 @@ import org.springframework.format.annotation.DateTimeFormat;
 @RestController
 @Validated
 @RequestMapping("/api/v1/contract-audit-tasks")
-@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL')")
+@PreAuthorize("hasAnyRole('SYSTEM_ADMIN','PROCUREMENT_MANAGER','AUDITOR','LEGAL','PROCUREMENT_USER','BUDGET_USER','CONTRACT_USER')")
 public class ContractAuditTaskController {
 
     private final ContractAuditTaskListService service;
     private final ContractAuditTaskNavigationService navigation;
+    private final com.fuquan.audit.security.application.AuthContext auth;
 
     public ContractAuditTaskController(ContractAuditTaskListService service,
-            ContractAuditTaskNavigationService navigation) {
+            ContractAuditTaskNavigationService navigation, com.fuquan.audit.security.application.AuthContext auth) {
         this.service = service;
         this.navigation = navigation;
+        this.auth = auth;
     }
 
     @GetMapping
@@ -55,14 +57,19 @@ public class ContractAuditTaskController {
             @RequestParam(defaultValue = "false") boolean includeHistory) {
         return ApiResponse.success(ContractAuditTaskPageResponse.from(service.list(
                 new ContractAuditTaskListQuery(page, size, keyword, createdFrom, createdTo, risk, status),
-                includeHistory),
+                includeHistory, actor()),
                 navigation));
     }
 
     @GetMapping("/summary")
     public ApiResponse<ContractAuditTaskSummary> summary(
             @RequestParam(defaultValue = "false") boolean includeHistory) {
-        return ApiResponse.success(service.summary(includeHistory));
+        return ApiResponse.success(service.summary(includeHistory, actor()));
+    }
+
+    private com.fuquan.audit.security.domain.CurrentUser actor() {
+        return auth.currentUser().orElseThrow(() -> new com.fuquan.audit.common.exception.BusinessException(
+                com.fuquan.audit.common.exception.BusinessErrorCode.UNAUTHENTICATED));
     }
 
     public record ContractAuditTaskPageResponse(

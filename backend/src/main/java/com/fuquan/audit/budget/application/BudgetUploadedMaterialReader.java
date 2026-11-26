@@ -3,6 +3,7 @@ package com.fuquan.audit.budget.application;
 import com.fuquan.audit.budget.application.port.BudgetMaterialStoragePort;
 import com.fuquan.audit.budget.domain.BudgetReviewTask;
 import com.fuquan.audit.common.material.application.port.DocumentTextPort;
+import com.fuquan.audit.common.material.application.port.MaterialParsePort;
 import com.fuquan.audit.common.material.application.port.MaterialFieldAiPort;
 import com.fuquan.audit.common.material.application.port.MaterialFieldAiPort.*;
 import java.io.*;
@@ -13,26 +14,42 @@ import org.springframework.stereotype.Component;
 /** Reads the entire bounded document. Explicit table labels need no model paraphrase. */
 @Component
 public class BudgetUploadedMaterialReader {
+    private com.fuquan.audit.common.material.visual.VisualIndexStore visualIndexes;
+    @org.springframework.beans.factory.annotation.Autowired public void setVisualIndexes(com.fuquan.audit.common.material.visual.VisualIndexStore value){this.visualIndexes=value;}
+    private com.fuquan.audit.common.material.visual.MaterialVisualEvidence visualQuality;
+    @org.springframework.beans.factory.annotation.Autowired public void setVisualQuality(com.fuquan.audit.common.material.visual.MaterialVisualEvidence value){this.visualQuality=value;}
     private final DocumentTextPort text;
     private final MaterialFieldAiPort ai;
     private final BudgetMaterialStoragePort storage;
     private static final Map<String,String> LABELS=Map.ofEntries(
-        Map.entry("科目编码","subjectCode"),Map.entry("科目代码","subjectCode"),Map.entry("科目名称","subjectName"),Map.entry("预算科目","subjectName"),
+        Map.entry("科目编码","subjectCode"),Map.entry("科目代码","subjectCode"),Map.entry("支出功能分类代码","functionalClassificationCode"),
+        Map.entry("政府采购编号","applicationNo"),Map.entry("采购编号","applicationNo"),
+        Map.entry("科目名称","subjectName"),Map.entry("预算科目","subjectName"),Map.entry("一级名称","subjectLevel1Name"),
+        Map.entry("二级名称","subjectLevel2Name"),Map.entry("三级名称","subjectLevel3Name"),Map.entry("支出功能分类名称","functionalClassificationName"),
         Map.entry("申报金额","declaredAmount"),Map.entry("申请金额","declaredAmount"),Map.entry("本次申报金额","declaredAmount"),Map.entry("本次申请金额","declaredAmount"),
         Map.entry("批复参考金额","approvalAmount"),Map.entry("批复参考额度","approvalAmount"),Map.entry("批复金额","approvalAmount"),Map.entry("批准金额","approvalAmount"),
+        Map.entry("第三方审定金额","thirdPartyReviewAmount"),Map.entry("下达金额","approvalAmount"),
         Map.entry("项目编号","projectCode"),Map.entry("项目编码","projectCode"),Map.entry("项目名称","projectName"),
-        Map.entry("预算年度","budgetYear"),Map.entry("年度","budgetYear"),Map.entry("申报部门","departmentName"),Map.entry("申请部门","departmentName"),Map.entry("部门名称","departmentName"),Map.entry("供应商名称","supplierName"),
+        Map.entry("预算年度","budgetYear"),Map.entry("申报年度","budgetYear"),Map.entry("年度","budgetYear"),Map.entry("申报部门","departmentName"),Map.entry("申请部门","departmentName"),Map.entry("申报单位","departmentName"),Map.entry("部门名称","departmentName"),Map.entry("部门","departmentName"),Map.entry("供应商名称","supplierName"),
         Map.entry("支出用途","spendingPurpose"),Map.entry("批准用途","approvedPurpose"),
         Map.entry("已完成审批环节","actualApprovalStep"),Map.entry("审批日期","approvalDate"),
         Map.entry("申报日期","applicationDate"),Map.entry("申请日期","applicationDate"),
-        Map.entry("申报编号","applicationNo"),Map.entry("申请编号","applicationNo"));
+        Map.entry("申报编号","applicationNo"),Map.entry("申请编号","applicationNo"),
+        Map.entry("项目预算","projectBudgetAmount"),Map.entry("项目预算金额","projectBudgetAmount"),Map.entry("预算金额","projectBudgetAmount"),Map.entry("预算总额","projectBudgetAmount"),
+        Map.entry("申报总额","declaredTotalAmount"),Map.entry("申请总额","declaredTotalAmount"),Map.entry("申报合计","declaredTotalAmount"),
+        Map.entry("批复总额","approvedTotalAmount"),Map.entry("批复控制数","approvedTotalAmount"),Map.entry("最高限价","ceilingAmount"));
     private static final Set<String> SUPPORTED_FIELDS=java.util.stream.Stream.concat(LABELS.values().stream(),
             java.util.stream.Stream.of("parentProjectName","applicationNo","applicationDate","actualApprovalStep","requiredApprovalStep",
                     "policyClause","approvalThreshold","thresholdCondition","spendingPurpose","approvedPurpose","requiredPreviousStep","approvalDate"))
             .collect(java.util.stream.Collectors.toUnmodifiableSet());
     private static final Pattern LABEL=Pattern.compile("("+String.join("|",LABELS.keySet().stream().sorted(Comparator.comparingInt(String::length).reversed()).map(Pattern::quote).toList())+")(?:[（(](万元|千元|元)[）)])?\\s*[:：]\\s*([^；;|。\\r\\n]+)");
     private static final Pattern UNIT=Pattern.compile("(?:金额单位|单位)\\s*[:：]\\s*(?:人民币)?(万元|千元|元)");
-    private static final Set<String> TABLE_DETAIL_COLUMNS=Set.of("数量","单价","计量单位","序号");
+    private static final Set<String> TABLE_DETAIL_COLUMNS=Set.of("数量","单价","计量单位","序号","单位","金额单位");
+    private static final Set<String> EMPTY_REMARKS=Set.of("","本项目支出","项目支出","无","暂无","—","/");
+    private static final Pattern DETAIL_INCLUSION_REMARK=Pattern.compile(
+            "(?:已|均)?(?:纳入|列入|计入)(?:本|该)?项目(?:预算)?明细(?:表|清单)?[。.]?");
+    private static final Pattern QUANTITY_ESTIMATE_REMARK=Pattern.compile(
+            "(?:按|按照|依据|根据)(?:工作量|工程量|清单|定额)(?:核定|测算|估算|核算)[。.]?");
     private static final Pattern ROLE=Pattern.compile("(本次申请|本次申报|申请金额|申报金额|申请|申报|批复参考金额|批复金额|批准金额|核准|获批|批复|批准)\\s*(?:为|计|[:：])?\\s*(?:人民币)?([0-9０-９,，.．+¥￥零壹贰叁肆伍陆柒捌玖貳參陸拾佰仟万萬亿億元圆圓角分整正]+)");
     /** Repairs only a line break inside a known label or a hyphenated project code.
      * The offset map keeps every excerpt an exact slice of the original text. */
@@ -56,6 +73,18 @@ public class BudgetUploadedMaterialReader {
         for(int i=0;i<source.length();i++)if(!skip[i]){text.append(source.charAt(i));offsets[count++]=i;}
         return new LabelledLayout(text.toString(),Arrays.copyOf(offsets,count),source.length());
     }
+    /** Preserve hierarchy and classification separately; the deepest item labels the comparison row. */
+    private static Row fieldOfficeRow(Row row) {
+        if(row.facts().stream().anyMatch(f->f.field().equals("subjectName")))return row;
+        for(String level:List.of("subjectLevel3Name","subjectLevel2Name","subjectLevel1Name")){
+            var candidates=row.facts().stream().filter(f->f.field().equals(level)).toList();
+            if(candidates.isEmpty())continue;
+            var facts=new ArrayList<>(row.facts());
+            for(var f:candidates)facts.add(new Fact("subjectName",f.value(),f.locator(),f.excerpt(),f.subjectScope(),f.amountScope()));
+            return new Row(row.rowKey(),List.copyOf(facts));
+        }
+        return row;
+    }
     private static String labelName(String label) {return label.replaceAll("[（(].*","").strip();}
     private static String unit(String value) {return value.contains("万元")?"万元":value.contains("千元")?"千元":value.contains("元")?"元":null;}
     private static String withUnit(String value,String unit) {
@@ -63,6 +92,13 @@ public class BudgetUploadedMaterialReader {
     }
     private static boolean missingAmount(String field,String value) {
         return field.endsWith("Amount")&&Set.of("未提供","未填写","未明确","待定","待核定","暂无","—","--","/","N/A").contains(value.strip());
+    }
+    private static boolean isExtractionNeutralRemark(String remark,List<Fact> facts) {
+        if(EMPTY_REMARKS.contains(remark)||UNIT.matcher(remark.replaceFirst("[。.]$","")).matches())return true;
+        return (DETAIL_INCLUSION_REMARK.matcher(remark).matches()||QUANTITY_ESTIMATE_REMARK.matcher(remark).matches())
+                &&facts.stream().anyMatch(f->Set.of("subjectName","subjectLevel1Name","subjectLevel2Name","subjectLevel3Name").contains(f.field()))
+                &&facts.stream().anyMatch(f->Set.of("declaredAmount","approvalAmount","thirdPartyReviewAmount").contains(f.field())
+                        &&BudgetUploadedMaterialAnalyzer.money(f.value())!=null);
     }
     public BudgetUploadedMaterialReader(DocumentTextPort text,MaterialFieldAiPort ai,BudgetMaterialStoragePort storage) {this.text=text;this.ai=ai;this.storage=storage;}
     public BudgetUploadedFacts.Snapshot read(BudgetReviewTask task) throws IOException {
@@ -80,8 +116,16 @@ public class BudgetUploadedMaterialReader {
         Map<String,Segment> headerSources=new HashMap<>();
         Set<String> semanticLocators=new HashSet<>();
         String activeRecord=null,previousLocator=null;var activeFields=new HashSet<String>();
+        var wordRows=wordTableRows(document);
+        String canonical=String.join("\n",document.segments().stream().map(Segment::text).toList());
+        var positioned=BudgetPositionedTableReader.read(document.segments(),visualIndexes==null?null:visualIndexes.find(id,document.sha256(),
+                com.fuquan.audit.common.material.visual.MaterialVisualEvidence.digest(canonical)).orElse(null));
+        rows.addAll(positioned.rows());
         for(var segment:document.segments()) {
             String body=segment.text();
+            rows.addAll(BudgetExplicitAmounts.read(segment));
+            var structuredWordRow=wordRows.get(segment.locator());
+            if(structuredWordRow!=null)rows.add(structuredWordRow);
             if(!adjacentWordNodes(previousLocator,segment.locator())) {activeRecord=null;activeFields.clear();}
             previousLocator=segment.locator();
             if(segment.locator().startsWith("excel/")&&segment.locator().contains("/row:")) {
@@ -95,16 +139,42 @@ public class BudgetUploadedMaterialReader {
                         &&body.substring(declaredUnit.end()).replaceAll("[\\s|。.;；]+","").isEmpty())continue;
                 }
                 var cells=Arrays.asList(body.split("\\s*\\|\\s*",-1));
+                // Two-cell document headings are label/value pairs, not table headers.
+                String first=cells.get(0).strip();
+                String headingField=LABELS.get(labelName(first));
+                if(cells.size()==2 && Set.of("projectName","projectCode","departmentName","budgetYear").contains(Objects.toString(headingField,""))) {
+                    String value=cells.get(1).strip();
+                    if(!value.isBlank()&&!LABELS.containsKey(labelName(value))&&!Set.of("备注","内容","数值","名称","说明").contains(value)
+                            &&com.fuquan.audit.common.material.SourceIdentityPolicy.plausible(headingField,value)) {
+                        rows.add(new Row(segment.locator(),List.of(new Fact(headingField,value,segment.locator()+"/col:2",body))));
+                        continue;
+                    }
+                }
                 boolean header=cells.size()>1&&cells.stream().anyMatch(v->LABELS.containsKey(labelName(v)));
                 if(header) {headers.put(sheet,cells);headerSources.put(sheet,segment);continue;}
                 var labels=headers.get(sheet);
                 if(labels!=null&&labels.size()==cells.size()) {
                     var facts=new ArrayList<Fact>();
+                    boolean grandTotal=Set.of("合计","总计").contains(cells.stream().map(String::strip)
+                            .filter(v->!v.isEmpty()).findFirst().orElse(""));
+                    // A real named detail beside a note saying 合计 is still a
+                    // detail. Only an otherwise unnamed aggregate changes roles.
+                    for(int col=0;grandTotal&&col<labels.size();col++) {
+                        String field=LABELS.get(labelName(labels.get(col)));
+                        String value=cells.get(col).strip();
+                        if(Set.of("subjectName","subjectLevel1Name","subjectLevel2Name","subjectLevel3Name").contains(Objects.toString(field,""))
+                                &&!value.isBlank()&&!Set.of("合计","总计").contains(value))grandTotal=false;
+                    }
+                    String rowUnit=null;
+                    for(int col=0;col<labels.size();col++)if(Set.of("单位","金额单位").contains(labels.get(col).strip()))rowUnit=unit(cells.get(col));
                     for(int col=0;col<cells.size();col++) {
                         String value=cells.get(col).strip(),label=labels.get(col).strip();
                         String field=LABELS.get(labelName(label));
+                        if(grandTotal&&Set.of("subjectName","subjectLevel1Name","subjectLevel2Name","subjectLevel3Name").contains(Objects.toString(field,"")))continue;
+                        if(grandTotal&&"declaredAmount".equals(field))field="declaredTotalAmount";
+                        if(grandTotal&&"approvalAmount".equals(field))field="approvedTotalAmount";
                         if(field!=null&&!value.isBlank()&&!missingAmount(field,value)) {
-                            String amountUnit=unit(label)==null?sheetUnits.get(sheet):unit(label);
+                            String amountUnit=unit(label)==null?(rowUnit==null?sheetUnits.get(sheet):rowUnit):unit(label);
                             if(field.endsWith("Amount"))value=withUnit(value,amountUnit);
                             // Header and cell are read deterministically; locator includes the real column.
                             facts.add(new Fact(field,value,segment.locator()+"/col:"+(col+1),label+"："+value));
@@ -113,7 +183,17 @@ public class BudgetUploadedMaterialReader {
                     if(!facts.isEmpty())rows.add(new Row(segment.locator(),facts));
                     // A recognized subject column is not proof that all amount columns
                     // are understood. Send the original header AND row to the model.
-                    if(labels.stream().anyMatch(l->!l.isBlank()&&!LABELS.containsKey(labelName(l))&&!TABLE_DETAIL_COLUMNS.contains(labelName(l)))) {
+                    boolean unknownColumn=false;
+                    for(int col=0;col<labels.size();col++) {
+                        String label=labelName(labels.get(col));
+                        if(label.isBlank()||LABELS.containsKey(label)||TABLE_DETAIL_COLUMNS.contains(label))continue;
+                        // The batch semantic review still receives the full original.
+                        // A boilerplate remark is not a reason to extract all exact
+                        // table amounts a second time. Narrative/unknown remarks stay.
+                        if(label.equals("备注")&&isExtractionNeutralRemark(cells.get(col).strip(),facts))continue;
+                        unknownColumn=true;
+                    }
+                    if(unknownColumn) {
                         var h=headerSources.get(sheet);
                         if(semanticLocators.add(h.locator()))semantic.add(h);
                         if(semanticLocators.add(segment.locator()))semantic.add(segment);
@@ -125,15 +205,21 @@ public class BudgetUploadedMaterialReader {
             // cannot authorize joining the project from one line to another's amount.
             var layout=labelledLayout(body);
             int layoutOffset=0;
-            for(String line:layout.text().split("\\R",-1)) {
-                int lineNumber=(int)body.substring(0,layout.sourceOffset(layoutOffset)).chars().filter(c->c=='\n').count();
+            var lineBreaks=Pattern.compile("\\R").matcher(layout.text());
+            while(layoutOffset<=layout.text().length()) {
+                boolean more=lineBreaks.find();int lineEnd=more?lineBreaks.start():layout.text().length();
+                String line=layout.text().substring(layoutOffset,lineEnd);
+                int lineNumber=body.substring(0,layout.sourceOffset(layoutOffset)).split("\\R",-1).length-1;
                 var facts=new ArrayList<Fact>();var matcher=LABEL.matcher(line);
                 while(matcher.find()) {
+                    // The generic label must not match the suffix of 经办部门/编制部门.
+                    if(matcher.group(1).equals("部门") && matcher.start()>0
+                            && Character.UnicodeScript.of(line.charAt(matcher.start()-1))==Character.UnicodeScript.HAN)continue;
                     String field=LABELS.get(matcher.group(1)),value=matcher.group(3).strip();
                     String excerpt=layout.excerpt(body,layoutOffset+matcher.start(),layoutOffset+matcher.end()),amountUnit=matcher.group(2);int resume=-1;
                     // OCR and Word commonly put several labels on one line without
                     // semicolons. A field must end before the next real label.
-                    var nextLabel=Pattern.compile("(?:"+String.join("|",LABELS.keySet().stream().map(Pattern::quote).toList())+"|金额单位|单位)\\s*[:：]").matcher(value);
+                    var nextLabel=Pattern.compile("(?:"+String.join("|",LABELS.keySet().stream().map(Pattern::quote).toList())+"|项目类别|金额单位|单位)\\s*[:：]").matcher(value);
                     if(nextLabel.find()) {
                         String prefix=value.substring(0,nextLabel.start()).strip();
                         resume=matcher.start(3)+matcher.group(3).indexOf(value)+nextLabel.start();
@@ -142,7 +228,11 @@ public class BudgetUploadedMaterialReader {
                     }
                     if(!value.isBlank()&&!missingAmount(field,value)) {
                         if(field.endsWith("Amount"))value=withUnit(value,amountUnit);
-                        facts.add(new Fact(field,value,segment.locator()+"/line:"+lineNumber,excerpt));
+                        // A labelled amount is exact, but its label can still belong to a historical example.
+                        String prefix=line.substring(0,matcher.start());
+                        String reference=prefix.matches("(?s).*(?:历史|旧|以往|往年|上年|其他|参考|示例)(?:项目|案例|年度)?(?:的)?\\s*$")
+                                &&!prefix.matches("(?s).*(?:非|不是|不属于|并非|不含)(?:历史|旧|其他|参考|示例)[^。；;]*$")?"REFERENCE":null;
+                        facts.add(new Fact(field,value,segment.locator()+"/line:"+lineNumber,excerpt,reference,null));
                     }
                     if(resume>=0)matcher.region(resume,line.length());
                 }
@@ -158,25 +248,54 @@ public class BudgetUploadedMaterialReader {
                     rows.add(new Row(activeRecord!=null&&(subject||continuation)?activeRecord:physical,facts));
                     if(activeRecord!=null)facts.forEach(f->activeFields.add(f.field()));
                 }
-                layoutOffset+=line.length()+1;
+                if(!more)break;
+                layoutOffset=lineBreaks.end();
             }
             // Labelled, structured spans are completely read locally. Mixed prose still goes to AI.
             String remainder=LABEL.matcher(body).replaceAll("").replaceAll("[\\s；;|。]+","");
-            if(!remainder.isEmpty())semantic.add(segment);
+            if(!remainder.isEmpty()&&(structuredWordRow==null||!wordRowFullyRead(structuredWordRow,body))) {
+                var spans=positioned.consumed().get(segment.locator());
+                if(spans==null||spans.isEmpty())semantic.add(segment);
+                else {
+                    // Keep the original offsets and line boundaries without creating hundreds
+                    // of short model units for one table. Only exact original quotes are accepted below.
+                    char[] masked=body.toCharArray();
+                    spans.forEach(s->{for(int n=s.start();n<s.end();n++)if(masked[n]!='\r'&&masked[n]!='\n')masked[n]=' ';});
+                    String remaining=new String(masked);
+                    if(!remaining.isBlank()&&!remaining.strip().matches("[0-9\\s]+"))semantic.add(new Segment(segment.locator(),remaining));
+                }
+            }
         }
         if(!semantic.isEmpty()) {
-            Result result=ai.extract("BUDGET",id,document.sha256(),semantic);
+            Result result;
+            try{result=ai.extract("BUDGET",id,document.sha256(),semantic);}
+            catch(RuntimeException unavailable){
+                if(Thread.currentThread().isInterrupted())throw unavailable;
+                // A failed optional extraction cannot erase independently read text and explicit amounts.
+                issues.add(new ExtractionIssue("document","document/extraction","MODEL_EXTRACTION_INCOMPLETE"));
+                result=new Result(List.of(),"UNAVAILABLE","budget-partial");
+            }
             if(result==null||result.rows()==null||result.rows().size()>10000)throw new IOException("BUDGET_AI_RESULT_INVALID");
-            issues.addAll(result.issues());
+            for(var issue:result.issues()) {
+                var nativeRow=wordRows.get(issue.locator());
+                boolean resolved=issue.reasonCode().equals("EVIDENCE_UNVERIFIED")&&issue.field().endsWith("Amount")
+                        &&nativeRow!=null&&nativeRow.facts().stream().anyMatch(f->f.field().equals(issue.field())
+                                &&BudgetUploadedMaterialAnalyzer.money(f.value())!=null);
+                if(!resolved)issues.add(issue);
+            }
             var sources=new HashMap<String,String>();for(var s:semantic)sources.put(s.locator(),s.text());
+            var modelSources=Map.copyOf(sources);
+            // Model excerpts must also occur in the unmodified source, not across masked cells.
+            for(var s:document.segments())if(sources.containsKey(s.locator()))sources.put(s.locator(),s.text());
             // Local labelled facts already have a physical row. A model may
             // repeat one using a broad or repeated excerpt; retain the precise
             // local evidence rather than trying to assign that excerpt a row.
             // Different values, roles or locators still require full validation.
             var explicitFacts=rows.stream().flatMap(r->r.facts().stream()).toList();
-            var scopes=modelScopes(result.rows(),sources);
+            var modelRows=separateInlineSubjects(result.rows());
+            var scopes=modelScopes(modelRows,sources);
             int modelRowNumber=0;
-            for(var row:result.rows()) {
+            for(var row:modelRows) {
                 int mentionId=modelRowNumber++;
                 if(row==null||row.facts()==null)throw new IOException("BUDGET_AI_RESULT_INVALID");
                 var novelFacts=new ArrayList<Fact>();
@@ -185,10 +304,23 @@ public class BudgetUploadedMaterialReader {
                 for(var fact:row.facts()) {
                   try {
                     String original=fact==null?null:sources.get(fact.locator());
-                    if(fact==null||!SUPPORTED_FIELDS.contains(fact.field())||original==null||fact.value()==null||fact.value().isBlank()
-                            ||fact.excerpt()==null||fact.excerpt().isBlank()||!original.contains(fact.excerpt())||!fact.excerpt().contains(fact.value()))
+                    if(fact==null||!SUPPORTED_FIELDS.contains(fact.field())||original==null||fact.value()==null||fact.value().isBlank())
+                        throw new IOException("BUDGET_AI_EVIDENCE_INVALID");
+                    // Native column+unit is authoritative for this physical row.
+                    // Models often append the header unit to a bare cell; that
+                    // optional duplicate must not invalidate a verified table.
+                    if(wordTableAmountAlreadyRead(rows,fact,original))continue;
+                    if(fact.excerpt()==null||fact.excerpt().isBlank()||!original.contains(fact.excerpt())
+                            ||!modelSources.get(fact.locator()).contains(fact.excerpt())||!fact.excerpt().contains(fact.value()))
                         throw new IOException("BUDGET_AI_EVIDENCE_INVALID");
                     if(missingAmount(fact.field(),fact.value()))continue;
+                    if(BudgetIdentityEvidence.subjectAsProject(fact,original))continue;
+                    if(BudgetSourceScope.wrongSubjectRole(fact,original)){
+                        org.slf4j.LoggerFactory.getLogger(getClass()).info("BUDGET_AI_FACT_REJECTED field=subjectName reasonCode=SUBJECT_ROLE_MISMATCH");
+                        continue;
+                    }
+                    if(fact.field().equals("budgetYear")&&!fact.value().replaceAll("\\s+","").matches("[12][0-9]{3}(?:年|年度)?"))continue;
+                    if(fact.field().equals("departmentName")&&Pattern.compile("(?:经办部门|记录部门|审批单位|批复单位)\\s*[:：]\\s*"+Pattern.quote(fact.value())).matcher(original).find())continue;
                     // A verbatim person name is still the wrong semantic role.
                     // Discard that optional candidate, retaining the labelled
                     // department and independently verified budget amounts.
@@ -204,13 +336,32 @@ public class BudgetUploadedMaterialReader {
                     if(fact.field().equals("applicationDate")&&original.contains("审批日期")
                             &&explicitFacts.stream().anyMatch(f->f.field().equals("approvalDate")&&f.value().equals(modelValue)
                             &&f.locator().startsWith(modelLocator+"/")))continue;
-                    if(explicitDuplicate(explicitFacts,fact,original))continue;
+                    if(explicitDuplicate(explicitFacts,fact,original)) {
+                        // Keep the deterministic value/position, while preserving grounded semantic scope.
+                        // Otherwise a locally read label could silently lose the model's historical/annual context.
+                        if(fact.subjectScope()!=null||fact.amountScope()!=null) {
+                            String modelLine=physicalLine(original,fact.excerpt());
+                            for(int n=0;n<rows.size();n++) {
+                                var local=rows.get(n);var refined=new ArrayList<Fact>();boolean changed=false;
+                                for(var known:local.facts()) {
+                                    boolean same=known.field().equals(fact.field())&&known.locator().replaceFirst("/line:[0-9]+$","").equals(fact.locator());
+                                    if(same)try{same=physicalLine(original,known.excerpt()).equals(modelLine);}catch(IOException ambiguous){same=false;}
+                                    if(same) {
+                                        String subject="REFERENCE".equals(known.subjectScope())?"REFERENCE":fact.subjectScope()!=null?fact.subjectScope():known.subjectScope();
+                                        refined.add(new Fact(known.field(),known.value(),known.locator(),known.excerpt(),subject,fact.amountScope()!=null?fact.amountScope():known.amountScope()));changed=true;
+                                    }else refined.add(known);
+                                }
+                                if(changed)rows.set(n,new Row(local.rowKey(),List.copyOf(refined)));
+                            }
+                        }
+                        continue;
+                    }
                     Scope scope=scopes.get(row);
                     boolean scoped=scope!=null&&scope.locator().equals(fact.locator());
                     fact=scoped?scopeEvidence(original,fact,scope):resolveEvidence(original,fact,row.facts());
                     if(fact.field().endsWith("Amount"))fact=amountEvidence(fact,scoped?original.substring(scope.start(),scope.end()):physicalLine(original,fact.excerpt()));
                     // A model may not replace an explicit amount by another labelled amount.
-                    if(fact.field().endsWith("Amount")) {
+                    if(Set.of("declaredAmount","approvalAmount").contains(fact.field())) {
                         // Validate against its original physical row as well as the
                         // supplied excerpt: a cropped "5000元" must not conceal
                         // the source's explicit approval label.
@@ -241,6 +392,7 @@ public class BudgetUploadedMaterialReader {
                         }
                         if(sawRole&&!correctRole)throw new IOException("BUDGET_AI_AMOUNT_LABEL_MISMATCH");
                     }
+                    if(repeatsExplicitProseAmount(explicitFacts,fact,original))continue;
                     enrichedFacts.put(fact,spreadsheetAmount(fact,original,headers,sheetUnits));
                     novelFacts.add(fact);
                   } catch(IOException rejected) {
@@ -266,7 +418,7 @@ public class BudgetUploadedMaterialReader {
                     Scope scope=scopes.get(row);
                     if(scope!=null&&scope.locator().equals(fact.locator())) {
                         String locator=fact.locator()+"/record:"+scope.start()+":"+scope.end();
-                        located.computeIfAbsent(locator,k->new ArrayList<>()).add(new Fact(fact.field(),fact.value(),locator,fact.excerpt()));
+                        located.computeIfAbsent(locator,k->new ArrayList<>()).add(new Fact(fact.field(),fact.value(),locator,fact.excerpt(),fact.subjectScope(),fact.amountScope()));
                         continue;
                     }
                     int position=original.indexOf(fact.excerpt());
@@ -280,7 +432,7 @@ public class BudgetUploadedMaterialReader {
                         &&row.facts().stream().anyMatch(f->Set.of("subjectCode","subjectName").contains(f.field())))locator+="/mention:"+mentionId;
                     var enriched=enrichedFacts.get(fact);
                     located.computeIfAbsent(locator,k->new ArrayList<>()).add(enriched==fact
-                        ?new Fact(fact.field(),fact.value(),locator,fact.excerpt()):enriched);
+                        ?new Fact(fact.field(),fact.value(),locator,fact.excerpt(),fact.subjectScope(),fact.amountScope()):enriched);
                 }
                 for(var group:located.entrySet())rows.add(new Row(group.getKey(),List.copyOf(group.getValue())));
             }
@@ -288,7 +440,7 @@ public class BudgetUploadedMaterialReader {
         if(rows.size()>10000||issues.size()>2000)throw new IOException("BUDGET_RESULT_LIMIT");
         // Remove exact duplicates only; conflicting evidence must survive.
         var distinct=new ArrayList<Row>();var seen=new HashSet<Row>();
-        for(var row:rows)if(seen.add(row))distinct.add(row);
+        for(var sourceRow:rows){var row=fieldOfficeRow(sourceRow);if(seen.add(row))distinct.add(row);}
         var repeatedPdfSegments=redundantPdfSegments(document.segments());
         var allFacts=distinct.stream().flatMap(r->r.facts().stream()).toList();
         var reconciledRows=new ArrayList<Row>();
@@ -337,8 +489,16 @@ public class BudgetUploadedMaterialReader {
         // Merge only after uncertainty filtering so discarded OCR identities cannot
         // re-enter the published snapshot through an earlier aggregate.
         var merged=new LinkedHashMap<String,LinkedHashSet<Fact>>();
-        for(var row:distinct)merged.computeIfAbsent(row.rowKey(),k->new LinkedHashSet<>()).addAll(row.facts());
-        return new BudgetUploadedFacts.Snapshot(merged.entrySet().stream().map(e->new Row(e.getKey(),List.copyOf(e.getValue()))).toList(),List.copyOf(issues));
+        var quoteQuality=visualQuality==null?null:visualQuality.quotes(id,document.sha256(),document.segments());
+        for(var row:distinct)for(var fact:row.facts()){
+            if(quoteQuality!=null&&quoteQuality.uncertain(fact.locator(),fact.excerpt())){
+                issues.add(new ExtractionIssue(fact.field(),fact.locator(),"EVIDENCE_UNVERIFIED"));continue;
+            }
+            merged.computeIfAbsent(row.rowKey(),k->new LinkedHashSet<>()).add(fact);
+        }
+        var projected=merged.entrySet().stream().map(e->new Row(e.getKey(),List.copyOf(e.getValue()))).toList();
+        if(BudgetSourceScope.annualUnitBackground(document.segments(),projected))projected=BudgetSourceScope.asBackground(projected);
+        return new BudgetUploadedFacts.Snapshot(projected,List.copyOf(issues),document.segments(),document.sha256(),document.method());
     }
 
     private static boolean adjacentWordNodes(String previous,String current) {
@@ -404,7 +564,42 @@ public class BudgetUploadedMaterialReader {
         var candidateAmount=BudgetUploadedMaterialAnalyzer.money(withUnit(fact.value(),explicitUnit));
         return knownAmount!=null&&candidateAmount!=null&&knownAmount.compareTo(candidateAmount)==0;
     }
+    private static boolean repeatsExplicitProseAmount(List<Fact> explicitFacts,Fact fact,String source) {
+        if(fact.locator().startsWith("excel/")||!Set.of("declaredAmount","declaredTotalAmount").contains(fact.field()))return false;
+        // A source-confirmed amount at this exact position already has an
+        // explicit role. Model scope labels cannot create a second copy.
+        int start=source.indexOf(fact.excerpt());
+        if(start<0||source.indexOf(fact.excerpt(),start+1)>=0)return false;
+        int end=start+fact.excerpt().length();
+        String prefix=fact.locator()+"/record:";
+        return explicitFacts.stream().filter(known->known.field().equals(fact.field())
+                &&known.value().equals(fact.value())&&"CURRENT".equals(known.subjectScope())
+                &&known.locator().startsWith(prefix)).anyMatch(known->{
+                    int knownStart=source.indexOf(known.excerpt());
+                    if(knownStart<0||source.indexOf(known.excerpt(),knownStart+1)>=0)return false;
+                    int knownEnd=knownStart+known.excerpt().length();
+                    return (start<=knownStart&&end>=knownEnd)||(knownStart<=start&&knownEnd>=end);
+                });
+    }
     private record Scope(String locator,int start,int end) {}
+    /** A model row key cannot merge two distinct items in one prose line. */
+    private static List<Row> separateInlineSubjects(List<Row> rows) {
+        var result=new ArrayList<Row>();
+        for(var row:rows) {
+            if(row==null||row.facts()==null||row.facts().stream().anyMatch(Objects::isNull)){result.add(row);continue;}
+            var subjects=row.facts().stream().filter(f->f!=null&&f.field().equals("subjectName")&&f.value()!=null).toList();
+            if(subjects.stream().map(Fact::value).distinct().count()<2){result.add(row);continue;}
+            var groups=new LinkedHashMap<String,List<Fact>>();
+            for(var fact:row.facts()) {
+                var matches=subjects.stream().filter(s->fact!=null&&Objects.equals(s.locator(),fact.locator())
+                        &&fact.excerpt()!=null&&fact.excerpt().contains(s.value())).map(Fact::value).distinct().toList();
+                String key=matches.size()==1?matches.get(0):"";
+                groups.computeIfAbsent(key,k->new ArrayList<>()).add(fact);
+            }
+            groups.forEach((key,facts)->result.add(new Row(row.rowKey()+"/subject:"+result.size(),List.copyOf(facts))));
+        }
+        return result;
+    }
     private static java.math.BigDecimal roleMoney(String source) {
         return BudgetUploadedMaterialAnalyzer.money(source.replaceFirst("(?<=[元圆圓整正角分])[,，]+$",""));
     }
@@ -412,7 +607,7 @@ public class BudgetUploadedMaterialReader {
         var anchors=new LinkedHashMap<Row,Integer>();var locators=new HashMap<Row,String>();
         for(var row:modelRows) {
             if(row==null||row.facts()==null||row.facts().isEmpty())continue;
-            // Each scope needs an independently unique subject in the source.
+            // Each scope needs an independently unique quoted subject context.
             // A row key itself never establishes a record or project boundary.
             if(row.facts().stream().filter(f->f!=null&&Set.of("subjectName","projectName").contains(f.field()))
                 .collect(java.util.stream.Collectors.groupingBy(Fact::field,java.util.stream.Collectors.mapping(Fact::value,java.util.stream.Collectors.toSet())))
@@ -423,8 +618,11 @@ public class BudgetUploadedMaterialReader {
                 if(fact.locator()!=null&&fact.locator().startsWith("excel/"))continue;
                 String source=sources.get(fact.locator());
                 if(source==null||fact.value()==null||fact.excerpt()==null||!source.contains(fact.excerpt())||!fact.excerpt().contains(fact.value()))continue;
-                int start=source.indexOf(fact.value());
-                if(start>=0&&source.indexOf(fact.value(),start+1)<0) {anchors.put(row,start);locators.put(row,fact.locator());}
+                int quote=source.indexOf(fact.excerpt());
+                if(quote>=0&&source.indexOf(fact.excerpt(),quote+1)<0) {
+                    int at=fact.excerpt().indexOf(fact.value());
+                    if(at>=0&&fact.excerpt().indexOf(fact.value(),at+1)<0){anchors.put(row,quote+at);locators.put(row,fact.locator());}
+                }
             }
         }
         var result=new HashMap<Row,Scope>();
@@ -475,7 +673,56 @@ public class BudgetUploadedMaterialReader {
         if(values.size()>1)throw new IOException("BUDGET_AI_ROW_AMBIGUOUS");
         if(values.isEmpty())return fact;
         String value=values.iterator().next();
-        return new Fact(fact.field(),value,fact.locator(),fact.excerpt().contains(value)?fact.excerpt():context);
+        return new Fact(fact.field(),value,fact.locator(),fact.excerpt().contains(value)?fact.excerpt():context,fact.subjectScope(),fact.amountScope());
+    }
+    /** Use native table boundaries, never carry a header across adjacent tables. */
+    private static Map<String,Row> wordTableRows(DocumentTextPort.Result document) {
+        var result=new HashMap<String,Row>();
+        var sources=document.segments().stream().filter(s->s.locator().startsWith("docx/body/"))
+                .collect(java.util.stream.Collectors.groupingBy(Segment::text));
+        for(var table:document.tables()) {
+            if(!table.locator().startsWith("docx/table:")||table.structureInferred())continue;
+            var physical=new TreeMap<Integer,List<MaterialParsePort.Cell>>();
+            for(var cell:table.cells())physical.computeIfAbsent(cell.rowNumber(),k->new ArrayList<>()).add(cell);
+            List<MaterialParsePort.Cell> header=null;
+            for(var cells:physical.values()) {
+                cells.sort(Comparator.comparingInt(MaterialParsePort.Cell::columnNumber));
+                if(cells.stream().anyMatch(c->c.value().contains("支出项目")||c.value().contains("科目名称")||c.value().contains("预算科目"))
+                        &&cells.stream().anyMatch(c->c.value().contains("申报金额")||c.value().contains("申请金额")||c.value().contains("批复金额"))) {
+                    header=List.copyOf(cells);continue;
+                }
+                if(header==null||header.size()!=cells.size())continue;
+                String raw=cells.stream().map(c->c.value().replace("\r\n","\u2028").replace('\r','\u2028').replace('\n','\u2028'))
+                        .collect(java.util.stream.Collectors.joining("\t"));
+                var matches=sources.getOrDefault(raw,List.of());
+                // An ambiguous or split row still goes through the grounded model path.
+                if(matches.size()!=1)continue;
+                var segment=matches.get(0);var facts=new ArrayList<Fact>();
+                boolean total=cells.stream().anyMatch(c->Set.of("合计","总计").contains(c.value().strip()));
+                for(int i=0;i<cells.size();i++) {
+                    if(cells.get(i).columnNumber()!=header.get(i).columnNumber())continue;
+                    String label=header.get(i).value(),value=cells.get(i).value().strip();
+                    String field=(label.contains("支出项目")||label.contains("科目名称")||label.contains("预算科目"))&&!total?"subjectName":
+                            label.contains("科目编码")||label.contains("科目代码")?"subjectCode":
+                            label.contains("申报金额")||label.contains("申请金额")?(total?"declaredTotalAmount":"declaredAmount"):
+                            label.contains("批复金额")?(total?"approvedTotalAmount":"approvalAmount"):
+                            label.contains("用途")?"spendingPurpose":null;
+                    if(field!=null&&!value.isBlank()&&!missingAmount(field,value))
+                        facts.add(new Fact(field,field.endsWith("Amount")?withUnit(value,unit(label)):value,segment.locator(),raw));
+                }
+                if(!facts.isEmpty())result.put(segment.locator(),new Row(segment.locator(),facts));
+            }
+        }
+        return result;
+    }
+    private static boolean wordTableAmountAlreadyRead(List<Row> rows,Fact fact,String original) {
+        return fact.locator().startsWith("docx/body/")&&fact.field().endsWith("Amount")&&rows.stream().flatMap(r->r.facts().stream())
+                .anyMatch(known->known.locator().equals(fact.locator())&&known.field().equals(fact.field())&&known.excerpt().equals(original));
+    }
+    private static boolean wordRowFullyRead(Row row,String source) {
+        return Arrays.stream(source.split("\t",-1)).map(String::strip).allMatch(value->value.isBlank()
+                ||value.matches("[0-9]+|项|个|套|台|次|人|年|月")
+                ||row.facts().stream().anyMatch(f->f.value().equals(value)||f.field().endsWith("Amount")&&f.value().startsWith(value)));
     }
     private static Fact spreadsheetAmount(Fact fact,String source,Map<String,List<String>> headers,Map<String,String> sheetUnits)throws IOException {
         if(!fact.field().endsWith("Amount")||!fact.locator().startsWith("excel/")||!fact.locator().contains("/row:"))return fact;
@@ -493,7 +740,7 @@ public class BudgetUploadedMaterialReader {
         String value=withUnit(fact.value(),declaredUnit);
         // The source column and its real header together establish the unit.
         // This follows the deterministic table path's original-unit convention.
-        return new Fact(fact.field(),value,fact.locator()+"/col:"+(columns.get(0)+1),label+"："+value);
+        return new Fact(fact.field(),value,fact.locator()+"/col:"+(columns.get(0)+1),label+"："+value,fact.subjectScope(),fact.amountScope());
     }
     private static Fact singleLineEvidence(String source,Fact fact)throws IOException {
         if(fact.excerpt().indexOf('\n')<0&&fact.excerpt().indexOf('\r')<0)return fact;
@@ -504,7 +751,7 @@ public class BudgetUploadedMaterialReader {
         if(lines.size()!=1)throw new IOException("BUDGET_AI_ROW_AMBIGUOUS");
         String excerpt=lines.get(0);
         physicalLine(source,excerpt);
-        return new Fact(fact.field(),fact.value(),fact.locator(),excerpt);
+        return new Fact(fact.field(),fact.value(),fact.locator(),excerpt,fact.subjectScope(),fact.amountScope());
     }
 
     private static Fact resolveEvidence(String source,Fact fact,List<Fact> peers)throws IOException {
@@ -525,7 +772,7 @@ public class BudgetUploadedMaterialReader {
             }
             if(candidates.size()!=1)throw ambiguity;
             String line=candidates.iterator().next();physicalLine(source,line);
-            return new Fact(fact.field(),fact.value(),fact.locator(),line);
+            return new Fact(fact.field(),fact.value(),fact.locator(),line,fact.subjectScope(),fact.amountScope());
         }
     }
 

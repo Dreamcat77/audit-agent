@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  AlertTriangle, Ban, Bell, CheckCircle2, ChevronDown, ChevronRight, CircleAlert,
+  AlertTriangle, Ban, CheckCircle2, ChevronDown, ChevronRight,
   Database, Download, Edit3, FileUp, Loader2, Plus, RefreshCw, Search, Settings2,
-  ShieldAlert, Trash2, Users, X, Zap,
+  ShieldAlert, Trash2, X, Zap,
 } from 'lucide-react';
 import {
   addBlacklistEntry, addBlacklistRule, deleteBlacklistRule, removeBlacklistEntry,
@@ -14,11 +14,13 @@ import type {
   BlacklistAlertItem, BlacklistEntry, BlacklistEntryRequest, BlacklistRule, BlacklistRuleRequest,
 } from '../api/types';
 import { ConfirmDialog } from './components/ConfirmDialog';
+import { HistoryFooter, HistoryPagination } from '../components/history/HistoryResults';
 import { enumLabel } from '../utils/enumLabels';
 
 type Tab = 'alerts' | 'entries' | 'rules';
 type AlertLevel = 'ALL' | 'CRITICAL' | 'WARNING' | 'INFO';
 type AlertStatus = 'ALL' | 'PENDING' | 'RESOLVED' | 'IGNORED' | 'FALSE_POSITIVE';
+const listSize = 15;
 
 const inputClass = 'w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-50';
 const types = ['行业失信名单', '被执行人名单', '本单位黑名单', '公开信用名单'];
@@ -100,32 +102,13 @@ function LevelBadge({ value }: { value: string }) {
   </span>;
 }
 
-function StatCard({ label, value, unit, tone = 'neutral', icon }: {
-  label: string;
-  value: number;
-  unit: string;
-  tone?: 'neutral' | 'red' | 'yellow';
-  icon: ReactNode;
-}) {
-  const styles = {
-    neutral: 'border-slate-200 bg-white text-slate-900',
-    red: 'border-red-200 bg-red-50/70 text-red-600',
-    yellow: 'border-amber-200 bg-amber-50/70 text-amber-600',
-  }[tone];
-  return <div className={`flex min-h-[92px] items-center justify-between rounded-lg border px-5 py-4 ${styles}`}>
-    <div>
-      <p className="text-xs font-medium text-slate-500">{label}</p>
-      <p className="mt-2 text-2xl font-semibold leading-none">{value}<span className="ml-1 text-sm font-normal text-slate-500">{unit}</span></p>
-    </div>
-    <span className="flex size-9 items-center justify-center rounded-lg bg-white/70 text-slate-400">{icon}</span>
-  </div>;
-}
-
 export function BlacklistAlertPage() {
   const [tab, setTab] = useState<Tab>('alerts');
   const [alerts, setAlerts] = useState<BlacklistAlertItem[]>([]);
   const [entries, setEntries] = useState<BlacklistEntry[]>([]);
   const [rules, setRules] = useState<BlacklistRule[]>([]);
+  const [listPage, setListPage] = useState(1);
+  const [listTotal, setListTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -143,8 +126,10 @@ export function BlacklistAlertPage() {
   const [ruleDeleteTarget, setRuleDeleteTarget] = useState<BlacklistRule | null>(null);
   const [ruleDeleteLoading, setRuleDeleteLoading] = useState(false);
   const importRef = useRef<HTMLInputElement>(null);
+  const loadSequence = useRef(0);
 
   const load = useCallback(async () => {
+    const sequence = ++loadSequence.current;
     setLoading(true);
     setError(null);
     try {
@@ -154,30 +139,57 @@ export function BlacklistAlertPage() {
           alertLevel: alertLevel === 'ALL' ? undefined : alertLevel,
           status: alertStatus === 'ALL' ? undefined : alertStatus,
           supplierName: supplierSearch.trim() || undefined,
-          page: 1,
-          size: 100,
+          page: listPage,
+          size: listSize,
         });
-        setAlerts(page.items);
+        if (sequence === loadSequence.current) {
+          setListTotal(page.total);
+          if (listPage > Math.max(1, page.totalPages)) setListPage(Math.max(1, page.totalPages));
+          else setAlerts(page.items);
+        }
       } else if (tab === 'entries') {
         const page = await queryBlacklistEntries({
           keyword: entrySearch.trim() || undefined,
           blacklistType: entryType || undefined,
           active: true,
-          page: 1,
-          size: 100,
+          page: listPage,
+          size: listSize,
         });
-        setEntries(page.items);
+        if (sequence === loadSequence.current) {
+          setListTotal(page.total);
+          if (listPage > Math.max(1, page.totalPages)) setListPage(Math.max(1, page.totalPages));
+          else setEntries(page.items);
+        }
       } else {
-        setRules(await listBlacklistRules());
+        const items = await listBlacklistRules();
+        if (sequence === loadSequence.current) setRules(items);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : '加载数据失败');
+      if (sequence === loadSequence.current) setError(err instanceof Error ? err.message : '加载数据失败');
     } finally {
-      setLoading(false);
+      if (sequence === loadSequence.current) setLoading(false);
     }
-  }, [alertLevel, alertStatus, batchId, entrySearch, entryType, supplierSearch, tab]);
+  }, [alertLevel, alertStatus, batchId, entrySearch, entryType, supplierSearch, tab, listPage]);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    void load();
+    return () => { ++loadSequence.current; };
+  }, [load]);
+
+  function exportRecords() {
+    const params = new URLSearchParams();
+    if (tab === 'alerts') {
+      if (batchId.trim()) params.set('batchId', batchId.trim());
+      if (supplierSearch.trim()) params.set('supplierName', supplierSearch.trim());
+      if (alertLevel !== 'ALL') params.set('alertLevel', alertLevel);
+      if (alertStatus !== 'ALL') params.set('status', alertStatus);
+    } else {
+      if (entrySearch.trim()) params.set('keyword', entrySearch.trim());
+      if (entryType) params.set('blacklistType', entryType);
+      params.set('active', 'true');
+    }
+    download(`/api/v1/blacklist/${tab === 'alerts' ? 'alerts' : 'entries'}/export?${params}`);
+  }
 
   const handleImport = async (file: File) => {
     setLoading(true);
@@ -194,88 +206,62 @@ export function BlacklistAlertPage() {
     }
   };
 
-  const pendingCount = alerts.filter(item => item.status === 'PENDING').length;
-  const criticalCount = new Set(alerts.filter(item => item.alertLevel === 'CRITICAL').map(item => item.blacklistId)).size;
-  const currentMonth = new Date().toISOString().slice(0, 7);
-  const monthlyHits = alerts.filter(item => item.createdTime?.slice(0, 7) === currentMonth).length;
-  const blockedApprovals = alerts.filter(item => item.alertLevel === 'CRITICAL' && ['RESOLVED', 'PROCESSED'].includes(item.status)).length;
-
-  const tabs: { id: Tab; label: string; count?: number }[] = [
-    { id: 'alerts', label: '命中告警记录', count: alerts.length },
-    { id: 'entries', label: '黑名单数据库', count: entries.length },
+  const tabs: { id: Tab; label: string }[] = [
+    { id: 'alerts', label: '命中告警' },
+    { id: 'entries', label: '黑名单名单' },
     { id: 'rules', label: '规则配置' },
   ];
 
   return <div className="min-h-full bg-[#f6f8fb]">
-    <section className="border-b border-slate-200 bg-[#f6f8fb] px-6 pb-5 pt-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <span className="flex size-7 items-center justify-center rounded-full text-red-500"><Ban size={24} strokeWidth={2} /></span>
-            <h1 className="text-xl font-semibold tracking-tight text-slate-900">供应商黑名单管理</h1>
-          </div>
-          <p className="mt-1 pl-10 text-sm text-slate-500">对接省市黑名单数据源，采购各环节自动查询并实时拦截</p>
+    <section className="border-b border-slate-200 bg-white px-6 pt-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <Ban size={19} className="text-red-600" />
+          <h1 className="text-lg font-semibold text-slate-900">供应商黑名单</h1>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button onClick={() => { setTab('alerts'); setAlertStatus('PENDING'); }} className="inline-flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700 hover:bg-amber-100">
-            <Bell size={14} />{pendingCount} 条待处理
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={() => void load()} title="刷新当前列表" aria-label="刷新当前列表" className="inline-flex size-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:text-blue-700">
+            <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
           </button>
-          <button onClick={() => void load()} className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-blue-300 hover:text-blue-700">
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />同步数据源
-          </button>
-          <button onClick={() => { setTab('entries'); setEntryEditor('new'); }} className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-xs font-medium text-white shadow-sm hover:bg-blue-700">
-            <Plus size={15} />手工录入
+          <button onClick={() => { setListPage(1); setTab('entries'); setEntryEditor('new'); }} className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-2 text-xs font-medium text-white hover:bg-blue-700">
+            <Plus size={14} />新增名单
           </button>
         </div>
       </div>
-    </section>
-
-    <section className="border-b border-slate-200 px-6 py-5">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <StatCard label="黑名单总量" value={entries.length} unit="家" icon={<Database size={18} />} />
-        <StatCard label="红色拦截条目" value={criticalCount} unit="家" tone="red" icon={<ShieldAlert size={18} />} />
-        <StatCard label="本月命中次数" value={monthlyHits} unit="次" tone="red" icon={<CircleAlert size={18} />} />
-        <StatCard label="已拦截审批" value={blockedApprovals} unit="个" tone="yellow" icon={<Ban size={18} />} />
-        <StatCard label="待处理告警" value={pendingCount} unit="条" tone="yellow" icon={<Bell size={18} />} />
-      </div>
-    </section>
-
-    <section className="border-b border-slate-200 px-6">
       <div className="flex flex-wrap items-center gap-1">
         <div className="flex items-center gap-1">
-          {tabs.map(item => <button key={item.id} onClick={() => setTab(item.id)} className={`relative px-4 py-4 text-sm font-medium transition ${tab === item.id ? 'text-blue-600' : 'text-slate-500 hover:text-slate-800'}`}>
+          {tabs.map(item => <button key={item.id} onClick={() => { setListPage(1); setTab(item.id); }} className={`relative px-4 py-4 text-sm font-medium transition ${tab === item.id ? 'text-blue-600' : 'text-slate-500 hover:text-slate-800'}`}>
             {item.label}
-            {item.count !== undefined && <span className={`ml-2 inline-flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] ${tab === item.id ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-500'}`}>{item.count}</span>}
             {tab === item.id && <span className="absolute inset-x-2 bottom-0 h-0.5 bg-blue-600" />}
           </button>)}
         </div>
         <div className="ml-auto flex items-center gap-2 py-2">
-          {tab === 'alerts' && <div className="relative hidden sm:block">
+          {tab === 'alerts' && <div className="relative">
             <Search size={15} className="absolute left-3 top-2.5 text-slate-400" />
-            <input value={supplierSearch} onChange={e => setSupplierSearch(e.target.value)} placeholder="搜索供应商或项目..." className={`${inputClass} w-60 pl-9`} />
+            <input value={supplierSearch} onChange={e => { setListPage(1); setSupplierSearch(e.target.value); }} placeholder="搜索供应商或项目..." className={`${inputClass} w-60 pl-9`} />
           </div>}
-          {tab === 'entries' && <div className="relative hidden sm:block">
+          {tab === 'entries' && <div className="relative">
             <Search size={15} className="absolute left-3 top-2.5 text-slate-400" />
-            <input value={entrySearch} onChange={e => setEntrySearch(e.target.value)} placeholder="搜索供应商或统一社会信用代码..." className={`${inputClass} w-72 pl-9`} />
+            <input value={entrySearch} onChange={e => { setListPage(1); setEntrySearch(e.target.value); }} placeholder="搜索供应商或统一社会信用代码..." className={`${inputClass} w-72 pl-9`} />
           </div>}
-          {tab !== 'rules' && <button onClick={() => download(tab === 'alerts' ? '/api/v1/blacklist/alerts/export' : '/api/v1/blacklist/entries/export')} className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-blue-300 hover:text-blue-700">
+          {tab !== 'rules' && <button onClick={exportRecords} className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-blue-300 hover:text-blue-700">
             <Download size={14} />导出记录
           </button>}
         </div>
       </div>
     </section>
 
-    <main className="space-y-4 px-6 py-5">
+    <main className="space-y-4 px-6 py-4">
       {notice && <div className="flex items-center justify-between rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">{notice}<button onClick={() => setNotice(null)} title="关闭"><X size={14} /></button></div>}
       {error && <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"><AlertTriangle size={14} />{error}<button className="ml-auto" onClick={() => setError(null)} title="关闭"><X size={14} /></button></div>}
 
       {tab === 'alerts' && <AlertsView
-        alerts={alerts} loading={loading} batchId={batchId} level={alertLevel} status={alertStatus}
-        onBatchId={setBatchId} onLevel={setAlertLevel} onStatus={setAlertStatus}
+        alerts={alerts} total={listTotal} loading={loading} batchId={batchId} level={alertLevel} status={alertStatus}
+        onBatchId={value => { setListPage(1); setBatchId(value); }} onLevel={value => { setListPage(1); setAlertLevel(value); }} onStatus={value => { setListPage(1); setAlertStatus(value); }}
         onView={setDetail} onProcess={setProcessTarget}
       />}
       {tab === 'entries' && <EntriesView
-        entries={entries} loading={loading} type={entryType} onType={setEntryType}
+        entries={entries} total={listTotal} loading={loading} type={entryType} onType={value => { setListPage(1); setEntryType(value); }}
         onAdd={() => setEntryEditor('new')} onEdit={setEntryEditor}
         onRemove={setRemoveTarget}
         onImport={() => importRef.current?.click()}
@@ -284,6 +270,10 @@ export function BlacklistAlertPage() {
         rules={rules} loading={loading} onAdd={() => setRuleEditor('new')} onEdit={setRuleEditor}
         onDelete={setRuleDeleteTarget}
       />}
+      {tab !== 'rules' && <HistoryFooter summary={`共 ${listTotal} 条`}>
+        <HistoryPagination page={listPage} totalPages={Math.max(1, Math.ceil(listTotal / listSize))}
+          hasNext={listPage * listSize < listTotal} busy={loading} onPageChange={setListPage} />
+      </HistoryFooter>}
     </main>
 
     <input ref={importRef} type="file" accept=".xls,.xlsx" className="hidden" onChange={event => {
@@ -330,6 +320,7 @@ export function BlacklistAlertPage() {
 
 function AlertsView(props: {
   alerts: BlacklistAlertItem[];
+  total: number;
   loading: boolean;
   batchId: string;
   level: AlertLevel;
@@ -342,15 +333,15 @@ function AlertsView(props: {
 }) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   return <section className="space-y-3">
-    <div className="flex flex-wrap items-center gap-2">
-      <input value={props.batchId} onChange={e => props.onBatchId(e.target.value)} placeholder="批次ID" className={`${inputClass} w-44`} />
-      <select value={props.level} onChange={e => props.onLevel(e.target.value as AlertLevel)} className={`${inputClass} w-32`}>
+    <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-[minmax(180px,1fr)_140px_140px_auto]">
+      <input value={props.batchId} onChange={e => props.onBatchId(e.target.value)} placeholder="批次ID" className={inputClass} />
+      <select value={props.level} onChange={e => props.onLevel(e.target.value as AlertLevel)} className={inputClass}>
         <option value="ALL">全部级别</option><option value="CRITICAL">严重</option><option value="WARNING">警告</option><option value="INFO">正常</option>
       </select>
-      <select value={props.status} onChange={e => props.onStatus(e.target.value as AlertStatus)} className={`${inputClass} w-32`}>
+      <select value={props.status} onChange={e => props.onStatus(e.target.value as AlertStatus)} className={inputClass}>
         <option value="ALL">全部状态</option><option value="PENDING">待处理</option><option value="RESOLVED">已处理</option><option value="IGNORED">已忽略</option><option value="FALSE_POSITIVE">误报</option>
       </select>
-      <span className="ml-auto text-xs text-slate-400">共 {props.alerts.length} 条告警</span>
+      <span className="text-xs text-slate-400 sm:justify-self-end">共 {props.total} 条告警</span>
     </div>
     {props.loading && props.alerts.length === 0 && <EmptyState loading />}
     {!props.loading && props.alerts.length === 0 && <EmptyState title="暂无命中告警" description="当前筛选条件下没有匹配的黑名单告警记录" />}
@@ -358,7 +349,7 @@ function AlertsView(props: {
       {props.alerts.map(alert => {
         const meta = levelMeta[alert.alertLevel] || levelMeta.INFO;
         const expanded = expandedId === alert.id;
-        return <article key={alert.id} className={`overflow-hidden rounded-lg border ${meta.border} ${meta.background}`}>
+        return <article key={alert.id} data-blacklist-alert-id={alert.id} className={`overflow-hidden rounded-lg border ${meta.border} ${meta.background}`}>
           <button className="flex w-full items-center gap-4 px-5 py-4 text-left" onClick={() => setExpandedId(expanded ? null : alert.id)}>
             <span className={`flex size-11 shrink-0 items-center justify-center rounded-lg ${meta.icon}`}><Ban size={21} /></span>
             <div className="min-w-0 flex-1">
@@ -377,11 +368,10 @@ function AlertsView(props: {
             </div>
             <div className="hidden shrink-0 items-end gap-2 sm:flex sm:flex-col">
               <StatusBadge value={alert.status} />
-              <span className="inline-flex items-center gap-1 text-[11px] text-slate-500"><Bell size={12} />告警已推送</span>
             </div>
             {expanded ? <ChevronDown size={18} className="shrink-0 text-slate-500" /> : <ChevronRight size={18} className="shrink-0 text-slate-500" />}
           </button>
-          <div className="flex items-center gap-2 border-t border-black/5 px-5 pb-3 sm:hidden"><StatusBadge value={alert.status} /><span className="text-[11px] text-slate-500"><Bell size={12} className="mr-1 inline" />告警已推送</span></div>
+          <div className="flex items-center gap-2 border-t border-black/5 px-5 pb-3 sm:hidden"><StatusBadge value={alert.status} /></div>
           {expanded && <div className="border-t border-black/5 bg-white/65 px-5 py-4">
             <div className="grid gap-3 text-xs sm:grid-cols-2">
               <InfoLine label="供应商统一信用代码" value={alert.supplierCode || '-'} mono />
@@ -404,6 +394,7 @@ function AlertsView(props: {
 
 function EntriesView(props: {
   entries: BlacklistEntry[];
+  total: number;
   loading: boolean;
   type: string;
   onType: (value: string) => void;
@@ -413,26 +404,10 @@ function EntriesView(props: {
   onImport: () => void;
 }) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const sourceCounts = props.entries.reduce<Record<string, number>>((result, entry) => {
-    result[entry.source] = (result[entry.source] || 0) + 1;
-    return result;
-  }, {});
-  const sources = [
-    { label: '省政府采购黑名单', source: '省政府采购黑名单', detail: '省级数据源', count: sourceCounts['省政府采购黑名单'] || 0 },
-    { label: '市纪委通报黑名单', source: '市纪委通报黑名单', detail: '市级数据源', count: sourceCounts['市纪委通报黑名单'] || 0 },
-    { label: '本单位内部录入', source: '内部录入', detail: '手工维护', count: sourceCounts['内部录入'] || 0 },
-  ];
   return <section className="space-y-4">
-    <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
-      {sources.map(source => <div key={source.label} className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-4">
-        <span className="flex size-9 items-center justify-center rounded-md bg-blue-50 text-blue-600"><Database size={18} /></span>
-        <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold text-slate-800">{source.label}</p><p className="mt-1 text-xs text-slate-500">收录 {source.count} 家 · {source.detail}</p></div>
-        <span className="rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-[11px] font-medium text-emerald-700">正常</span>
-      </div>)}
-    </div>
     <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 px-5 py-4">
-        <div className="flex items-center gap-2"><ShieldAlert size={17} className="text-red-500" /><h2 className="text-sm font-semibold text-slate-900">供应商黑名单条目</h2><span className="text-xs text-slate-400">{props.entries.length} 家</span></div>
+        <div className="flex items-center gap-2"><ShieldAlert size={17} className="text-red-500" /><h2 className="text-sm font-semibold text-slate-900">供应商黑名单条目</h2><span className="text-xs text-slate-400">{props.total} 家</span></div>
         <div className="ml-auto flex flex-wrap items-center gap-2">
           <select value={props.type} onChange={e => props.onType(e.target.value)} className={`${inputClass} w-40`}><option value="">全部黑名单类型</option>{types.map(type => <option key={type}>{type}</option>)}</select>
           <button onClick={props.onImport} className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600 hover:border-blue-300 hover:text-blue-700"><FileUp size={14} />导入</button>
@@ -444,7 +419,7 @@ function EntriesView(props: {
       <div className="divide-y divide-slate-100">
         {props.entries.map(entry => {
           const expanded = expandedId === entry.id;
-          return <div key={entry.id}>
+          return <div key={entry.id} data-blacklist-entry-id={entry.id}>
             <button onClick={() => setExpandedId(expanded ? null : entry.id)} className="flex w-full items-center gap-3 px-5 py-4 text-left hover:bg-slate-50">
               <span className={`flex size-8 shrink-0 items-center justify-center rounded-md text-xs font-semibold ${entry.active ? 'bg-red-50 text-red-600' : 'bg-slate-100 text-slate-500'}`}>{entry.active ? '红' : '—'}</span>
               <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold text-slate-900">{entry.supplierName}</p><p className="mt-1 text-xs text-slate-500">{entry.blacklistType} · {enumLabel(entry.source)}</p></div>
@@ -466,7 +441,7 @@ function EntriesView(props: {
 }
 
 function RulesView(props: { rules: BlacklistRule[]; loading: boolean; onAdd: () => void; onEdit: (rule: BlacklistRule) => void; onDelete: (rule: BlacklistRule) => void }) {
-  return <section className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)]">
+  return <section className="space-y-3">
     <div>
       <div className="mb-3 flex items-center justify-between"><div className="flex items-center gap-2"><Zap size={18} className="text-blue-500" /><h2 className="text-base font-semibold text-slate-900">报警规则配置</h2></div><button onClick={props.onAdd} className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-2 text-xs text-white hover:bg-blue-700"><Plus size={14} />新增规则</button></div>
       <div className="space-y-3">
@@ -484,24 +459,7 @@ function RulesView(props: { rules: BlacklistRule[]; loading: boolean; onAdd: () 
         })}
       </div>
     </div>
-    <div className="space-y-4">
-      <div className="flex items-center gap-2"><Bell size={18} className="text-blue-500" /><h2 className="text-base font-semibold text-slate-900">告警推送配置</h2></div>
-      <div className="rounded-lg border border-slate-200 bg-white p-5">
-        <PushConfig title="红色命中" detail="系统通知 + 短信" tone="red" recipients={['审计主任', '系统管理员', '经办人']} />
-        <PushConfig title="黄色命中" detail="系统通知" tone="yellow" recipients={['经办人', '直属领导']} />
-        <PushConfig title="日报发送" detail="邮件" tone="blue" recipients={['采购管理人员', '审计主任']} last />
-      </div>
-      <div className="rounded-lg border border-slate-200 bg-white p-5">
-        <div className="mb-3 flex items-center justify-between"><h3 className="text-sm font-semibold text-slate-900">数据源对接状态</h3><span className="text-xs text-slate-400">当前环境</span></div>
-        {['省政府采购黑名单 API', '市纪委通报库 API', '全国企业信用信息系统'].map((source, index) => <div key={source} className="flex items-center gap-3 border-b border-slate-100 py-3 last:border-0"><span className="size-2 rounded-full bg-emerald-500" /><span className="flex-1 text-xs text-slate-700">{source}</span><span className="text-xs text-slate-400">{index === 0 ? '已配置' : '未同步'}</span></div>)}
-      </div>
-    </div>
   </section>;
-}
-
-function PushConfig({ title, detail, tone, recipients, last = false }: { title: string; detail: string; tone: 'red' | 'yellow' | 'blue'; recipients: string[]; last?: boolean }) {
-  const color = tone === 'red' ? 'text-red-600 border-blue-200 bg-blue-50' : tone === 'yellow' ? 'text-amber-600 border-blue-200 bg-blue-50' : 'text-blue-600 border-blue-200 bg-blue-50';
-  return <div className={`pb-4 ${last ? '' : 'mb-4 border-b border-slate-100'}`}><div className="flex items-center justify-between"><h3 className="text-sm font-semibold text-slate-800">{title}</h3><span className="text-xs text-slate-500">{detail}</span></div><div className="mt-3 flex flex-wrap gap-2">{recipients.map(item => <span key={item} className={`rounded-full border px-3 py-1 text-xs ${color}`}>{item}</span>)}<span className="rounded-full border border-dashed border-slate-300 px-3 py-1 text-xs text-slate-400">+ 添加</span></div></div>;
 }
 
 function InfoLine({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {

@@ -17,7 +17,7 @@ export function RiskAssessmentContent({ loading, error, assessment, onRetry, onO
   return (
     <section className="delivery-page space-y-6">
       <header className="delivery-page-header">
-        <div><h1 className="delivery-page-title">风险预估</h1><p className="delivery-page-subtitle">只读汇总已有合同审核结果，不生成新的风险结论或评分</p></div>
+        <div><h1 className="delivery-page-title">风险预估</h1><p className="delivery-page-subtitle">仅展示各合同最新已完成审核中的关注事项</p></div>
       </header>
 
       {error && <div role="alert" className="delivery-alert delivery-alert-warning">
