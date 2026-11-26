@@ -140,6 +140,7 @@ public class ApachePoiBudgetMaterialParser implements BudgetMaterialParser {
                 if(normalizedSubject!=null&&isSubjectHeader(normalizedSubject)
                         &&declaredAmountPriority(BudgetTextNormalizer.subject(amountText))>0)continue;
                 if(normalizedSubject!=null&&Set.of("合计","总计","小计").contains(normalizedSubject))continue;
+                if (subject.isBlank() && hasTotalLabelBeforeSubject(row, subjectColumn, formatter)) continue;
                 if ((subject == null || subject.isBlank())
                         && (subjectCode == null || subjectCode.isBlank())
                         && (amountText == null || amountText.isBlank())
@@ -171,8 +172,20 @@ public class ApachePoiBudgetMaterialParser implements BudgetMaterialParser {
         }
     }
 
+    private static boolean hasTotalLabelBeforeSubject(Row row, int subjectColumn, DataFormatter formatter) {
+        boolean found = false;
+        for (int column = 0; column < subjectColumn; column++) {
+            String label = BudgetTextNormalizer.subject(formatter.formatCellValue(row.getCell(column)));
+            if (label == null || label.isBlank()) continue;
+            if (!Set.of("合计", "总计", "小计").contains(label)) return false;
+            found = true;
+        }
+        return found;
+    }
+
     private static boolean isSubjectHeader(String header) {
-        return header.contains("科目名称") || header.equals("科目") || header.contains("预算科目");
+        return header.contains("科目名称") || header.equals("科目") || header.contains("预算科目")
+                || header.equals("三级名称");
     }
 
     private static boolean isSubjectCodeHeader(String header) {

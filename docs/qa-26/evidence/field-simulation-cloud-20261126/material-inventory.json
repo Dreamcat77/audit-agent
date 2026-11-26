@@ -1,0 +1,114 @@
+{
+  "status": "PASS",
+  "scope": "LOCAL_FILE_INTEGRITY_AND_STRUCTURE",
+  "manifestSha256": "a1ca04a010d1179f462ab21935101c1237859826736277f91b36cd10cc9e419f",
+  "files": [
+    {
+      "batch": "F26B44",
+      "file": "关于执法终端及回传能力建设的请示.docx",
+      "bytes": 38392,
+      "sha256": "3b3d33a1a3321c62d7a2f44e1778f8f9dc9661021af19c5a82b919f8289b20cd",
+      "paragraphs": 34
+    },
+    {
+      "batch": "F26B44",
+      "file": "年度财政支出预算预通知书.pdf",
+      "bytes": 23317,
+      "sha256": "489d2b197461659353c72e7134ac29f420966f68e2acbad8ede3dcc9acf76bc9",
+      "pages": 1,
+      "nativeTextCharsByPage": [
+        245
+      ]
+    },
+    {
+      "batch": "F26B44",
+      "file": "松浦信息化项目经费复函.pdf",
+      "bytes": 215435,
+      "sha256": "a480c4e06417d1a9f133c2dacf04d2c4f8bfdda8bfc1034789c12e1ac1825286",
+      "pages": 1,
+      "nativeTextCharsByPage": [
+        0
+      ]
+    },
+    {
+      "batch": "F26B44",
+      "file": "项目明细表.xlsx",
+      "bytes": 4829,
+      "sha256": "91294e58d33e5d9bb659519f59a63dcb26b48fff1a3dca11300551e739552d70",
+      "sheets": [
+        "项目明细"
+      ]
+    },
+    {
+      "batch": "F26P24",
+      "file": "供应商报价及范围响应.xlsx",
+      "bytes": 5441,
+      "sha256": "220251575cff406a82daf5ff7977f04b5231df2a7acada9a8041a216905bd1fe",
+      "sheets": [
+        "报价汇总",
+        "费用组成"
+      ]
+    },
+    {
+      "batch": "F26P24",
+      "file": "前滩设备巡检竞争性磋商文件.docx",
+      "bytes": 39214,
+      "sha256": "e85d3a5c59c1c395f470c071dc2e44f36287036a23127e62e94bf426b7074aac",
+      "paragraphs": 25
+    },
+    {
+      "batch": "F26P24",
+      "file": "采购代理委托协议.docx",
+      "bytes": 37756,
+      "sha256": "5bdb73257553b91e78ad0f5002f5fdaaeb84dc4d849f0c774a794a03edde7c92",
+      "paragraphs": 8
+    },
+    {
+      "batch": "F26P24",
+      "file": "采购文件更正公告.pdf",
+      "bytes": 184511,
+      "sha256": "6323c7d6fdae4ee275b185cf91461daf296e2b6ea9428f459d790057858b9234",
+      "pages": 1,
+      "nativeTextCharsByPage": [
+        0
+      ]
+    },
+    {
+      "batch": "F26C24",
+      "file": "中标通知书.pdf",
+      "bytes": 117367,
+      "sha256": "0226d54ee12bc3a648c442c303c98e4295e65bdf90bcb6c8b03504c2ded50905",
+      "pages": 1,
+      "nativeTextCharsByPage": [
+        0
+      ]
+    },
+    {
+      "batch": "F26C24",
+      "file": "合同书.docx",
+      "bytes": 39209,
+      "sha256": "e7ef6addb6569d0fe83052c65126cb6116815fa4a2c0249ddb534191249ec7db",
+      "paragraphs": 29
+    },
+    {
+      "batch": "F26C24",
+      "file": "合同价款明细表.xlsx",
+      "bytes": 4394,
+      "sha256": "6e33818f0bce5e35368ec2998100e7547c96af03601c45ba9b94e9f58df27fe7",
+      "sheets": [
+        "价款明细"
+      ]
+    },
+    {
+      "batch": "F26C24",
+      "file": "廉洁保密协议.pdf",
+      "bytes": 161506,
+      "sha256": "fe3bf312b0230e66e6a303e7eeaace5e88f9d4ed0a411282b0f9bf5fea4223f7",
+      "pages": 1,
+      "nativeTextCharsByPage": [
+        0
+      ]
+    }
+  ],
+  "remoteStatus": "PENDING_LOCAL_26"
+}

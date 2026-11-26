@@ -1,0 +1,132 @@
+{
+  "scope": "LOCAL",
+  "baseCommit": "658376412fcea20a4f4f7afd0ebde6ec54ad144e",
+  "backendCommand": "bash /workspace/.audit-agent-dev/mvn clean verify",
+  "backendExitCode": 1,
+  "totalTests": 3865,
+  "failures": 1,
+  "errors": 0,
+  "skipped": 24,
+  "totalTimeSeconds": 173,
+  "failedTest": "CandidateCrossMaterialAuthorityArchitectureGuardTest.keepsSupportRecoveryEndpointLocalAndMachineClassified",
+  "failureDiagnosis": "Fixed CRLF hash compared to unchanged LF checkout of frontend/src/api/client.ts",
+  "relevantSuites": [
+    {
+      "name": "com.fuquan.audit.integration.material.FieldSimulationReaderTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.533
+    },
+    {
+      "name": "com.fuquan.audit.contract.application.analysis.ContractAnalysisReportTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.12
+    },
+    {
+      "name": "com.fuquan.audit.contract.application.analysis.ContractAnalysisRelationsTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.011
+    },
+    {
+      "name": "com.fuquan.audit.contract.application.analysis.ContractAnalysisTableTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.027
+    },
+    {
+      "name": "com.fuquan.audit.procurement.application.ProcurementMaterialBatchServiceTest",
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.976
+    },
+    {
+      "name": "com.fuquan.audit.budget.application.ExcelBudgetMaterialParserTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.285
+    },
+    {
+      "name": "com.fuquan.audit.budget.application.QualityNextBudgetReproductionTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "com.fuquan.audit.budget.application.BudgetOfficeMaterialParserTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.003
+    },
+    {
+      "name": "com.fuquan.audit.budget.application.BudgetBatchChecksTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.029
+    },
+    {
+      "name": "com.fuquan.audit.budget.application.BudgetBatchCancellationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.003
+    },
+    {
+      "name": "com.fuquan.audit.budget.application.BudgetMaterialCancellationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.001
+    },
+    {
+      "name": "com.fuquan.audit.budget.application.BudgetProcessingOutcomeTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.002
+    },
+    {
+      "name": "com.fuquan.audit.budget.application.BudgetBatchReviewTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.441
+    }
+  ],
+  "relevantTestCount": 126,
+  "materialToolTests": 4,
+  "frontendProxyTests": 3,
+  "frontendInstall": "BLOCKED_HTTP_403_CDN_SHEETJS_COM",
+  "productionBuild": "BLOCKED_MISSING_DEPENDENCIES",
+  "customerChrome109Build": "BLOCKED_MISSING_DEPENDENCIES",
+  "browserFixtures": "NOT_RUN",
+  "remote26": "PENDING_LOCAL_26",
+  "field": "PENDING_FIELD_ACCEPTANCE",
+  "changedApplicationFile": {
+    "path": "backend/src/main/java/com/fuquan/audit/budget/infra/excel/ApachePoiBudgetMaterialParser.java",
+    "sha256": "5b4dc4c4ad0fb887aedaa18e1b52907d6143a23de80ecc68ee1f4e8470ad2a58"
+  }
+}

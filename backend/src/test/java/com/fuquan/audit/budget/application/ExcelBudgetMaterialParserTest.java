@@ -11,6 +11,57 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 
 class ExcelBudgetMaterialParserTest {
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(strings = {"合计", "总计", "小计"})
+    void totalLabelBeforeAnEmptySubjectDoesNotBecomeAnotherBudgetLine(String label) throws Exception {
+        try (var workbook = new XSSFWorkbook(); var out = new ByteArrayOutputStream()) {
+            var sheet = workbook.createSheet("明细");
+            var header = sheet.createRow(0);
+            header.createCell(1).setCellValue("科目名称");
+            header.createCell(2).setCellValue("申报金额");
+            var detail = sheet.createRow(1);
+            detail.createCell(0).setCellValue("1");
+            detail.createCell(1).setCellValue("设备");
+            detail.createCell(2).setCellValue(100);
+            var total = sheet.createRow(2);
+            total.createCell(0).setCellValue(label);
+            total.createCell(2).setCellValue(100);
+            workbook.write(out);
+            assertThat(new ApachePoiBudgetMaterialParser().parse(
+                    new ByteArrayInputStream(out.toByteArray()), "total.xlsx"))
+                    .singleElement().satisfies(line -> assertThat(line.declaredAmount()).isEqualByComparingTo("100"));
+        }
+    }
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(strings = {"一级名称", "二级名称"})
+    void parentCategoryAloneCannotBecomeTheBudgetSubject(String heading) throws Exception {
+        try (var workbook = new XSSFWorkbook(); var out = new ByteArrayOutputStream()) {
+            var sheet = workbook.createSheet("分类");
+            var header = sheet.createRow(0);
+            header.createCell(0).setCellValue(heading);
+            header.createCell(1).setCellValue("申报金额");
+            var row = sheet.createRow(1);
+            row.createCell(0).setCellValue("信息化建设");
+            row.createCell(1).setCellValue(490000);
+            workbook.write(out);
+            assertThatThrownBy(() -> new ApachePoiBudgetMaterialParser().parse(
+                    new ByteArrayInputStream(out.toByteArray()), "parent.xlsx"))
+                    .isInstanceOf(java.io.IOException.class).hasMessageContaining("无法完整读取");
+        }
+    }
+    @Test
+    void frozenF26B44WorkbookKeepsFourSubjectsAndDeclaredTotal() throws Exception {
+        var path = java.nio.file.Path.of("..", "test-materials", "field-simulation-20261126-r3",
+                "F26B44", "项目明细表.xlsx");
+        try (var input = java.nio.file.Files.newInputStream(path)) {
+            var lines = new ApachePoiBudgetMaterialParser().parse(input, path.getFileName().toString());
+            assertThat(lines).hasSize(4);
+            assertThat(lines).extracting(BudgetMaterialLine::subjectName)
+                    .containsExactly("移动记录设备", "数据回传升级", "现场培训服务", "设备巡检服务");
+            assertThat(lines.stream().map(BudgetMaterialLine::declaredAmount)
+                    .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add)).isEqualByComparingTo("490000");
+        }
+    }
 
     @Test
     void workbookPicturesMustUseOcrAwareParserInsteadOfSilentlyIgnoringThem() throws Exception {

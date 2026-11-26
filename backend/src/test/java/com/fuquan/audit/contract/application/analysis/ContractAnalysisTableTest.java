@@ -6,6 +6,27 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.*;
 
 class ContractAnalysisTableTest {
+    @Test void frozenF26C24WorkbookProvesThreeRowsAnd2050000Yuan() throws Exception {
+        var path = java.nio.file.Path.of("..", "test-materials", "field-simulation-20261126-r3",
+                "F26C24", "合同价款明细表.xlsx");
+        var reader = new com.fuquan.audit.integration.material.OfficeDocumentTextReader(null,
+                org.mockito.Mockito.mock(com.fuquan.audit.review.application.port.OcrPort.class));
+        try (var input = java.nio.file.Files.newInputStream(path)) {
+            var result = reader.read(input, path.getFileName().toString(), "frozen-price-table", 1000000, 512, 1000000);
+            String text = result.segments().stream().map(segment -> segment.text())
+                    .collect(java.util.stream.Collectors.joining("\n"));
+            var table = parse(text);
+            assertThat(table.complete()).isTrue();
+            assertThat(table.rows()).hasSize(3);
+            assertThat(table.rows().stream().map(ContractAnalysisTable.Row::amount)
+                    .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add)).isEqualByComparingTo("2050000");
+            for (var row : table.rows()) {
+                assertThat(text.substring(row.evidence().start(), row.evidence().end())).isEqualTo(row.evidence().excerpt());
+            }
+        } finally {
+            reader.close();
+        }
+    }
     @Test void serviceWorkloadTableCanProveAllFourPhysicalRowsWithoutMergingEqualAmounts(){
         String rows="服务事项\t工作量\u2028（人月）\t含税单价\u2028（元/人月）\t含税经费（元）\n"
                 +"核对合计功能服务\t1.00\t45,580\t45,580\n".repeat(4)+"合计\t4.00\t\t182,320\n";
